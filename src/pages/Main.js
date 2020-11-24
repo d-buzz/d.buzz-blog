@@ -42,7 +42,7 @@ const Main = () => {
             <Route path="/login" component={LoginPage} />
           </Switch>
         </Container>
-        <Footer title="D.App" description="The long post view for D.Buzz platform!" />
+        <Footer title="D.Buzz" description="The long post view for D.Buzz platform!" />
       </Router>
     </React.Fragment>
   );

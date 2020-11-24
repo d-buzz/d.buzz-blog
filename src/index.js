@@ -2,19 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
-import { router } from 'react-router';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
 
-
+import LightDarkTheme from './themes/LightDarkTheme';
 import Main from './pages/Main';
 
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
 ReactDOM.render(
-  <React.Fragment>
-    <Main />
-  </React.Fragment>,
+  <LightDarkTheme>
+    <Provider store={store}>
+      <Main />
+    </Provider>
+  </LightDarkTheme>,
   document.getElementById('root')
 );
 

@@ -207,7 +207,7 @@ const Header = (props) => {
           <Grid item>
             <Button
               className={classes.navBtnStyle}
-            >Our dApps</Button>
+            >Hive Dapps</Button>
           </Grid>
         </Grid>
       </Toolbar>
