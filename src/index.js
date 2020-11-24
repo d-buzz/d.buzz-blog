@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { router } from 'react-router';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+
+
+import Main from './pages/Main';
+
+
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <React.Fragment>
+    <Main />
+  </React.Fragment>,
   document.getElementById('root')
 );
 
