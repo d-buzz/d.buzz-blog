@@ -42,23 +42,25 @@ const useStyles = makeStyles(theme => ({
   },
 
   commentBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    borderColor: theme.palette.primary.main,
     boxShadow: 'none',
+    color:  theme.palette.primary.main,
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      color: theme.palette.primary.textDefault,
+      backgroundColor: theme.palette.primary.backgroundPrimary
     },
     margin: theme.spacing(1, 0, 3),
   },
 
   replyBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    borderColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     boxShadow: 'none',
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      color: theme.palette.primary.textDefault,
+      backgroundColor: theme.palette.primary.backgroundPrimary
     },
   },
 
@@ -71,13 +73,13 @@ const useStyles = makeStyles(theme => ({
   },
 
   voteBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
-    color: '#212529',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    borderColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     boxShadow: 'none',
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      color: theme.palette.primary.textDefault,
+      backgroundColor: theme.palette.primary.backgroundPrimary
     },
   },
 

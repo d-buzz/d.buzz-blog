@@ -5,12 +5,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
 import Chip from '@material-ui/core/Chip';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+
+import CheckIcon from '@material-ui/icons/Check';
+import NotInterestedOutlinedIcon from '@material-ui/icons/NotInterestedOutlined';
 
 const useStyles = makeStyles(theme => ({
   titleStyle: {
@@ -24,26 +26,21 @@ const useStyles = makeStyles(theme => ({
   },
 
   postBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
-    color: '#e31337',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    borderColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     boxShadow: 'none',
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      color: theme.palette.primary.textDefault,
     },
     margin: theme.spacing(1),
   },
 
   cancelBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
-    color: '#212529',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    borderColor: theme.palette.primary.backgroundPrimary,
+    color: theme.palette.primary.textDefault,
     boxShadow: 'none',
-    '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
-    },
     margin: theme.spacing(1),
   },
 
@@ -78,14 +75,14 @@ const NewPostPage = () => {
             color="primary"
             size="medium"
             className={classes.postBtn}
-            startIcon={<SaveIcon />}
+            startIcon={<CheckIcon />}
           >Post</Button>
 
           <Button
             color="primary"
             size="medium"
             className={classes.cancelBtn}
-            startIcon={<SaveIcon />}
+            startIcon={<NotInterestedOutlinedIcon />}
           >Cancel</Button>
         </Grid>
 

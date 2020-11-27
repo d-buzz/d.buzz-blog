@@ -24,13 +24,14 @@ const useStyles = makeStyles(theme => ({
 
   submit: {
     margin: theme.spacing(1, 0, 2),
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
-    color: '#e31337',
+    backgroundColor: theme.palette.primary.main,
+    borderColor:theme.palette.primary.backgroundPrimary,
+    color: theme.palette.primary.textDefault,
     boxShadow: 'none',
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      backgroundColor: theme.palette.primary.main,
+      borderColor:theme.palette.primary.backgroundPrimary,
+      color: theme.palette.primary.textDefault,
     }
   }
 }));

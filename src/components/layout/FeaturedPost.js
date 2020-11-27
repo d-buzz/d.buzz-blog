@@ -9,9 +9,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Hidden from '@material-ui/core/Hidden';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles( theme => ({
   card: {
     display: 'flex',
+    backgroundColor: theme.palette.primary.backgroundPrimary
   },
   cardDetails: {
     flex: 1,
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
   cardMedia: {
     width: 160,
   },
-});
+}));
 
 const FeaturedPost = (props) => {
   const classes = useStyles();

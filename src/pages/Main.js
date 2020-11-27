@@ -15,7 +15,10 @@ import LoginPage from './LoginPage';
 
 const useStyles = makeStyles((theme) => ({
   pageStyle: {
-    backgroundColor: '#ffffff'
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+  },
+  root: {
+    backgroundColor: theme.palette.primary.backgroundPrimary
   }
 }));
 
@@ -31,7 +34,7 @@ const Main = () => {
 
 
   return (
-    <React.Fragment >
+    <div className={classes.root} >
       <Router>
         <CssBaseline />
         <Container className={classes.pageStyle} maxWidth="lg">
@@ -44,7 +47,7 @@ const Main = () => {
         </Container>
         <Footer title="D.Buzz" description="The long post view for D.Buzz platform!" />
       </Router>
-    </React.Fragment>
+    </div>
   );
 }
 

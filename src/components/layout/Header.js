@@ -17,7 +17,8 @@ import DBuzzLogo from '../common/DBuzzLogo';
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    color: '#212529'
+    color: theme.palette.primary.textPrimary,
+    backgroundColor: theme.palette.primary.backgroundPrimary
   },
   toolbarTitle: {
     flex: 1
@@ -25,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
   toolbarSecondary: {
     justifyContent: 'space-between',
     overflowX: 'auto',
+    color: theme.palette.primary.textPrimary,
+    backgroundColor: theme.palette.primary.backgroundPrimary
   },
   toolbarLink: {
     padding: theme.spacing(1),
@@ -34,24 +37,23 @@ const useStyles = makeStyles((theme) => ({
 
 
   navBtnStyle: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
     boxShadow: 'none',
     borderColor: 'none',
     '&:hover': {
       boxShadow: 'none',
-      color: '#e31337',
-      backgroundColor: '#ffffff',
+      color: theme.palette.primary.textPrimary,
     }
   },
 
   signUpBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#e61c34',
-    color: '#e31337',
+    backgroundColor: theme.palette.primary.backgroundPrimary,
+    color: theme.palette.primary.textPrimary,
     boxShadow: 'none',
+    borderColor: 'none',
     '&:hover': {
-      color: '#e31337',
-      backgroundColor: '#fff'
+      boxShadow: 'none',
+      color: theme.palette.primary.textDefault,
     }
   },
 
@@ -59,15 +61,12 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
       width: 'auto',
+      color: theme.palette.primary.textDefault
     },
   },
   searchIcon: {
@@ -101,7 +100,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(2),
     zIndex: 1,
-    backgroundColor: '#e31337'
+    backgroundColor: theme.palette.primary.textPrimary,
+    color: theme.palette.primary.textDefault
   },
 
   fabRegister: {
@@ -109,7 +109,8 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(10),
     zIndex: 1,
-    backgroundColor: '#e31337'
+    backgroundColor: theme.palette.primary.textPrimary,
+    color: theme.palette.primary.textDefault
   },
 }));
 
@@ -156,7 +157,7 @@ const Header = (props) => {
         <Toolbar
           className={classes.toolbar}
         >
-          <Button className={classes.signUpBtn} variant="contained" size="medium">Follow</Button>
+          <Button className={classes.signUpBtn}  size="medium">Follow</Button>
           <Typography
             component="h2"
             variant="h5"
@@ -181,7 +182,7 @@ const Header = (props) => {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          <Button className={classes.signUpBtn} variant="contained" size="medium">Sign up</Button>
+          <Button className={classes.signUpBtn}  size="medium">Sign up</Button>
         </Toolbar>
       </Hidden>
 

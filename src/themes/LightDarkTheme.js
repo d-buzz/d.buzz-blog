@@ -2,47 +2,52 @@ import React from 'react';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 
-const darkMode = createMuiTheme({
+const nightShade = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      light: '#757ce8',
-      main: '#3f50b5',
-      dark: '#002884',
+      main: '#e31337',
       contrastText: '#fff',
-    },
-    secondary: {
-      light: '#ff7961',
-      main: '#f44336',
-      dark: '#ba000d',
-      contrastText: '#000',
+      textPrimary: '#e31337',
+      textDefault: '#fff',
+      backgroundPrimary: '#15202b',
     }
   }
 });
 
-const lightMode = createMuiTheme({
+const granite = createMuiTheme({
   palette: {
-    type: 'light',
+    type: 'dark',
     primary: {
-      light: '#757ce8',
-      main: '#3f50b5',
-      dark: '#002884',
+      main: '#e31337',
       contrastText: '#fff',
-    },
-    secondary: {
-      light: '#ff7961',
-      main: '#f44336',
-      dark: '#ba000d',
-      contrastText: '#000',
+      textPrimary: '#e31337',
+      textDefault: '#fff',
+      backgroundPrimary: '#212529',
     }
   }
 });
+
+const dayLight = createMuiTheme({
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#e31337',
+      contrastText: '#fff',
+      textPrimary: '#e31337',
+      textDefault: '#424242',
+      backgroundPrimary: '#ffffff',    
+    }
+  }
+});
+
+
 
 
 
 const LightDarkTheme = ({children}) => {
   return (
-    <ThemeProvider theme={lightMode}>{children}</ThemeProvider>
+    <ThemeProvider theme={dayLight}>{children}</ThemeProvider>
   )
 }
 

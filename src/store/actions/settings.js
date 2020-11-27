@@ -1,6 +1,6 @@
 export const SET_THEME = 'SET_THEME';
 
-export const setDarkTheme = isDark => ({
+export const setTheme = theme => ({
   type: SET_THEME,
-  isDark
+  theme
 });

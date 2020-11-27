@@ -1,14 +1,14 @@
 import * as types from '../actions/settings';
 
 const initState = {
-  isDark: false,
+  theme: null,
 };
 
-export default (state = initState, { isDark, type }) => {
+export default (state = initState, { theme, type }) => {
 
   switch (type) {
     case types.SET_THEME:
-      return { ...state, isDark };
+      return { ...state, theme };
     default:
       return { ...state};
   }

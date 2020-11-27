@@ -12,7 +12,7 @@ import Main from './pages/Main';
 ReactDOM.render(
   <LightDarkTheme>
     <Provider store={store}>
-      <Main />
+        <Main />
     </Provider>
   </LightDarkTheme>,
   document.getElementById('root')

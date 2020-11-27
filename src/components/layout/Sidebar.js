@@ -9,14 +9,14 @@ import Link from '@material-ui/core/Link';
 const useStyles = makeStyles((theme) => ({
   sidebarAboutBox: {
     padding: theme.spacing(2),
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: theme.palette.primary.backgroundPrimary ,
   },
   sidebarSection: {
     marginTop: theme.spacing(3),
   },
 
   sidebarLink: {
-    color: '#15202b',
+    color: theme.palette.primary.textDefault,
     '&:hover': {
       color: '#e31337'
     }
