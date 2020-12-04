@@ -1,8 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const DBuzzLogo = () => {
 
-  let isDark = false;
+  const theme = useSelector(state => state.settings.theme);
+ 
+  let isDark = theme !== 'daylight';
 
   return (
     <React.Fragment>

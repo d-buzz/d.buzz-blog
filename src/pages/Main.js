@@ -11,6 +11,7 @@ import Footer from '../components/layout/Footer';
 import PostPage from './PostPage';
 import NewPostPage from './NewPostPage';
 import LoginPage from './LoginPage';
+import ProfilePage from './ProfilePage';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +44,7 @@ const Main = () => {
             <Route path="/post" component={PostPage} />
             <Route path="/new-post" component={NewPostPage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/profile" component={ProfilePage} />
           </Switch>
         </Container>
         <Footer title="D.Buzz" description="The long post view for D.Buzz platform!" />

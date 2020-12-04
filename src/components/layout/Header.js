@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(2),
     zIndex: 1,
     backgroundColor: theme.palette.primary.textPrimary,
-    color: theme.palette.primary.textDefault
+    color: theme.palette.primary.contrastText
   },
 
   fabRegister: {
@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(10),
     zIndex: 1,
     backgroundColor: theme.palette.primary.textPrimary,
-    color: theme.palette.primary.textDefault
+    color: theme.palette.primary.contrastText
   },
 }));
 

@@ -10,11 +10,11 @@ import Main from './pages/Main';
 
 
 ReactDOM.render(
-  <LightDarkTheme>
-    <Provider store={store}>
-        <Main />
-    </Provider>
-  </LightDarkTheme>,
+  <Provider store={store}>
+    <LightDarkTheme>
+      <Main />
+    </LightDarkTheme>
+  </Provider>,
   document.getElementById('root')
 );
 

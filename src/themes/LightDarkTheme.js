@@ -2,6 +2,9 @@ import React from 'react';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 
+import { useSelector } from 'react-redux';
+
+
 const nightShade = createMuiTheme({
   palette: {
     type: 'dark',
@@ -46,8 +49,11 @@ const dayLight = createMuiTheme({
 
 
 const LightDarkTheme = ({children}) => {
+
+  const theme = useSelector(state => state.settings.theme);
+
   return (
-    <ThemeProvider theme={dayLight}>{children}</ThemeProvider>
+    <ThemeProvider theme={theme === 'nightshade' ? nightShade : (theme === 'granite' ? granite : dayLight)}>{children}</ThemeProvider>
   )
 }
 
