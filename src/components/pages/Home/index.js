@@ -3,6 +3,7 @@ import { testRequest } from 'store/tests/actions'
 import compose from 'recompose/compose'
 import { bindActionCreators } from 'redux'
 import { connect} from 'react-redux'
+import { Preloader, BrandIcon } from 'components/elements'
 
 const Home = (props) => {
   const { testRequest, data } = props
@@ -15,6 +16,10 @@ const Home = (props) => {
   return (
     <React.Fragment>
       <center>
+        <div style={{ width: 200, height: 200 }}>
+          <Preloader />
+        </div>
+        <BrandIcon />
         <h2>{ JSON.stringify(data) }</h2>
       </center>
     </React.Fragment>
