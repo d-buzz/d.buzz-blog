@@ -6,17 +6,18 @@ import store from 'store/store'
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
 } from 'react-router-dom'
+import initReactFastclick from 'react-fastclick'
+
+initReactFastclick()
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
 
