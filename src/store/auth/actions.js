@@ -21,3 +21,17 @@ export const authenticateUserFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const SET_MUTE_LIST = 'SET_MUTE_LIST'
+
+export const setMuteList = (response) => ({
+  type: SET_MUTE_LIST,
+  payload: response,
+})
+
+export const SET_ACCOUNT_LIST = 'SET_ACCOUNT_LIST'
+
+export const setAccountList = (list) => ({
+  type: SET_ACCOUNT_LIST,
+  payload: list,
+})
