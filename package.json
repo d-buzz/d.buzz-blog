@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@hiveio/hive-js": "^0.8.13",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "caesar-shift": "^1.0.0",
+    "config": "^3.3.3",
     "crypto-js": "^4.0.0",
     "immutable": "^4.0.0-rc.12",
     "lottie-react": "^2.1.0",
