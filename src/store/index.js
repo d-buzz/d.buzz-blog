@@ -1,25 +1,17 @@
-import { createBrowserHistory } from 'history';
-import { createStore, applyMiddleware, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import reducers from './reducers';
-import services from './services';
-import { routerMiddleware } from 'react-router-redux';
+import { combineReducers } from 'redux'
+import { fork, all } from 'redux-saga/effects'
 
-const browserHistory = createBrowserHistory();
-const middleware = routerMiddleware(browserHistory);
-const sagaMiddleware = createSagaMiddleware();
+import { tests } from './tests/reducers'
+import { reducer as thunkReducer } from 'redux-saga-thunk'
+import * as testSagas from './tests/sagas'
 
-const store = createStore(
-    reducers,
-    process.env.NODE_ENV === 'production' ? applyMiddleware(
-        middleware,
-        sagaMiddleware
-    ) : compose(applyMiddleware(
-        middleware,
-        sagaMiddleware
-    ), window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : NOOP => NOOP )
-);
-
-services.forEach(service => sagaMiddleware.run(service));
-
-export default store;
+export const rootReducer = combineReducers({
+  thunk: thunkReducer,
+  tests,
+})
+  
+export function* rootSaga() {
+  yield all([
+    ...Object.values(testSagas),
+  ].map(fork))
+}
