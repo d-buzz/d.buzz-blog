@@ -20,7 +20,7 @@ const Home = (props) => {
           <Preloader />
         </div>
         <BrandIcon />
-        <h2>{ JSON.stringify(data) }</h2>
+        <h2>{JSON.stringify(data)}</h2>
       </center>
     </React.Fragment>
   )
@@ -33,9 +33,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     testRequest,
-  }, dispatch)
+  }, dispatch),
 })
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
 )(Home)
