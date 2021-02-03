@@ -22,15 +22,13 @@ const SplashScreen = () => {
         <Preloader />
       </div>
       <BrandIcon style={{
-          position: 'absolute',
-          margin: 'auto',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-        
+        position: 'absolute',
+        margin: 'auto',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}/>
     </div>
   )
 }
@@ -62,7 +60,7 @@ const Init = (props) => {
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     getBestRpcNode,
-  }, dispatch)
+  }, dispatch),
 })
 
 export default connect(null, mapDispatchToProps)(Init)
