@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
 import appConfig from 'config'
+import { v4 as uuidv4 } from 'uuid'
 import { api, auth } from '@hiveio/hive-js'
 
 export const keychainSignIn = (username) => {
@@ -49,6 +50,30 @@ export const fetchMuteList = (user) => {
       } else {
         resolve(data)
       }
+    })
+  })
+}
+
+export const getBestRpcNode = () => {
+  return new Promise((resolve) => {
+    axios.get('https://beacon.peakd.com/api/best')
+      .then(function (result) {
+        console.log({result})
+      })
+      .catch(function(error) {
+        console.log({error})
+        resolve('https://api.hive.blog')
+      })
+  })
+}
+
+
+//note: should be able to set a version for dbuzz blog also, since we are using the version of dbuzz.
+export const checkVersion = () => {
+  return new Promise((resolve) => {
+    axios.get('https://blog.d.buzz/version.json')
+    .then(function(result) {
+      resolve(result.data)
     })
   })
 }
