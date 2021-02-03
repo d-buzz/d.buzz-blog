@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Preloader, BrandIcon } from 'components/elements'
+import { getBestRpcNode } from 'store/settings/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -38,7 +41,14 @@ const Init = (props) => {
   const [init, setInit] = useState(false)
 
   useEffect(() => {
-    setInit(true)
+    //note: should add the checkversionrequest()
+    getBestRpcNode().then(() => {
+      setInit(true)
+      // getTrendingTagsRequest()
+      // getSavedUserRequest().then(() => {
+      //   setInit(true)
+      // })
+    })
   }, [])
 
   return (
@@ -49,4 +59,10 @@ const Init = (props) => {
   )
 }
 
-export default Init
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    getBestRpcNode,
+  }, dispatch)
+})
+
+export default connect(null, mapDispatchToProps)(Init)
