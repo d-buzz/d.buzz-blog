@@ -15,4 +15,3 @@ function* watchTestRequest({payload, meta}) {
 export default function* sagas() {
   yield takeEvery(TEST_REQUEST, watchTestRequest)
 }
-

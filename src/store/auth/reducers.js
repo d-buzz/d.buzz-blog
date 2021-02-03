@@ -9,9 +9,9 @@ const defaultState = fromJS({
 
 export const auth = (state = defaultState, { type, payload }) => {
   switch (type) {
-    case AUTHENTICATE_USER_SUCCESS:
-      return state.set('user', payload)
-    default: 
-      return state
+  case AUTHENTICATE_USER_SUCCESS:
+    return state.set('user', payload)
+  default: 
+    return state
   }
 }

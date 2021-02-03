@@ -109,7 +109,6 @@ function* authenticateUserRequest(payload, meta) {
 }
 
 
-
 function* watchAuthenticationUserRequest({ payload, meta }) {
   yield call(authenticateUserRequest, payload, meta)
 }

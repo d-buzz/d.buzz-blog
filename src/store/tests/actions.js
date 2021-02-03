@@ -6,7 +6,7 @@ export const testRequest = () => ({
   payload: {},
   meta: {
     thunk: true,
-  }
+  },
 })
 
 export const testSuccess = (response, meta) => ({

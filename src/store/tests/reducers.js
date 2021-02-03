@@ -7,9 +7,9 @@ const defaultState = fromJS({
 
 export const tests = (state = defaultState, { type, payload }) => {
   switch (type) {
-    case TEST_SUCCESS:
-      return state.set('data', payload)
-    default:
-      return state
+  case TEST_SUCCESS:
+    return state.set('data', payload)
+  default:
+    return state
   }
 }

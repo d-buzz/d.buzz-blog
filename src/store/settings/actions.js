@@ -5,7 +5,7 @@ export const getBestRpcNode = () => ({
   type: GET_BEST_RPC_NODE,
   meta: {
     thunk: true,
-  }
+  },
 })
 
 export const setRpcNode = (response, meta) => ({
