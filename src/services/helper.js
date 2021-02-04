@@ -60,4 +60,3 @@ export const readSession = (session) => {
 
   return dataDecrypt
 }
-
