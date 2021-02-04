@@ -4,9 +4,14 @@ import {
   authenticateUserSuccess,
   authenticateUserFailure,
 
-  setMuteList,
+  GET_SAVED_USER_REQUEST,
+  getSavedUsersSuccess,
+  getSavedUsersFailure,
 
+  setMuteList,
   setAccountList,
+  setOpacityUsers,
+  setHasAgreedPayout,
 
 } from './actions'
 
@@ -19,7 +24,7 @@ import {
   fetchMuteList,
 } from 'services/api'
 
-import { generateSession } from 'services/helper'
+import { generateSession, readSession } from 'services/helper'
 
 function* authenticateUserRequest(payload, meta) {
   const { password, useKeychain } = payload
@@ -108,11 +113,72 @@ function* authenticateUserRequest(payload, meta) {
   }
 }
 
+function* getSavedUserRequest(meta) {
+  let user = { username: '', useKeychain: false, isAuthenticated: false }
+  try {
+    let saved = yield call([localStorage, localStorage.getItem], 'user')
+    let active = yield call([localStorage, localStorage.getItem], 'active')
+    let accounts = yield call([localStorage, localStorage.getItem], 'accounts')
+
+    if (!accounts) {
+      accounts = []
+    } else {
+      accounts = JSON.parse(accounts)
+    }
+
+    saved = JSON.parse(saved)
+
+    try {
+      const parseActive = JSON.parse(active) 
+      active = parseActive
+    } catch(error) {
+      console.log({error})
+    }
+
+    if (active !== null && saved !== null && Array.isArray(saved) && active && saved.length !== 0) {
+      //note: I still have to know the meaning behind this...
+      let activeUser = null
+      saved.forEach((item) => {
+        const decrypted = readSession(item)
+
+        if (decrypted.username === active) {
+          activeUser = decrypted
+        }
+      })
+      user = activeUser
+    }
+
+    if (user.isAuthenticated) {
+      let mutelist = yield call(fetchMuteList, user.username)
+      mutelist = [ ...new Set(mutelist.map(item => item.following))]
+      yield put(setMuteList(mutelist))
+      yield put(setOpacityUsers([]))
+    }
+
+    let payoutAgreed = yield call([localStorage, localStorage.getItem], 'payoutAgreed')
+
+    if (payoutAgreed === null) {
+      payoutAgreed = false
+    }
+
+    yield put(setAccountList(accounts))
+    yield put(setHasAgreedPayout(payoutAgreed))
+    
+    yield put(getSavedUsersSuccess(user, meta))
+  } catch (error) {
+    yield put(getSavedUsersFailure(user, meta))
+  }
+}
 
 function* watchAuthenticationUserRequest({ payload, meta }) {
   yield call(authenticateUserRequest, payload, meta)
 }
 
+function* watchGetSavedUsersRequest({ meta }) {
+  yield call(getSavedUserRequest, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(AUTHENTICATE_USER_REQUEST, watchAuthenticationUserRequest)
+  yield takeEvery(GET_SAVED_USER_REQUEST, watchGetSavedUsersRequest)
 }
