@@ -4,6 +4,8 @@ import { Preloader, BrandIcon } from 'components/elements'
 import { getBestRpcNode } from 'store/settings/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { getTrendingTagsRequest } from 'store/posts/actions'
+import { getSavedUserRequest } from 'store/auth/actions'
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -41,11 +43,10 @@ const Init = (props) => {
   useEffect(() => {
     //note: should add the checkversionrequest()
     getBestRpcNode().then(() => {
-      setInit(true)
-      // getTrendingTagsRequest()
-      // getSavedUserRequest().then(() => {
-      //   setInit(true)
-      // })
+      getTrendingTagsRequest()
+      getSavedUserRequest().then(() => {
+        setInit(true)
+      })
     })
   }, [])
 
@@ -60,6 +61,8 @@ const Init = (props) => {
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     getBestRpcNode,
+    getSavedUserRequest,
+    getTrendingTagsRequest,
   }, dispatch),
 })
 
