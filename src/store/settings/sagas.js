@@ -6,6 +6,9 @@ import {
 
   CHECK_VERSION_REQUEST,
   checkVersionSuccess,
+  GET_SAVED_THEME_REQUEST,
+  getSavedThemeFailure,
+  getSavedThemeSuccess,
 } from './actions'
 
 import {
@@ -43,6 +46,20 @@ function* checkVersionRequest(meta) {
   yield put(checkVersionSuccess(latest, meta))
 }
 
+function* getSavedThemeRequest(meta) {
+  let theme = { mode: 'light'}
+  try {
+    let saved = yield call([localStorage, localStorage.getItem], 'theme')
+    saved = JSON.parse(saved)
+    if (saved !== null) {
+      theme = saved
+    }
+    yield put(getSavedThemeSuccess(theme, meta))
+  } catch (error) {
+    yield put(getSavedThemeFailure(error, meta))
+  }
+}
+
 function* watchGetBestRpcNode({ meta }) {
   yield call(getBestRPCNode, meta)
 }
@@ -51,7 +68,12 @@ function* watchCheckVersionRequest({ meta }) {
   yield call(checkVersionRequest, meta)
 }
 
+function* watchGetSavedThemeRequest({ meta }) {
+  yield call(getSavedThemeRequest, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_BEST_RPC_NODE, watchGetBestRpcNode)
   yield takeEvery(CHECK_VERSION_REQUEST, watchCheckVersionRequest)
+  yield takeEvery(GET_SAVED_THEME_REQUEST, watchGetSavedThemeRequest)
 }
