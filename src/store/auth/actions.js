@@ -35,3 +35,40 @@ export const setAccountList = (list) => ({
   type: SET_ACCOUNT_LIST,
   payload: list,
 })
+
+export const GET_SAVED_USER_REQUEST = 'GET_SAVED_USER_REQUEST'
+export const GET_SAVED_USER_SUCCESS = 'GET_SAVED_USER_SUCCESS'
+export const GET_SAVED_USER_FAILURE = 'GET_SAVED_USER_FAILURE'
+
+export const getSavedUserRequest = () => ({
+  type: GET_SAVED_USER_REQUEST,
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getSavedUsersSuccess = (response, meta) => ({
+  type: GET_SAVED_USER_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getSavedUsersFailure = (error, meta) => ({
+  type: GET_SAVED_USER_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_OPACITY_USERS = 'SET_OPACITY_USERS'
+
+export const setOpacityUsers = (users) => ({
+  type: SET_OPACITY_USERS,
+  payload: users,
+})
+
+export const SET_HAS_AGREED_PAYOUT = 'SET_HAS_AGREED_PAYOUT'
+
+export const setHasAgreedPayout = (agreedPayout) => ({
+  type: SET_HAS_AGREED_PAYOUT,
+  payload: agreedPayout,
+})
