@@ -1,7 +1,15 @@
 import axios from 'axios'
 import appConfig from 'config'
 import { v4 as uuidv4 } from 'uuid'
-import { api, auth } from '@hiveio/hive-js'
+import { 
+  api,
+  auth,
+  broadcast,
+  config,
+} from '@hiveio/hive-js'
+
+config.set('rebranded_api', true)
+broadcast.updateOperations()
 
 export const keychainSignIn = (username) => {
   const challenge = { token: uuidv4() }
@@ -72,8 +80,27 @@ export const getBestRpcNode = () => {
 export const checkVersion = () => {
   return new Promise((resolve) => {
     axios.get('https://blog.d.buzz/version.json')
-    .then(function(result) {
-      resolve(result.data)
-    })
+      .then(function(result) {
+        resolve(result.data)
+      })
+  })
+}
+
+const setRPCNode = () => {
+  const node = localStorage.getItem('rpc')
+  api.setOptions({ url: node })
+}
+
+export const fetchTrendingTags = () => {
+  return new Promise((resolve, reject) => {
+    // note: initialized due to needs to execute during first API call
+    setRPCNode()
+    api.getTrendingTagsAsync(null, 100)
+      .then((result) => {
+        resolve(result)
+      })
+      .catch((error) => {
+        reject(error)
+      })
   })
 }
