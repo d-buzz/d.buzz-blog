@@ -1,16 +1,25 @@
 import React from 'react'
 import routes from './routes'
-import { Switch, Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
+import { createUseStyles } from 'react-jss'
+import { Helmet } from 'react-helmet'
+import { Init, AuthGuard, ThemeLoader } from 'components'
+import { renderRoutes } from 'react-router-config'
+import { LastLocationProvider } from 'react-router-last-location'
 
-const RouteWithSubRoutes = (route) => {
+const useStyles = createUseStyles(theme => ({
+  wrapper: {
+    overflow: 'hidden !important',
+    backgroundColor: theme.backgroundColor.primary,
+  },
+}))
+
+const AppWrapper = ({ children }) => {
+  const classes = useStyles()
   return (
-    <Route
-      path={route.path}
-      render={props => (
-        <route.component {...props} routes={route.routes} />
-      )}
-    />
+    <div classes={classes.wrapper}>
+      {children}
+    </div>
   )
 }
 
@@ -18,11 +27,25 @@ const RouteWithSubRoutes = (route) => {
 const App = (props) => {
   return (
     <React.Fragment>  
-      <Switch>
-        {routes.map((route, i) => (
-          <RouteWithSubRoutes key={i} {...route} />
-        ))}
-      </Switch>
+      <Helmet>
+        <meta property="og:title" content="D.Buzz Blog" />
+        <meta property="og:description" content="D.Buzz Blog | Blogging for HIVE" />
+        <meta property="og:image" content="https://d.buzz/dbuzz.svg" />
+        <meta property="title" content="D.Buzz Blog" />
+        <meta property="description" content="D.Buzz Blog | Blogging for HIVE" />
+        <meta property="image" content="https://d.buzz/dbuzz.svg" />
+      </Helmet>
+      <LastLocationProvider>
+        <ThemeLoader>
+          <Init>
+            <AuthGuard>
+              <AppWrapper>
+                {renderRoutes(routes)}
+              </AppWrapper>
+            </AuthGuard>
+          </Init>
+        </ThemeLoader>
+      </LastLocationProvider>
     </React.Fragment>
   )
 }
