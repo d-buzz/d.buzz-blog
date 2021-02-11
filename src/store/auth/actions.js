@@ -72,3 +72,10 @@ export const setHasAgreedPayout = (agreedPayout) => ({
   type: SET_HAS_AGREED_PAYOUT,
   payload: agreedPayout,
 })
+
+export const SET_FROM_LANDING = 'SET_FROM_LANDING'
+
+export const setFromLanding = (status) => ({
+  type: SET_FROM_LANDING,
+  payload: { status },
+})
