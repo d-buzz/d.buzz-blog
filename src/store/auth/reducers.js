@@ -3,11 +3,13 @@ import {
   GET_SAVED_USER_SUCCESS,
   SET_OPACITY_USERS,
   SET_HAS_AGREED_PAYOUT,
+  SET_FROM_LANDING,
 } from './actions'
 import { fromJS } from 'immutable'
 
 const defaultState = fromJS({
   user: {},
+  fromLanding: false,
   opacityUsers: [],
   payoutAgreed: false,
 })
@@ -22,6 +24,8 @@ export const auth = (state = defaultState, { type, payload }) => {
     return state.set('opacityUsers', payload)
   case SET_HAS_AGREED_PAYOUT:
     return state.set('payoutAgreed', payload)
+  case SET_FROM_LANDING:
+    return state.set('fromLanding', payload)
   default: 
     return state
   }
