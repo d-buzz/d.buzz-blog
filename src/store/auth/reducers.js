@@ -1,6 +1,6 @@
 import {
   AUTHENTICATE_USER_SUCCESS,
-  GET_SAVED_USERS_SUCCESS,
+  GET_SAVED_USER_SUCCESS,
   SET_OPACITY_USERS,
   SET_HAS_AGREED_PAYOUT,
 } from './actions'
@@ -16,7 +16,7 @@ export const auth = (state = defaultState, { type, payload }) => {
   switch (type) {
   case AUTHENTICATE_USER_SUCCESS:
     return state.set('user', payload)
-  case GET_SAVED_USERS_SUCCESS:
+  case GET_SAVED_USER_SUCCESS:
     return state.set('user', payload)
   case SET_OPACITY_USERS:
     return state.set('opacityUsers', payload)
