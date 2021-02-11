@@ -8,6 +8,7 @@ import {
   HashRouter as Router,
 } from 'react-router-dom'
 import initReactFastclick from 'react-fastclick'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './override.css'
 
 initReactFastclick()
