@@ -1,9 +1,10 @@
 import React from 'react'
 
 const GuardedAppFrame = (props) => {
+  console.log('guarded frame')
   return (
     <React.Fragment>
-      THIS IS GUARDED FRAME
+      <h1>THIS IS GUARDED FRAME</h1>
     </React.Fragment>
   )
 }
