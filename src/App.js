@@ -10,7 +10,7 @@ import { LastLocationProvider } from 'react-router-last-location'
 const useStyles = createUseStyles(theme => ({
   wrapper: {
     overflow: 'hidden !important',
-    backgroundColor: theme.backgroundColor.primary,
+    backgroundColor: theme.background.primary,
   },
 }))
 
@@ -23,8 +23,7 @@ const AppWrapper = ({ children }) => {
   )
 }
 
-
-const App = (props) => {
+const App = () => {
   return (
     <React.Fragment>  
       <Helmet>
