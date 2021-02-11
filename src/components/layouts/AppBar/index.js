@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
-import { Container, Navbar, Nav } from 'react-bootstrap'
-import { BrandIcon, BrandDarkIcon, BackArrowIcon, ContainedButton } from 'components/elements'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import { BrandIcon, 
+  BrandDarkIcon, 
+  BackArrowIcon,  
+} from 'components/elements'
 import IconButton from '@material-ui/core/IconButton'
 import { createUseStyles } from 'react-jss'
 import { SearchField, LoginModal } from 'components'
@@ -8,6 +13,7 @@ import { signupHiveOnboard } from 'services/helper'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
+import { Button, Hidden } from '@material-ui/core'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -19,7 +25,7 @@ const useStyles = createUseStyles(theme => ({
     margin: '0 auto',
     '@media (min-width: 1100px)': {
       '&.container': {
-        maxWidth: '900px',
+        maxWidth: '1000px',
       },
     },
   },
@@ -33,9 +39,8 @@ const useStyles = createUseStyles(theme => ({
     marginTop: 10,
     backgroundColor: '#e6ecf0',
   },
-  button: {
-    width: 100,
-    height: 35,
+  buttonWrapper: {
+    // margin: 'auto',
   },
   loginButton: {
     marginTop: 15,
@@ -59,6 +64,7 @@ const AppBar = (props) => {
   }
 
   const handleClickOpenLoginModal = () => {
+    console.log('test login')
     setOpen(true)
   }
 
@@ -66,38 +72,51 @@ const AppBar = (props) => {
     setOpen(false)
   }
 
-  const handleSignupComplete = () => {
+  const handleSignupOnHive = () => {
     signupHiveOnboard()
   }
 
 
   return (
-    <Navbar fixed="top" className={classes.nav}>
-      <Container> className={classes.container}
-        <Navbar.Brand>
-          {pathname !== 'ug' && (
-            <React.Fragment>
-              <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
-                <BackArrowIcon />
-              </IconButton>
-              &nbsp;
-            </React.Fragment>
+    <React.Fragment>
+      <Navbar fixed="top" className={classes.nav}>
+        <Container className={classes.container}>
+          <Navbar.Brand>
+            {pathname !== '/' && (
+              <React.Fragment>
+                <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
+                  <BackArrowIcon />
+                </IconButton>
+                &nbsp;
+              </React.Fragment>
+            )}
+            <Link to="/">
+              {mode === 'light' && (<BrandIcon height={30} top={-10} />)}
+              {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-10} />)}
+            </Link>
+          </Navbar.Brand>
+          {!isMobile && (
+            <Nav className="mr-auto">
+              <Hidden only="xs">
+                <SearchField disableTips={true} />
+              </Hidden>
+            </Nav>
           )}
-          <Link to="/">
-            {mode === 'light' && (<BrandIcon height={30} top={-15} />)}
-            {(mode === 'night' || mode === 'gray') && (<BrandDarkIcon height={30} top={-15} />)}
-          </Link>
-        </Navbar.Brand>
-        {!isMobile && (
-          <Nav className="mr-auto">
-            <SearchField disableTips={true} />
-          </Nav>
-        )}
-        <ContainedButton style={{ marginLeft: 5 }} onClick={handleClickOpenLoginModal} transparent={true} fontSize={15} label="Log in" className={classes.button} />
-        <ContainedButton style={{ marginLeft: 5 }} onClick={handleSignupComplete} fontSize={15} label="Sign up" className={classes.button} />      
-      </Container>
-      <LoginModal show={open} onHide={handleClickCloseLoginModal} />
-    </Navbar>
+          <div className={classes.buttonWrapper}>
+            <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
+              Sign in
+            </Button>
+            &nbsp;
+            <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
+              Sign up
+            </Button>
+            
+          
+          </div>
+        </Container>
+        <LoginModal show={open} onHide={handleClickCloseLoginModal} />
+      </Navbar>
+    </React.Fragment>
   )
 }
 const mapStateToProps = (state) => ({
