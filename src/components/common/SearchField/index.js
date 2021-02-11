@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useHistory } from 'react-router'
-import { RoundedField, SearchIcon } from 'components/elements'
+import { BoxField, SearchIcon } from 'components/elements'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
 
@@ -78,7 +78,7 @@ const SearchField = (props) => {
 
   return (
     <React.Fragment>
-      <RoundedField
+      <BoxField
         icon={<SearchIcon top={iconTop} />}
         placeholder={!isMobile ? 'Search D.Buzz': ''}
         className={classes.search}
