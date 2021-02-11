@@ -1,12 +1,18 @@
 import { 
+  AppFrame,
   Home,
 } from 'components'
   
 const routes =  [
   {
-    path: "/",
-    exact: true,
-    component: Home
+    component: AppFrame,
+    routes: [
+      {
+        path: "/",
+        exact: true,
+        component: Home,
+      },
+    ],
   },
 ]
  
