@@ -1,5 +1,6 @@
 import {
   SET_RPC_NODE,
+  SET_THEME_SUCCESS,
   GET_SAVED_THEME_SUCCESS,
   GENERATE_STYLES,
 } from './actions'
@@ -16,6 +17,8 @@ export const settings = (state = defaultState, { type, payload }) => {
   switch (type) {
   case SET_RPC_NODE:
     return state.set('rpcNode', payload)
+  case SET_THEME_SUCCESS:
+    return state.set('theme', payload)
   case GET_SAVED_THEME_SUCCESS:
     return state.set('theme', payload)
   case GENERATE_STYLES:
