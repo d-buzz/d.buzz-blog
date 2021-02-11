@@ -1,4 +1,4 @@
-const night = {
+const darknight = {
   background: {
     primary: 'rgb(21, 32, 43)',
     secondary: '#192734',
@@ -325,7 +325,7 @@ const light = {
   skeleton: { },
 }
 
-const gray = {
+const grayscale = {
   background: {
     primary: '#202225',
     secondary: '#192734',
@@ -494,10 +494,10 @@ const gray = {
 }
 
 export const getTheme = (mode) => {
-  if(mode === 'night') {
-    return night
-  } else if(mode === 'gray') {
-    return gray
+  if (mode === 'darknight') {
+    return darknight
+  } else if (mode === 'grayscale') {
+    return grayscale
   } else {
     return light
   }
