@@ -4,7 +4,6 @@ import ModalBody from 'react-bootstrap/ModalBody'
 import FormLabel from 'react-bootstrap/FormLabel'
 import FormCheck from 'react-bootstrap/FormCheck'
 import FormControl from 'react-bootstrap/FormControl'
-import { ContainedButton } from 'components/elements'
 import { createUseStyles } from 'react-jss'
 import { authenticateUserRequest } from 'store/auth/actions'
 import { Spinner } from 'components/elements'
@@ -19,6 +18,7 @@ import { isMobile } from 'react-device-detect'
 import { Link } from 'react-router-dom'
 import { signupHiveOnboard } from 'services/helper'
 import { SuccessConfirmation } from 'components/elements'
+import { Welcomer } from 'components/elements'
 
 const useStyles = createUseStyles(theme => ({
   loginButton: {
@@ -36,7 +36,7 @@ const useStyles = createUseStyles(theme => ({
   },
   modal: {
     '& div.modal-content': {
-      borderRadius: '15px 15px !important',
+      borderRadius: '5px 5px !important',
       border: 'none',
       maxWidth: 400,
       minWidth: 100,
@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => ({
       backgroundColor: theme.background.primary,
     },
     '& input.form-control': {
-      borderRadius: '50px 50px',
+      borderRadius: '5px 5px',
       fontSize: 14,
       ...theme.search.background,
       ...theme.font,
@@ -170,6 +170,9 @@ const LoginModal = (props) => {
         <ModalBody>
           <div style={{ width: '98%', margin: '0 auto', top: 10 }}>
             <center>
+              <div style={{ width: 200, height: 200 }}>
+                <Welcomer />
+              </div>
               <h6 className={classes.label}>Hi there, welcome back!</h6>
               {signUpConfirmation && (
                 <React.Fragment>
@@ -222,6 +225,7 @@ const LoginModal = (props) => {
                   onChange={handleClickCheckbox}
                 />
               </span>
+              <br />
             </React.Fragment>
           )}
           {!hasInstalledKeychain && !isMobile && (
@@ -270,14 +274,16 @@ const LoginModal = (props) => {
           )}
           <center>
             {!loading && (
-              <ContainedButton
-                onClick={handleClickLogin}
-                transparent={true}
-                className={classes.loginButton}
-                fontSize={15}
+              <Button 
+                className={classes.loginButton} 
+                variant="outlined" 
+                color="secondary" 
+                onClick={handleClickLogin} 
                 disabled={isDisabled() || hasSwitcherMatch()}
-                label="Submit"
-              />
+              >
+                Submit
+              </Button>
+              
             )}
             {loading && (
               <Spinner size={40} loading={true} />
