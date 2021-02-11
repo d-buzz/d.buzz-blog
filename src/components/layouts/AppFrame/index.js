@@ -7,6 +7,7 @@ import { isMobile } from 'react-device-detect'
 import { Container } from 'react-bootstrap'
 import { StickyContainer } from 'react-sticky'
 import { connect } from 'react-redux'
+import UnguardedAppFrame from '../UnguardedAppFrame'
 
 const useStyles = createUseStyles({
   main: {
@@ -49,7 +50,8 @@ const AppFrame = (props) => {
   const classes = useStyles()
   const { user, route } = props
   const { pathname, search } = useLocation()
-  const { isAuthenticated } = user
+  let { isAuthenticated } = user
+  isAuthenticated = false
   const params = queryString.parse(search) || ''
   const referrer = document.referrer
   
@@ -93,6 +95,9 @@ const AppFrame = (props) => {
           <StickyContainer>
             {isAuthenticated && (
               <GuardedAppFrame pathname={pathname} route={route} />
+            )}
+            {!isAuthenticated && (
+              <UnguardedAppFrame route={route} />
             )}
           </StickyContainer>
         </Container>
