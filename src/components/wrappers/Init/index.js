@@ -20,7 +20,7 @@ const SplashScreen = () => {
 
   return (
     <div className={classes.wrapper}>
-      <div style={{ width: 200, height: 200 }}>
+      <div style={{ width: 200, height: 200, position: 'absolute', margin: 'auto', top: 0, left: 0, right: 0, bottom:0 }}>
         <Preloader />
       </div>
       <BrandIcon style={{
@@ -39,7 +39,6 @@ const Init = (props) => {
   const { children } = props
 
   const [init, setInit] = useState(false)
-
   useEffect(() => {
     setInit(true)
     //note: should add the checkversionrequest()
