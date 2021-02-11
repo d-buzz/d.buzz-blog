@@ -41,13 +41,14 @@ const Init = (props) => {
   const [init, setInit] = useState(false)
 
   useEffect(() => {
+    setInit(true)
     //note: should add the checkversionrequest()
-    getBestRpcNode().then(() => {
-      getTrendingTagsRequest()
-      getSavedUserRequest().then(() => {
-        setInit(true)
-      })
-    })
+    // getBestRpcNode().then(() => {
+    //   getTrendingTagsRequest()
+    //   getSavedUserRequest().then(() => {
+    //     setInit(true)
+    //   })
+    // })
   }, [])
 
   return (
