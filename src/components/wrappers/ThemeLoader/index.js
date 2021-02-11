@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { ThemeProvider } from 'react-jss'
-import { connect } from 'react-redux'
-import { getTheme } from 'services/theme'
-import { bindActionCreators } from 'redux'
 import { getSavedThemeRequest, generateStyles } from 'store/settings/actions'
+import { getTheme } from 'services/theme'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ThemeProvider } from 'components'
 
 const ThemeLoader = (props) => {
   const {
@@ -13,7 +13,6 @@ const ThemeLoader = (props) => {
   } = props
 
   const [loaded, setLoaded] = useState(false)
-  
   useEffect(() => {
     getSavedThemeRequest()
       .then(({ mode }) => {
@@ -22,9 +21,9 @@ const ThemeLoader = (props) => {
         generateStyles(theme)
         setLoaded(true)
       })
-    //eslint-disable-next-line
+    // eslint-disable-next-line
   }, [])
-  
+
   return (
     <React.Fragment>
       {loaded && (
