@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-sage/effects'
+import { call, put, takeEvery } from 'redux-saga/effects'
 import {
   GET_TRENDING_TAGS_REQUEST,
   getTrendingTagsSuccess,
