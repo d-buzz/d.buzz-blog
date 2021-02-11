@@ -6,10 +6,13 @@ import {
   auth,
   broadcast,
   config,
+  formatter,
 } from '@hiveio/hive-js'
 
 config.set('rebranded_api', true)
 broadcast.updateOperations()
+
+const visited = []
 
 export const keychainSignIn = (username) => {
   const challenge = { token: uuidv4() }
@@ -100,6 +103,73 @@ export const fetchTrendingTags = () => {
         resolve(result)
       })
       .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export const fetchFollowCount = (username) => {
+  return api.getFollowCountAsync(username)
+    .then((result) => {
+      return result
+    })
+    .catch((error) => {
+      return error
+    })
+}
+
+export const isFollowing = (follower, following) => {
+  return new Promise((resolve, reject) => {
+    const params = [follower, following]
+    api.call('bridge.get_relationship_between_accounts', params, (err, data) => {
+      if (err) {
+        reject(err)
+      }else {
+        const { follows } = data
+        resolve(follows)
+      }
+    })
+  })
+}
+
+export const fetchProfile = (username, checkFollow = false) => {
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  return new Promise((resolve, reject) => {
+    api.getAccountsAsync(username)
+      .then(async(result) => {
+        result.forEach(async(item, index) => {
+          const repscore = item.reputation
+          let score = formatter.reputation(repscore)
+
+          if(!score || score < 25) {
+            score = 25
+          }
+
+          result[index].reputation = score
+
+          if(checkFollow) {
+
+            const follow_count = await fetchFollowCount(item.name)
+            result[index].follow_count = follow_count
+
+            let isFollowed = false
+
+            if(user) {
+              isFollowed = await isFollowing(user.username, item.name)
+            }
+
+            result[index].isFollowed = isFollowed
+          }
+
+          visited.push(result[index])
+
+          if(index === result.length - 1) {
+            resolve(result)
+          }
+        })
+
+      }).catch((error) => {
         reject(error)
       })
   })
