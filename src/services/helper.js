@@ -60,3 +60,17 @@ export const readSession = (session) => {
 
   return dataDecrypt
 }
+
+export const signupHiveOnboard = () => {
+  const referenceUrl = window.open('https://hiveonboard.com/create-account?ref=dbuzz&redirect_url=https://d.buzz/#/?status=success', '_blank')
+  referenceUrl.blur()
+}
+
+export function hasCompatibleKeychain() {
+  return (
+    window.hive_keychain &&
+    window.hive_keychain.requestSignBuffer &&
+    window.hive_keychain.requestBroadcast &&
+    window.hive_keychain.requestSignedCall
+  )
+}
