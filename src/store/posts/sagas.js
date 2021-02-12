@@ -12,11 +12,12 @@ import {
 function* getTrendingTagsRequests(meta) {
   try {
     let data = yield call(fetchTrendingTags)
-
+    console.log({data})
     data = data.filter((tag) => !tag.name.includes('hive') && !tag.name.split('')[1].match(new RegExp('^\\d+$')))
+    console.log({data})
     yield put(getTrendingTagsSuccess(data, meta))
   } catch (error) {
-    yield put(getTrendingTagsFailure)
+    yield put(getTrendingTagsFailure(error, meta))
   }
 }
 
