@@ -57,10 +57,10 @@ const SideBarRight = (props) => {
     let link = ''
 
     if(!isAuthenticated) {
-      link = '/ug'
+      link = '/'
     }
 
-    link += `/tags?q=${tag}`
+    link += `tags?q=${tag}`
 
     return link
   }
@@ -78,7 +78,7 @@ const SideBarRight = (props) => {
     <React.Fragment>
       {!hideSearchBar && !isInSearchRoute && (<SearchField />)}
       <div style={{ paddingTop: 5 }}>
-        <ListGroup>
+        <ListGroup label="Top Trends for">
           {items.slice(0, 5).map((item) => (
             <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
           ))}
