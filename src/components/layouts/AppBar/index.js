@@ -18,8 +18,14 @@ import { Button, Hidden } from '@material-ui/core'
 const useStyles = createUseStyles(theme => ({
   nav: {
     height: 55,
-    backgroundColor: theme.nav.backgroud,
+    backgroundColor: theme.nav.background,
     borderBottom: theme.border.primary,
+  },
+  search: {
+    width: 350,
+    marginBottom: 10,
+    marginTop: 10,
+    backgroundColor: '#e6ecf0',
   },
   container: {
     margin: '0 auto',
@@ -32,20 +38,6 @@ const useStyles = createUseStyles(theme => ({
   backButton: {
     display: 'inline-block',
     ...theme.icon,
-  },
-  search: {
-    width: 350,
-    marginBottom: 10,
-    marginTop: 10,
-    backgroundColor: '#e6ecf0',
-  },
-  buttonWrapper: {
-    // margin: 'auto',
-  },
-  loginButton: {
-    marginTop: 15,
-    width: 100,
-    height: 35,
   },
 }))
 
@@ -102,7 +94,7 @@ const AppBar = (props) => {
               </Hidden>
             </Nav>
           )}
-          <div className={classes.buttonWrapper}>
+          <div>
             <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
               Sign in
             </Button>
@@ -110,8 +102,6 @@ const AppBar = (props) => {
             <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
               Sign up
             </Button>
-            
-          
           </div>
         </Container>
         <LoginModal show={open} onHide={handleClickCloseLoginModal} />
