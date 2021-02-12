@@ -21,11 +21,13 @@ const useStyles = createUseStyles(theme => ({
   label: {
     color: theme.font.color,
     paddingTop: 10,
+    paddingLeft: 15,
     fontWeight: 'bold',
     fontSize: 14,
   },
   subLabel: {
     fontSize: 13,
+    paddingLeft: 15,
     color: '#657786',
   },
   linkWrapper: {
