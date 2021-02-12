@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Preloader, BrandIcon } from 'components/elements'
-import { getBestRpcNode } from 'store/settings/actions'
+import { getBestRpcNode, checkVersionRequest } from 'store/settings/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getTrendingTagsRequest } from 'store/posts/actions'
@@ -36,18 +36,42 @@ const SplashScreen = () => {
 }
 
 const Init = (props) => {
-  const { children } = props
+  const { 
+    getTrendingTagsRequest,
+    getBestRpcNode,
+    getSavedUserRequest,
+    children } = props
 
   const [init, setInit] = useState(false)
+
   useEffect(() => {
-    setInit(true)
-    //note: should add the checkversionrequest()
-    // getBestRpcNode().then(() => {
-    //   getTrendingTagsRequest()
-    //   getSavedUserRequest().then(() => {
-    //     setInit(true)
-    //   })
-    // })
+    getBestRpcNode().then(() => {
+      getTrendingTagsRequest()
+      getSavedUserRequest().then(() => {
+        setInit(true)
+      })
+    })
+  
+    /** 
+     * Check Version will be implemented
+     * - if it will be on production mode
+     * - if blog.d.buzz is already hosted
+     *  
+     * checkVersionRequest().then((isLatest) => {
+     * if(!isLatest) {
+     *  window.history.forward(1)
+     *  window.location.reload(true)
+     *  } else {
+     *    getBestRpcNode().then(() => {
+     *      getTrendingTagsRequest()
+  *         getSavedUserRequest().then(() => {
+     *        setInit(true)
+     *      })
+     *    })
+     *  }
+     * })
+     */
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -63,6 +87,7 @@ const mapDispatchToProps = (dispatch) => ({
     getBestRpcNode,
     getSavedUserRequest,
     getTrendingTagsRequest,
+    checkVersionRequest,
   }, dispatch),
 })
 
