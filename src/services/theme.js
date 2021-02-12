@@ -169,7 +169,7 @@ const darknight = {
 
 const light = {
   background: {
-    primary: 'white',
+    primary: '#E5E5E5',
     secondary: 'white',
   },
   notification: { },
@@ -316,7 +316,7 @@ const light = {
   },
   right: {
     list: {
-      background: '#f5f8fa',
+      background: 'white',
       hover: {
         backgroundColor: 'rgba(0, 0, 0, 0.03)',
       },
