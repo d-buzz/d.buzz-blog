@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import uuid from 'uuid-random'
 import { encrypt, decrypt } from 'caesar-shift'
 import CryptoJS  from 'crypto-js'
@@ -73,4 +74,24 @@ export function hasCompatibleKeychain() {
     window.hive_keychain.requestBroadcast &&
     window.hive_keychain.requestSignedCall
   )
+}
+
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window
+  return { width, height }
+}
+
+export const useWindowDimensions = () => {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowDimensions
 }
