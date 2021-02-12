@@ -12,8 +12,6 @@ import UnguardedAppFrame from '../UnguardedAppFrame'
 const useStyles = createUseStyles({
   main: {
     minHeight: '100vh',
-    borderLeft: '1px solid #e6ecf0',
-    borderRight: '1px solid #e6ecf0',
   },
   inner: {
     width: '98%',
