@@ -70,6 +70,7 @@ export const getBestRpcNode = () => {
     axios.get('https://beacon.peakd.com/api/best')
       .then(function (result) {
         console.log({result})
+        resolve(result.data[0].endpoint)
       })
       .catch(function(error) {
         console.log({error})
