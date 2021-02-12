@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(theme => ({
   container: {
     backgroundColor: theme.right.list.background,
-    borderRadius: '10px 10px',
+    borderRadius: '5px 5px',
   },
   wrapper: {
     width: '100%',
@@ -17,6 +17,7 @@ const useStyles = createUseStyles(theme => ({
   label: {
     color: theme.font.color,
     paddingTop: 10,
+    paddingLeft: 5,
     marginBottom: 10,
     fontWeight: 'bold',
     fontSize: 18,
