@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "react-app"
+  ],
+  "rules": {
+    "react/jsx-curly-spacing": [
+      2,
+      {
+        "when": "never",
+        "allowMultiline": false,
+        "children": true
+      }
+    ],
+    "semi": [2, "never"],
+    "comma-dangle": ["error", "always-multiline"],
+    "indent": ["error", 2],
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-cond-assign": [2, "always"],
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }],
+    "prefer-const": ["error", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }]
+  }
+}

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import uuid from 'uuid-random'
 import { encrypt, decrypt } from 'caesar-shift'
 import CryptoJS  from 'crypto-js'
@@ -61,3 +62,36 @@ export const readSession = (session) => {
   return dataDecrypt
 }
 
+export const signupHiveOnboard = () => {
+  const referenceUrl = window.open('https://hiveonboard.com/create-account?ref=dbuzz&redirect_url=https://d.buzz/#/?status=success', '_blank')
+  referenceUrl.blur()
+}
+
+export function hasCompatibleKeychain() {
+  return (
+    window.hive_keychain &&
+    window.hive_keychain.requestSignBuffer &&
+    window.hive_keychain.requestBroadcast &&
+    window.hive_keychain.requestSignedCall
+  )
+}
+
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window
+  return { width, height }
+}
+
+export const useWindowDimensions = () => {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowDimensions
+}

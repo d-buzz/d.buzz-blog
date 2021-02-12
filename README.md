@@ -1,5 +1,7 @@
 ### DBUZZ BLOG FRONTEND
-Frontend for Dbuzz community
+Frontend for Dbuzz Blog
+
+### Developed by *[postnzt](https://www.facebook.com/postNZT/)*
 
 ### Contribution
 
