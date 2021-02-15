@@ -4,6 +4,30 @@ import { encrypt, decrypt } from 'caesar-shift'
 import CryptoJS  from 'crypto-js'
 import sha256 from 'crypto-js/sha256'
 import { Remarkable } from 'remarkable'
+import { DefaultRenderer } from 'steem-content-renderer'
+import markdownLinkExtractor from 'markdown-link-extractor'
+
+const remarkable = new Remarkable()
+export default remarkable
+
+/** Removes all markdown leaving just plain text */
+const remarkableStripper = md => {
+  md.renderer.render = (tokens, options, env) => {
+    let str = ''
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type === 'inline') {
+        str += md.renderer.render(tokens[i].children, options, env);
+      } else {
+        // console.log('content', tokens[i])
+        const content = tokens[i].content
+        str += (content || '') + ' '
+      }
+    }
+    return str
+  }
+}
+
+remarkable.use(remarkableStripper)
 
 const randomizer = (min, max) => {
   return Math.random() * (max - min) + min
@@ -77,6 +101,22 @@ export function hasCompatibleKeychain() {
   )
 }
 
+const renderer = new DefaultRenderer({
+  baseUrl: "https://blog.d.buzz/",
+  breaks: true,
+  skipSanitization: false,
+  allowInsecureScriptTags: false,
+  addNofollowToLinks: true,
+  doNotShowImages: false,
+  ipfsPrefix: "https://images.hive.blog/0x0/",
+  assetsWidth: 640,
+  assetsHeight: 480,
+  imageProxyFn: (url) => `https://images.hive.blog/0x0/${url}`,
+  usertagUrlFn: (account) => "/@" + account,
+  hashtagUrlFn: (hashtag) => `/tags?q=${hashtag}`,
+  isLinkSafeFn: (url) => url.match(/^\//g),
+})
+
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window
   return { width, height }
@@ -100,28 +140,6 @@ export const useWindowDimensions = () => {
 export const anchorTop = () => {
   window.scrollTo(0, 0)
 }
-
-const remarkable = new Remarkable()
-export default remarkable
-
-/** Removes all markdown leaving just plain text */
-const remarkableStripper = md => {
-  md.renderer.render = (tokens, options, env) => {
-    let str = ''
-    for (let i = 0; i < tokens.length; i++) {
-      if (tokens[i].type === 'inline') {
-        str += md.renderer.render(tokens[i].children, options, env);
-      } else {
-        // console.log('content', tokens[i])
-        const content = tokens[i].content
-        str += (content || '') + ' '
-      }
-    }
-    return str
-  }
-}
-
-remarkable.use(remarkableStripper)
 
 export const extractVideoLinks = (links) => {
   const videoLinks = []
@@ -170,3 +188,99 @@ export const extractImageLinks = (links) => {
 
   return imageLinks
 }
+
+const prepareImages = (content) => {
+  let contentReplaced = content
+  const splitContent = contentReplaced.split(' ')
+  splitContent.forEach((item, index) => {
+    // remove 3speak thumbnails
+    if((item.includes('.png') && item.includes('img.3speakcontent.online')) && !item.includes('https://images.hive.blog')) {
+      splitContent[index] = ''
+    } 
+  })
+  return splitContent.join(' ')
+}
+
+const prepareEmbeds = (content) => {
+  let contentReplaced = content
+  contentReplaced = contentReplaced.replace('Watch on 3Speak', 'Watch-on-3Speak')
+  const splitContent = contentReplaced.split(' ')
+  const visited = []
+  splitContent.forEach((item, index) => {
+    if(item.includes('3speak.online') && item.includes('watch?v=')) {
+      const preserve = `&#9654;&#65039;${item.replace('Watch-on-3Speak', 'Watch on 3Speak')}`
+      item = item.split(')')
+
+      if(item.length !== 0) {
+        item = item[0]
+      }
+
+      let splitLink = item.split('watch?v=')
+
+      let idToFormat = splitLink[1]
+      idToFormat = idToFormat.replace(/\)/g, '')
+      idToFormat = idToFormat.replace('[Watch on', '')
+      idToFormat = idToFormat.trim('')
+  
+      const videoLink = `https://3speak.online/embed?v=${idToFormat}`
+
+      if(!visited.includes(videoLink)) {
+        visited.push(videoLink)
+        splitContent[index] = `.^~~~~~~embed:${videoLink}~~~~~~^. \n\n${preserve}`
+      }
+    } else if(item.includes('d.tube/#!/v/')) {
+      const preserve = item
+      const link  = markdownLinkExtractor(item)
+      const rawLink = link[0].split('v/')
+      const splitRawLink = rawLink[1].split('&#39')
+      const videoLink = `https://emb.d.tube/#!/${splitRawLink[0]}`
+
+      if(!visited.includes(videoLink)) {
+        visited.push(videoLink)
+        splitContent[index] = `.^~~~~~~embed:${videoLink}~~~~~~^. \n\n<center><a ${preserve}`
+      }
+
+    }
+  })
+  return splitContent.join(' ')
+}
+
+const render = (content) => {
+  const sections = []
+  content = content.split('~~~~~~^.')
+
+  content.forEach((item, index) => {
+    let contentBody = ''
+    if(item.includes('.^~~~~~~')) {
+      const splitEmbed = item.split('embed:')
+      const src = splitEmbed[1]
+
+      contentBody = `<iframe
+                    title='Embedded Video'
+                    key='${index}'
+                    src="${src}"
+                    allowFullScreen='true'
+                    frameBorder='0'
+                    height='400'
+                    width='100%'
+                  ></iframe>`    
+    } else {
+      contentBody = renderer.render(item)
+    }
+
+    sections.push(contentBody)
+  })
+
+  return sections.join(' ')
+}
+
+export const renderContent = (content) => {
+  let body = content
+  body = prepareImages(body)
+  body = prepareEmbeds(body)
+  body = render(body)
+
+  return body
+}
+
+
