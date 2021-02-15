@@ -261,6 +261,7 @@ const light = {
     },
   },
   postList: {
+    background: 'white',
     hover: {
       backgroundColor: '#f5f8fa',
     },

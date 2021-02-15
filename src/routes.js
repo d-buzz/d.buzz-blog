@@ -1,6 +1,7 @@
 import { 
   AppFrame,
   Home,
+  Trending,
 } from 'components'
   
 const routes =  [
@@ -11,6 +12,11 @@ const routes =  [
         path: "/",
         exact: true,
         component: Home,
+      },
+      {
+        path: '/trending',
+        exact: true,
+        component: Trending,
       },
     ],
   },

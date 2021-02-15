@@ -14,6 +14,8 @@ broadcast.updateOperations()
 
 const visited = []
 
+const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
+
 export const keychainSignIn = (username) => {
   const challenge = { token: uuidv4() }
   const buffer = JSON.stringify(challenge, null, 0)
@@ -173,5 +175,134 @@ export const fetchProfile = (username, checkFollow = false) => {
       }).catch((error) => {
         reject(error)
       })
+  })
+}
+
+export const checkIfImage = (links) => {
+  return new Promise(async(resolve, reject) => {
+
+    const params = { links }
+
+    const result = await axios.post(`${scrapeUrl}/generate`, params)
+
+    resolve(result.data)
+  })
+}
+
+
+export const callBridge = async(method, params, appendParams = true) => {
+  return new Promise((resolve, reject) => {
+
+    if(appendParams) {
+      params = { 'tag': '', limit: 10, ...params}
+    }
+
+    api.call('bridge.' + method, params, async(err, data) => {
+      if (err) {
+        reject(err)
+      }else {
+        let lastResult = []
+
+        if(data.length !== 0) {
+          lastResult = [data[data.length-1]]
+        }
+
+        removeFootNote(data)
+        data = [...data, ...lastResult] 
+
+        resolve(data)
+      }
+    })
+  })
+}
+
+export const getLinkMeta = (url) => {
+  return new Promise(async(resolve, reject) => {
+
+    axios.get(`${scrapeUrl}?url=${url}`)
+      .then(function (result) {
+        const data = result.data
+        resolve(data)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+export const invokeMuteFilter = (items, mutelist, opacityUsers = []) => {
+  return items.filter((item) => !mutelist.includes(item.author) || opacityUsers.includes(item.author))
+}
+
+export const removeFootNote = (data) => {
+  return data.forEach((item) => {
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+  })
+}
+
+export const generateMuteOperation = (follower, following) => {
+  return new Promise((resolve) => {
+    const json = JSON.stringify(["follow",{"follower":`${follower}`,"following":`${following}`,"what":["ignore"]}])
+
+    const operation = [
+      [
+        'custom_json',
+        {
+          'required_auths': [],
+          'required_posting_auths': [follower],
+          'id': 'follow',
+          json,
+        },
+      ],
+    ]
+
+    resolve(operation)
+  })
+}
+
+export const broadcastKeychainOperation = (account, operations, key = 'Posting') => {
+  return new Promise((resolve, reject) => {
+    window.hive_keychain.requestBroadcast(
+      account,
+      operations,
+      key,
+      response => {
+        if(!response.success) {
+          reject(response.error.code)
+        } else {
+          resolve(response)
+        }
+      },
+    )
+  })
+}
+
+export const extractLoginData = (data) => {
+  return new Buffer(data, 'hex').toString().split('\t')
+}
+
+export const broadcastOperation = (operations, keys) => {
+  config.set('rebranded_api', true)
+  broadcast.updateOperations()
+  return new Promise((resolve, reject) => {
+    broadcast.send(
+      {
+        extensions: [],
+        operations,
+      },
+      keys,
+      (error, result) => {
+        console.log(error)
+        if(error) {
+          reject(error.code)
+        } else {
+          resolve({
+            success: true,
+            result,
+          })
+        }
+      },
+    )
   })
 }

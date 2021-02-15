@@ -3,6 +3,7 @@ import uuid from 'uuid-random'
 import { encrypt, decrypt } from 'caesar-shift'
 import CryptoJS  from 'crypto-js'
 import sha256 from 'crypto-js/sha256'
+import { Remarkable } from 'remarkable'
 
 const randomizer = (min, max) => {
   return Math.random() * (max - min) + min
@@ -94,4 +95,78 @@ export const useWindowDimensions = () => {
   }, [])
 
   return windowDimensions
+}
+
+export const anchorTop = () => {
+  window.scrollTo(0, 0)
+}
+
+const remarkable = new Remarkable()
+export default remarkable
+
+/** Removes all markdown leaving just plain text */
+const remarkableStripper = md => {
+  md.renderer.render = (tokens, options, env) => {
+    let str = ''
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type === 'inline') {
+        str += md.renderer.render(tokens[i].children, options, env);
+      } else {
+        // console.log('content', tokens[i])
+        const content = tokens[i].content
+        str += (content || '') + ' '
+      }
+    }
+    return str
+  }
+}
+
+remarkable.use(remarkableStripper)
+
+export const extractVideoLinks = (links) => {
+  const videoLinks = []
+
+  links.forEach((link) => {
+    if(link.includes('youtube') || link.includes('youtu.be')) {
+      const splitLink = link.includes('youtu.be') ? link.split('be/') : link.split('v=')
+      const tempLink = splitLink[1]
+
+      if(tempLink !== undefined) {
+        if(tempLink.includes('&')) {
+          splitLink[1] = (tempLink.split('&'))[0]
+        }
+  
+        videoLinks.push({ link, type: 'youtube', id: splitLink[1] })
+      }
+    } else if(link.includes('3speak.online')) {
+      const splitLink = link.split('watch?v=')
+      link = `https://3speak.online/embed?v=${splitLink[1]}`
+      videoLinks.push({ link, type: '3speak', id: splitLink[1] })
+    }
+  })
+
+  return videoLinks
+}
+
+export const extractImageLinks = (links) => {
+  const imageLinks = []
+
+  links.forEach((link) => {
+    if((link.includes('.jpg') 
+        || link.includes('.png')
+        || link.includes('.JPEG')
+        || link.includes('youtu.be') 
+        || link.includes('youtube')) 
+        && !link.includes('img.3speakcontent.online')) {
+
+      if(link.includes('youtube')) {
+        const splitLink = link.includes('youtu.be') ? link.split('be/') : link.split('v=')
+        link = `https://img.youtube.com/vi/${splitLink[1]}/hqdefault.jpg`
+      } 
+      
+      imageLinks.push(link)
+    }
+  })
+
+  return imageLinks
 }
