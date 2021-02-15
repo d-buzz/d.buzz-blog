@@ -58,6 +58,7 @@ const useStyle = createUseStyles(theme => ({
   wrapper: {
     width: '100%',
     overflow: 'hidden',
+    marginBottom: 15,
     borderBottom: theme.border.primary,
     '& a': {
       color: 'black',
@@ -234,7 +235,7 @@ const PostList = React.memo((props) => {
 
   const { width } = useWindowDimensions()
 
-  const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : 480 })
+  const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : 500 })
   const [avatarSize, setAvatarSize] = useState(isMobile ? 45 : 50)
   const [leftWidth, setLeftWidth] = useState({ width: isMobile ? 50 : 60 })
   const [delayHandler, setDelayHandler] = useState(null)
@@ -248,7 +249,7 @@ const PostList = React.memo((props) => {
       if (width >= 676) {
         setAvatarSize(50)
         setLeftWidth({ width:60 })
-        setRightWidth({ width:480 })
+        setRightWidth({ width:500 })
       } else {
         setLeftWidth({ width: 50 })
         setAvatarSize(45)
