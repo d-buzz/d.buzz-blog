@@ -13,31 +13,29 @@ import { signupHiveOnboard } from 'services/helper'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
-import { Button, Hidden } from '@material-ui/core'
+import { Button, Hidden, Toolbar } from '@material-ui/core'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
-    height: 55,
+    height: 65,
     backgroundColor: theme.nav.background,
     borderBottom: theme.border.primary,
   },
   search: {
-    width: 350,
-    marginBottom: 10,
-    marginTop: 10,
+    width: '60%',
+    paddingLeft: 5,
+    marginBottom: 5,
+    marginTop: 5,
     backgroundColor: '#e6ecf0',
-  },
-  container: {
-    margin: '0 auto',
-    '@media (min-width: 1100px)': {
-      '&.container': {
-        maxWidth: '1000px',
-      },
-    },
   },
   backButton: {
     display: 'inline-block',
     ...theme.icon,
+  },
+  buttons: {
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+    paddingLeft: 15,
   },
 }))
 
@@ -56,7 +54,6 @@ const AppBar = (props) => {
   }
 
   const handleClickOpenLoginModal = () => {
-    console.log('test login')
     setOpen(true)
   }
 
@@ -72,7 +69,7 @@ const AppBar = (props) => {
   return (
     <React.Fragment>
       <Navbar fixed="top" className={classes.nav}>
-        <Container className={classes.container}>
+        <Container>
           <Navbar.Brand>
             {pathname !== '/' && (
               <React.Fragment>
@@ -83,18 +80,28 @@ const AppBar = (props) => {
               </React.Fragment>
             )}
             <Link to="/">
-              {mode === 'light' && (<BrandIcon height={30} top={-10} />)}
-              {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-10} />)}
+              {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
+              {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
             </Link>
           </Navbar.Brand>
           {!isMobile && (
-            <Nav className="mr-auto">
+            <React.Fragment>
               <Hidden only="xs">
-                <SearchField disableTips={true} />
+                <SearchField className={classes.search} disableTips={true} />
               </Hidden>
-            </Nav>
+              <Nav>
+                <Hidden only={['xs', 'sm']}>
+                  <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
+                    
+                  </Toolbar>
+                </Hidden>
+              </Nav>
+                
+              
+            </React.Fragment>
           )}
-          <div>
+          
+          <div className={classes.buttons}>
             <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
               Sign in
             </Button>

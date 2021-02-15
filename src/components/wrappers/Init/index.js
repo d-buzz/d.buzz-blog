@@ -45,6 +45,7 @@ const Init = (props) => {
   const [init, setInit] = useState(false)
 
   useEffect(() => {
+    setInit(true)
     getBestRpcNode().then(() => {
       getTrendingTagsRequest()
       getSavedUserRequest().then(() => {

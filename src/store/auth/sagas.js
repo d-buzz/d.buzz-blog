@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, takeEvery, select } from "redux-saga/effects"
 import {
   AUTHENTICATE_USER_REQUEST,
   authenticateUserSuccess,
@@ -13,6 +13,9 @@ import {
   setOpacityUsers,
   setHasAgreedPayout,
 
+  MUTE_USER_REQUEST,
+  muteUserSuccess,
+  muteUserFailure,
 } from './actions'
 
 import {
@@ -22,6 +25,10 @@ import {
   packLoginData,
   getCommunityRole,
   fetchMuteList,
+  generateMuteOperation,
+  broadcastKeychainOperation,
+  extractLoginData,
+  broadcastOperation,
 } from 'services/api'
 
 import { generateSession, readSession } from 'services/helper'
@@ -170,6 +177,48 @@ function* getSavedUserRequest(meta) {
   }
 }
 
+function* muteUserRequest(payload, meta) {
+  try {
+    const { user: following } = payload
+    const user = yield select(state => state.auth.get('user'))
+
+    const { username: follower, useKeychain } = user
+
+    const operation = yield call(generateMuteOperation, follower, following)
+
+    let success = false
+
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, follower, operation)
+      success = result.success
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operation, [wif])
+
+      success = result.success
+    }
+
+    if(!success) {
+      yield put(muteUserFailure('Unable to publish post', meta))
+    } else {
+      const mutelist = yield select(state => state.auth.get('mutelist'))
+      mutelist.push(following)
+
+      const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+      opacityUsers.push(following)
+      yield put(setOpacityUsers(opacityUsers))
+      yield put(setMuteList(mutelist))
+      yield put(muteUserSuccess(meta))
+    }
+
+  } catch(error) {
+    yield put(muteUserFailure(error, meta))
+  }
+}
+
 function* watchAuthenticationUserRequest({ payload, meta }) {
   yield call(authenticateUserRequest, payload, meta)
 }
@@ -178,7 +227,12 @@ function* watchGetSavedUsersRequest({ meta }) {
   yield call(getSavedUserRequest, meta)
 }
 
+function* watchMuteUserRequest({ payload, meta }) {
+  yield call(muteUserRequest, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(AUTHENTICATE_USER_REQUEST, watchAuthenticationUserRequest)
   yield takeEvery(GET_SAVED_USER_REQUEST, watchGetSavedUsersRequest)
+  yield takeEvery(MUTE_USER_REQUEST, watchMuteUserRequest)
 }

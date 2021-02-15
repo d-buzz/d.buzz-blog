@@ -3,6 +3,7 @@ import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles(theme => ({
   container: {
+    marginTop: 15,
     backgroundColor: theme.right.list.background,
     borderRadius: '5px 5px',
   },

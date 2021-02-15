@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Landing } from 'components'
 
 const Home = (props) => {
   const { user } = props
@@ -8,7 +9,7 @@ const Home = (props) => {
   return (
     <div>
       {isAuthenticated && (<h1>FEEDS</h1>)}
-      {!isAuthenticated && (<h2> Landing</h2>)}
+      {!isAuthenticated && <Landing />}
     </div>
   )
 }

@@ -85,8 +85,16 @@ const SideBarRight = (props) => {
           <Spinner size={50} loading={loading}/> 
         </ListGroup>
       </div>
+      {/* <div style={{ paddingTop: 15 }}>
+        <ListGroup label="Top Trending Communities">
+          {items.slice(0, 5).map((item) => (
+            <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
+          ))}
+          <Spinner size={50} loading={loading}/> 
+        </ListGroup>
+      </div> */}
       <div style={{ paddingTop: 15 }}>
-        <ListGroup>
+        <ListGroup label="Be in touch with us">
           {SocialMediaLinks.map((item) => (
             <ListLink key={`${item.name}-links`} title={item.name} label={`@${item.label}`} imagePath={item.imagePath} href={item.url} />
           ))}

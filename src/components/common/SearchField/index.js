@@ -7,8 +7,8 @@ import { connect } from 'react-redux'
 
 const useStyles = createUseStyles(theme => ({
   search: {
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 5,
+    marginTop: 5,
     ...theme.search.background,
   },
   searchTips: {
