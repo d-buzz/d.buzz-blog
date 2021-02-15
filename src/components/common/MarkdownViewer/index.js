@@ -1,5 +1,4 @@
 import React from 'react'
-import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import textParser from 'npm-text-parser'
 import classNames from 'classnames'
@@ -9,23 +8,7 @@ import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { TweetSkeleton } from 'components'
 import  remarkableStripper from 'services/helper'
 import removeMd from 'remove-markdown'
-import { extractImageLinks, extractVideoLinks } from '../../../services/helper'
-
-const renderer = new DefaultRenderer({
-  baseUrl: "https://blog.d.buzz/",
-  breaks: true,
-  skipSanitization: false,
-  allowInsecureScriptTags: false,
-  addNofollowToLinks: true,
-  doNotShowImages: false,
-  ipfsPrefix: "https://images.hive.blog/0x0/",
-  assetsWidth: 640,
-  assetsHeight: 480,
-  imageProxyFn: (url) => `https://images.hive.blog/0x0/${url}`,
-  usertagUrlFn: (account) => "/@" + account,
-  hashtagUrlFn: (hashtag) => `/tags?q=${hashtag}`,
-  isLinkSafeFn: (url) => url.match(/^\//g),
-})
+import { renderContent, extractImageLinks, extractVideoLinks } from 'services/helper'
 
 const useStyles = createUseStyles(theme => ({
   markdown: {
@@ -45,7 +28,7 @@ const useStyles = createUseStyles(theme => ({
     fontSize: '14 !important',
     '& blockquote': {
       // padding: '10px 12px',
-      margin: '0 0 20px',
+      margin: 0,
       fontSize: 13,
       borderLeft: '5px solid #eee',
     },
@@ -65,14 +48,6 @@ const useStyles = createUseStyles(theme => ({
       height: 300,
       width: '100%',
       border: theme.border.primary,
-    },
-    '@media (max-width: 768px)': {
-      '& img': {
-        height: '190px !important',
-      },
-      '& iframe': {
-        height: '190px !important',
-      },
     },
   },
   full: {
@@ -237,26 +212,24 @@ const extractDescription = (content) => {
 
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex, isPostList) => {
   if (isPostList) {
-    if (content.includes(':threespeak')) {
-      const splitThreeSpeak = content.split(':')
-      const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
-      return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
-    } else {
-      const links = markdownLinkExtractor(content)
-      const imageLinks = extractImageLinks(links)
-      const videoLinks = extractVideoLinks(links)
-      const description = extractDescription(content)
-      
-      let data = imageLinks[0]+ ' ' + videoLinks[0] + ' ' + description
-      data = data.replace('[object Object]', '')
-      console.log({data})
-      
-      return <div key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-          className={classNames(markdownClass, assetClass)}
-          dangerouslySetInnerHTML={{ __html: renderer.render(data) }}
-        />
-    }
-   
+    let safeHtmlString = ''
+
+    safeHtmlString = renderContent(content)
+
+    const links = markdownLinkExtractor(content)
+    const imageLinks = extractImageLinks(links)
+    const videoLinks = extractVideoLinks(links)
+    const description = extractDescription(content)
+    
+    let data = imageLinks[0]+ ' ' + videoLinks[0] + ' ' + description
+    data = data.replace('[object Object]', '')
+    console.log({data})
+    
+    return <div
+      key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+      className={classNames(markdownClass, assetClass)}
+      dangerouslySetInnerHTML={{__html: safeHtmlString || ''}} 
+    />
   } else {
     if (content.includes(':twitter:')) {
       const splitTwitter = content.split(':')
@@ -270,11 +243,14 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
       const url = `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`
       return <UrlVideoEmbed key={`${url}${scrollIndex}vimm`} url={url} />
     } else {
-      // render normally
+      let safeHtmlString = ''
+
+      safeHtmlString = renderContent(content)  
+      
       return <div
         key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
         className={classNames(markdownClass, assetClass)}
-        dangerouslySetInnerHTML={{ __html: renderer.render(content) }}
+        dangerouslySetInnerHTML={{__html: safeHtmlString || ''}} 
       />
     }
   }
