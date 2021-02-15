@@ -212,24 +212,28 @@ const extractDescription = (content) => {
 
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex, isPostList) => {
   if (isPostList) {
-    let safeHtmlString = ''
-
-    safeHtmlString = renderContent(content)
-
     const links = markdownLinkExtractor(content)
     const imageLinks = extractImageLinks(links)
     const videoLinks = extractVideoLinks(links)
     const description = extractDescription(content)
-    
-    let data = imageLinks[0]+ ' ' + videoLinks[0] + ' ' + description
-    data = data.replace('[object Object]', '')
-    console.log({data})
-    
+    let data = null
+
+    if (imageLinks.length !== 0) {
+      const rawData = imageLinks[0] + ' ' + description
+      data = renderContent(rawData)
+      data = data.toString()
+    } else if (videoLinks.length !== 0) {
+      const rawData = videoLinks[0] + ' ' + description
+      data = renderContent(rawData)
+      data = data.toString()
+    }
+
     return <div
       key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
       className={classNames(markdownClass, assetClass)}
-      dangerouslySetInnerHTML={{__html: safeHtmlString || ''}} 
+      dangerouslySetInnerHTML={{ __html: data }} 
     />
+    
   } else {
     if (content.includes(':twitter:')) {
       const splitTwitter = content.split(':')
