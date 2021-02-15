@@ -145,20 +145,20 @@ export const fetchProfile = (username, checkFollow = false) => {
           const repscore = item.reputation
           let score = formatter.reputation(repscore)
 
-          if(!score || score < 25) {
+          if (!score || score < 25) {
             score = 25
           }
 
           result[index].reputation = score
 
-          if(checkFollow) {
+          if (checkFollow) {
 
             const follow_count = await fetchFollowCount(item.name)
             result[index].follow_count = follow_count
 
             let isFollowed = false
 
-            if(user) {
+            if (user) {
               isFollowed = await isFollowing(user.username, item.name)
             }
 
@@ -167,7 +167,7 @@ export const fetchProfile = (username, checkFollow = false) => {
 
           visited.push(result[index])
 
-          if(index === result.length - 1) {
+          if (index === result.length - 1) {
             resolve(result)
           }
         })
@@ -193,7 +193,7 @@ export const checkIfImage = (links) => {
 export const callBridge = async(method, params, appendParams = true) => {
   return new Promise((resolve, reject) => {
 
-    if(appendParams) {
+    if (appendParams) {
       params = { 'tag': '', limit: 10, ...params}
     }
 
@@ -203,7 +203,7 @@ export const callBridge = async(method, params, appendParams = true) => {
       }else {
         let lastResult = []
 
-        if(data.length !== 0) {
+        if (data.length !== 0) {
           lastResult = [data[data.length-1]]
         }
 
@@ -268,7 +268,7 @@ export const broadcastKeychainOperation = (account, operations, key = 'Posting')
       operations,
       key,
       response => {
-        if(!response.success) {
+        if (!response.success) {
           reject(response.error.code)
         } else {
           resolve(response)
@@ -294,7 +294,7 @@ export const broadcastOperation = (operations, keys) => {
       keys,
       (error, result) => {
         console.log(error)
-        if(error) {
+        if (error) {
           reject(error.code)
         } else {
           resolve({

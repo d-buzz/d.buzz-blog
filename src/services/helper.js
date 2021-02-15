@@ -11,7 +11,7 @@ const randomizer = (min, max) => {
 
 const keygen = (index) => {
   let key = 5 + index
-  if(key > 28) {
+  if (key > 28) {
     key = key - 5
   }
 
@@ -127,18 +127,18 @@ export const extractVideoLinks = (links) => {
   const videoLinks = []
 
   links.forEach((link) => {
-    if(link.includes('youtube') || link.includes('youtu.be')) {
+    if (link.includes('youtube') || link.includes('youtu.be')) {
       const splitLink = link.includes('youtu.be') ? link.split('be/') : link.split('v=')
       const tempLink = splitLink[1]
 
-      if(tempLink !== undefined) {
-        if(tempLink.includes('&')) {
+      if (tempLink !== undefined) {
+        if (tempLink.includes('&')) {
           splitLink[1] = (tempLink.split('&'))[0]
         }
   
         videoLinks.push({ link, type: 'youtube', id: splitLink[1] })
       }
-    } else if(link.includes('3speak.online')) {
+    } else if (link.includes('3speak.online')) {
       const splitLink = link.split('watch?v=')
       link = `https://3speak.online/embed?v=${splitLink[1]}`
       videoLinks.push({ link, type: '3speak', id: splitLink[1] })
@@ -152,14 +152,14 @@ export const extractImageLinks = (links) => {
   const imageLinks = []
 
   links.forEach((link) => {
-    if((link.includes('.jpg') 
+    if ((link.includes('.jpg') 
         || link.includes('.png')
         || link.includes('.JPEG')
         || link.includes('youtu.be') 
         || link.includes('youtube')) 
         && !link.includes('img.3speakcontent.online')) {
 
-      if(link.includes('youtube')) {
+      if (link.includes('youtube')) {
         const splitLink = link.includes('youtu.be') ? link.split('be/') : link.split('v=')
         link = `https://img.youtube.com/vi/${splitLink[1]}/hqdefault.jpg`
       } 

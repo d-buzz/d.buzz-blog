@@ -188,7 +188,7 @@ function* muteUserRequest(payload, meta) {
 
     let success = false
 
-    if(useKeychain) {
+    if (useKeychain) {
       const result = yield call(broadcastKeychainOperation, follower, operation)
       success = result.success
     } else {
@@ -201,7 +201,7 @@ function* muteUserRequest(payload, meta) {
       success = result.success
     }
 
-    if(!success) {
+    if (!success) {
       yield put(muteUserFailure('Unable to publish post', meta))
     } else {
       const mutelist = yield select(state => state.auth.get('mutelist'))

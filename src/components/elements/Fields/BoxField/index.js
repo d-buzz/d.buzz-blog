@@ -57,7 +57,7 @@ const BoxField = (props) => {
 
   let defaultInputStyle = { width: '100%', paddingLeft: 5, paddingRight: 5 }
 
-  if(icon) {
+  if (icon) {
     defaultInputStyle = {}
   }
 

@@ -59,7 +59,7 @@ const Init = (props) => {
      * - if blog.d.buzz is already hosted
      *  
      * checkVersionRequest().then((isLatest) => {
-     * if(!isLatest) {
+     * if (!isLatest) {
      *  window.history.forward(1)
      *  window.location.reload(true)
      *  } else {

@@ -89,13 +89,13 @@ const ContainedButton = (props) => {
 
   let buttonClass = classes.button
 
-  if(transparent) {
+  if (transparent) {
     buttonClass = classes.transparentButton
   }
 
-  if(disabled) {
+  if (disabled) {
     buttonClass = classes.disabledButton
-    if(transparent) {
+    if (transparent) {
       buttonClass = classes.disabledButtonTransparent
     }
   }

@@ -49,14 +49,14 @@ const SideBarRight = (props) => {
   const { isAuthenticated } = user
   let isInSearchRoute = false
 
-  if(pathname.match((/(\/search?)/))) {
+  if (pathname.match((/(\/search?)/))) {
     isInSearchRoute = true
   }
 
   const linkGenerator = (tag) => {
     let link = ''
 
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       link = '/'
     }
 

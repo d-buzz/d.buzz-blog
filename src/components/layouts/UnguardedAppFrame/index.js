@@ -47,7 +47,7 @@ const UnguardedAppFrame = (props) => {
   const { width } = useWindowDimensions()
 
   useEffect(() => {
-    if(width < 800) {
+    if (width < 800) {
       setMainWidth(12)
       setHideRightSideBar(true)
     } else {

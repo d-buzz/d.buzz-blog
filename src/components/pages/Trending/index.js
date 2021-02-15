@@ -50,7 +50,7 @@ const Trending = (props) => {
 
   useEffect(() => {
     setPageFrom('trending')
-    if(!isVisited) {
+    if (!isVisited) {
       anchorTop()
       clearScrollIndex()
       clearHomePosts()

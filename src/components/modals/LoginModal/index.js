@@ -154,9 +154,9 @@ const LoginModal = (props) => {
   const hasSwitcherMatch = () => {
     let hasMatch = false
     const { isAuthenticated } = user
-    if(accounts && Array.isArray(accounts) && accounts.length !== 0 && isAuthenticated) {
+    if (accounts && Array.isArray(accounts) && accounts.length !== 0 && isAuthenticated) {
       accounts.forEach((item) => {
-        if(item.username === username) {
+        if (item.username === username) {
           hasMatch = true
         }
       })

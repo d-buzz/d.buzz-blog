@@ -32,7 +32,7 @@ const addHover = (theme) => {
     },
   }
 
-  if(isMobile) {
+  if (isMobile) {
     style = {}
   }
 
@@ -205,29 +205,29 @@ const PostList = React.memo((props) => {
   let { payout = null, payoutAt = null } = props
   let { max_accepted_payout } = props
 
-  if(max_accepted_payout) {
+  if (max_accepted_payout) {
     max_accepted_payout = max_accepted_payout.replace('HBD', '')
   }
 
-  if(!payoutAt) {
+  if (!payoutAt) {
     const { cashout_time } = props
     payoutAt = cashout_time
   }
 
-  if(!payout) {
+  if (!payout) {
     const { pending_payout_value, total_payout_value } = props
 
-    if(total_payout_value) {
+    if (total_payout_value) {
       payout = total_payout_value
     }
 
-    if(pending_payout_value > total_payout_value) {
+    if (pending_payout_value > total_payout_value) {
       payout = pending_payout_value
     }
 
     payout = `${payout}`.replace('HBD', '')
 
-    if(!payout) {
+    if (!payout) {
       payout = '0.00'
     }
   }
@@ -244,15 +244,15 @@ const PostList = React.memo((props) => {
 
 
   useEffect(() => {
-    if(!isMobile) {
-      if(width >= 676) {
+    if (!isMobile) {
+      if (width >= 676) {
         setAvatarSize(50)
         setLeftWidth({ width:60 })
         setRightWidth({ width:480 })
       } else {
         setLeftWidth({ width: 50 })
         setAvatarSize(45)
-        if(!unguardedLinks) {
+        if (!unguardedLinks) {
           setRightWidth({ width: width-200 })
         } else {
           setRightWidth({ width: width-120 })
@@ -266,7 +266,7 @@ const PostList = React.memo((props) => {
   const history = useHistory()
   const authorLink = `/@${author}${'?ref='+profileRef}`
 
-  if(user.is_authenticated && !searchListMode) {
+  if (user.is_authenticated && !searchListMode) {
     hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
   } else {
     hasUpvoted = false
@@ -286,10 +286,10 @@ const PostList = React.memo((props) => {
     const hostname = window.location.hostname
 
     e.preventDefault()
-    if(href && !href.includes(hostname)) {
+    if (href && !href.includes(hostname)) {
       window.open(href, '_blank')
     } else {
-      if(!href) {
+      if (!href) {
         const link = generateLink(author, permlink)
         saveScrollIndex(scrollIndex)
         history.push(link)
