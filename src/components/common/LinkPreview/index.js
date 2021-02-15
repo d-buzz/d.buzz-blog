@@ -31,7 +31,7 @@ const useStyles = createUseStyles(theme => ({
       width: '100%',
       objectFit: 'cover',
       border: 'none !important',
-      borderRadius: '15px 0px 0px 15px !important',
+      borderRadius: '5px 0px 0px 5px !important',
     },
   },
   right: {
