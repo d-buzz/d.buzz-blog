@@ -187,7 +187,7 @@ const extractDescription = (content) => {
     stripListLeaders: true , 
     listUnicodeChar: '',  
     gfm: true, 
-    useImgAltText: true
+    useImgAltText: true,
   })
 
 
@@ -228,11 +228,15 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
       data = data.toString()
     }
 
-    return <div
-      key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-      className={classNames(markdownClass, assetClass)}
-      dangerouslySetInnerHTML={{ __html: data }} 
-    />
+    return (
+      <React.Fragment>
+        <div
+          key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+          className={classNames(markdownClass, assetClass)}
+          dangerouslySetInnerHTML={{ __html: data }} 
+        />
+      </React.Fragment>
+    )
     
   } else {
     if (content.includes(':twitter:')) {
