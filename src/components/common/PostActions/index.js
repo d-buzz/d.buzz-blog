@@ -193,7 +193,7 @@ const PostActions = (props) => {
   let payoutAdditionalStyle = {}
   let iconDetails = {}
 
-  if(parseFloat(max_accepted_payout) === 0) {
+  if (parseFloat(max_accepted_payout) === 0) {
     payoutAdditionalStyle = { textDecoration: 'line-through' }
     iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
   }else{
@@ -210,12 +210,12 @@ const PostActions = (props) => {
 
   let extraPadding = { paddingTop: 10 }
 
-  if(disableExtraPadding) {
+  if (disableExtraPadding) {
     extraPadding = {}
   }
 
   useEffect(() => {
-    if(recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
+    if (recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
       setUpvoted(true)
     }
     // eslint-disable-next-line
@@ -224,14 +224,14 @@ const PostActions = (props) => {
 
   const handleClickShowSlider = () => {
     setShowSlider(true)
-    if(replyRef === 'list') {
+    if (replyRef === 'list') {
       recomputeRowIndex(scrollIndex)
     }
   }
 
   const handleClickHideSlider = () => {
     setShowSlider(false)
-    if(replyRef === 'list') {
+    if (replyRef === 'list') {
       recomputeRowIndex(scrollIndex)
     }
   }
@@ -241,14 +241,14 @@ const PostActions = (props) => {
   }
 
   const handleClickUpvote = () => {
-    if(replyRef === 'list') {
+    if (replyRef === 'list') {
       recomputeRowIndex(scrollIndex)
     }
     setShowSlider(false)
     setLoading(true)
     upvoteRequest(author, permlink, sliderValue)
       .then(({ success, errorMessage }) => {
-        if(success) {
+        if (success) {
           setVote(vote + 1)
           setUpvoted(true)
           setLoading(false)

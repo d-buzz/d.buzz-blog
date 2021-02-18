@@ -1,5 +1,4 @@
 import React from 'react'
-import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import textParser from 'npm-text-parser'
 import classNames from 'classnames'
@@ -9,23 +8,7 @@ import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { TweetSkeleton } from 'components'
 import  remarkableStripper from 'services/helper'
 import removeMd from 'remove-markdown'
-import { extractImageLinks, extractVideoLinks } from '../../../services/helper'
-
-const renderer = new DefaultRenderer({
-  baseUrl: "https://blog.d.buzz/",
-  breaks: true,
-  skipSanitization: false,
-  allowInsecureScriptTags: false,
-  addNofollowToLinks: true,
-  doNotShowImages: false,
-  ipfsPrefix: "https://images.hive.blog/0x0/",
-  assetsWidth: 640,
-  assetsHeight: 480,
-  imageProxyFn: (url) => `https://images.hive.blog/0x0/${url}`,
-  usertagUrlFn: (account) => "/@" + account,
-  hashtagUrlFn: (hashtag) => `/tags?q=${hashtag}`,
-  isLinkSafeFn: (url) => url.match(/^\//g),
-})
+import { renderContent, extractImageLinks, extractVideoLinks } from 'services/helper'
 
 const useStyles = createUseStyles(theme => ({
   markdown: {
@@ -45,7 +28,7 @@ const useStyles = createUseStyles(theme => ({
     fontSize: '14 !important',
     '& blockquote': {
       // padding: '10px 12px',
-      margin: '0 0 20px',
+      margin: 0,
       fontSize: 13,
       borderLeft: '5px solid #eee',
     },
@@ -65,14 +48,6 @@ const useStyles = createUseStyles(theme => ({
       height: 300,
       width: '100%',
       border: theme.border.primary,
-    },
-    '@media (max-width: 768px)': {
-      '& img': {
-        height: '190px !important',
-      },
-      '& iframe': {
-        height: '190px !important',
-      },
     },
   },
   full: {
@@ -110,7 +85,7 @@ const prepareTwitterEmbeds = (content) => {
   const links = textParser.getUrls(content)
 
   const matchData = content.match(htmlReplacement)
-  if(matchData) {
+  if (matchData) {
     const id = matchData[5]
     let title = body
     title = title.replace(htmlReplacement, '')
@@ -123,10 +98,10 @@ const prepareTwitterEmbeds = (content) => {
         let match = ''
         let id = ''
 
-        if(link.match(mainTwitterRegex)) {
+        if (link.match(mainTwitterRegex)) {
           match = link.match(mainTwitterRegex)
           id = match[2]
-          if(link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+          if (link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
             match = link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
             id = match[2]
             id = id.slice(0, -2)
@@ -134,7 +109,7 @@ const prepareTwitterEmbeds = (content) => {
           body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
         }
 
-        if(match) {
+        if (match) {
           const id = match[2]
           body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
         }
@@ -159,17 +134,17 @@ const prepareVimmEmbeds = (content) => {
     let id = ''
 
     try {
-      if(link.match(vimmRegex) && !link.includes('/view')){
+      if (link.match(vimmRegex) && !link.includes('/view')){
         const data = link.split('/')
         match = link.match(vimmRegex)
         id = data[3]
-        if(link.match(vimmRegexEmbed)){
+        if (link.match(vimmRegexEmbed)){
           match = link.match(vimmRegexEmbed)
           id = match[1]
         }
       }
 
-      if(match){
+      if (match){
         body = body.replace(link, `~~~~~~.^.~~~:vimm:${id}:~~~~~~.^.~~~`)
       }
     } catch(error) { }
@@ -185,13 +160,13 @@ const prepareThreeSpeakEmbeds = (content) => {
     try {
       link = link.replace(/&amp;/g, '&')
       let match = ''
-      if(link.includes('3speak.online/watch?v')) {
+      if (link.includes('3speak.online/watch?v')) {
         match = link.match(/(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=(.*))))?/i)
-      } else if(link.includes('3speak.co/watch?v')){
+      } else if (link.includes('3speak.co/watch?v')){
         match = link.match(/(?:https?:\/\/(?:(?:3speak\.co\/watch\?v=(.*))))?/i)
       }
 
-      if(match) {
+      if (match) {
         const id = match[1]
         body = body.replace(link, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
       }
@@ -212,7 +187,7 @@ const extractDescription = (content) => {
     stripListLeaders: true , 
     listUnicodeChar: '',  
     gfm: true, 
-    useImgAltText: true
+    useImgAltText: true,
   })
 
 
@@ -220,14 +195,14 @@ const extractDescription = (content) => {
 
 
   splitDescription.forEach((item, index) => {
-    if(item.includes('JPEG') || item.includes('jpg') || item.includes('png')) {
+    if (item.includes('JPEG') || item.includes('jpg') || item.includes('png')) {
       splitDescription[index] = ''
     }
   })
 
   description = splitDescription.join(' ')
 
-  if(description.length > 400) {
+  if (description.length > 400) {
     description = `${description.substring(0, 400).trim()} ....`
   }
 
@@ -237,44 +212,53 @@ const extractDescription = (content) => {
 
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex, isPostList) => {
   if (isPostList) {
-    if (content.includes(':threespeak')) {
-      const splitThreeSpeak = content.split(':')
-      const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
-      return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
-    } else {
-      const links = markdownLinkExtractor(content)
-      const imageLinks = extractImageLinks(links)
-      const videoLinks = extractVideoLinks(links)
-      const description = extractDescription(content)
-      
-      let data = imageLinks[0]+ ' ' + videoLinks[0] + ' ' + description
-      data = data.replace('[object Object]', '')
-      console.log({data})
-      
-      return <div key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-          className={classNames(markdownClass, assetClass)}
-          dangerouslySetInnerHTML={{ __html: renderer.render(data) }}
-        />
+    const links = markdownLinkExtractor(content)
+    const imageLinks = extractImageLinks(links)
+    const videoLinks = extractVideoLinks(links)
+    const description = extractDescription(content)
+    let data = null
+
+    if (imageLinks.length !== 0) {
+      const rawData = imageLinks[0] + ' ' + description
+      data = renderContent(rawData)
+      data = data.toString()
+    } else if (videoLinks.length !== 0) {
+      const rawData = videoLinks[0] + ' ' + description
+      data = renderContent(rawData)
+      data = data.toString()
     }
-   
+
+    return (
+      <React.Fragment>
+        <div
+          key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+          className={classNames(markdownClass, assetClass)}
+          dangerouslySetInnerHTML={{ __html: data }} 
+        />
+      </React.Fragment>
+    )
+    
   } else {
-    if(content.includes(':twitter:')) {
+    if (content.includes(':twitter:')) {
       const splitTwitter = content.split(':')
       return <TwitterTweetEmbed key={`${splitTwitter[2]}${scrollIndex}tweet`} tweetId={splitTwitter[2]} onLoad={() => recomputeRowIndex(scrollIndex)} placeholder={<TweetSkeleton />}/>
-    } else if(content.includes(':threespeak:')) {
+    } else if (content.includes(':threespeak:')) {
       const splitThreeSpeak = content.split(':')
       const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
       return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
-    } else if(content.includes(':vimm:')){
+    } else if (content.includes(':vimm:')){
       const splitVimm = content.split(':')
       const url = `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`
       return <UrlVideoEmbed key={`${url}${scrollIndex}vimm`} url={url} />
     } else {
-      // render normally
+      let safeHtmlString = ''
+
+      safeHtmlString = renderContent(content)  
+      
       return <div
         key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
         className={classNames(markdownClass, assetClass)}
-        dangerouslySetInnerHTML={{ __html: renderer.render(content) }}
+        dangerouslySetInnerHTML={{__html: safeHtmlString || ''}} 
       />
     }
   }
@@ -298,11 +282,11 @@ const MarkdownViewer = React.memo((props) => {
     try {
       link = link.replace(/&amp;/g, '&')
 
-      if(link.includes('twitter.com')) {
+      if (link.includes('twitter.com')) {
         content = prepareTwitterEmbeds(content)
-      } else if(link.includes('3speak.co') || link.includes('3speak.online')) {
+      } else if (link.includes('3speak.co') || link.includes('3speak.online')) {
         content = prepareThreeSpeakEmbeds(content)
-      } else if(link.includes('www.vimm.tv')) {
+      } else if (link.includes('www.vimm.tv')) {
         content = prepareVimmEmbeds(content)
       }
 
@@ -312,7 +296,7 @@ const MarkdownViewer = React.memo((props) => {
 
   let assetClass = classes.minified
 
-  if(!minifyAssets) {
+  if (!minifyAssets) {
     assetClass = classes.full
   }
   let splitContent = content.split(`~~~~~~.^.~~~`)

@@ -40,7 +40,7 @@ const PostTags = (props) => {
 
   let tags = []
   try {
-    if('tags' in meta) {
+    if ('tags' in meta) {
       tags = meta.tags
     }
   } catch (e) {  }

@@ -145,20 +145,20 @@ export const fetchProfile = (username, checkFollow = false) => {
           const repscore = item.reputation
           let score = formatter.reputation(repscore)
 
-          if(!score || score < 25) {
+          if (!score || score < 25) {
             score = 25
           }
 
           result[index].reputation = score
 
-          if(checkFollow) {
+          if (checkFollow) {
 
             const follow_count = await fetchFollowCount(item.name)
             result[index].follow_count = follow_count
 
             let isFollowed = false
 
-            if(user) {
+            if (user) {
               isFollowed = await isFollowing(user.username, item.name)
             }
 
@@ -167,7 +167,7 @@ export const fetchProfile = (username, checkFollow = false) => {
 
           visited.push(result[index])
 
-          if(index === result.length - 1) {
+          if (index === result.length - 1) {
             resolve(result)
           }
         })
@@ -193,7 +193,7 @@ export const checkIfImage = (links) => {
 export const callBridge = async(method, params, appendParams = true) => {
   return new Promise((resolve, reject) => {
 
-    if(appendParams) {
+    if (appendParams) {
       params = { 'tag': '', limit: 10, ...params}
     }
 
@@ -203,7 +203,7 @@ export const callBridge = async(method, params, appendParams = true) => {
       }else {
         let lastResult = []
 
-        if(data.length !== 0) {
+        if (data.length !== 0) {
           lastResult = [data[data.length-1]]
         }
 
@@ -268,7 +268,7 @@ export const broadcastKeychainOperation = (account, operations, key = 'Posting')
       operations,
       key,
       response => {
-        if(!response.success) {
+        if (!response.success) {
           reject(response.error.code)
         } else {
           resolve(response)
@@ -294,7 +294,7 @@ export const broadcastOperation = (operations, keys) => {
       keys,
       (error, result) => {
         console.log(error)
-        if(error) {
+        if (error) {
           reject(error.code)
         } else {
           resolve({
@@ -306,3 +306,89 @@ export const broadcastOperation = (operations, keys) => {
     )
   })
 }
+
+export const fetchContent = (author, permlink) => {
+  return new Promise((resolve, reject) => {
+    api.getContentAsync(author, permlink)
+      .then(async(result) => {
+        result.body = result.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+        const profile = await fetchProfile([result.author])
+        result.profile = profile[0]
+        resolve(result)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export const fetchDiscussions = (author, permlink) => {
+  return new Promise((resolve, reject) => {
+    const params = {"author":`${author}`, "permlink": `${permlink}`}
+    api.call('bridge.get_discussion', params, async(err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        const authors = []
+        let profile = []
+
+        const arr = Object.values(data)
+        const uniqueAuthors = [ ...new Set(arr.map(item => item.author)) ]
+
+        uniqueAuthors.forEach((item) => {
+          if(!authors.includes(item)) {
+            const profileVisited = visited.filter((prof) => prof.name === item)
+            if(!authors.includes(item) && profileVisited.length === 0) {
+              authors.push(item)
+            } else if(profileVisited.length !== 0) {
+              profile.push(profileVisited[0])
+            }
+          }
+        })
+
+        if(authors.length !== 0 ) {
+          const info = await fetchProfile(authors)
+          profile = [ ...profile, ...info]
+        }
+
+        const parent = data[`${author}/${permlink}`]
+
+        const getChildren = (reply) => {
+          const { replies } = reply
+          const children = []
+
+          replies.forEach(async(item) => {
+            let content = data[item]
+
+            if(!content) {
+              content = item
+            }
+
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+
+            if(content.replies.length !== 0) {
+              const child = getChildren(content)
+              content.replies = child
+            }
+
+            const info = profile.filter((prof) => prof.name === content.author)
+            visited.push(info[0])
+            content.profile = info[0]
+            children.push(content)
+          })
+
+          return children
+        }
+
+        const children = getChildren(parent)
+        parent.replies = children
+
+        let replies = parent.replies
+        replies = replies.reverse()
+        resolve(replies)
+      }
+    })
+  })
+}
+

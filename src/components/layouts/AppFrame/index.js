@@ -59,7 +59,7 @@ const AppFrame = (props) => {
   const [showLogin, setShowLogin] = useState(false)
   const [signUpConfirmation, setSignUpConfirmation] = useState(false)
 
-  if(unGuardedRoute) {
+  if (unGuardedRoute) {
     containerClass = classes.unGuardedContainer
   }
 

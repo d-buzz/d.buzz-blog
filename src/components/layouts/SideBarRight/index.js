@@ -49,14 +49,14 @@ const SideBarRight = (props) => {
   const { isAuthenticated } = user
   let isInSearchRoute = false
 
-  if(pathname.match((/(\/search?)/))) {
+  if (pathname.match((/(\/search?)/))) {
     isInSearchRoute = true
   }
 
   const linkGenerator = (tag) => {
     let link = ''
 
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       link = '/'
     }
 
@@ -78,7 +78,7 @@ const SideBarRight = (props) => {
     <React.Fragment>
       {!hideSearchBar && !isInSearchRoute && (<SearchField />)}
       <div style={{ paddingTop: 5 }}>
-        <ListGroup label="Top Trends for">
+        <ListGroup label="Top Trending Communities">
           {items.slice(0, 5).map((item) => (
             <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
           ))}
@@ -101,18 +101,16 @@ const SideBarRight = (props) => {
         </ListGroup>
       </div>
       <div className={classes.footer}>
-        <right>
-          <div className={classes.inner}>
-            <Link to="/org/en/tos">Terms of Service</Link>
-            <Link to="/org/en/privacy">Privacy Policy</Link>
-            <Link to="/org/en/disclaimer">Disclaimer</Link>
-            <br />
-            <Link to="/org/en/getstarted">Get Started</Link>
-            <Link to="/developers">Developers</Link>
-            <br />
-            <label>&copy; Dataloft, LLC&nbsp; - <i>v.{config.VERSION}</i></label>
-          </div>
-        </right>
+        <div className={classes.inner}>
+          <Link to="/org/en/tos">Terms of Service</Link>
+          <Link to="/org/en/privacy">Privacy Policy</Link>
+          <Link to="/org/en/disclaimer">Disclaimer</Link>
+          <br />
+          <Link to="/org/en/getstarted">Get Started</Link>
+          <Link to="/developers">Developers</Link>
+          <br />
+          <label>&copy; Dataloft, LLC&nbsp; - <i>v.{config.VERSION}</i></label>
+        </div>
       </div>
     </React.Fragment>
   )

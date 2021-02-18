@@ -20,10 +20,10 @@ const SplashScreen = () => {
 
   return (
     <div className={classes.wrapper}>
-      <div style={{ width: 200, height: 200, position: 'absolute', margin: 'auto', top: 0, left: 0, right: 0, bottom:0 }}>
+      <div style={{ width: 250, height: 250, position: 'absolute', margin: 'auto', top: 0, left: 0, right: 0, bottom:0 }}>
         <Preloader />
       </div>
-      <BrandIcon style={{
+      <BrandIcon height={55}style={{
         position: 'absolute',
         margin: 'auto',
         top: 0,
@@ -45,7 +45,6 @@ const Init = (props) => {
   const [init, setInit] = useState(false)
 
   useEffect(() => {
-    setInit(true)
     getBestRpcNode().then(() => {
       getTrendingTagsRequest()
       getSavedUserRequest().then(() => {
@@ -59,7 +58,7 @@ const Init = (props) => {
      * - if blog.d.buzz is already hosted
      *  
      * checkVersionRequest().then((isLatest) => {
-     * if(!isLatest) {
+     * if (!isLatest) {
      *  window.history.forward(1)
      *  window.location.reload(true)
      *  } else {

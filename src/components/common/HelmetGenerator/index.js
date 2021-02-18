@@ -23,13 +23,13 @@ const HelmetGenerator = (props) => {
         let description = stripContent
         const links = markdownLinkExtractor(content)
 
-        if(`${title}`.length > 80) {
+        if (`${title}`.length > 80) {
           title = `${title.substr(0, 80)} ...`
         }
 
         title = `${title} | D.Buzz Blog`
 
-        if(description > 120) {
+        if (description > 120) {
           description = `${description.substr(0, 120)} ...`
         }
 
@@ -39,10 +39,10 @@ const HelmetGenerator = (props) => {
         setTitle(title)
         setDescription(description)
 
-        if(links.length !== 0) {
+        if (links.length !== 0) {
           const result = await checkIfImage(links)
           const { hasImage, imageUrl } = result
-          if(hasImage) {
+          if (hasImage) {
             setImage(`https://images.hive.blog/0x0/${imageUrl}`)
           } else {
             setImage(avatarLink)

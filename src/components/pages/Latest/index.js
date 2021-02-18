@@ -1,105 +1,111 @@
 import React, { useEffect, useCallback } from 'react'
-import { pending } from 'redux-saga-thunk'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
-  getTrendingPostsRequest,
-  setTrendingIsVisited,
-  setHomeIsVisited,
+  getLatestPostsRequest,
   setLatestIsVisited,
+  setHomeIsVisited,
+  setTrendingIsVisited,
   clearHomePosts,
-  clearLatestPosts,
+  clearTrendingPosts,
   clearTagsPost,
   setTagsIsVisited,
   setPageFrom,
   clearLastSearchTag,
   clearSearchPosts,
+  clearAppendReply,
+  clearReplies,
 } from 'store/posts/actions'
 import {
   setProfileIsVisited,
   clearAccountPosts,
   clearAccountReplies,
 } from 'store/profile/actions'
+import { pending } from 'redux-saga-thunk'
 import { anchorTop } from 'services/helper'
 import { InfiniteList, HelmetGenerator } from 'components'
 import { clearScrollIndex } from 'store/interfaces/actions'
 
-const Trending = (props) => {
+const Latest = (props) => {
   const {
-    isVisited,
-    loading,
-    items,
-    last,
-    unguardedLinks,
-    getTrendingPostsRequest,
-    setTrendingIsVisited,
-    setHomeIsVisited,
-    clearHomePosts,
-    clearLatestPosts,
+    getLatestPostsRequest,
     setLatestIsVisited,
+    isVisited,
+    setHomeIsVisited,
+    setTrendingIsVisited,
+    clearHomePosts,
+    clearTrendingPosts,
     setProfileIsVisited,
     clearAccountPosts,
     clearAccountReplies,
+    items,
+    last,
+    loading,
     clearTagsPost,
     setTagsIsVisited,
     setPageFrom,
     clearLastSearchTag,
     clearSearchPosts,
+    clearAppendReply,
+    clearReplies,
     clearScrollIndex,
   } = props
 
   useEffect(() => {
-    setPageFrom('trending')
-    if (!isVisited) {
+    setPageFrom('latest')
+    if(!isVisited) {
       anchorTop()
-      clearScrollIndex()
       clearHomePosts()
-      clearLatestPosts()
-      getTrendingPostsRequest()
-      setTrendingIsVisited()
+      clearScrollIndex()
+      clearTrendingPosts()
+      setLatestIsVisited()
+      getLatestPostsRequest()
       setHomeIsVisited(false)
-      setLatestIsVisited(false)
+      setTrendingIsVisited(false)
     }
+    clearAppendReply()
     clearSearchPosts()
     clearLastSearchTag()
     clearAccountPosts()
     clearAccountReplies()
     clearTagsPost()
+    clearReplies()
     setTagsIsVisited(false)
     setProfileIsVisited(false)
-  // eslint-disable-next-line
+    //eslint-disable-next-line
   }, [])
+
 
   const loadMorePosts =  useCallback(() => {
     const { permlink, author } = last
-    getTrendingPostsRequest(permlink, author)
+    getLatestPostsRequest(permlink, author)
     // eslint-disable-next-line
   }, [last])
 
   return (
     <React.Fragment>
-      <HelmetGenerator page='Trending' />
-      <InfiniteList unguardedLinks={unguardedLinks} loading={loading} items={items} onScroll={loadMorePosts} />
+      <HelmetGenerator page='Latest' />
+      <InfiniteList loading={loading} items={items} onScroll={loadMorePosts}/>
     </React.Fragment>
   )
 }
 
 const mapStateToProps = (state) => ({
-  loading: pending(state, 'GET_TRENDING_POSTS_REQUEST'),
-  isVisited: state.posts.get('isTrendingVisited'),
-  items: state.posts.get('trending'),
-  last: state.posts.get('lastTrending'),
+  loading: pending(state, 'GET_LATEST_POSTS_REQUEST'),
+  items: state.posts.get('latest'),
+  isVisited: state.posts.get('isLatestVisited'),
+  last: state.posts.get('lastLatest'),
   mutelist: state.auth.get('mutelist'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
-    getTrendingPostsRequest,
-    setTrendingIsVisited,
-    setHomeIsVisited,
-    clearHomePosts,
+    getLatestPostsRequest,
     setLatestIsVisited,
-    clearLatestPosts,
+    setHomeIsVisited,
+    setTrendingIsVisited,
+    clearHomePosts,
+    clearTrendingPosts,
     setProfileIsVisited,
     clearAccountPosts,
     clearAccountReplies,
@@ -108,8 +114,10 @@ const mapDispatchToProps = (dispatch) => ({
     setPageFrom,
     clearLastSearchTag,
     clearSearchPosts,
+    clearAppendReply,
+    clearReplies,
     clearScrollIndex,
-  },dispatch),
+  }, dispatch),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trending)
+export default connect(mapStateToProps, mapDispatchToProps)(Latest)

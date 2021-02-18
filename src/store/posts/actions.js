@@ -182,3 +182,131 @@ export const getLinkMetaFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const CLEAR_CONTENT = 'CLEAR_CONTENT'
+
+export const clearContent = () => ({
+  type: CLEAR_CONTENT,
+})
+
+export const GET_HOME_POSTS_REQUEST = 'GET_HOME_POSTS_REQUEST'
+export const GET_HOME_POSTS_SUCCESS = 'GET_HOME_POSTS_SUCCESS'
+export const GET_HOME_POSTS_FAILURE = 'GET_HOME_POSTS_FAILURE'
+
+export const getHomePostsRequest = (start_permlink = null, start_author = null) => ({
+  type: GET_HOME_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getHomePostsSuccess = (response, meta) => ({
+  type: GET_HOME_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getHomePostsFailure = (error, meta) => ({
+  type: GET_HOME_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_HOME_LAST_POST = 'SET_HOME_LAST_POST'
+
+export const setHomeLastPost = (post) => ({
+  type: SET_HOME_LAST_POST,
+  payload: post,
+})
+
+export const GET_LATEST_POSTS_REQUEST = 'GET_LATEST_POSTS_REQUEST'
+export const GET_LATEST_POSTS_SUCCESS = 'GET_LATEST_POSTS_SUCCESS'
+export const GET_LATEST_POSTS_FAILURE = 'GET_LATEST_POSTS_FAILURE'
+
+export const getLatestPostsRequest = (start_permlink = '', start_author = '') => ({
+  type: GET_LATEST_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getLatestPostsSuccess = (response, meta) => ({
+  type: GET_LATEST_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getLatestPostsFailure = (error, meta) => ({
+  type: GET_LATEST_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_LATEST_LAST_POST = 'SET_LATEST_LAST_POST'
+
+export const setLatestLastPost = (post) => ({
+  type: SET_LATEST_LAST_POST,
+  payload: post,
+})
+
+export const GET_CONTENT_REQUEST = 'GET_CONTENT_REQUEST'
+export const GET_CONTENT_SUCCESS = 'GET_CONTENT_SUCCESS'
+export const GET_CONTENT_FAILURE = 'GET_CONTENT_FAILURE'
+
+export const getContentRequest = (author, permlink) => ({
+  type: GET_CONTENT_REQUEST,
+  payload: { author, permlink },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getContentSuccess = (response, meta) => ({
+  type: GET_CONTENT_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getContentFailure = (error, meta) => ({
+  type: GET_CONTENT_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_CONTENT_REDIRECT = 'SET_CONTENT_REDIRECT'
+export const UNSET_CONTENT_REDIRECT = 'UNSET_CONTENT_REDIRECT'
+
+export const setContentRedirect = (content) => ({
+  type: SET_CONTENT_REDIRECT,
+  payload: content,
+})
+
+export const unsetContentRedirect = () => ({
+  type: UNSET_CONTENT_REDIRECT,
+})
+
+export const GET_REPLIES_REQUEST = 'GET_REPLIES_REQUEST'
+export const GET_REPLIES_SUCCESS = 'GET_REPLIES_SUCCESS'
+export const GET_REPLIES_FAILURE = 'GET_REPLIES_FAILURE'
+
+export const getRepliesRequest = (author, permlink) => ({
+  type: GET_REPLIES_REQUEST,
+  payload: { author, permlink },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getRepliesSuccess = (response, meta) => ({
+  type: GET_REPLIES_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getRepliesFailure = (error, meta) => ({
+  type: GET_REPLIES_FAILURE,
+  payload: error,
+  meta,
+})

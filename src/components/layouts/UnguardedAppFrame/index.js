@@ -33,10 +33,6 @@ const useStyles = createUseStyles(theme => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
-  title: {
-    display: 'inline-block',
-    marginLeft: 5,
-  },
 }))
 
 const UnguardedAppFrame = (props) => {
@@ -47,7 +43,7 @@ const UnguardedAppFrame = (props) => {
   const { width } = useWindowDimensions()
 
   useEffect(() => {
-    if(width < 800) {
+    if (width < 800) {
       setMainWidth(12)
       setHideRightSideBar(true)
     } else {

@@ -6,14 +6,27 @@ import { BrandIcon,
   BrandDarkIcon, 
   BackArrowIcon,  
 } from 'components/elements'
-import IconButton from '@material-ui/core/IconButton'
 import { createUseStyles } from 'react-jss'
 import { SearchField, LoginModal } from 'components'
 import { signupHiveOnboard } from 'services/helper'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
-import { Button, Hidden, Toolbar } from '@material-ui/core'
+import { 
+  Button, 
+  Hidden, 
+  Avatar,
+  Typography,
+  Fab,
+} from '@material-ui/core'
+import { IconButton } from 'components/elements'
+import AddIcon from '@material-ui/icons/Add'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { bindActionCreators } from 'redux'
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { signoutUserRequest } from 'store/auth/actions'
+import { useLastLocation } from 'react-router-last-location'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -37,20 +50,30 @@ const useStyles = createUseStyles(theme => ({
     whiteSpace: 'nowrap',
     paddingLeft: 15,
   },
+  leftAdjust: {
+    marginLeft: 7,
+  },
 }))
 
 const AppBar = (props) => {
   const classes = useStyles()
-  const { theme } = props
+  const lastLocation = useLastLocation()
+  const { theme, user, signoutUserRequest } = props
+  const { isAuthenticated } = user
   const { mode } = theme
   const history = useHistory()
   const location = useLocation()
   const { pathname } = location
+  const { username } = user
 
   const [open, setOpen] = useState(false)
 
   const handleClickBackButton = () => {
-    history.goBack()
+    if(!lastLocation) {
+      history.replace('/')
+    } else {
+      history.goBack()
+    }
   }
 
   const handleClickOpenLoginModal = () => {
@@ -65,13 +88,46 @@ const AppBar = (props) => {
     signupHiveOnboard()
   }
 
+  const handleClickLogout = () => {
+    signoutUserRequest()
+  }
+  
+  let title = 'Home'
+
+  if(pathname.match(/(\/c\/)/)) {
+    title = 'Buzz'
+  }
+
+  if(pathname.match(/^\/trending/)) {
+    title = 'Trending'
+  }
+
+  if(pathname.match(/^\/latest/)) {
+    title = 'Latest'
+  }
+
+  if(!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    title = 'Profile'
+  }
+
+  if(pathname.match(/(\/notifications)/)) {
+    title = 'Notifications'
+  }
+
+  if(pathname.match(/(\/tags?)/)) {
+    title = 'Tags'
+  }
+
+  if(pathname.match(/(\/search?)/)) {
+    title = 'Search'
+  }
 
   return (
     <React.Fragment>
       <Navbar fixed="top" className={classes.nav}>
         <Container>
           <Navbar.Brand>
-            {pathname !== '/' && (
+            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
               <React.Fragment>
                 <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
                   <BackArrowIcon />
@@ -89,27 +145,53 @@ const AppBar = (props) => {
               <Hidden only="xs">
                 <SearchField className={classes.search} disableTips={true} />
               </Hidden>
-              <Nav>
-                <Hidden only={['xs', 'sm']}>
-                  <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary}>
+              <Nav style={{ marginLeft: 60 }}>
+                {isAuthenticated && (
+                  <React.Fragment>
+                    {/* <div onClick={onClick} >
+                    <Link to={path}>
+                      <IconWrapper style={{ textAlign: 'right' }} className={iconClass}>{icon}</IconWrapper>
+                      {username}
+                    </Link>
+                    </div> */}
                     
-                  </Toolbar>
-                </Hidden>
+                    <Avatar className={classes.leftAdjust} src={`https://images.hive.blog/u/${username}/avatar/small`} />
+                    &nbsp;&nbsp;&nbsp;
+                    <Typography variant="subtitle1" style={{ paddingTop: 5 }} className={classes.leftAdjust}>{username}</Typography>
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                      <AddIcon />
+                    </Fab>
+                    &nbsp;
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                      <NotificationsNoneIcon />
+                    </Fab>
+                    &nbsp;
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                      <KeyboardArrowDownIcon />
+                    </Fab>
+                    &nbsp;
+                    <Fab onClick={handleClickLogout} color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                      <ExitToAppIcon />
+                    </Fab>
+                  </React.Fragment>
+                )}
               </Nav>
-                
-              
             </React.Fragment>
           )}
+          {!isAuthenticated && (
+            <div className={classes.buttons}>
+              <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
+                Sign in
+              </Button>
+              &nbsp;
+              <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
+                Sign up
+              </Button>
+            </div>
+          )}
           
-          <div className={classes.buttons}>
-            <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
-              Sign in
-            </Button>
-            &nbsp;
-            <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
-              Sign up
-            </Button>
-          </div>
         </Container>
         <LoginModal show={open} onHide={handleClickCloseLoginModal} />
       </Navbar>
@@ -118,6 +200,13 @@ const AppBar = (props) => {
 }
 const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
+  user: state.auth.get('user'),
 })
 
-export default connect(mapStateToProps)(AppBar)
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    signoutUserRequest,
+  }, dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppBar)

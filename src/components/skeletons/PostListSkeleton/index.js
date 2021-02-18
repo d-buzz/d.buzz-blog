@@ -12,7 +12,7 @@ const addHover = (theme) => {
     },
   }
 
-  if(isMobile) {
+  if (isMobile) {
     style = {}
   }
 

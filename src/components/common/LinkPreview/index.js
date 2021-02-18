@@ -31,7 +31,7 @@ const useStyles = createUseStyles(theme => ({
       width: '100%',
       objectFit: 'cover',
       border: 'none !important',
-      borderRadius: '15px 0px 0px 15px !important',
+      borderRadius: '5px 0px 0px 5px !important',
     },
   },
   right: {
@@ -69,10 +69,10 @@ const LinkPreview = (props) => {
   let isValidUrl = false
   let url = ''
 
-  if(links.length !== 0) {
+  if (links.length !== 0) {
     for(let index = links.length; index > 0 ; index--) {
       const link = links[index-1]
-      if(!link.includes('images.hive.blog')
+      if (!link.includes('images.hive.blog')
           && !link.includes('youtu.be')
           && !link.includes('files.peakd')
           && !link.includes('youtube.com/watch?v=')
@@ -107,12 +107,12 @@ const LinkPreview = (props) => {
   useEffect(() => {
     let isSubscribed = true
 
-    if(isValidUrl) {
+    if (isValidUrl) {
       setLoading(true)
       getLinkMetaRequest(url)
         .then((data) => {
-          if(isSubscribed) {
-            if(!data.hasOwnProperty('title')) {
+          if (isSubscribed) {
+            if (!data.hasOwnProperty('title')) {
               setNoShow(true)
             }
             setMeta(data)
@@ -126,7 +126,7 @@ const LinkPreview = (props) => {
   }, [])
 
   useEffect(() => {
-    if(noShow) {
+    if (noShow) {
       recomputeRowIndex(scrollIndex)
     }
     // eslint-disable-next-line
@@ -137,15 +137,15 @@ const LinkPreview = (props) => {
 
     let maxLength = 60
 
-    if(isMobile) {
+    if (isMobile) {
       maxLength = 35
     }
 
-    if(`${title}`.length > maxLength) {
+    if (`${title}`.length > maxLength) {
       title = `${title.substring(0, maxLength)}...`
     }
 
-    if(title=== null || title === '') {
+    if (title=== null || title === '') {
       setNoShow(true)
     }
 
@@ -157,11 +157,11 @@ const LinkPreview = (props) => {
 
     let maxLength = 75
 
-    if(isMobile) {
+    if (isMobile) {
       maxLength = 45
     }
 
-    if(`${description}`.length > maxLength) {
+    if (`${description}`.length > maxLength) {
       description = `${description.substring(0, maxLength)}...`
     }
 
@@ -175,11 +175,11 @@ const LinkPreview = (props) => {
   const getImage = () => {
     let image = meta.image
 
-    if(!`${image}`.includes('https') || !`${image}`.includes('http') || image === '') {
+    if (!`${image}`.includes('https') || !`${image}`.includes('http') || image === '') {
       image = `${window.location.origin}/no-img.png`
     }
 
-    if(image.match(/^\//g)) {
+    if (image.match(/^\//g)) {
       const parser = document.createElement('a')
       image = `${parser.origin}${meta.image}`
     }
