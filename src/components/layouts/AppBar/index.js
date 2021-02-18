@@ -26,6 +26,7 @@ import { bindActionCreators } from 'redux'
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { signoutUserRequest } from 'store/auth/actions'
+import { useLastLocation } from 'react-router-last-location'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -56,8 +57,9 @@ const useStyles = createUseStyles(theme => ({
 
 const AppBar = (props) => {
   const classes = useStyles()
+  const lastLocation = useLastLocation()
   const { theme, user, signoutUserRequest } = props
-  let { isAuthenticated } = user
+  const { isAuthenticated } = user
   const { mode } = theme
   const history = useHistory()
   const location = useLocation()
@@ -67,7 +69,11 @@ const AppBar = (props) => {
   const [open, setOpen] = useState(false)
 
   const handleClickBackButton = () => {
-    history.goBack()
+    if(!lastLocation) {
+      history.replace('/')
+    } else {
+      history.goBack()
+    }
   }
 
   const handleClickOpenLoginModal = () => {
@@ -85,9 +91,35 @@ const AppBar = (props) => {
   const handleClickLogout = () => {
     signoutUserRequest()
   }
+  
+  let title = 'Home'
 
-  const isActivePath = (path, current) => {
-    return path === current
+  if(pathname.match(/(\/c\/)/)) {
+    title = 'Buzz'
+  }
+
+  if(pathname.match(/^\/trending/)) {
+    title = 'Trending'
+  }
+
+  if(pathname.match(/^\/latest/)) {
+    title = 'Latest'
+  }
+
+  if(!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    title = 'Profile'
+  }
+
+  if(pathname.match(/(\/notifications)/)) {
+    title = 'Notifications'
+  }
+
+  if(pathname.match(/(\/tags?)/)) {
+    title = 'Tags'
+  }
+
+  if(pathname.match(/(\/search?)/)) {
+    title = 'Search'
   }
 
   return (
@@ -95,7 +127,7 @@ const AppBar = (props) => {
       <Navbar fixed="top" className={classes.nav}>
         <Container>
           <Navbar.Brand>
-            {pathname === '/' && (
+            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
               <React.Fragment>
                 <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
                   <BackArrowIcon />
@@ -104,7 +136,7 @@ const AppBar = (props) => {
               </React.Fragment>
             )}
             <Link to="/">
-              {mode === 'light' && (<BrandIcon height={50} top={-40} />)}
+              {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
               {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
             </Link>
           </Navbar.Brand>
@@ -174,7 +206,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
-  }, dispatch)
+  }, dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppBar)
