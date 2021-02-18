@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Feeds, Landing } from 'components'
+import { Landing } from 'components'
 
 const Home = (props) => {
   const { user } = props
