@@ -5,26 +5,26 @@ import {
 
 } from 'store/posts/actions'
 
-import { createUseStyles } from 'react-jss'
+// import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
 import { pending } from 'redux-saga-thunk'
 
 
-const useStyles = createUseStyles(theme => ({
-  wrapper: {
-    width: '95%',
-    margin: '0 auto',
-    marginTop: 0,
-    borderBottom: theme.border.primary,
-    '& img': {
-      borderRadius: '15px 15px',
-    },
-    '& iframe': {
-      borderRadius: '15px 15px',
-    },
-  },
+// const useStyles = createUseStyles(theme => ({
+//   wrapper: {
+//     width: '95%',
+//     margin: '0 auto',
+//     marginTop: 0,
+//     borderBottom: theme.border.primary,
+//     '& img': {
+//       borderRadius: '15px 15px',
+//     },
+//     '& iframe': {
+//       borderRadius: '15px 15px',
+//     },
+//   },
  
-}))
+// }))
 
 const Content = (props) => {
   const {

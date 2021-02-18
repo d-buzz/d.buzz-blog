@@ -170,7 +170,7 @@ const LoginModal = (props) => {
         <ModalBody>
           <div style={{ width: '98%', margin: '0 auto', top: 10 }}>
             <center>
-              <div style={{ width: 200, height: 200 }}>
+              <div style={{ width: 180, height: 180 }}>
                 <Welcomer />
               </div>
               <h6 className={classes.label}>Hi there, welcome back!</h6>

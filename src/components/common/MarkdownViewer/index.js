@@ -228,15 +228,12 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
       data = data.toString()
     }
 
-    return (
-      <React.Fragment>
-        <div
-          key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-          className={classNames(markdownClass, assetClass)}
-          dangerouslySetInnerHTML={{ __html: data }} 
-        />
-      </React.Fragment>
-    )
+    return <div
+      key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+      className={classNames(markdownClass, assetClass)}
+      dangerouslySetInnerHTML={{ __html: data }} 
+    />
+    
     
   } else {
     if (content.includes(':twitter:')) {

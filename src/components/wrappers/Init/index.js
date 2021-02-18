@@ -51,26 +51,6 @@ const Init = (props) => {
         setInit(true)
       })
     })
-  
-    /** 
-     * Check Version will be implemented
-     * - if it will be on production mode
-     * - if blog.d.buzz is already hosted
-     *  
-     * checkVersionRequest().then((isLatest) => {
-     * if (!isLatest) {
-     *  window.history.forward(1)
-     *  window.location.reload(true)
-     *  } else {
-     *    getBestRpcNode().then(() => {
-     *      getTrendingTagsRequest()
-  *         getSavedUserRequest().then(() => {
-     *        setInit(true)
-     *      })
-     *    })
-     *  }
-     * })
-     */
     // eslint-disable-next-line
   }, [])
 

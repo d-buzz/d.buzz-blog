@@ -4,12 +4,9 @@ import { useLocation, Redirect } from 'react-router-dom'
 
 const AuthGuard = (props) => {
   const { children, user, fromLanding } = props
+  const { isAuthenticated } = user
   const location = useLocation()
   const { pathname } = location
-  const { isAuthenticated } = user
-
-  //set auth 
-  // isAuthenticated = true
 
   const isGuardedRoute = () => {
     return pathname.match(/^(\/latest)/g) || pathname.match(/^(\/trending)/g)
