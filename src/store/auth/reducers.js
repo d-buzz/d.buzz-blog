@@ -6,6 +6,7 @@ import {
   SET_FROM_LANDING,
   SET_MUTE_LIST,
   MUTE_USER_SUCCESS,
+  SIGNOUT_USER_SUCCESS,
 } from './actions'
 import { fromJS } from 'immutable'
 
@@ -33,6 +34,8 @@ export const auth = (state = defaultState, { type, payload }) => {
     return state.set('mutelist', payload)
   case MUTE_USER_SUCCESS:
     return state.set('mutelist', payload)
+  case SIGNOUT_USER_SUCCESS:
+    return state.set('user', payload)
   default: 
     return state
   }

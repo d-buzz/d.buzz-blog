@@ -102,3 +102,50 @@ export const setFromLanding = (status) => ({
   type: SET_FROM_LANDING,
   payload: { status },
 })
+
+export const SIGNOUT_USER_REQUEST = 'SIGNOUT_USER_REQUEST'
+export const SIGNOUT_USER_SUCCESS = 'SIGNOUT_USER_SUCCESS'
+export const SIGNOUT_USER_FAILURE = 'SIGNOUT_USER_FAILURE'
+
+export const signoutUserRequest = () => ({
+  type: SIGNOUT_USER_REQUEST,
+  meta: {
+    thunk: true,
+  },
+})
+
+export const signoutUserSuccess = (response, meta) => ({
+  type: SIGNOUT_USER_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const signoutUserFailure = (error, meta) => ({
+  type: SIGNOUT_USER_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const CHECK_HAS_UPDATE_AUTHORITY_REQUEST = 'CHECK_HAS_UPDATE_AUTHORITY_REQUEST'
+export const CHECK_HAS_UPDATE_AUTHORITY_SUCCESS = 'CHECK_HAS_UPDATE_AUTHORITY_SUCCESS'
+export const CHECK_HAS_UPDATE_AUTHORITY_FAILURE = 'CHECK_HAS_UPDATE_AUTHORITY_FAILURE'
+
+export const checkHasUpdateAuthorityRequest = (author) => ({
+  type: CHECK_HAS_UPDATE_AUTHORITY_REQUEST,
+  payload: { author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const checkHasUpdateAuthoritySuccess = (response, meta) => ({
+  type: CHECK_HAS_UPDATE_AUTHORITY_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const checkHasUpdateAuthorityFailure = (error, meta) => ({
+  type: CHECK_HAS_UPDATE_AUTHORITY_FAILURE,
+  payload: error,
+  meta,
+})

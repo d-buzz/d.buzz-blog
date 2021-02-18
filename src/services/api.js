@@ -306,3 +306,89 @@ export const broadcastOperation = (operations, keys) => {
     )
   })
 }
+
+export const fetchContent = (author, permlink) => {
+  return new Promise((resolve, reject) => {
+    api.getContentAsync(author, permlink)
+      .then(async(result) => {
+        result.body = result.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+        const profile = await fetchProfile([result.author])
+        result.profile = profile[0]
+        resolve(result)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export const fetchDiscussions = (author, permlink) => {
+  return new Promise((resolve, reject) => {
+    const params = {"author":`${author}`, "permlink": `${permlink}`}
+    api.call('bridge.get_discussion', params, async(err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        const authors = []
+        let profile = []
+
+        const arr = Object.values(data)
+        const uniqueAuthors = [ ...new Set(arr.map(item => item.author)) ]
+
+        uniqueAuthors.forEach((item) => {
+          if(!authors.includes(item)) {
+            const profileVisited = visited.filter((prof) => prof.name === item)
+            if(!authors.includes(item) && profileVisited.length === 0) {
+              authors.push(item)
+            } else if(profileVisited.length !== 0) {
+              profile.push(profileVisited[0])
+            }
+          }
+        })
+
+        if(authors.length !== 0 ) {
+          const info = await fetchProfile(authors)
+          profile = [ ...profile, ...info]
+        }
+
+        const parent = data[`${author}/${permlink}`]
+
+        const getChildren = (reply) => {
+          const { replies } = reply
+          const children = []
+
+          replies.forEach(async(item) => {
+            let content = data[item]
+
+            if(!content) {
+              content = item
+            }
+
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+
+            if(content.replies.length !== 0) {
+              const child = getChildren(content)
+              content.replies = child
+            }
+
+            const info = profile.filter((prof) => prof.name === content.author)
+            visited.push(info[0])
+            content.profile = info[0]
+            children.push(content)
+          })
+
+          return children
+        }
+
+        const children = getChildren(parent)
+        parent.replies = children
+
+        let replies = parent.replies
+        replies = replies.reverse()
+        resolve(replies)
+      }
+    })
+  })
+}
+

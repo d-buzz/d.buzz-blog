@@ -6,6 +6,7 @@ import sha256 from 'crypto-js/sha256'
 import { Remarkable } from 'remarkable'
 import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
+import stripHtml from 'string-strip-html'
 
 const remarkable = new Remarkable()
 export default remarkable
@@ -283,4 +284,60 @@ export const renderContent = (content) => {
   return body
 }
 
+export const calculatePayout = (data) => {
 
+  const {
+    pending_payout_value,
+    total_payout_value,
+    curator_payout_value,
+    is_paidout = null,
+  } = data
+
+  let payout = 0
+
+  if(is_paidout) {
+
+    // if(is_paidout) {
+    payout = parseFloat(`${pending_payout_value}`.replace('HBD'))
+    // } else {
+    //   payout = parseFloat(`${total_payout_value}`.replace('HBD')) + parseFloat(`${curator_payout_value}`.replace('HBD'))
+    // }
+  } else {
+    payout = parseFloat(`${total_payout_value}`.replace('HBD')) + parseFloat(`${curator_payout_value}`.replace('HBD')) + parseFloat(`${pending_payout_value}`.replace('HBD'))
+  }
+
+  payout = payout.toFixed(2)
+
+  if(payout === 0) {
+    payout = '0.00'
+  }
+
+  return payout
+}
+
+export const invokeTwitterIntent = (content) => {
+  const width = 500
+  const height = 600
+  let body = content
+  if(body.length < 274) {
+    body += ' #HIVE'
+  }
+  body = encodeURIComponent(stripHtml(body))
+  window.open(`https://twitter.com/intent/tweet?text=${body}` , 'newwindow', 'width=' + width + ', height=' + height + ', top=' + ((window.innerHeight - height) / 2) + ', left=' + ((window.innerWidth - width) / 2))
+}
+
+export const sendToBerries = (author) => {
+  window.open(`https://buymeberri.es/!dbuzz/@${author}`, '_blank')
+}
+
+export const truncateBody = (body) => {
+  const bodyLength = `${stripHtml(body)}`.length
+
+  if(bodyLength > 280) {
+    body = stripHtml(body)
+    body = `${body}`.substr(0, 280)
+    body = `${body} . . .`
+  }
+
+  return body
+}

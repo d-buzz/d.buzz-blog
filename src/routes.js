@@ -2,6 +2,8 @@ import {
   AppFrame,
   Home,
   Trending,
+  Latest,
+  Content,
 } from 'components'
   
 const routes =  [
@@ -17,6 +19,16 @@ const routes =  [
         path: '/trending',
         exact: true,
         component: Trending,
+      },
+      {
+        path: '/latest',
+        exact: true,
+        component: Latest,
+      },
+      {
+        path: '/@:username/c/:permlink',
+        exact: true,
+        component: Content,
       },
     ],
   },

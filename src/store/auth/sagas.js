@@ -16,6 +16,15 @@ import {
   MUTE_USER_REQUEST,
   muteUserSuccess,
   muteUserFailure,
+
+  SIGNOUT_USER_REQUEST,
+  signoutUserSuccess,
+  signoutUserFailure,
+
+  CHECK_HAS_UPDATE_AUTHORITY_REQUEST,
+  checkHasUpdateAuthoritySuccess,
+  checkHasUpdateAuthorityFailure,
+
 } from './actions'
 
 import {
@@ -138,9 +147,7 @@ function* getSavedUserRequest(meta) {
     try {
       const parseActive = JSON.parse(active) 
       active = parseActive
-    } catch(error) {
-      console.log({error})
-    }
+    } catch (e) {}
 
     if (active !== null && saved !== null && Array.isArray(saved) && active && saved.length !== 0) {
       //note: I still have to know the meaning behind this...
@@ -173,7 +180,7 @@ function* getSavedUserRequest(meta) {
     
     yield put(getSavedUsersSuccess(user, meta))
   } catch (error) {
-    yield put(getSavedUsersFailure(user, meta))
+    yield put(getSavedUsersFailure(error, meta))
   }
 }
 
@@ -219,8 +226,52 @@ function* muteUserRequest(payload, meta) {
   }
 }
 
+function* checkHasUpdateAuthorityRequest(payload, meta) {
+  try {
+    const { author } = payload
+    const user = yield select(state => state.auth.get('user'))
+    let { login_data } = user
+    const { username, useKeychain } = user
+
+    if(useKeychain) {
+      login_data = username
+    } else {
+      login_data = extractLoginData(login_data)
+      login_data = login_data[0]
+    }
+
+    const hasAuthority = author === login_data
+
+    yield put(checkHasUpdateAuthoritySuccess(hasAuthority, meta))
+  } catch (error) {
+    yield put(checkHasUpdateAuthorityFailure(error, meta))
+  }
+}
+
+function* signoutUserRequest(meta) {
+  try {
+    const user = { username: '', useKeychain: false, is_authenticated: false }
+    
+    yield call([localStorage, localStorage.setItem], 'user', JSON.stringify([]))
+    yield call([localStorage, localStorage.setItem], 'active', null)
+    yield call([localStorage, localStorage.setItem], 'accounts', JSON.stringify([]))
+    yield put(setAccountList([]))
+    yield put(signoutUserSuccess(user, meta))
+  } catch(error) {
+    yield put(signoutUserFailure(error, meta))
+  }
+}
+
 function* watchAuthenticationUserRequest({ payload, meta }) {
   yield call(authenticateUserRequest, payload, meta)
+}
+
+function* watchSignoutUserRequest({ meta }) {
+  yield call(signoutUserRequest, meta)
+}
+
+function* watchCheckHasUpdateAuthorityRequest({ payload, meta }) {
+  yield call(checkHasUpdateAuthorityRequest, payload, meta)
 }
 
 function* watchGetSavedUsersRequest({ meta }) {
@@ -232,7 +283,9 @@ function* watchMuteUserRequest({ payload, meta }) {
 }
 
 export default function* sagas() {
+  yield takeEvery(CHECK_HAS_UPDATE_AUTHORITY_REQUEST, watchCheckHasUpdateAuthorityRequest)
   yield takeEvery(AUTHENTICATE_USER_REQUEST, watchAuthenticationUserRequest)
   yield takeEvery(GET_SAVED_USER_REQUEST, watchGetSavedUsersRequest)
+  yield takeEvery(SIGNOUT_USER_REQUEST, watchSignoutUserRequest)
   yield takeEvery(MUTE_USER_REQUEST, watchMuteUserRequest)
 }
