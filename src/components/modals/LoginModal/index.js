@@ -173,7 +173,7 @@ const LoginModal = (props) => {
               <div style={{ width: 180, height: 180 }}>
                 <Welcomer />
               </div>
-              <h6 className={classes.label}>Hi there, welcome back!</h6>
+              <h6 className={classes.label}>Hi there BUZZERS, welcome back!</h6>
               {signUpConfirmation && (
                 <React.Fragment>
                   <div style={{ height: 100, width: 100 }} >
