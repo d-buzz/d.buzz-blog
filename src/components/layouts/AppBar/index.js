@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
@@ -27,6 +27,7 @@ import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { signoutUserRequest } from 'store/auth/actions'
 import { useLastLocation } from 'react-router-last-location'
+import { pending } from 'redux-saga-thunk'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -58,7 +59,7 @@ const useStyles = createUseStyles(theme => ({
 const AppBar = (props) => {
   const classes = useStyles()
   const lastLocation = useLastLocation()
-  const { theme, user, signoutUserRequest } = props
+  const { theme, user, signoutUserRequest, loadingAccount } = props
   const { isAuthenticated } = user
   const { mode } = theme
   const history = useHistory()
@@ -122,6 +123,12 @@ const AppBar = (props) => {
     title = 'Search'
   }
 
+  useEffect(() => {
+    if (!loadingAccount) {
+      setOpen(false)
+    }
+  }, [loadingAccount])
+
   return (
     <React.Fragment>
       <Navbar fixed="top" className={classes.nav}>
@@ -160,19 +167,19 @@ const AppBar = (props) => {
                     <Typography variant="subtitle1" style={{ paddingTop: 5 }} className={classes.leftAdjust}>{username}</Typography>
                     &nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;
-                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust} disableElevation>
                       <AddIcon />
                     </Fab>
                     &nbsp;
-                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust} disableElevation>
                       <NotificationsNoneIcon />
                     </Fab>
                     &nbsp;
-                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                    <Fab color="secondary" size="small" aria-label="add" className={classes.leftAdjust} disableElevation>
                       <KeyboardArrowDownIcon />
                     </Fab>
                     &nbsp;
-                    <Fab onClick={handleClickLogout} color="secondary" size="small" aria-label="add" className={classes.leftAdjust}>
+                    <Fab onClick={handleClickLogout} color="secondary" size="small" aria-label="add" className={classes.leftAdjust} disableElevation>
                       <ExitToAppIcon />
                     </Fab>
                   </React.Fragment>
@@ -201,6 +208,7 @@ const AppBar = (props) => {
 const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
+  loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
