@@ -196,6 +196,30 @@ const light = {
   },
   nav: {
     background: 'white',
+    profile: {
+      wrapper: {
+        backgroundColor: '#e6ecf0',
+        '&:hover': {
+          backgroundColor: '#f5f8fa',
+        },
+      },
+    },
+    buzz: {
+      wrapper: {
+        backgroundColor: '#e6ecf0',
+        '&:hover': {
+          background: '#f5f8fa',
+        },
+      },
+    },
+    notification: {
+      wrapper: {
+        backgroundColor: '#e6ecf0',
+        '&:hover': {
+          background: '#f5f8fa',
+        },
+      },
+    },
   },
   dialog: {
     user: {
