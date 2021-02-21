@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'react-bootstrap/Image'
 
 const Avatar = React.memo((props) => {
-  const { author, height = 50, size = 'small', border = false, style = {}, className = {}, onClick = () => {} } = props
+  const { author, height = 40, size = 'small', border = false, style = {}, className = {}, onClick = () => {} } = props
 
   return (
     <React.Fragment>
