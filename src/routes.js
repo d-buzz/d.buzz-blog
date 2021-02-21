@@ -3,7 +3,7 @@ import {
   Home,
   Trending,
   Latest,
-  Content,
+  ContentModal,
 } from 'components'
   
 const routes =  [
@@ -28,7 +28,7 @@ const routes =  [
       {
         path: '/@:username/c/:permlink',
         exact: true,
-        component: Content,
+        component: ContentModal,
       },
     ],
   },
