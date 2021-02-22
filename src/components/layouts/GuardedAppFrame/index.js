@@ -36,10 +36,7 @@ const useStyles = createUseStyles(theme => ({
 }))
 
 const GuardedAppFrame = (props) => {
-  const {
-    route,
-  } = props
-
+  const { route } = props
   const classes = useStyles()
   const [mainWidth, setMainWidth] = useState(8)
   const [hideRightSideBar, setHideRightSideBar] = useState(false)
@@ -57,9 +54,9 @@ const GuardedAppFrame = (props) => {
 
   return (
     <React.Fragment>
-      <Row >
+      <Row>
         <Col xs={mainWidth} className={classes.clearPadding}>
-          <div style={{ paddingTop: 60 }} className={classes.main}>
+          <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
             <React.Fragment>
               {renderRoutes(route.routes)}
             </React.Fragment>

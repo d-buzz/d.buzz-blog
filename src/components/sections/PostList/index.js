@@ -9,6 +9,7 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
+  ContentModal,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
 import { Link } from 'react-router-dom'
@@ -241,6 +242,7 @@ const PostList = React.memo((props) => {
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [muted, setMuted] = useState(false)
+  const [openContentModal, setOpenContentModal] = useState(false)
   const popoverAnchor = useRef(null)
 
 
@@ -288,12 +290,14 @@ const PostList = React.memo((props) => {
 
     e.preventDefault()
     if (href && !href.includes(hostname)) {
-      window.open(href, '_blank')
+      // window.open(href, '_blank')
     } else {
       if (!href) {
         const link = generateLink(author, permlink)
         saveScrollIndex(scrollIndex)
-        history.push(link)
+        // history.push(link)
+        setOpenContentModal(true)
+        console.log({link})
       } else {
         const split = href.split('/')
         href = `/${split[3]}`
@@ -398,6 +402,7 @@ const PostList = React.memo((props) => {
                 >
                   {user.username && user.username !== author && (<MenuItem onClick={handleClickMuteDialog} className={classes.menuText}>Mute</MenuItem>)}
                 </Menu>
+                
               </div>
             </Col>
           </Row>

@@ -102,7 +102,7 @@ const Feeds = React.memo((props) => {
   return (
     <React.Fragment>
       <HelmetGenerator page='Home' />
-      {/* {!isMobile && !buzzModalStatus && (<CreateBuzzForm />)} */}
+      {!isMobile && !buzzModalStatus && (<CreateBuzzForm />)}
       {(items.length === 0) && !loading && (
         <React.Fragment>
           <center>

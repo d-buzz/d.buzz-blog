@@ -32,6 +32,15 @@ import {
   GET_REPLIES_REQUEST,
   getRepliesSuccess,
   getRepliesFailure,
+
+  UPLOAD_FILE_REQUEST,
+  uploadFileSuccess,
+  uploadFileError,
+
+  PUBLISH_POST_REQUEST,
+  publishPostSuccess,
+  publishPostFailure,
+
 } from './actions'
 
 import {
@@ -41,7 +50,22 @@ import {
   getLinkMeta,
   fetchContent,
   fetchDiscussions,
+  uploadIpfsImage,
+  broadcastKeychainOperation,
+  broadcastOperation,
+  generatePostOperations,
+  extractLoginData,
 } from 'services/api'
+import { errorMessageComposer } from 'services/helper'
+import stripHtml from 'string-strip-html'
+import moment from 'moment'
+
+const footnote = (body) => {
+  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>'
+  body = `${body} ${footnoteAppend}`
+
+  return body
+}
 
 function* getTrendingTagsRequests(meta) {
   try {
@@ -215,6 +239,128 @@ function* getRepliesRequest(payload, meta) {
   }
 }
 
+function* fileUploadRequest(payload, meta) {
+  try {
+    const user = yield select(state => state.auth.get('user'))
+    const old = yield select(state => state.posts.get('images'))
+    const { is_authenticated } = user
+    const { file } = payload
+
+    if(is_authenticated) {
+
+      const result = yield call(uploadIpfsImage, file)
+
+      let images = []
+
+      if(Array.isArray(old) && old.length !== 0) {
+        images = [ ...old ]
+      }
+
+      const ipfsHash = result.hashV0
+      const postUrl = `https://ipfs.io/ipfs/${ipfsHash}`
+      images.push(postUrl)
+
+      yield put(uploadFileSuccess(images, meta))
+    } else {
+      yield put(uploadFileError('authentication required', meta))
+    }
+  } catch (error) {
+    yield put(uploadFileError(error, meta))
+  }
+}
+
+function* publishPostRequest(payload, meta) {
+  try {
+    const { tags, payout } = payload
+    let { body } = payload
+
+    body = footnote(body)
+
+    const user = yield select(state => state.auth.get('user'))
+    const { username, useKeychain } = user
+
+    let title = stripHtml(body)
+
+    if(title.length > 70) {
+      title = `${title.substr(0, 70)} ...`
+    }
+
+    const operations = yield call(generatePostOperations, username, title, body, tags, payout)
+
+    let success = false
+    const comment_options = operations[1]
+    const permlink = comment_options[1].permlink
+
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, username, operations)
+      success = result.success
+
+      if(!success) {
+        yield put(publishPostFailure('Unable to publish post', meta))
+      }
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operations, [wif])
+
+      success = result.success
+    }
+
+    if(success) {
+      const comment = operations[0]
+      const json_metadata = comment[1].json_metadata
+
+      let currentDatetime = moment().toISOString()
+      currentDatetime = currentDatetime.replace('Z', '')
+
+      let cashout_time = moment().add(7, 'days').toISOString()
+      cashout_time = cashout_time.replace('Z', '')
+
+      let body = comment[1].body
+      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
+
+
+      const content = {
+        author: username,
+        category: 'hive-193084',
+        permlink,
+        title: comment[1].title,
+        body: body,
+        replies: [],
+        total_payout_value: '0.000 HBD',
+        curator_payout_value: '0.000 HBD',
+        pending_payout_value: '0.000 HBD',
+        active_votes: [],
+        root_author: "",
+        parent_author: null,
+        parent_permlink: "hive-190384",
+        root_permlink: permlink,
+        root_title: title,
+        json_metadata,
+        children: 0,
+        created: currentDatetime,
+        cashout_time,
+        max_accepted_payout: `${payout.toFixed(3)} HBD`,
+      }
+
+      yield put(setContentRedirect(content))
+    }
+
+    const data = {
+      success,
+      author: username,
+      permlink,
+    }
+
+    yield put(publishPostSuccess(data, meta))
+  } catch (error) {
+    const errorMessage = errorMessageComposer('post', error)
+    yield put(publishPostFailure({ errorMessage }, meta))
+  }
+}
+
 function* watchGetLatestPostsRequest({payload, meta}) {
   yield call(getLatestPostsRequest, payload, meta)
 }
@@ -243,6 +389,14 @@ function* watchGetRepliesRequest({ payload, meta }) {
   yield call(getRepliesRequest, payload, meta)
 }
 
+function* watchUploadFileUploadRequest({ payload, meta }) {
+  yield call(fileUploadRequest, payload, meta)
+}
+
+function* watchPublishPostRequest({ payload, meta }) {
+  yield call(publishPostRequest, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
@@ -251,4 +405,6 @@ export default function* sagas() {
   yield takeEvery(GET_HOME_POSTS_REQUEST, watchGetHomePostsRequest)
   yield takeEvery(GET_CONTENT_REQUEST, watchGetContentRequest)
   yield takeEvery(GET_REPLIES_REQUEST, watchGetRepliesRequest)
+  yield takeEvery(UPLOAD_FILE_REQUEST, watchUploadFileUploadRequest)
+  yield takeEvery(PUBLISH_POST_REQUEST, watchPublishPostRequest)
 }

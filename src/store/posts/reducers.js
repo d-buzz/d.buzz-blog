@@ -23,6 +23,8 @@ import {
   CLEAR_CONTENT,
   SET_CONTENT_REDIRECT,
   UNSET_CONTENT_REDIRECT,
+  UPLOAD_FILE_SUCCESS,
+  PUBLISH_POST_SUCCESS,
 } from './actions'
 import { fromJS } from 'immutable'
 
@@ -44,6 +46,8 @@ const defaultState = fromJS({
   appendReply: {},
   replies: [],
   pageFrom: '',
+  images: [],
+  published: {},
 })
 
 export const posts = (state = defaultState, { type, payload }) => {
@@ -96,6 +100,10 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('contentRedirect', payload)
   case UNSET_CONTENT_REDIRECT:
     return state.set('contentRedirect', null)
+  case UPLOAD_FILE_SUCCESS:
+    return state.set('images', payload)
+  case PUBLISH_POST_SUCCESS:
+    return state.set('published', payload)
   default:
     return state
   }

@@ -1,9 +1,17 @@
 import React from 'react'
+import { Modal } from 'react-responsive-modal'
 
-const ContentModal = () => {
+const ContentModal = (props) => {
+  const { isOpen } = props
+  console.log({isOpen})
+
+  
   return (
     <React.Fragment>
-      THIS IS CONTENT
+      <Modal open={true} >
+        <h2>Big modal</h2>
+        
+      </Modal>
     </React.Fragment>
   )
 }
