@@ -7,6 +7,9 @@ import { Remarkable } from 'remarkable'
 import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import stripHtml from 'string-strip-html'
+import diff_match_patch from 'diff-match-patch'
+
+const dmp = new diff_match_patch()
 
 const remarkable = new Remarkable()
 export default remarkable
@@ -340,4 +343,40 @@ export const truncateBody = (body) => {
   }
 
   return body
+}
+
+export const createPatch = (text1, text2) => {
+  if (!text1 && text1 === '') return undefined
+  const patches = dmp.patch_make(text1, text2)
+  const patch = dmp.patch_toText(patches)
+  return patch
+}
+
+export const errorMessageComposer = (type = null, errorCode = 0) => {
+  let errorMessage = 'Transaction broadcast failure for unknown reason, please contact the administrator'
+
+  const prefixes = [
+    {
+      type: 'post',
+      prefix: 'Post creation failed',
+    },
+    {
+      type: 'upvote',
+      prefix: 'Upvote transaction failed',
+    },
+    {
+      type: 'reply',
+      prefix: 'Reply transaction failed',
+    },
+  ]
+
+  if(type) {
+    errorMessage = prefixes.find( item => item.type === type).prefix
+  }
+
+  if(errorCode === -32000) {
+    errorMessage += ', you have insufficient resource credit to make this transaction, please consider retrying after recharge or after powering up hive'
+  }
+
+  return errorMessage
 }
