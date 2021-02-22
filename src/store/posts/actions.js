@@ -310,3 +310,51 @@ export const getRepliesFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const UPLOAD_FILE_REQUEST = 'UPLOAD_FILE_REQUEST'
+export const UPLOAD_FILE_SUCCESS = 'UPLOAD_FILE_SUCCESS'
+export const UPLOAD_FILE_FAILURE = 'UPLOAD_FILE_FAILURE'
+
+export const uploadFileRequest = (file) => ({
+  type: UPLOAD_FILE_REQUEST,
+  payload: { file },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const uploadFileSuccess = (response, meta) => ({
+  type: UPLOAD_FILE_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const uploadFileError = (error, meta) => ({
+  type: UPLOAD_FILE_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const PUBLISH_POST_REQUEST = 'PUBLISH_POST_REQUEST'
+export const PUBLISH_POST_SUCCESS = 'PUBLISH_POST_SUCCESS'
+export const PUBLISH_POST_FAILURE = 'PUBLISH_POST_FAILURE'
+
+export const publishPostRequest = (body, tags, payout) => ({
+  type: PUBLISH_POST_REQUEST,
+  payload: { body, tags, payout },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const publishPostSuccess = (response, meta) => ({
+  type: PUBLISH_POST_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const publishPostFailure = (error, meta) => ({
+  type: PUBLISH_POST_FAILURE,
+  payload: error,
+  meta,
+})
