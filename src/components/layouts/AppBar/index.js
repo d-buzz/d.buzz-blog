@@ -9,7 +9,7 @@ import {
   BackArrowIcon,  
 } from 'components/elements'
 import { createUseStyles } from 'react-jss'
-import { SearchField, LoginModal } from 'components'
+import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
 import { signupHiveOnboard } from 'services/helper'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
@@ -97,6 +97,7 @@ const useStyles = createUseStyles(theme => ({
   },
   notificationButton: {
     borderRadius: 35,
+    border: 'none',
     margin: 'auto',
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
@@ -144,6 +145,9 @@ const AppBar = (props) => {
 
   const minify = false // set value for testing...
   const [open, setOpen] = useState(false)
+  const [openBuzzModal, setOpenBuzzModal] = useState(false)
+  const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
+  const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
 
   const handleClickBackButton = () => {
     if(!lastLocation) {
@@ -168,17 +172,34 @@ const AppBar = (props) => {
   const handleClickLogout = () => {
     signoutUserRequest()
   }
-  
-  const handleClickBuzz = () => {
-    alert('buzz me')
-  }
-
-  const handleClickNotification = () => {
-    alert('notification')
-  }
 
   const handleClickProfile = () => {
     alert('profile')
+  }
+
+  const handleClickOpenBuzzModal = () => {
+    setOpenBuzzModal(true)
+    console.log('truer is sisis')
+  }
+  
+  const handleClickCloseBuzzModal = () => {
+    setOpenBuzzModal(false)
+  }
+
+  const handleClickOpenUserSettingsModal = () => {
+    setOpenUserSettingsModal(true)
+  }
+
+  const handleClickCloseUserSettingsModal = () => {
+    setOpenUserSettingsModal(false)
+  }
+
+  const handleClickOpenSwitchAccountModal = () => {
+    setOpenSwitchAccountModal(true)
+  }
+
+  const handleClickCloseSwitchAccountModal = () => {
+    setOpenSwitchAccountModal(false)
   }
 
   let title = 'Home'
@@ -245,17 +266,25 @@ const AppBar = (props) => {
                   {!minify && (
                     <React.Fragment>
                       <div style={{ display: 'inline-flex' }}>
+                        &nbsp;
                         <div className={classes.buzzButton}>
-                          <div className={classes.buzzWrapper} onClick={handleClickBuzz}>
+                          <div className={classes.buzzWrapper} onClick={handleClickOpenBuzzModal}>
                             <AddIcon />
                           </div>
                         </div>
                         &nbsp;
-                        <div className={classes.notificationButton}>
-                          <div className={classes.notificationWrapper} onClick={handleClickNotification}>
+                        <Menu>
+                          <MenuButton
+                            className={classNames(classes.notificationButton, classes.notificationWrapper)}
+                          >
                             <NotificationsNoneIcon />
-                          </div>
-                        </div>
+                          </MenuButton>
+                          <MenuList className={classes.menulistWrapper}>
+                            <MenuLink>stafsadasd</MenuLink>
+                            <MenuLink>stafsadasd</MenuLink>
+                            <MenuLink>stafsadasd</MenuLink>
+                          </MenuList>
+                        </Menu>
                         &nbsp;
                         <Menu>
                           <MenuButton
@@ -268,7 +297,11 @@ const AppBar = (props) => {
                             </div>
                           </MenuButton>
                           <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
-                            <MenuLink onSelect={handleClickProfile} style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}>
+                            <MenuLink  
+                              style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                              as={Link}
+                              to="/profile"
+                            >
                               <div>
                                 <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
                                 <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
@@ -277,12 +310,39 @@ const AppBar = (props) => {
                                 </div>
                               </div>
                             </MenuLink>
-                            <MenuLink to="/latest"><HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label></MenuLink>
-                            <MenuLink to="/latest"><TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label></MenuLink>
-                            <MenuLink to="/latest"><UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label></MenuLink>
-                            <MenuLink to="/latest"><SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label></MenuLink>
-                            <MenuLink to="/latest"><SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label></MenuLink>
-                            <MenuLink onSelect={handleClickLogout}> <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label></MenuLink>
+                            <MenuLink
+                              as={Link}
+                              to="/"
+                            >
+                              <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                            </MenuLink>
+                            <MenuLink 
+                              as={Link}
+                              to="/trending"
+                            >
+                              <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                            </MenuLink>
+                            <MenuLink 
+                              as={Link}
+                              to="/latest"
+                            >
+                              <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                            </MenuLink>
+                            <MenuLink 
+                              onSelect={handleClickOpenUserSettingsModal}
+                            >
+                              <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                            </MenuLink>
+                            <MenuLink 
+                              onSelect={handleClickOpenSwitchAccountModal}
+                            >
+                              <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                            </MenuLink>
+                            <MenuLink 
+                              onSelect={handleClickLogout}
+                            > 
+                              <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                            </MenuLink>
                           </MenuList>
                         </Menu>
                       </div>
@@ -308,6 +368,9 @@ const AppBar = (props) => {
           
         </Container>
         <LoginModal show={open} onHide={handleClickCloseLoginModal} />
+        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+        <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
+        <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
       </Navbar>
     </React.Fragment>
   )
