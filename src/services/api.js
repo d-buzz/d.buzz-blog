@@ -1,4 +1,5 @@
 import axios from 'axios'
+import stripHtml from 'string-strip-html'
 import appConfig from 'config'
 import { v4 as uuidv4 } from 'uuid'
 import { 
@@ -15,6 +16,7 @@ broadcast.updateOperations()
 const visited = []
 
 const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
+const imageUrl = `${appConfig.IMAGE_API}/image`
 
 export const keychainSignIn = (username) => {
   const challenge = { token: uuidv4() }
@@ -392,3 +394,100 @@ export const fetchDiscussions = (author, permlink) => {
   })
 }
 
+export const uploadIpfsImage = async(data) => {
+  const formData = new FormData()
+  formData.append('image', data)
+
+  return new Promise(async(resolve, reject) => {
+    axios({
+      method: 'POST',
+      url: `${imageUrl}/upload`,
+      key: 'image',
+      headers: {'Content-Type': 'multipart/form-data' },
+      data: formData,
+    }).then(async(result) => {
+      const data = result.data
+      resolve(data)
+
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+export const generatePostOperations = (account, title, body, tags, payout) => {
+
+  const json_metadata = createMeta(tags)
+
+  const permlink = createPermlink(title)
+
+  const operations = []
+
+  return new Promise((resolve) => {
+    const op_comment = [
+      'comment',
+      {
+        'author': account,
+        'title': stripHtml(title),
+        'body': `${body.trim()}`,
+        'parent_author': '',
+        'parent_permlink': `${appConfig.TAG}`,
+        permlink,
+        json_metadata,
+      },
+    ]
+
+    operations.push(op_comment)
+
+    const max_accepted_payout = `${payout.toFixed(3)} HBD`
+    const extensions = []
+
+
+    if(payout === 0) {
+      extensions.push([
+        0,
+        { beneficiaries:
+          [
+            { account: 'null', weight: 10000 },
+          ],
+        },
+      ])
+    }
+
+
+    const op_comment_options = [
+      'comment_options',
+      {
+        'author': account,
+        permlink,
+        max_accepted_payout,
+        'percent_hbd': 5000,
+        'allow_votes': true,
+        'allow_curation_rewards': true,
+        extensions,
+      },
+    ]
+
+    operations.push(op_comment_options)
+
+    resolve(operations)
+  })
+
+}
+
+export const createMeta = (tags = []) => {
+
+  const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
+
+  const meta = {
+    app: `${appConfig.VERSION}`,
+    tags: uniqueTags,
+  }
+
+  return JSON.stringify(meta)
+}
+
+export const createPermlink = (title) => {
+  const permlink = new Array(22).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)})
+  return permlink
+}
