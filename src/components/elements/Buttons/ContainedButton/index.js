@@ -102,12 +102,10 @@ const ContainedButton = (props) => {
 
   return (
     <div onClick={!disabled && !loading ? onClick : () => {}} className={classNames(buttonClass, className)} style={style} >
-      <center>
-        <label style={{ fontSize: fontSize, ...labelStyle }}>
-          {!loading && label}
-          {loading && (<Spinner size={20} top={4} loading={true} />)}
-        </label>
-      </center>
+      <label style={{ fontSize: fontSize, ...labelStyle }}>
+        {!loading && label}
+        {loading && (<Spinner size={20} top={4} loading={true} />)}
+      </label>      
     </div>
   )
 }
