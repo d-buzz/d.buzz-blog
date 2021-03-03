@@ -3,9 +3,7 @@ import { Modal } from 'react-responsive-modal'
 
 const ContentModal = (props) => {
   const { isOpen } = props
-  console.log({isOpen})
 
-  
   return (
     <React.Fragment>
       <Modal open={true} >
