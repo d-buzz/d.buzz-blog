@@ -31,9 +31,6 @@ const useStyles = createUseStyles(theme => ({
 
 const SwitchAccountModal = (props) => {
   const { show, onHide } = props
-
-  console.log({show})
-  console.log({onHide})
   const classes = useStyles()
 
   return (

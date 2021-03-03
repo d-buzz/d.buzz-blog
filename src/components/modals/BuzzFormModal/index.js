@@ -2,17 +2,15 @@ import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 import ModalBody from 'react-bootstrap/ModalBody'
 import IconButton from '@material-ui/core/IconButton'
+import { BuzzForm } from 'components'
 import { CloseIcon } from 'components/elements'
 import { createUseStyles } from 'react-jss'
-import { CreateBuzzForm } from 'components'
 
 const useStyles = createUseStyles(theme => ({
   modal: {
-    width: 630,
     '& div.modal-content': {
       margin: '0 auto',
       backgroundColor: theme.background.primary,
-      width: 630,
       borderRadius: '5px 5px !important',
       border: 'none',
     },
@@ -32,26 +30,27 @@ const useStyles = createUseStyles(theme => ({
 
 const BuzzFormModal = (props) => {
   const { show, onHide } = props
-
-  console.log({show})
-  console.log({onHide})
   const classes = useStyles()
 
   return (
     <React.Fragment>
       <Modal
+        className={classes.modal}
         backdrop="static"
         keyboard={false}
         show={show}
         onHide={onHide}
-        dialogClassName={classes.modal}
-        animation={false}
+        animation={true}
+        scrollable={true}
+        size="lg"
       >
         <ModalBody className={classes.modalBody}>
           <IconButton style={{ float: 'right', marginRight: 10 }} onClick={onHide}>
             <CloseIcon />
           </IconButton>
-          {/* <CreateBuzzForm modal={true} hideModalCallback={onHide} /> */}
+          <center style={{ marginTop: 10 }}><h5>Create Buzz</h5></center>
+          <hr style={{ marginTop: 25, marginBottom: -10 }} />
+          <BuzzForm />
         </ModalBody>
       </Modal>
     </React.Fragment>

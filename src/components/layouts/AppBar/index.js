@@ -179,7 +179,6 @@ const AppBar = (props) => {
 
   const handleClickOpenBuzzModal = () => {
     setOpenBuzzModal(true)
-    console.log('truer is sisis')
   }
   
   const handleClickCloseBuzzModal = () => {
