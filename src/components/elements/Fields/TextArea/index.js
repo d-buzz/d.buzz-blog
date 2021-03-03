@@ -11,15 +11,19 @@ const useStyles = createUseStyles(theme => ({
       outline: 'none',
     },
     border: 'none',
+    borderRadius: 5,
     paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
     ...theme.textArea,
   },
 }))
 
 const TextArea = (props) => {
+  console.log('ets')
   const classes = useStyles()
   const {
-    label = 'What\'s buzzing?',
+    label,
     minRows = 2,
   } = props
 
