@@ -42,7 +42,7 @@
     "react-router-last-location": "^2.0.1",
     "react-scripts": "^3.4.3",
     "react-sticky": "^6.0.3",
-    "react-tag-input": "^6.5.2",
+    "react-tag-input": "^6.2.1",
     "react-textarea-autosize": "^8.3.0",
     "react-twitter-embed": "^3.0.3",
     "react-virtualized": "^9.18.5",
