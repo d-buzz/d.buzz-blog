@@ -279,9 +279,10 @@ const AppBar = (props) => {
                             <NotificationsNoneIcon />
                           </MenuButton>
                           <MenuList className={classes.menulistWrapper}>
-                            <MenuLink>stafsadasd</MenuLink>
-                            <MenuLink>stafsadasd</MenuLink>
-                            <MenuLink>stafsadasd</MenuLink>
+                            <MenuLink>Notifications 1</MenuLink>
+                            <MenuLink>Notifications 2</MenuLink>
+                            <MenuLink>Notifications 3</MenuLink>
+                            <MenuLink>Notifications 4</MenuLink>
                           </MenuList>
                         </Menu>
                         &nbsp;
