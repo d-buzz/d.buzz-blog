@@ -20,7 +20,6 @@ const useStyles = createUseStyles(theme => ({
 }))
 
 const TextArea = (props) => {
-  console.log('ets')
   const classes = useStyles()
   const {
     label,
