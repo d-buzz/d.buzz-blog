@@ -2,12 +2,19 @@ import React, { useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { TextArea, ContainedButton } from 'components/elements'
-import { EditorToolbar, MarkdownViewer } from 'components'
+import { MarkdownViewer } from 'components'
 import { createUseStyles } from 'react-jss'
 import Switch from '@material-ui/core/Switch'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { WithContext as ReactTags } from 'react-tag-input'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
+import Editor from 'react-postnzt-markdown'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { publishPostRequest, setPageFrom } from 'store/posts/actions'
+import { pending } from 'redux-saga-thunk'
+import { broadcastNotification } from 'store/interfaces/actions'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
   container: {
@@ -35,8 +42,16 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter]
 
-const BuzzForm = () => {
+const BuzzForm = (props) => {
   const classes = useStyles()
+  const history = useHistory()
+  const { 
+    publishPostRequest, 
+    publishing, 
+    setPageFrom,
+    onHide,
+    broadcastNotification,
+  } = props
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [tags, setTags] = useState([])
@@ -47,13 +62,15 @@ const BuzzForm = () => {
     const { name } = target
     const { value } = target
    
-
-    if (name === 'content-area') {
-      setBody(value)
-    } else if (name === 'title-area') {
+    if (name === 'title-area') {
       setTitle(value)
     }
   }
+
+  const handleBodyonChange = (e) => {
+    setBody(e)
+  }
+
   const handleClickOnPreview = (e) => {
     const { target } = e
     const { name } = target
@@ -93,11 +110,25 @@ const BuzzForm = () => {
   } 
 
   const handleClickHelp = () => {
-    alert('help')
+    const windows = window.open('https://www.markdownguide.org/basic-syntax/')
+    windows.blur()
   }
 
   const handleClickPublishPost = () => {
-    alert('publish post')
+    console.log('click')
+    publishPostRequest(title, body, tags)
+    console.log('went')
+      // .then((data) => {
+      //   if (data.success) {
+      //     setPageFrom(null)
+      //     const { author, permlink } = data
+      //     onHide(true)
+      //     broadcastNotification('success', 'You successfully published a post')
+      //     history.push(`/@${author}/c/${permlink}`)
+      //   } else {
+      //     broadcastNotification('error', data.errorMessage)
+      //   }
+      // })
   }
 
   return (
@@ -112,9 +143,30 @@ const BuzzForm = () => {
                   <HelpOutlineIcon />
                 </div>
                 <hr />
-                <EditorToolbar /> &nbsp;
                 <TextArea label="Title" minRows={1} name='title-area' value={title} onKeyUp={onChange} onKeyDown={onChange} onChange={onChange} autoFocus onFocus={moveCaretAtEnd} />
-                <TextArea label="Post Content" minRows={8} name='content-area' value={body} onKeyUp={onChange} onKeyDown={onChange} onChange={onChange} autoFocus onFocus={moveCaretAtEnd} />
+                <Editor 
+                  name='body-area'
+                  value={body}
+                  onChange={handleBodyonChange}
+                  language="en"
+                  placeholder="What's in you mind?"
+                  height="300px"
+                  toolbar={{
+                    undo: true,
+                    redo: true,
+                    bold: true,
+                    italic: true,
+                    h1: true,
+                    h2: true,
+                    h3: true,
+                    h4: true,
+                    code: true,
+                    link: true,
+                    img: true,
+                    // preview: true,
+                  }}
+                />
+                &nbsp;
                 <ReactTags
                   placeholder="Add Tags"
                   tags={tags}
@@ -142,24 +194,26 @@ const BuzzForm = () => {
                   <MarkdownViewer content={title} />
                 </strong>
                 <MarkdownViewer content={body} />
-                <ReactTags
-                  placeholder="Add Tags"
-                  tags={tags}
-                  handleDelete={handleDelete}
-                  handleAddition={handleAddition}
-                  handleDrag={handleDrag}
-                  delimiters={delimiters}
-                  autofocus={false}
-                  classNames={{
-                    tagInputField: classes.tagWrapper,
-                  }}
-                />
+                {(title || body ) && (
+                  <ReactTags
+                    placeholder="Add Tags"
+                    tags={tags}
+                    handleDelete={handleDelete}
+                    handleAddition={handleAddition}
+                    handleDrag={handleDrag}
+                    delimiters={delimiters}
+                    autofocus={false}
+                    classNames={{
+                      tagInputField: classes.tagWrapper,
+                    }}
+                  />   
+                )}
               </React.Fragment> 
             )}
           </div>
           <div style={{ marginLeft: 25 }}>
             <ContainedButton
-              // disabled={loading || publishing || content.length === 0}
+              disabled={ publishing || (title.length === 0 && body.length === 0) }
               label="Buzz"
               onClick={handleClickPublishPost}
             />
@@ -184,5 +238,17 @@ const BuzzForm = () => {
     </React.Fragment>
   )
 }
+const mapStateToProps = (state) => ({
+  user: state.auth.get('user'),
+  publishing: pending(state, 'PUBLISH_POST_REQUEST'),
+})
 
-export default BuzzForm
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    publishPostRequest,
+    setPageFrom,
+    broadcastNotification,
+  }, dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BuzzForm)

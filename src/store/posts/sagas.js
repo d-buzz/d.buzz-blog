@@ -57,7 +57,6 @@ import {
   extractLoginData,
 } from 'services/api'
 import { errorMessageComposer } from 'services/helper'
-import stripHtml from 'string-strip-html'
 import moment from 'moment'
 
 const footnote = (body) => {
@@ -271,7 +270,7 @@ function* fileUploadRequest(payload, meta) {
 
 function* publishPostRequest(payload, meta) {
   try {
-    const { tags, payout } = payload
+    const { title, tags } = payload
     let { body } = payload
 
     body = footnote(body)
@@ -279,21 +278,23 @@ function* publishPostRequest(payload, meta) {
     const user = yield select(state => state.auth.get('user'))
     const { username, useKeychain } = user
 
-    let title = stripHtml(body)
+    const operations = yield call(generatePostOperations, username, title, body, tags)
+    console.log({operations})
+    console.log('done operations')
 
-    if(title.length > 70) {
-      title = `${title.substr(0, 70)} ...`
-    }
-
-    const operations = yield call(generatePostOperations, username, title, body, tags, payout)
 
     let success = false
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
 
+    console.log({useKeychain})
+
     if(useKeychain) {
+      console.log('in')
       const result = yield call(broadcastKeychainOperation, username, operations)
       success = result.success
+      console.log('success')
+      console.log({success})
 
       if(!success) {
         yield put(publishPostFailure('Unable to publish post', meta))
@@ -342,7 +343,6 @@ function* publishPostRequest(payload, meta) {
         children: 0,
         created: currentDatetime,
         cashout_time,
-        max_accepted_payout: `${payout.toFixed(3)} HBD`,
       }
 
       yield put(setContentRedirect(content))
