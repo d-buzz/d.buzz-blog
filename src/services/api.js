@@ -6,12 +6,8 @@ import {
   api,
   auth,
   broadcast,
-  config,
   formatter,
 } from '@hiveio/hive-js'
-
-config.set('rebranded_api', true)
-broadcast.updateOperations()
 
 const visited = []
 
@@ -271,6 +267,8 @@ export const broadcastKeychainOperation = (account, operations, key = 'Posting')
       key,
       response => {
         if (!response.success) {
+          console.log('this is the error:')
+          console.log(response)
           reject(response.error.code)
         } else {
           resolve(response)
@@ -285,8 +283,7 @@ export const extractLoginData = (data) => {
 }
 
 export const broadcastOperation = (operations, keys) => {
-  config.set('rebranded_api', true)
-  broadcast.updateOperations()
+  
   return new Promise((resolve, reject) => {
     broadcast.send(
       {
@@ -295,8 +292,8 @@ export const broadcastOperation = (operations, keys) => {
       },
       keys,
       (error, result) => {
-        console.log(error)
         if (error) {
+          console.log({error})
           reject(error.code)
         } else {
           resolve({
@@ -366,8 +363,8 @@ export const fetchDiscussions = (author, permlink) => {
               content = item
             }
 
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
 
             if(content.replies.length !== 0) {
               const child = getChildren(content)
@@ -415,7 +412,7 @@ export const uploadIpfsImage = async(data) => {
   })
 }
 
-export const generatePostOperations = (account, title, body, tags, payout) => {
+export const generatePostOperations = (account, title, body, tags) => {
 
   const json_metadata = createMeta(tags)
 
@@ -428,10 +425,10 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
       'comment',
       {
         'author': account,
-        'title': stripHtml(title),
-        'body': `${body.trim()}`,
+        'title': title,
+        'body': body,
         'parent_author': '',
-        'parent_permlink': `${appConfig.TAG}`,
+        'parent_permlink': '',
         permlink,
         json_metadata,
       },
@@ -439,29 +436,17 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
 
     operations.push(op_comment)
 
-    const max_accepted_payout = `${payout.toFixed(3)} HBD`
+   
     const extensions = []
-
-
-    if(payout === 0) {
-      extensions.push([
-        0,
-        { beneficiaries:
-          [
-            { account: 'null', weight: 10000 },
-          ],
-        },
-      ])
-    }
 
 
     const op_comment_options = [
       'comment_options',
       {
         'author': account,
+        'max_accepted_payout,': "1000000.000 HBD",
         permlink,
-        max_accepted_payout,
-        'percent_hbd': 5000,
+        'percent_hbd': 10000,
         'allow_votes': true,
         'allow_curation_rewards': true,
         extensions,
@@ -480,7 +465,7 @@ export const createMeta = (tags = []) => {
   const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
 
   const meta = {
-    app: `${appConfig.VERSION}`,
+    app: `d-buzz.blog/${appConfig.VERSION}`,
     tags: uniqueTags,
   }
 

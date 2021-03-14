@@ -8,6 +8,8 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import stripHtml from 'string-strip-html'
 import diff_match_patch from 'diff-match-patch'
+import Tooltip from 'react-bootstrap/Tooltip'
+import React from 'react'
 
 const dmp = new diff_match_patch()
 
@@ -380,3 +382,69 @@ export const errorMessageComposer = (type = null, errorCode = 0) => {
 
   return errorMessage
 }
+
+export const renderBoldTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Bold
+  </Tooltip>
+)
+
+export const renderItalicTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Italic
+  </Tooltip>
+)
+
+export const renderHeadingTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Headings
+  </Tooltip>
+)
+
+export const renderCodeTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Code
+  </Tooltip>
+)
+
+export const renderQouteTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Qoute
+  </Tooltip>
+)
+
+export const renderOrderedListTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Ordered List
+  </Tooltip>
+)
+
+export const renderUnorderedListTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Unordered List
+  </Tooltip>
+)
+
+export const renderLinkTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Link
+  </Tooltip>
+)
+
+export const renderImageTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Image
+  </Tooltip>
+)
+
+export const renderTableTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+    Table
+  </Tooltip>
+)
+
+export const renderEmojiTooltip = (props) => (
+  <Tooltip id="button-tooltip" {...props}>
+   Emoji
+  </Tooltip>
+)
