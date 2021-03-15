@@ -62,6 +62,17 @@ const AppFrame = (props) => {
           </StickyContainer>
         </Container>
       )}
+      {isMobile && (
+        <center>
+          <h1 style={{ paddingTop: 50 }}>
+             In Development...
+          </h1>
+          <br />
+          <br />
+          <br />
+          <img src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif" alt="" width={200} />
+        </center>
+      )}
     </React.Fragment>
   )
 }
