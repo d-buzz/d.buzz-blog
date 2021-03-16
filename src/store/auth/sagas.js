@@ -71,63 +71,75 @@ function* authenticateUserRequest(payload, meta) {
       const data = yield call(keychainSignIn, username)
       if (data.success) {
         user.isAuthenticated = true
-      } else {
-        let profile = yield call(fetchProfile, [username])
+      }
+    } else {
 
-        if (profile) {
-          profile = profile[0]
-        }
-        
-        if (profile) {
-          const pubWif = profile['posting'].key_auths[0][0]
-          try {
-            const isValid = isWifValid(password, pubWif)
-            user.isAuthenticated = isValid
-            user.loginData = packLoginData(username, password)
-          } catch (e) {
-            user.isAuthenticated = false
-          }
-        } else {
+      let profile = yield call(fetchProfile, [username])
+
+      if (profile) {
+        profile = profile[0]
+      }
+
+      if(profile) {
+        const pubWif =  profile['posting'].key_auths[0][0]
+        try {
+          const isValid = isWifValid(password, pubWif)
+          user.isAuthenticated = isValid
+          user.login_data = packLoginData(username, password)
+        } catch(e) {
           user.isAuthenticated = false
         }
+      } else {
+        user.isAuthenticated = false
       }
-
-      if (user.isAuthenticated) {
-        const isSubscribe = yield call(getCommunityRole, username)
-        user.isSubscribe = isSubscribe
-        user.active = true
-
-        let mutelist = yield call(fetchMuteList, username)
-
-        mutelist = [ ...new Set(mutelist.map(item => item.following))]
-
-        yield put(setMuteList(mutelist))
-
-        const session = generateSession(user)
-
-        const isInAccountList = accounts.filter(item => item.username === username)
-
-        if (isInAccountList.length === 0) {
-          users.push(session)
-          accounts.push({ username, keychain: useKeychain })
-        }
-
-        yield call([localStorage, localStorage.clear])
-        yield call([localStorage, localStorage.setItem], 'user', JSON.stringify(users))
-        yield call([localStorage, localStorage.setItem], 'active', username)
-        yield call([localStorage, localStorage.setItem], 'accounts', JSON.stringify(accounts))
-        yield put(setAccountList(accounts))
-      }
-
-      if (initialUsersLength > 0 && users.length !== initialUsersLength) {
-        window.location.reload()
-      }
-      yield put(authenticateUserSuccess(user, meta))
     }
-  } catch(error) {
-    yield put(authenticateUserFailure(error, meta))
+
+    if (user.isAuthenticated) {
+      const isSubscribe = yield call(getCommunityRole, username)
+      user.isSubscribe = isSubscribe
+      user.active = true
+
+      let mutelist = yield call(fetchMuteList, username)
+
+      mutelist = [...new Set(mutelist.map(item => item.following))]
+
+      yield put(setMuteList(mutelist))
+
+      const session = generateSession(user)
+
+      // const isInAccountList = accounts.filter(item => item.username === username)
+
+      // if(isInAccountList.length === 0) {
+      //   users.push(session)
+      //   accounts.push({ username, keychain: useKeychain })
+      // }
+
+      const accountIndex = accounts.findIndex(item => item.username === username)
+
+      if(accountIndex === -1) {
+        accounts.push({ username, keychain: useKeychain })
+      } else {
+        accounts[accountIndex].keychain = useKeychain
+      }
+
+      users.push(session)
+
+      yield call([localStorage, localStorage.clear])
+      yield call([localStorage, localStorage.setItem], 'user', JSON.stringify(users))
+      yield call([localStorage, localStorage.setItem], 'active', username)
+      yield call([localStorage, localStorage.setItem], 'accounts', JSON.stringify(accounts))
+      yield put(setAccountList(accounts))
+    }
+
+    if (initialUsersLength > 0 && users.length !== initialUsersLength) {
+      window.location.reload()
+    }
+
+      yield put(authenticateUserSuccess(user, meta))
+    } catch(error) {
+      yield put(authenticateUserFailure(error, meta))
+    }
   }
-}
 
 function* getSavedUserRequest(meta) {
   let user = { username: '', useKeychain: false, isAuthenticated: false }
@@ -250,7 +262,7 @@ function* checkHasUpdateAuthorityRequest(payload, meta) {
 
 function* signoutUserRequest(meta) {
   try {
-    const user = { username: '', useKeychain: false, is_authenticated: false }
+    const user = { username: '', useKeychain: false, isAuthenticated: false }
     
     yield call([localStorage, localStorage.setItem], 'user', JSON.stringify([]))
     yield call([localStorage, localStorage.setItem], 'active', null)
