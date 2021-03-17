@@ -47,7 +47,20 @@ const UserSettingModal = (props) => {
           <IconButton style={{ float: 'right', marginRight: 10 }} onClick={onHide}>
             <CloseIcon />
           </IconButton>
-          <h1>SETTINGS</h1>
+          <center>
+            <h1 style={{ paddingTop: 50 }}>
+              Still in Development...
+            </h1>
+            <br />
+            <br />
+            <br />
+            <img src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif" alt="" width={200} />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </center>
         </ModalBody>
       </Modal>
     </React.Fragment>
