@@ -89,10 +89,10 @@ export const setOpacityUsers = (users) => ({
   payload: users,
 })
 
-export const SET_HAS_AGREED_PAYOUT = 'SET_HAS_AGREED_PAYOUT'
+export const SET_HAS_PAYOUT_AGREED = 'SET_HAS_PAYOUT_AGREED'
 
 export const setHasAgreedPayout = (agreedPayout) => ({
-  type: SET_HAS_AGREED_PAYOUT,
+  type: SET_HAS_PAYOUT_AGREED,
   payload: agreedPayout,
 })
 
