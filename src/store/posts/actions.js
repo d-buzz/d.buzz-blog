@@ -339,9 +339,9 @@ export const PUBLISH_POST_REQUEST = 'PUBLISH_POST_REQUEST'
 export const PUBLISH_POST_SUCCESS = 'PUBLISH_POST_SUCCESS'
 export const PUBLISH_POST_FAILURE = 'PUBLISH_POST_FAILURE'
 
-export const publishPostRequest = (title, body, tags) => ({
+export const publishPostRequest = (title, body, tags, payout) => ({
   type: PUBLISH_POST_REQUEST,
-  payload: { title, body, tags },
+  payload: { title, body, tags, payout },
   meta: {
     thunk: true,
   },
