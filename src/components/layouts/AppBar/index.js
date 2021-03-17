@@ -113,7 +113,6 @@ const useStyles = createUseStyles(theme => ({
     display: 'block',
     whiteSpace: 'nowrap',
     borderRadius: 5,
-    border: 'solid 1px hsla(0, 0%, 0%, 0.25)',
     background: 'hsla(0, 100%, 100%, 0.99)',
     outline: 'none',
     padding: '1rem 0',
@@ -171,10 +170,6 @@ const AppBar = (props) => {
 
   const handleClickLogout = () => {
     signoutUserRequest()
-  }
-
-  const handleClickProfile = () => {
-    alert('profile')
   }
 
   const handleClickOpenBuzzModal = () => {
