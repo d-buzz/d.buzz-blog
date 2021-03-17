@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { TextArea, ContainedButton } from 'components/elements'
-import { MarkdownViewer } from 'components'
+import { MarkdownViewer, PayoutDisclaimerModal } from 'components'
 import { createUseStyles } from 'react-jss'
+import Tooltip from '@material-ui/core/Tooltip'
 import Switch from '@material-ui/core/Switch'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { WithContext as ReactTags } from 'react-tag-input'
@@ -13,6 +14,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { publishPostRequest, setPageFrom } from 'store/posts/actions'
 import { pending } from 'redux-saga-thunk'
+import HelpIcon from '@material-ui/icons/Help'
 import { broadcastNotification } from 'store/interfaces/actions'
 import { useHistory } from 'react-router-dom'
 
@@ -33,6 +35,13 @@ const useStyles = createUseStyles(theme => ({
     width: '100%',
     padding: 5,
   },
+  tinyInput: {
+    height: 25,
+    width: 50,
+    marginLeft: 5,
+    borderRadius: 5,
+    borderStyle: 'none',
+  },
 }))
 
 const KeyCodes = {
@@ -42,6 +51,10 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter]
 
+const tooltips = {
+  payout: `This is your max accept payout for THIS buzz. You can set different max payouts for each of your buzz's. If you set you payout to "0", any rewards will be sent to the @null account.`,
+}
+
 const BuzzForm = (props) => {
   const classes = useStyles()
   const history = useHistory()
@@ -50,20 +63,34 @@ const BuzzForm = (props) => {
     publishing, 
     setPageFrom,
     onHide,
+    payoutAgreed,
     broadcastNotification,
   } = props
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [tags, setTags] = useState([])
   const [preview, setPreview] = useState(false)
+  const [payout, setPayout] = useState(1.000)
+  const [openPayoutDisclaimer, setOpenPayoutDisclaimer] = useState(false)
 
   const onChange = (e) => {
     const { target } = e
     const { name } = target
-    const { value } = target
+    let { value } = target
    
     if (name === 'title-area') {
       setTitle(value)
+    } else if (name === 'max-payout') {
+
+      if (!payoutAgreed) {
+        setOpenPayoutDisclaimer(true)
+      } else {
+        if ((value < 0 || `${value}`.trim() === '') && payout !== 0) {
+          value = 0.00
+        }
+        value = value % 1 === 0 ? parseInt(value) : parseFloat(value)
+        setPayout(value)
+      }
     }
   }
 
@@ -71,14 +98,16 @@ const BuzzForm = (props) => {
     setBody(e)
   }
 
+  const closePayoutDisclaimer = () => {
+    setOpenPayoutDisclaimer(false)
+  }
+
   const handleClickOnPreview = (e) => {
     const { target } = e
     const { name } = target
-    console.log({name})
 
     if (name === 'preview') {
       setPreview(!preview)
-      console.log({preview})
     }
   }
 
@@ -115,9 +144,7 @@ const BuzzForm = (props) => {
   }
 
   const handleClickPublishPost = () => {
-    console.log('click')
-    publishPostRequest(title, body, tags)
-    console.log('went')
+    publishPostRequest(title, body, tags, payout)
       // .then((data) => {
       //   if (data.success) {
       //     setPageFrom(null)
@@ -212,6 +239,13 @@ const BuzzForm = (props) => {
             )}
           </div>
           <div style={{ marginLeft: 25 }}>
+            <br /><br />
+            <label className={classes.payoutLabel}>Max Payout: </label>
+            <input name='max-payout' className={classes.tinyInput} type="number" onChange={onChange} value={payout} required min="0" step="any" />
+            <Tooltip title={tooltips.payout} placement="top">
+              <HelpIcon classes={{ root: classes.icon }} fontSize='small' />
+            </Tooltip>
+
             <ContainedButton
               disabled={ publishing || (title.length === 0 && body.length === 0) }
               label="Buzz"
@@ -230,9 +264,8 @@ const BuzzForm = (props) => {
                 label="Preview"
               />
             </div>
-           
           </div>
-          
+          <PayoutDisclaimerModal show={openPayoutDisclaimer} onHide={closePayoutDisclaimer} />
         </Row>
       </Container>
     </React.Fragment>
@@ -240,6 +273,7 @@ const BuzzForm = (props) => {
 }
 const mapStateToProps = (state) => ({
   user: state.auth.get('user'),
+  payoutAgreed: state.auth.get('payoutAgreed'),
   publishing: pending(state, 'PUBLISH_POST_REQUEST'),
 })
 

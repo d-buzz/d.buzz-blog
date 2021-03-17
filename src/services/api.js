@@ -267,8 +267,6 @@ export const broadcastKeychainOperation = (account, operations, key = 'Posting')
       key,
       response => {
         if (!response.success) {
-          console.log('this is the error:')
-          console.log(response)
           reject(response.error.code)
         } else {
           resolve(response)
@@ -293,7 +291,6 @@ export const broadcastOperation = (operations, keys) => {
       keys,
       (error, result) => {
         if (error) {
-          console.log({error})
           reject(error.code)
         } else {
           resolve({
@@ -412,11 +409,10 @@ export const uploadIpfsImage = async(data) => {
   })
 }
 
-export const generatePostOperations = (account, title, body, tags) => {
-
+export const generatePostOperations = (account, title, body, tags, payout) => {
   const json_metadata = createMeta(tags)
 
-  const permlink = createPermlink(title)
+  const permlink = createPermlink()
 
   const operations = []
 
@@ -428,25 +424,36 @@ export const generatePostOperations = (account, title, body, tags) => {
         'title': title,
         'body': body,
         'parent_author': '',
-        'parent_permlink': '',
+        'parent_permlink': permlink,
         permlink,
         json_metadata,
       },
     ]
 
     operations.push(op_comment)
-
-   
+    const max_accepted_payout = `${payout.toFixed(3)} HBD`
     const extensions = []
+
+
+    if(payout === 0) {
+      extensions.push([
+        0,
+        { beneficiaries:
+          [
+            { account: 'null', weight: 10000 },
+          ],
+        },
+      ])
+    }
 
 
     const op_comment_options = [
       'comment_options',
       {
         'author': account,
-        'max_accepted_payout,': "1000000.000 HBD",
         permlink,
-        'percent_hbd': 10000,
+        max_accepted_payout,
+        'percent_hbd': 5000,
         'allow_votes': true,
         'allow_curation_rewards': true,
         extensions,
@@ -472,7 +479,7 @@ export const createMeta = (tags = []) => {
   return JSON.stringify(meta)
 }
 
-export const createPermlink = (title) => {
-  const permlink = new Array(22).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)})
+export const createPermlink = () => {
+  const permlink = new Array(21).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)})
   return permlink
 }

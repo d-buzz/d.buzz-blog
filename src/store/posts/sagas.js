@@ -270,22 +270,26 @@ function* fileUploadRequest(payload, meta) {
 
 function* publishPostRequest(payload, meta) {
   try {
-    const { title, tags } = payload
+    const { title, tags, payout } = payload
     let { body } = payload
 
     body = footnote(body)
 
+
     const user = yield select(state => state.auth.get('user'))
     const { username, useKeychain } = user
+    console.log({user})
 
-    const operations = yield call(generatePostOperations, username, title, body, tags)
-    console.log({operations})
-    console.log('done operations')
-
+    try {
+      const operations = yield call(generatePostOperations, username, title, body, tags, payout)
+      console.log({operations})
+      console.log('done operations')
+   
 
     let success = false
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
+    console.log({permlink})
 
     console.log({useKeychain})
 
@@ -299,15 +303,17 @@ function* publishPostRequest(payload, meta) {
       if(!success) {
         yield put(publishPostFailure('Unable to publish post', meta))
       }
-    } else {
+    } else if (!useKeychain) {
       let { login_data } = user
       login_data = extractLoginData(login_data)
+      console.log({login_data})
 
       const wif = login_data[1]
       const result = yield call(broadcastOperation, operations, [wif])
 
       success = result.success
     }
+    
 
     if(success) {
       const comment = operations[0]
@@ -325,7 +331,7 @@ function* publishPostRequest(payload, meta) {
 
       const content = {
         author: username,
-        category: 'hive-193084',
+        category: '',
         permlink,
         title: comment[1].title,
         body: body,
@@ -336,13 +342,14 @@ function* publishPostRequest(payload, meta) {
         active_votes: [],
         root_author: "",
         parent_author: null,
-        parent_permlink: "hive-190384",
+        parent_permlink: "",
         root_permlink: permlink,
         root_title: title,
         json_metadata,
         children: 0,
         created: currentDatetime,
         cashout_time,
+        max_accepted_payout: `${payout.toFixed(3)} HBD`,
       }
 
       yield put(setContentRedirect(content))
@@ -353,8 +360,10 @@ function* publishPostRequest(payload, meta) {
       author: username,
       permlink,
     }
-
+    
     yield put(publishPostSuccess(data, meta))
+  } catch(e) { console.log(e)}
+
   } catch (error) {
     const errorMessage = errorMessageComposer('post', error)
     yield put(publishPostFailure({ errorMessage }, meta))

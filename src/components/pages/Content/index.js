@@ -33,8 +33,6 @@ const Content = (props) => {
   } = props
 
   const { author } = content
-  console.log('this is the author')
-  console.log({author})
 
   return (
     <React.Fragment>
