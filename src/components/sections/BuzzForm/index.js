@@ -40,6 +40,7 @@ const useStyles = createUseStyles(theme => ({
     width: 50,
     marginLeft: 5,
     borderRadius: 5,
+    borderStyle: 'none',
   },
 }))
 
@@ -104,11 +105,9 @@ const BuzzForm = (props) => {
   const handleClickOnPreview = (e) => {
     const { target } = e
     const { name } = target
-    console.log({name})
 
     if (name === 'preview') {
       setPreview(!preview)
-      console.log({preview})
     }
   }
 
@@ -145,9 +144,7 @@ const BuzzForm = (props) => {
   }
 
   const handleClickPublishPost = () => {
-    console.log('click')
-    publishPostRequest(title, body, tags)
-    console.log('went')
+    publishPostRequest(title, body, tags, payout)
       // .then((data) => {
       //   if (data.success) {
       //     setPageFrom(null)
