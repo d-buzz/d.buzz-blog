@@ -102,7 +102,6 @@ const EditorToolbar = () => {
 
   useEffect(() => {
     const bodyEditor = document.getElementById('body-area')
-    console.log(bodyEditor.innerHTML)
 
     bodyEditor.onclick = editorToggleHandler
     bodyEditor.onkeydown = editorToggleHandler
