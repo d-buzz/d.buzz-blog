@@ -50,7 +50,7 @@ const BuzzFormModal = (props) => {
           </IconButton>
           <center style={{ marginTop: 10 }}><h5>Create Buzz</h5></center>
           <hr style={{ marginTop: 25, marginBottom: -10 }} />
-          <BuzzForm />
+          <BuzzForm hideModalCallback={onHide} />
         </ModalBody>
       </Modal>
     </React.Fragment>

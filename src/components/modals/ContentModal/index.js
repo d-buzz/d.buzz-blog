@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal } from 'react-responsive-modal'
 
 const ContentModal = (props) => {
-  const { isOpen } = props
+  // const { isOpen } = props
 
   return (
     <React.Fragment>

@@ -9,7 +9,7 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  ContentModal,
+  // ContentModal,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
 import { Link } from 'react-router-dom'
@@ -242,7 +242,7 @@ const PostList = React.memo((props) => {
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [muted, setMuted] = useState(false)
-  const [openContentModal, setOpenContentModal] = useState(false)
+  // const [openContentModal, setOpenContentModal] = useState(false)
   const popoverAnchor = useRef(null)
 
 
@@ -296,7 +296,7 @@ const PostList = React.memo((props) => {
         const link = generateLink(author, permlink)
         saveScrollIndex(scrollIndex)
         // history.push(link)
-        setOpenContentModal(true)
+        // setOpenContentModal(true)
         console.log({link})
       } else {
         const split = href.split('/')

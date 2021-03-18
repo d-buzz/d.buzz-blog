@@ -1,5 +1,4 @@
 import axios from 'axios'
-import stripHtml from 'string-strip-html'
 import appConfig from 'config'
 import { v4 as uuidv4 } from 'uuid'
 import { 
@@ -424,7 +423,7 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
         'title': title,
         'body': body,
         'parent_author': '',
-        'parent_permlink': permlink,
+        'parent_permlink': `${appConfig.TAG}`,
         permlink,
         json_metadata,
       },
