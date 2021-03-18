@@ -29,10 +29,10 @@ import { pending } from 'redux-saga-thunk'
 const Content = (props) => {
   const {
     loadingContent,
-    content,
+    // content,
   } = props
 
-  const { author } = content
+  // const { author } = content
 
   return (
     <React.Fragment>
@@ -63,7 +63,7 @@ const Content = (props) => {
 
 const mapStateToProps = (state) => ({
   loadingContent: pending(state, 'GET_CONTENT_REQUEST'),
-  content: state.posts.get('content'),
+  // content: state.posts.get('content'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
