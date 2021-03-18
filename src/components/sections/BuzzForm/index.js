@@ -62,7 +62,7 @@ const BuzzForm = (props) => {
     publishPostRequest, 
     publishing, 
     setPageFrom,
-    onHide,
+    hideModalCallback = () => { },
     payoutAgreed,
     broadcastNotification,
   } = props
@@ -145,17 +145,17 @@ const BuzzForm = (props) => {
 
   const handleClickPublishPost = () => {
     publishPostRequest(title, body, tags, payout)
-      // .then((data) => {
-      //   if (data.success) {
-      //     setPageFrom(null)
-      //     const { author, permlink } = data
-      //     onHide(true)
-      //     broadcastNotification('success', 'You successfully published a post')
-      //     history.push(`/@${author}/c/${permlink}`)
-      //   } else {
-      //     broadcastNotification('error', data.errorMessage)
-      //   }
-      // })
+      .then((data) => {
+        if (data.success) {
+          setPageFrom(null)
+          const { author, permlink } = data
+          hideModalCallback()
+          broadcastNotification('success', 'You successfully published a post')
+          history.push(`/@${author}/c/${permlink}`)
+        } else {
+          broadcastNotification('error', data.errorMessage)
+        }
+      })
   }
 
   return (
