@@ -295,7 +295,7 @@ const AppBar = (props) => {
                             <MenuLink  
                               style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
                               as={Link}
-                              to="/profile"
+                              to={`/@${username}`}
                             >
                               <div>
                                 <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
