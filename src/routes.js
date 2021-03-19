@@ -39,7 +39,7 @@ const routes =  [
         component: Profile,
         routes: [
           {
-            path: '/@:username',
+            path: '/@:username/',
             exact: true,
             component: AccountPosts,
           },
