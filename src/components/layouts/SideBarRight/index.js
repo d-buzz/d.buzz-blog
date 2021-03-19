@@ -48,9 +48,12 @@ const SideBarRight = (props) => {
   const { pathname } = location
   const { isAuthenticated } = user
   let isInSearchRoute = false
+  let profileRoute = false
 
   if (pathname.match((/(\/search?)/))) {
     isInSearchRoute = true
+  } else if (pathname.match(/^\/@/)) {
+    profileRoute = true
   }
 
   const linkGenerator = (tag) => {
@@ -77,41 +80,45 @@ const SideBarRight = (props) => {
   return (
     <React.Fragment>
       {!hideSearchBar && !isInSearchRoute && (<SearchField />)}
-      <div style={{ paddingTop: 5 }}>
-        <ListGroup label="Top Trending Communities">
-          {items.slice(0, 5).map((item) => (
-            <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
-          ))}
-          <Spinner size={50} loading={loading}/> 
-        </ListGroup>
-      </div>
-      {/* <div style={{ paddingTop: 15 }}>
-        <ListGroup label="Top Trending Communities">
-          {items.slice(0, 5).map((item) => (
-            <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
-          ))}
-          <Spinner size={50} loading={loading}/> 
-        </ListGroup>
-      </div> */}
-      <div style={{ paddingTop: 15 }}>
-        <ListGroup label="Be in touch with us">
-          {SocialMediaLinks.map((item) => (
-            <ListLink key={`${item.name}-links`} title={item.name} label={`@${item.label}`} imagePath={item.imagePath} href={item.url} />
-          ))}
-        </ListGroup>
-      </div>
-      <div className={classes.footer}>
-        <div className={classes.inner}>
-          <Link to="/org/en/tos">Terms of Service</Link>
-          <Link to="/org/en/privacy">Privacy Policy</Link>
-          <Link to="/org/en/disclaimer">Disclaimer</Link>
-          <br />
-          <Link to="/org/en/getstarted">Get Started</Link>
-          <Link to="/developers">Developers</Link>
-          <br />
-          <label>&copy; Dataloft, LLC&nbsp; - <i>v.{config.VERSION}</i></label>
-        </div>
-      </div>
+      {!profileRoute && (
+        <React.Fragment>
+          <div style={{ paddingTop: 5 }}>
+            <ListGroup label="Top Trending Communities">
+              {items.slice(0, 5).map((item) => (
+                <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
+              ))}
+              <Spinner size={50} loading={loading}/> 
+            </ListGroup>
+          </div>
+          {/* <div style={{ paddingTop: 15 }}>
+            <ListGroup label="Top Trending Communities">
+              {items.slice(0, 5).map((item) => (
+                <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
+              ))}
+              <Spinner size={50} loading={loading}/> 
+            </ListGroup>
+          </div> */}
+          <div style={{ paddingTop: 15 }}>
+            <ListGroup label="Be in touch with us">
+              {SocialMediaLinks.map((item) => (
+                <ListLink key={`${item.name}-links`} title={item.name} label={`@${item.label}`} imagePath={item.imagePath} href={item.url} />
+              ))}
+            </ListGroup>
+          </div>
+          <div className={classes.footer}>
+            <div className={classes.inner}>
+              <Link to="/org/en/tos">Terms of Service</Link>
+              <Link to="/org/en/privacy">Privacy Policy</Link>
+              <Link to="/org/en/disclaimer">Disclaimer</Link>
+              <br />
+              <Link to="/org/en/getstarted">Get Started</Link>
+              <Link to="/developers">Developers</Link>
+              <br />
+              <label>&copy; Dataloft, LLC&nbsp; - <i>v.{config.VERSION}</i></label>
+            </div>
+          </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   )
 }
