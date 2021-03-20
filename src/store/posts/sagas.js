@@ -41,6 +41,15 @@ import {
   publishPostSuccess,
   publishPostFailure,
 
+  FOLLOW_REQUEST,
+  followSuccess,
+  followFailure,
+  setHasBeenFollowedRecently,
+
+  UNFOLLOW_REQUEST,
+  unfollowSuccess,
+  unfollowFailure,
+  setHasBeenUnfollowedRecently,
 } from './actions'
 
 import {
@@ -55,6 +64,8 @@ import {
   broadcastOperation,
   generatePostOperations,
   extractLoginData,
+  generateFollowOperation,
+  generateUnfollowOperation,
 } from 'services/api'
 import { errorMessageComposer } from 'services/helper'
 import moment from 'moment'
@@ -242,10 +253,10 @@ function* fileUploadRequest(payload, meta) {
   try {
     const user = yield select(state => state.auth.get('user'))
     const old = yield select(state => state.posts.get('images'))
-    const { is_authenticated } = user
+    const { isAuthenticated } = user
     const { file } = payload
 
-    if(is_authenticated) {
+    if(isAuthenticated) {
 
       const result = yield call(uploadIpfsImage, file)
 
@@ -370,6 +381,105 @@ function* publishPostRequest(payload, meta) {
   }
 }
 
+function* followRequest(payload, meta) {
+  try {
+    const { following } = payload
+    const user = yield select(state => state.auth.get('user'))
+    const { username, useKeychain } = user
+
+    const operation = yield call(generateFollowOperation, username, following)
+    let success = false
+
+
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, username, operation)
+      success = result.success
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operation, [wif])
+      success = result.success
+    }
+
+    if(success) {
+      let recentFollows = yield select(state => state.posts.get('hasBeenRecentlyFollowed'))
+      let recentUnfollows = yield select(state => state.posts.get('hasBeenRecentlyUnfollowed'))
+
+      if(!Array.isArray(recentUnfollows)) {
+        recentUnfollows = []
+      } else {
+        const index = recentUnfollows.findIndex((item) => item === following)
+        if(index) {
+          recentUnfollows.splice(index, 1)
+        }
+      }
+
+      if(!Array.isArray(recentFollows)) {
+        recentFollows = []
+      }
+      recentFollows.push(following)
+      yield put(setHasBeenFollowedRecently(recentFollows))
+      yield put(setHasBeenUnfollowedRecently(recentUnfollows))
+    }
+
+    yield put(followSuccess(success, meta))
+  } catch (error) {
+    yield put(followFailure(error, meta))
+  }
+}
+
+function* unfollowRequest(payload, meta) {
+  try {
+    const { following } = payload
+    const user = yield select(state => state.auth.get('user'))
+    const { username, useKeychain } = user
+
+    const operation = yield call(generateUnfollowOperation, username, following)
+    let success = false
+
+
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, username, operation)
+      success = result.success
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operation, [wif])
+      success = result.success
+    }
+
+    if(success) {
+      let recentFollows = yield select(state => state.posts.get('hasBeenRecentlyFollowed'))
+      let recentUnfollows = yield select(state => state.posts.get('hasBeenRecentlyUnfollowed'))
+
+      if(!Array.isArray(recentFollows)) {
+        recentFollows = []
+      } else {
+        const index = recentFollows.findIndex((item) => item === following)
+        if(index) {
+          recentFollows.splice(index, 1)
+        }
+      }
+
+      if(!Array.isArray(recentUnfollows)) {
+        recentUnfollows = []
+      }
+      recentUnfollows.push(following)
+
+      yield put(setHasBeenFollowedRecently(recentFollows))
+      yield put(setHasBeenUnfollowedRecently(recentUnfollows))
+    }
+
+    yield put(unfollowSuccess(success, meta))
+  } catch(error) {
+    yield put(unfollowFailure(error, meta))
+  }
+}
+
 function* watchGetLatestPostsRequest({payload, meta}) {
   yield call(getLatestPostsRequest, payload, meta)
 }
@@ -406,6 +516,14 @@ function* watchPublishPostRequest({ payload, meta }) {
   yield call(publishPostRequest, payload, meta)
 }
 
+function* watchFollowRequest({ payload, meta }) {
+  yield call(followRequest, payload, meta)
+}
+
+function* watchUnfollowRequest({ payload, meta }) {
+  yield call(unfollowRequest, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
@@ -416,4 +534,6 @@ export default function* sagas() {
   yield takeEvery(GET_REPLIES_REQUEST, watchGetRepliesRequest)
   yield takeEvery(UPLOAD_FILE_REQUEST, watchUploadFileUploadRequest)
   yield takeEvery(PUBLISH_POST_REQUEST, watchPublishPostRequest)
+  yield takeEvery(FOLLOW_REQUEST, watchFollowRequest)
+  yield takeEvery(UNFOLLOW_REQUEST, watchUnfollowRequest)
 }
