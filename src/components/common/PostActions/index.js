@@ -206,7 +206,7 @@ const PostActions = (props) => {
   const [loading, setLoading] = useState(false)
   const [upvoted, setUpvoted] = useState(hasUpvoted)
 
-  const { is_authenticated } = user
+  const { isAuthenticated } = user
 
   let extraPadding = { paddingTop: 10 }
 
@@ -293,9 +293,9 @@ const PostActions = (props) => {
                 <ActionWrapper
                   className={classes.actionWrapperSpace}
                   inlineClass={classNames(classes.inline, classes.icon)}
-                  icon={<IconButton classes={{ root: classes.iconButton  }} disabled={!is_authenticated || disableUpvote} size="small"><HeartIcon /></IconButton>}
+                  icon={<IconButton classes={{ root: classes.iconButton  }} disabled={!isAuthenticated || disableUpvote} size="small"><HeartIcon /></IconButton>}
                   hideStats={hideStats}
-                  disabled={!is_authenticated || disableUpvote}
+                  disabled={!isAuthenticated || disableUpvote}
                   onClick={handleClickShowSlider}
                   stat={(
                     <label style={{ marginLeft: 5 }}>
@@ -323,9 +323,9 @@ const PostActions = (props) => {
               <ActionWrapper
                 className={classes.actionWrapperSpace}
                 inlineClass={classNames(classes.inline, classes.icon)}
-                icon={<IconButton classes={{ root: classes.iconButton  }} size="small" disabled={!is_authenticated}><CommentIcon /></IconButton>}
+                icon={<IconButton classes={{ root: classes.iconButton  }} size="small" disabled={!isAuthenticated}><CommentIcon /></IconButton>}
                 hideStats={hideStats}
-                disabled={!is_authenticated}
+                disabled={!isAuthenticated}
                 onClick={handleClickReply}
                 stat={(
                   <label style={{ marginLeft: 5 }}>
