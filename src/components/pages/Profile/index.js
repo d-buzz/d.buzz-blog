@@ -10,6 +10,31 @@ import { useLocation, useHistory } from 'react-router-dom'
 import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import {
+  getProfileRequest,
+  getAccountPostsRequest,
+  setProfileIsVisited,
+  getAccountRepliesRequest,
+  getAccountCommentsRequest,
+  clearAccountPosts,
+  clearAccountReplies,
+  getFollowersRequest,
+  clearProfile,
+  getFollowingRequest,
+  clearAccountFollowers,
+  clearAccountFollowing,
+  clearAccountComments,
+} from 'store/profile/actions'
+import {
+  followRequest,
+  unfollowRequest,
+  setPageFrom,
+} from 'store/posts/actions'
+import queryString from 'query-string'
+import { anchorTop } from 'services/helper'
+import { clearScrollIndex, broadcastNotification, openMuteDialog } from 'store/interfaces/actions'
 
 const useStyles = createUseStyles(theme => ({
   cover: {
@@ -54,7 +79,30 @@ const Profile = (props) => {
   const history = useHistory()
   const location = useLocation()
   const { pathname } = location
+  const {
+    match, 
+    user,
+    profile,
+    getProfileRequest,
+    setPageFrom, 
+    isVisited,
+    clearProfile,
+    clearAccountPosts,
+    clearAccountReplies,
+    clearAccountFollowers,
+    clearAccountFollowing,
+    clearAccountComments,
+    setProfileIsVisited,
+    getAccountPostsRequest, 
+    getAccountCommentsRequest,
+  } = props
+  
+  const { username: loginuser, isAuthenticated } = user
+  
   const [index, setIndex] = useState(0)
+  const [hasRecentlyFollowed, setHasRecentlyFollowed] = useState(false)
+  const [hasRecentlyUnfollowed, setHasRecentlyUnfollowed] = useState(false)
+
 
   const onChange = (e, index) => {
     setIndex(index)
@@ -72,6 +120,33 @@ const Profile = (props) => {
     history.push(`/@${username}/t/${tab}/`)
   }
 
+  const { params } = match
+  const { username } = params
+
+  useEffect(() => {
+    setPageFrom(null)
+    const params = queryString.parse(location.search)
+
+    if (!isVisited || (params.ref && (params.ref === 'replies' || params.ref === 'nav')) || username) {
+      anchorTop()
+      clearScrollIndex()
+      clearProfile()
+      clearAccountPosts()
+      clearAccountReplies()
+      clearAccountFollowers()
+      clearAccountFollowing()
+      clearAccountComments()
+      setProfileIsVisited()
+      getProfileRequest(username)
+      getAccountPostsRequest(username)
+      getAccountCommentsRequest(username)
+      getAccountRepliesRequest(username)
+      getFollowersRequest(username)
+      getFollowingRequest(username)
+    }
+    // eslint-disable-next-line
+  }, [username])
+
   useEffect(() => {
     if(pathname.match(/(\/t\/buzz\/)$|(\/t\/buzz)$/m)) {
       setIndex(0)
@@ -84,15 +159,37 @@ const Profile = (props) => {
     }
   }, [pathname])
 
-  const username = "postnzt"
-  const name = "Jhune Carlo Trogelio"
-  const reputation = 10000000
-  const website = "jhunecarlotrogelio.xyz"
-  const hivepower = 1000000
-  const following = 10002
-  const followers = 1029292
-  const about = "wveryaklsdj;al skjd;laksjd l;aksjd;lakjsd ;alksjd "
-  const cover_image = "https://images.hive.blog/DQmbzvpt9zYrk7kJGUyqTCAxTaB3tVGPbo6ABeescopuj1B/pA2ZXw.png"
+  const { metadata, stats, hivepower } = profile || ''
+  const { profile: profileMeta } = metadata || ''
+  const { name, cover_image, website, about } = profileMeta || ''
+  const { followers, following } = stats || 0
+
+  const { reputation = 0, isFollowed } = profile
+
+  const followUser = () => {
+    followRequest(username).then((result) => {
+      if(result) {
+        broadcastNotification('success', `Successfully followed @${username}`)
+        setHasRecentlyFollowed(true)
+        setHasRecentlyUnfollowed(false)
+      } else {
+        broadcastNotification('error', `Failed following @${username}`)
+      }
+    })
+  }
+
+  const unfollowUser = () => {
+    unfollowRequest(username).then((result) => {
+      if(result) {
+        broadcastNotification('success', `Successfully Unfollowed @${username}`)
+        setHasRecentlyFollowed(false)
+        setHasRecentlyUnfollowed(true)
+      } else {
+        broadcastNotification('error', `Failed Unfollowing @${username}`)
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       <HelmetGenerator page='Profile' />
@@ -162,4 +259,33 @@ const Profile = (props) => {
   )
 }
 
-export default Profile
+const mapStateToProps = (state) => ({
+  user: state.auth.get('user'),
+  profile: state.profile.get('profile'),
+  isVisited: state.profile.get('isProfileVisited'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    getProfileRequest,
+    getAccountPostsRequest,
+    setProfileIsVisited,
+    getAccountRepliesRequest,
+    clearAccountPosts,
+    getFollowersRequest,
+    clearProfile,
+    clearAccountReplies,
+    getFollowingRequest,
+    clearAccountFollowers,
+    clearAccountFollowing,
+    setPageFrom,
+    followRequest,
+    unfollowRequest,
+    broadcastNotification,
+    clearScrollIndex,
+    openMuteDialog,
+    getAccountCommentsRequest,
+    clearAccountComments,
+  }, dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

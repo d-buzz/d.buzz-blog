@@ -35,7 +35,7 @@ const useStyle = createUseStyles({
 const PostTags = (props) => {
   const classes = useStyle()
   const { meta, highlightTag } = props
-  // const { is_authenticated } = user
+  // const { isAuthenticated } = user
   const history = useHistory()
 
   let tags = []
