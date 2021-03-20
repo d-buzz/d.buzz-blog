@@ -172,6 +172,7 @@ const light = {
     primary: '#E5E5E5',
     secondary: 'white',
   },
+  backgroundColor: 'white',
   notification: { },
   messageColor: {
     color: 'green !important',

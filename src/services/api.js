@@ -482,3 +482,87 @@ export const createPermlink = () => {
   const permlink = new Array(21).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)})
   return permlink
 }
+
+export const fetchGlobalProperties = () => {
+  return new Promise((resolve, reject) => {
+    api.getDynamicGlobalProperties((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
+
+export const fetchSingleProfile = (account) => {
+  const user = localStorage.getItem('active')
+
+  return new Promise((resolve, reject) => {
+    const params = {account}
+    api.call('bridge.get_profile', params, async(err, data) => {
+      if (err) {
+        reject(err)
+      }else {
+        let isFollowed = false
+
+        if(user && `${user}`.trim() !== '') {
+          // const { username } = readSession(user)
+          if(user !== data.name) {
+            isFollowed = await isFollowing(user, data.name)
+          }
+        }
+
+        data.isFollowed = isFollowed
+
+        resolve(data)
+      }
+    })
+  })
+}
+
+export const fetchAccounts = (username) => {
+  return new Promise((resolve, reject) => {
+    api.getAccountsAsync([username])
+      .then(async(result) => {
+        resolve(result)
+      }).catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export const fetchAccountPosts = (account, start_permlink = null, start_author = null, sort = 'posts') => {
+  return new Promise((resolve, reject) => {
+    const params = {
+      sort,
+      account,
+      observer: account,
+      start_author: start_author,
+      start_permlink,
+      limit: 100,
+    }
+
+    api.call('bridge.get_account_posts', params, async(err, data) => {
+      if(err) {
+        reject(err)
+      }else {
+        removeFootNote(data)
+
+        let lastResult = []
+
+        if(data.length !== 0) {
+          lastResult = [data[data.length-1]]
+        }
+
+        data = [...data, ...lastResult]
+
+        if(data.length === 0) {
+          data = []
+        }
+        resolve(data)
+      }
+    })
+  })
+}
+

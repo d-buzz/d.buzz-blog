@@ -35,7 +35,7 @@ const routes =  [
         component: ContentModal,
       },
       {
-        path: '/@username',
+        path: '/@:username',
         component: Profile,
         routes: [
           {

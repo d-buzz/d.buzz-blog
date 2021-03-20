@@ -13,7 +13,7 @@ const Avatar = React.memo((props) => {
         height={height}
         width={height}
         className={className}
-        style={{ border: border ? '5px solid white' : 'none', backgroundColor: 'white', ...style }}
+        style={{ border: border ? '2px solid #e61c34' : 'none', backgroundColor: 'white', ...style }}
       />
     </React.Fragment>
   )

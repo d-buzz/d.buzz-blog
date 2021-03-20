@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
+import { useLocation } from 'react-router-dom'
 import { useWindowDimensions } from 'services/helper'
 
 const useStyles = createUseStyles(theme => ({
@@ -38,9 +39,16 @@ const useStyles = createUseStyles(theme => ({
 const UnguardedAppFrame = (props) => {
   const { route } = props
   const classes = useStyles()
+  const location = useLocation()
+  const { pathname } = location
   const [mainWidth, setMainWidth] = useState(8)
   const [hideRightSideBar, setHideRightSideBar] = useState(false)
   const { width } = useWindowDimensions()
+  let isProfileRoute = false
+
+  if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    isProfileRoute = true
+  }
 
   useEffect(() => {
     if (width < 800) {
@@ -55,26 +63,38 @@ const UnguardedAppFrame = (props) => {
   return (
     <React.Fragment>
       <Row>
-        <Col xs={mainWidth} className={classes.clearPadding}>
-          <div style={{ paddingTop: 60 }} className={classes.main}>
-            <React.Fragment>
-              {renderRoutes(route.routes)}
-            </React.Fragment>
-          </div>
-        </Col>
-        {!hideRightSideBar && (
-          <Col xs={4}>
-            <Sticky>
-              {({ style }) => (
-                <div style={{ ...style, paddingTop: 60 }}>
-                  <SideBarRight hideSearchBar={true} />
-                </div>
-              )}
-            </Sticky>
+        {!isProfileRoute && (
+          <React.Fragment>
+            <Col xs={mainWidth} className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+            </Col>
+            {!hideRightSideBar && (
+              <Col xs={4}>
+                <Sticky>
+                  {({ style }) => (
+                    <div style={{ ...style, paddingTop: 60 }}>
+                      <SideBarRight hideSearchBar={true} />
+                    </div>
+                  )}
+                </Sticky>
+              </Col>
+            )}
+          </React.Fragment>
+        )}
+        {isProfileRoute && (
+          <Col className={classes.clearPadding}>
+            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              <React.Fragment>
+                {renderRoutes(route.routes)}
+              </React.Fragment>
+            </div>
           </Col>
         )}
       </Row>
-     
     </React.Fragment>
   )
 }
