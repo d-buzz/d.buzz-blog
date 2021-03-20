@@ -358,3 +358,65 @@ export const publishPostFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const FOLLOW_REQUEST = 'FOLLOW_REQUEST'
+export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS'
+export const FOLLOW_FAILURE = 'FOLLOW_FAILURE'
+
+export const followRequest = (following) => ({
+  type: FOLLOW_REQUEST,
+  payload: { following },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const followSuccess = (response, meta) => ({
+  type: FOLLOW_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const followFailure = (error, meta) => ({
+  type: FOLLOW_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_HAS_BEEN_FOLLOWED_RECENTLY = 'SET_HAS_BEEN_FOLLOWED_RECENTLY'
+
+export const setHasBeenFollowedRecently = (following) => ({
+  type: SET_HAS_BEEN_FOLLOWED_RECENTLY,
+  payload: following,
+})
+
+export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST'
+export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS'
+export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE'
+
+export const unfollowRequest = (following) => ({
+  type: UNFOLLOW_REQUEST,
+  payload: { following },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const unfollowSuccess = (response, meta) => ({
+  type: UNFOLLOW_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const unfollowFailure = (error, meta) => ({
+  type: UNFOLLOW_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_HAS_BEEN_UNFOLLOWED_RECENTLY = 'SET_HAS_BEEN_UNFOLLOWED_RECENTLY'
+
+export const setHasBeenUnfollowedRecently = (following) => ({
+  type: SET_HAS_BEEN_UNFOLLOWED_RECENTLY,
+  payload: following,
+})
