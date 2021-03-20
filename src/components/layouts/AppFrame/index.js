@@ -31,6 +31,11 @@ const useStyles = createUseStyles({
       },
     },
   },
+  profileContainer: {
+    '@media (min-widht: 1100px': {
+      margin: '0 auto !important',
+    },
+  },
 })
 
 const AppFrame = (props) => {
@@ -42,9 +47,12 @@ const AppFrame = (props) => {
   
   let containerClass = classes.guardedContainer
   const unGuardedRoute = (pathname.match(/^\/login/) || !isAuthenticated)
+  const profileRoute = (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/))
 
   if (unGuardedRoute) {
     containerClass = classes.unGuardedContainer
+  } else if (profileRoute) {
+    containerClass = classes.profileContainer
   }
 
   return (
