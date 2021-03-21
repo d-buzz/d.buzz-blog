@@ -55,6 +55,7 @@ const useStyles = createUseStyles(theme => ({
     margin: '0 auto',
     height: 'max-content',
     borderRadius: '5px', 
+    paddingBottom: 15,
     backgroundColor: theme.background.secondary,
   },
   avatar: {
@@ -70,6 +71,13 @@ const useStyles = createUseStyles(theme => ({
     margin: 0,
     fontSize: 14,
     ...theme.font,
+  },
+  weblink: {
+    wordWrap: 'break-word',
+    color: '#d32f2f',
+    '&:hover': {
+      color: '#d32f2f',
+    },
   },
 }))
 
@@ -200,7 +208,7 @@ const Profile = (props) => {
           <div className={classes.cover}>
             {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover_photo" />)}
           </div>
-          <Col>
+            <Col>
               <div className={classes.avatar}>
                 <Avatar border={true} height="140" author={username} size="medium" />
               </div>
@@ -255,15 +263,20 @@ const Profile = (props) => {
                 <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
               </Tabs>
             </Col>  
-        </Row>
+          </Row>
         
-          <div style={{ paddingTop: 15, width: '50%', alignContent: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
-            <React.Fragment>
-              {renderRoutes(route.routes, { author: username })}
-            </React.Fragment>
-          </div>
-        
+          <Row>
+            <Col sm={3} />
+            <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
+              <React.Fragment>
+                {renderRoutes(route.routes, { author: username })}
+              </React.Fragment>
+            </Col>
+            <Col sm={3} />
+          </Row>
       </Container>
+      
+      
     </React.Fragment>
   )
 }
