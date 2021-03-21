@@ -1,5 +1,9 @@
 import React, { useEffect, useCallback } from 'react'
-import { CreateBuzzForm, InfiniteList, HelmetGenerator } from 'components'
+import { 
+  // CreateBuzzForm, 
+  InfiniteList, 
+  HelmetGenerator 
+} from 'components'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { pending } from 'redux-saga-thunk'
@@ -27,7 +31,7 @@ import {
 } from 'store/profile/actions'
 import { clearScrollIndex } from 'store/interfaces/actions'
 import { anchorTop } from 'services/helper'
-import { isMobile } from 'react-device-detect'
+// import { isMobile } from 'react-device-detect'
 import { Link } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
@@ -64,7 +68,7 @@ const Feeds = React.memo((props) => {
     clearContent,
     clearReplies,
     clearScrollIndex,
-    buzzModalStatus,
+    // buzzModalStatus,
   } = props
   const classes = useStyles()
 
@@ -102,7 +106,7 @@ const Feeds = React.memo((props) => {
   return (
     <React.Fragment>
       <HelmetGenerator page='Home' />
-      {!isMobile && !buzzModalStatus && (<CreateBuzzForm />)}
+      {/* {!isMobile && !buzzModalStatus && (<CreateBuzzForm />)} */}
       {(items.length === 0) && !loading && (
         <React.Fragment>
           <center>

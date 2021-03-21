@@ -91,7 +91,7 @@ const Profile = (props) => {
   const {
     match, 
     route,
-    user,
+    // user,
     profile,
     getProfileRequest,
     setPageFrom, 
@@ -108,11 +108,11 @@ const Profile = (props) => {
     getAccountRepliesRequest,
   } = props
   
-  const { username: loginuser, isAuthenticated } = user
+  // const { username: loginuser, isAuthenticated } = user
   
   const [index, setIndex] = useState(0)
-  const [hasRecentlyFollowed, setHasRecentlyFollowed] = useState(false)
-  const [hasRecentlyUnfollowed, setHasRecentlyUnfollowed] = useState(false)
+  // const [hasRecentlyFollowed, setHasRecentlyFollowed] = useState(false)
+  // const [hasRecentlyUnfollowed, setHasRecentlyUnfollowed] = useState(false)
 
 
   const onChange = (e, index) => {
@@ -175,31 +175,34 @@ const Profile = (props) => {
   const { name, cover_image, website, about } = profileMeta || ''
   const { followers, following } = stats || 0
 
-  const { reputation = 0, isFollowed } = profile
+  const { 
+    reputation = 0, 
+    // isFollowed 
+  } = profile
 
-  const followUser = () => {
-    followRequest(username).then((result) => {
-      if(result) {
-        broadcastNotification('success', `Successfully followed @${username}`)
-        setHasRecentlyFollowed(true)
-        setHasRecentlyUnfollowed(false)
-      } else {
-        broadcastNotification('error', `Failed following @${username}`)
-      }
-    })
-  }
+  // const followUser = () => {
+  //   followRequest(username).then((result) => {
+  //     if(result) {
+  //       broadcastNotification('success', `Successfully followed @${username}`)
+  //       setHasRecentlyFollowed(true)
+  //       setHasRecentlyUnfollowed(false)
+  //     } else {
+  //       broadcastNotification('error', `Failed following @${username}`)
+  //     }
+  //   })
+  // }
 
-  const unfollowUser = () => {
-    unfollowRequest(username).then((result) => {
-      if(result) {
-        broadcastNotification('success', `Successfully Unfollowed @${username}`)
-        setHasRecentlyFollowed(false)
-        setHasRecentlyUnfollowed(true)
-      } else {
-        broadcastNotification('error', `Failed Unfollowing @${username}`)
-      }
-    })
-  }
+  // const unfollowUser = () => {
+  //   unfollowRequest(username).then((result) => {
+  //     if(result) {
+  //       broadcastNotification('success', `Successfully Unfollowed @${username}`)
+  //       setHasRecentlyFollowed(false)
+  //       setHasRecentlyUnfollowed(true)
+  //     } else {
+  //       broadcastNotification('error', `Failed Unfollowing @${username}`)
+  //     }
+  //   })
+  // }
 
   return (
     <React.Fragment>
