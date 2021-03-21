@@ -256,9 +256,13 @@ const Profile = (props) => {
               </Tabs>
             </Col>  
         </Row>
-        <React.Fragment>
-          {renderRoutes(route.routes, { author: username })}
-        </React.Fragment>
+        
+          <div style={{ paddingTop: 15, width: '50%', alignContent: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
+            <React.Fragment>
+              {renderRoutes(route.routes, { author: username })}
+            </React.Fragment>
+          </div>
+        
       </Container>
     </React.Fragment>
   )
