@@ -1,12 +1,55 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { pending } from 'redux-saga-thunk'
+import { InfiniteList } from 'components'
+import { getAccountPostsRequest } from 'store/profile/actions'
 
-const AccountPosts = () => {
-  console.log('this is it')
+const AccountPosts = (props) => {
+  const {
+    items = [],
+    loading,
+    getAccountPostsRequest,
+    author,
+    last,
+    user,
+    // mutelist,
+  } = props
+
+  const loadMorePosts =  useCallback(() => {
+    try {
+      const { permlink, author: start_author } = last
+      getAccountPostsRequest(author, permlink, start_author)
+    } catch(e) { }
+    // eslint-disable-next-line
+  }, [last])
+
   return (
     <React.Fragment>
-      <h1>Account post</h1>
+      {/* {!muted && ( */}
+        <React.Fragment>
+          <InfiniteList disableOpacity={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.is_authenticated}/>
+          {(!loading && items.length === 0) &&
+          (<center><br/><h6>No Buzz's from @{author}</h6></center>)}
+        </React.Fragment>
+      {/* )} */}
+      {/* {muted && <center><br /><h6>This user is on your mutelist, unmute this user to view their buzzes</h6></center>} */}
     </React.Fragment>
   )
 }
 
-export default AccountPosts
+const mapStateToProps = (state) => ({
+  items: state.profile.get('posts'),
+  loading: pending(state, 'GET_ACCOUNT_POSTS_REQUEST'),
+  last: state.profile.get('last'),
+  user: state.auth.get('user'),
+  mutelist: state.auth.get('mutelist'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    getAccountPostsRequest,
+  }, dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountPosts)
