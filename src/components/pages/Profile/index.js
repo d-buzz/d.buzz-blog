@@ -105,6 +105,7 @@ const Profile = (props) => {
     setProfileIsVisited,
     getAccountPostsRequest, 
     getAccountCommentsRequest,
+    getAccountRepliesRequest,
   } = props
   
   const { username: loginuser, isAuthenticated } = user
