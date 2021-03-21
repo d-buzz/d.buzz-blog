@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab'
 import { HelmetGenerator } from 'components'
 import { Avatar } from 'components/elements'
 import { useLocation, useHistory } from 'react-router-dom'
+import { renderRoutes } from 'react-router-config'
 import Chip from '@material-ui/core/Chip'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
@@ -81,6 +82,7 @@ const Profile = (props) => {
   const { pathname } = location
   const {
     match, 
+    route,
     user,
     profile,
     getProfileRequest,
@@ -254,6 +256,9 @@ const Profile = (props) => {
               </Tabs>
             </Col>  
         </Row>
+        <React.Fragment>
+          {renderRoutes(route.routes, { author: username })}
+        </React.Fragment>
       </Container>
     </React.Fragment>
   )
