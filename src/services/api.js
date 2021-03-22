@@ -625,3 +625,34 @@ export const generateUpdateOperation = (parent_author, parent_permlink, author, 
     resolve(op_comment)
   })
 }
+
+export const keychainUpvote = (username, permlink, author, weight) => {
+  return new Promise((resolve, reject) => {
+    window.hive_keychain.requestVote(
+      username,
+      permlink,
+      author,
+      weight,
+      response => {
+        if(response.success) {
+          resolve(response)
+        } else {
+          reject(response.error.code)
+        }
+      },
+    )
+  })
+}
+
+export const broadcastVote = (wif, voter, author, permlink, weight) => {
+  // api.setOptions({ url: 'https://anyx.io' })
+
+  return new Promise((resolve, reject) => {
+    broadcast.voteAsync(wif, voter, author, permlink, weight)
+      .then((result) => {
+        resolve(result)
+      }).catch((error) => {
+        reject(error.code)
+      })
+  })
+}

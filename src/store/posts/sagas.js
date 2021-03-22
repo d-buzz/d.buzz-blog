@@ -58,6 +58,12 @@ import {
   PUBLISH_UPDATE_REQUEST,
   publishUpdateSuccess,
   publishUpdateFailure,
+
+  UPVOTE_REQUEST,
+  upvoteSuccess,
+  upvoteFailure,
+
+  saveReceptUpvotes,
 } from './actions'
 
 import {
@@ -77,6 +83,8 @@ import {
   isFollowing,
   fetchFollowCount,
   generateUpdateOperation,
+  keychainUpvote,
+  broadcastVote,
 } from 'services/api'
 import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
@@ -551,6 +559,55 @@ function* publishUpdateRequest(payload, meta) {
   }
 }
 
+function* upvoteRequest(payload, meta) {
+
+  try {
+    const { author, permlink, percentage } = payload
+    const user = yield select(state => state.auth.get('user'))
+    const { username, is_authenticated, useKeychain } = user
+    let recentUpvotes = yield select(state => state.posts.get('recentUpvotes'))
+
+    const weight = percentage * 100
+
+    if(is_authenticated) {
+      try {
+        if(useKeychain) {
+
+          const result = yield call(keychainUpvote, username, permlink, author, weight)
+          if(result.success) {
+            recentUpvotes = [...recentUpvotes, permlink]
+            yield put(upvoteSuccess({ success: true }, meta))
+          }
+  
+        } else {
+  
+          let { login_data } = user
+          login_data = extractLoginData(login_data)
+          const wif = login_data[1]
+  
+          yield call(broadcastVote, wif, username, author, permlink, weight)
+          recentUpvotes = [...recentUpvotes, permlink]
+          yield put(upvoteSuccess({ success: true }, meta))
+  
+        }
+  
+        yield put(saveReceptUpvotes(recentUpvotes))
+  
+      } catch (e) { console.log(e)}
+    } else {
+      yield put(upvoteFailure({ success: false, errorMessage: 'No authentication' }, meta))
+    }
+
+  } catch(error) {
+    const errorMessage = errorMessageComposer('upvote', error)
+    yield put(upvoteFailure({ success: false, errorMessage }, meta))
+  }
+}
+
+function* watchUpvoteRequest({ payload, meta }) {
+  yield call(upvoteRequest, payload, meta)
+}
+
 function* watchGetFollowDetailsRequest({ payload, meta }) {
   yield call(getFollowDetailsRequest, payload, meta)
 }
@@ -617,4 +674,5 @@ export default function* sagas() {
   yield takeEvery(PUBLISH_POST_REQUEST, watchPublishPostRequest)
   yield takeEvery(FOLLOW_REQUEST, watchFollowRequest)
   yield takeEvery(UNFOLLOW_REQUEST, watchUnfollowRequest)
+  yield takeEvery(UPVOTE_REQUEST, watchUpvoteRequest)
 }
