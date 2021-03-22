@@ -468,3 +468,10 @@ export const publishUpdateFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const SAVE_RECENT_UPVOTES = 'SAVE_RECENT_UPVOTES'
+
+export const saveReceptUpvotes = (response) => ({
+  type: SAVE_RECENT_UPVOTES,
+  payload: response,
+})
