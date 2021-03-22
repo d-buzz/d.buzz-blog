@@ -50,6 +50,14 @@ import {
   unfollowSuccess,
   unfollowFailure,
   setHasBeenUnfollowedRecently,
+
+  GET_FOLLOW_DETAILS_REQUEST,
+  getFollowDetailsSuccess,
+  getFollowDetailsFailure,
+
+  PUBLISH_UPDATE_REQUEST,
+  publishUpdateSuccess,
+  publishUpdateFailure,
 } from './actions'
 
 import {
@@ -66,8 +74,11 @@ import {
   extractLoginData,
   generateFollowOperation,
   generateUnfollowOperation,
+  isFollowing,
+  fetchFollowCount,
+  generateUpdateOperation,
 } from 'services/api'
-import { errorMessageComposer } from 'services/helper'
+import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
 
 const footnote = (body) => {
@@ -189,6 +200,7 @@ function* getLinkMetaRequest(payload, meta) {
 }
 
 function* getContentRequest(payload, meta) {
+  console.log('this')
   const { author, permlink } = payload
   console.log({payload})
   const contentRedirect = yield select(state => state.posts.get('contentRedirect'))
@@ -480,6 +492,73 @@ function* unfollowRequest(payload, meta) {
   }
 }
 
+function* getFollowDetailsRequest(payload, meta) {
+  try {
+    const { name } = payload
+    const user = yield select(state => state.auth.get('user'))
+    const { is_authenticated, username } = user
+    const count = yield call(fetchFollowCount, name)
+
+    let isFollowed = false
+
+    if(is_authenticated) {
+      isFollowed = yield call(isFollowing, username, name)
+    }
+
+    yield put(getFollowDetailsSuccess({ isFollowed, count }, meta))
+  } catch(error) {
+    yield put(getFollowDetailsFailure(error, meta))
+  }
+}
+
+function* publishUpdateRequest(payload, meta) {
+  try {
+    const { permlink, body: altered  } = payload
+
+    const user = yield select(state => state.auth.get('user'))
+    const { username, useKeychain } = user
+
+    const original = yield call(fetchContent, username, permlink)
+    const {
+      parent_author,
+      parent_permlink,
+      author,
+      title,
+      body,
+      json_metadata,
+    } = original
+
+    const patch = createPatch(body.trim(), altered.trim())
+    const operation = yield call(generateUpdateOperation, parent_author, parent_permlink, author, permlink, title, patch, json_metadata)
+
+    let success = false
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, username, operation)
+      success = result.success
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operation, [wif])
+      success = result.success
+    }
+
+    yield put(publishUpdateSuccess(success, meta))
+
+  } catch(error) {
+    yield put(publishUpdateFailure(error, meta))
+  }
+}
+
+function* watchGetFollowDetailsRequest({ payload, meta }) {
+  yield call(getFollowDetailsRequest, payload, meta)
+}
+
+function* watchPublishUpdateRequest({ payload, meta }) {
+  yield call(publishUpdateRequest, payload, meta)
+}
+
 function* watchGetLatestPostsRequest({payload, meta}) {
   yield call(getLatestPostsRequest, payload, meta)
 }
@@ -528,6 +607,8 @@ export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
   yield takeEvery(GET_TRENDING_POSTS_REQUEST, watchGetTrendingPostsRequest)
+  yield takeEvery(GET_FOLLOW_DETAILS_REQUEST, watchGetFollowDetailsRequest)
+  yield takeEvery(PUBLISH_UPDATE_REQUEST, watchPublishUpdateRequest)
   yield takeEvery(GET_LINK_META_REQUEST, watchGetLinkMetaRequest)
   yield takeEvery(GET_HOME_POSTS_REQUEST, watchGetHomePostsRequest)
   yield takeEvery(GET_CONTENT_REQUEST, watchGetContentRequest)

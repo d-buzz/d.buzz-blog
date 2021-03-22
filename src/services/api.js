@@ -605,3 +605,23 @@ export const generateUnfollowOperation = (follower, following) => {
     resolve(operation)
   })
 }
+
+export const generateUpdateOperation = (parent_author, parent_permlink, author, permlink, title, body, json_metadata) => {
+
+  return new Promise((resolve) => {
+    const op_comment = [[
+      'comment',
+      {
+        parent_author,
+        parent_permlink,
+        author,
+        permlink,
+        title,
+        body,
+        json_metadata,
+      },
+    ]]
+
+    resolve(op_comment)
+  })
+}
