@@ -420,3 +420,51 @@ export const setHasBeenUnfollowedRecently = (following) => ({
   type: SET_HAS_BEEN_UNFOLLOWED_RECENTLY,
   payload: following,
 })
+
+export const GET_FOLLOW_DETAILS_REQUEST = 'GET_FOLLOW_DETAILS_REQUEST'
+export const GET_FOLLOW_DETAILS_SUCCESS = 'GET_FOLLOW_DETAILS_SUCCESS'
+export const GET_FOLLOW_DETAILS_FAILURE = 'GET_FOLLOW_DETAILS_FAILURE'
+
+export const getFollowDetailsRequest = (name) => ({
+  type: GET_FOLLOW_DETAILS_REQUEST,
+  payload: { name },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getFollowDetailsSuccess = (response, meta) => ({
+  type: GET_FOLLOW_DETAILS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getFollowDetailsFailure = (error, meta) => ({
+  type: GET_FOLLOW_DETAILS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const PUBLISH_UPDATE_REQUEST = 'PUBLISH_UPDATE_REQUEST'
+export const PUBLISH_UPDATE_SUCCESS = 'PUBLISH_UPDATE_SUCCESS'
+export const PUBLISH_UPDATE_FAILURE = 'PUBLISH_UPDATE_FAILURE'
+
+export const publishUpdateRequest = (permlink, body) => ({
+  type: PUBLISH_UPDATE_REQUEST,
+  payload: { permlink, body },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const publishUpdateSuccess = (response, meta) => ({
+  type: PUBLISH_UPDATE_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const publishUpdateFailure = (error, meta) => ({
+  type: PUBLISH_UPDATE_FAILURE,
+  payload: error,
+  meta,
+})
