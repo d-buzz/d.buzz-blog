@@ -645,8 +645,6 @@ export const keychainUpvote = (username, permlink, author, weight) => {
 }
 
 export const broadcastVote = (wif, voter, author, permlink, weight) => {
-  // api.setOptions({ url: 'https://anyx.io' })
-
   return new Promise((resolve, reject) => {
     broadcast.voteAsync(wif, voter, author, permlink, weight)
       .then((result) => {
