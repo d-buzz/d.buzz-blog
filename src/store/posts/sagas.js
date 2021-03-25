@@ -504,12 +504,12 @@ function* getFollowDetailsRequest(payload, meta) {
   try {
     const { name } = payload
     const user = yield select(state => state.auth.get('user'))
-    const { is_authenticated, username } = user
+    const { isAuthenticated, username } = user
     const count = yield call(fetchFollowCount, name)
 
     let isFollowed = false
 
-    if(is_authenticated) {
+    if(isAuthenticated) {
       isFollowed = yield call(isFollowing, username, name)
     }
 
@@ -560,40 +560,37 @@ function* publishUpdateRequest(payload, meta) {
 }
 
 function* upvoteRequest(payload, meta) {
-
   try {
     const { author, permlink, percentage } = payload
     const user = yield select(state => state.auth.get('user'))
-    const { username, is_authenticated, useKeychain } = user
+    const { username, isAuthenticated, useKeychain } = user
     let recentUpvotes = yield select(state => state.posts.get('recentUpvotes'))
 
     const weight = percentage * 100
 
-    if(is_authenticated) {
-      try {
-        if(useKeychain) {
+    if(isAuthenticated) {
+      if(useKeychain) {
 
-          const result = yield call(keychainUpvote, username, permlink, author, weight)
-          if(result.success) {
-            recentUpvotes = [...recentUpvotes, permlink]
-            yield put(upvoteSuccess({ success: true }, meta))
-          }
-  
-        } else {
-  
-          let { login_data } = user
-          login_data = extractLoginData(login_data)
-          const wif = login_data[1]
-  
-          yield call(broadcastVote, wif, username, author, permlink, weight)
+        const result = yield call(keychainUpvote, username, permlink, author, weight)
+        if(result.success) {
           recentUpvotes = [...recentUpvotes, permlink]
           yield put(upvoteSuccess({ success: true }, meta))
-  
         }
-  
-        yield put(saveReceptUpvotes(recentUpvotes))
-  
-      } catch (e) { console.log(e)}
+
+      } else {
+
+        let { login_data } = user
+        login_data = extractLoginData(login_data)
+        const wif = login_data[1]
+
+        yield call(broadcastVote, wif, username, author, permlink, weight)
+        recentUpvotes = [...recentUpvotes, permlink]
+        yield put(upvoteSuccess({ success: true }, meta))
+
+      }
+
+      yield put(saveReceptUpvotes(recentUpvotes))
+
     } else {
       yield put(upvoteFailure({ success: false, errorMessage: 'No authentication' }, meta))
     }
