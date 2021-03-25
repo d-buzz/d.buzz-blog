@@ -26,6 +26,7 @@ import {
   UNSET_CONTENT_REDIRECT,
   UPLOAD_FILE_SUCCESS,
   PUBLISH_POST_SUCCESS,
+  SAVE_RECENT_UPVOTES,
 } from './actions'
 import { fromJS } from 'immutable'
 
@@ -49,6 +50,7 @@ const defaultState = fromJS({
   replies: [],
   pageFrom: '',
   images: [],
+  recentUpvotes: [],
   published: {},
 })
 
@@ -108,6 +110,8 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('images', payload)
   case PUBLISH_POST_SUCCESS:
     return state.set('published', payload)
+  case SAVE_RECENT_UPVOTES:
+    return state.set('recentUpvotes', payload)
   default:
     return state
   }
