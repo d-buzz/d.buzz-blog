@@ -8,6 +8,7 @@ import {
   GET_REPLIES_SUCCESS,
   SET_PAGE_FROM,
   SET_HOME_IS_VISITED,
+  SET_HOME_LAST_POST,
   SET_TRENDING_IS_VISITED,
   SET_LATEST_IS_VISITED,
   SET_LATEST_LAST_POST,
@@ -36,6 +37,7 @@ const defaultState = fromJS({
   searchTag: [],
   trending: [],
   lastTrending: {},
+  lastHome: {},
   tagPost: [],
   home: [],
   lastLatest: {},
@@ -84,6 +86,8 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('home', [])
   case SET_HOME_IS_VISITED:
     return state.set('isHomeVisited', payload)
+  case SET_HOME_LAST_POST:
+    return state.set('lastHome', payload)
   case SET_TRENDING_IS_VISITED:
     return state.set('isTrendingVisited', payload)
   case SET_LATEST_IS_VISITED:
