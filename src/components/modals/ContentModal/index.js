@@ -28,14 +28,15 @@ const useStyles = createUseStyles(theme => ({
 }))
 const ContentModal = (props) => {
   const classes = useStyles()
-  const { onHide } = props
-  const show = true
+  const { show, onHide, link } = props
+  console.log('content link:')
+  console.log(link)
 
   return (
     <React.Fragment>
       <Modal
         backdrop="static"
-        keyboard={false}
+        keyboard="true"
         show={show}
         onHide={onHide}
         dialogClassName={classes.modal}
