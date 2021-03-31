@@ -250,9 +250,6 @@ const PostList = React.memo((props) => {
     setOpenContentModal(false)
   }
 
-  console.log('this is content modal')
-  console.log(openContentModal)
-
   useEffect(() => {
     if (!isMobile) {
       if (width >= 676) {
@@ -292,7 +289,11 @@ const PostList = React.memo((props) => {
 
   const handleOpenContent = (e) => {
     const { target } = e
+    console.log('patense')
+    console.log(target)
     let { href } = target
+    console.log('thaddes')
+    console.log(href)
     const hostname = window.location.hostname
 
     e.preventDefault()
@@ -301,8 +302,8 @@ const PostList = React.memo((props) => {
     } else {
       if (!href) {
         const link = generateLink(author, permlink)
-        saveScrollIndex(scrollIndex)
         setOpenContentModal(true)
+        saveScrollIndex(scrollIndex)
         // history.push(link)
         console.log({link})
       } else {
@@ -413,9 +414,9 @@ const PostList = React.memo((props) => {
               </div>
             </Col>
           </Row>
+          <ContentModal show={openContentModal} onhide={handleClickCloseContentModal} link={contentLink}/>
         </div>
       </div>
-      <ContentModal show={openContentModal} onhide={handleClickCloseContentModal} link={contentLink}/>
     </React.Fragment>
   )
 })
