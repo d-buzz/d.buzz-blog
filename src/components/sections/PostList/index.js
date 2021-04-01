@@ -289,11 +289,7 @@ const PostList = React.memo((props) => {
 
   const handleOpenContent = (e) => {
     const { target } = e
-    console.log('patense')
-    console.log(target)
     let { href } = target
-    console.log('thaddes')
-    console.log(href)
     const hostname = window.location.hostname
 
     e.preventDefault()
