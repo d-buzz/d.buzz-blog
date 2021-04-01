@@ -297,15 +297,13 @@ const PostList = React.memo((props) => {
     const hostname = window.location.hostname
 
     e.preventDefault()
-    if (href && !href.includes(hostname)) {
+    if(href && !href.includes(hostname)) {
       window.open(href, '_blank')
     } else {
-      if (!href) {
+      if(!href) {
         const link = generateLink(author, permlink)
-        setOpenContentModal(true)
         saveScrollIndex(scrollIndex)
-        // history.push(link)
-        console.log({link})
+        history.push(link)
       } else {
         const split = href.split('/')
         href = `/${split[3]}`
