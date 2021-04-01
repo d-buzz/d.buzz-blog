@@ -210,7 +210,7 @@ const Profile = (props) => {
       <Container>
         <Row className={classes.wrapper}>
           <div className={classes.cover}>
-            {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover_photo" />)}
+            {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
           </div>
             <Col>
               <div className={classes.avatar}>
@@ -256,8 +256,6 @@ const Profile = (props) => {
               <br />
               <Tabs
                 value={index}
-                indicatorColor="primary"
-                textColor="danger"
                 centered
                 onChange={onChange}
                 className={classes.tabContainer}
