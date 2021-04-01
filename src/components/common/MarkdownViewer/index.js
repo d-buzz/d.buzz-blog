@@ -6,9 +6,10 @@ import classNames from 'classnames'
 import { UrlVideoEmbed, LinkPreview, TweetSkeleton } from 'components'
 import { createUseStyles } from 'react-jss'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
+import { useLocation } from 'react-router-dom'
 
 const renderer = new DefaultRenderer({
-  baseUrl: "https://d.buzz/",
+  baseUrl: "https://blog.d.buzz/",
   breaks: true,
   skipSanitization: false,
   allowInsecureScriptTags: false,
@@ -387,12 +388,16 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
 
 const MarkdownViewer = React.memo((props) => {
   const classes = useStyles()
+  const location = useLocation()
+  const { pathname } = location
+
   const {
     minifyAssets = true,
     scrollIndex = -1,
     recomputeRowIndex = () => {},
   } = props
   let { content = '' } = props
+  let isContent = false
   const original = content
   // content = prepareImages(content)
 
@@ -432,6 +437,10 @@ const MarkdownViewer = React.memo((props) => {
 
   splitContent = splitContent.filter((item) => item !== '')
 
+  if(!pathname.match(/(\/c\/)/)) {
+    isContent = true
+  }
+  console.log(isContent)
 
   return (
     <React.Fragment>
