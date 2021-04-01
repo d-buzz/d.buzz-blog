@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { HelmetGenerator } from 'components'
+import { ProfileSkeleton, HelmetGenerator } from 'components'
 import { Avatar } from 'components/elements'
 import { useLocation, useHistory } from 'react-router-dom'
 import { renderRoutes } from 'react-router-config'
@@ -36,6 +36,7 @@ import {
 import queryString from 'query-string'
 import { anchorTop } from 'services/helper'
 import { clearScrollIndex, broadcastNotification, openMuteDialog } from 'store/interfaces/actions'
+import { pending } from 'redux-saga-thunk'
 
 const useStyles = createUseStyles(theme => ({
   cover: {
@@ -92,6 +93,7 @@ const Profile = (props) => {
     match, 
     route,
     // user,
+    loading,
     profile,
     getProfileRequest,
     setPageFrom, 
@@ -207,75 +209,80 @@ const Profile = (props) => {
   return (
     <React.Fragment>
       <HelmetGenerator page='Profile' />
+      <ProfileSkeleton loading={loading} />
       <Container>
-        <Row className={classes.wrapper}>
-          <div className={classes.cover}>
-            {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
-          </div>
-            <Col>
-              <div className={classes.avatar}>
-                <Avatar border={true} height="140" author={username} size="medium" />
+        {!loading && (
+          <React.Fragment>
+            <Row className={classes.wrapper}>
+              <div className={classes.cover}>
+                {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
               </div>
-              <Col xs="auto">
-                <p className={classNames(classes.paragraph, classes.fullName)}>
-                  {name || username}&nbsp;
-                  <Chip component="span"  size="small" label={`${reputation} Rep`} />&nbsp;
-                  <Chip component="span"  size="small" label={`${parseFloat(hivepower).toFixed(2)} HP`} />
-                </p>
-              </Col>
-              <Row>
+              <Col>
+                <div className={classes.avatar}>
+                  <Avatar border={true} height="140" author={username} size="medium" />
+                </div>
                 <Col xs="auto">
-                  <p className={classes.paragraph}>
-                    {about}
+                  <p className={classNames(classes.paragraph, classes.fullName)}>
+                    {name || username}&nbsp;
+                    <Chip component="span"  size="small" label={`${reputation} Rep`} />&nbsp;
+                    <Chip component="span"  size="small" label={`${parseFloat(hivepower).toFixed(2)} HP`} />
                   </p>
                 </Col>
-              </Row>
-              <Row>
-                <Col xs="auto">
-                  <p className={classes.paragraph}>
-                    <a href={website} target="_blank" rel="noopener noreferrer" className={classes.weblink}>
-                      {website}
-                    </a>
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="auto">
-                  <p className={classes.paragraph}>
-                    {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
-                      <b>{following}</b> Following
-                    {/* </Link>  */}
-                    &nbsp;
-                    {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
-                      <b>{followers}</b> Follower
-                    {/* </Link>  */}
-                    &nbsp;
-                  </p>
-                </Col>
-              </Row>
-              <br />
-              <Tabs
-                value={index}
-                centered
-                onChange={onChange}
-                className={classes.tabContainer}
-              >
-                <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Buzz's" />
-                <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
-                <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
-              </Tabs>
-            </Col>  
-          </Row>
+                <Row>
+                  <Col xs="auto">
+                    <p className={classes.paragraph}>
+                      {about}
+                    </p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="auto">
+                    <p className={classes.paragraph}>
+                      <a href={website} target="_blank" rel="noopener noreferrer" className={classes.weblink}>
+                        {website}
+                      </a>
+                    </p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="auto">
+                    <p className={classes.paragraph}>
+                      {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
+                        <b>{following}</b> Following
+                      {/* </Link>  */}
+                      &nbsp;
+                      {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
+                        <b>{followers}</b> Follower
+                      {/* </Link>  */}
+                      &nbsp;
+                    </p>
+                  </Col>
+                </Row>
+                <br />
+                <Tabs
+                  value={index}
+                  centered
+                  onChange={onChange}
+                  className={classes.tabContainer}
+                >
+                  <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Buzz's" />
+                  <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
+                  <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
+                </Tabs>
+              </Col>  
+            </Row>
+          </React.Fragment>
+        )}
         
-          <Row>
-            <Col sm={3} />
-            <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
-              <React.Fragment>
-                {renderRoutes(route.routes, { author: username })}
-              </React.Fragment>
-            </Col>
-            <Col sm={3} />
-          </Row>
+        <Row>
+          <Col sm={3} />
+          <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
+            <React.Fragment>
+              {renderRoutes(route.routes, { author: username })}
+            </React.Fragment>
+          </Col>
+          <Col sm={3} />
+        </Row>
       </Container>
       
       
@@ -285,6 +292,7 @@ const Profile = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.get('user'),
+  loading: pending(state, 'GET_PROFILE_REQUEST'),
   profile: state.profile.get('profile'),
   isVisited: state.profile.get('isProfileVisited'),
 })
