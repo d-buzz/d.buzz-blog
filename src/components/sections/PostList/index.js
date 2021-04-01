@@ -9,7 +9,7 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  // ContentModal,
+  ContentModal,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
 import { Link } from 'react-router-dom'
@@ -242,9 +242,13 @@ const PostList = React.memo((props) => {
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [muted, setMuted] = useState(false)
-  // const [openContentModal, setOpenContentModal] = useState(false)
+  const [openContentModal, setOpenContentModal] = useState(false)
   const popoverAnchor = useRef(null)
+  let contentLink = ""
 
+  const handleClickCloseContentModal = () => {
+    setOpenContentModal(false)
+  }
 
   useEffect(() => {
     if (!isMobile) {
@@ -289,15 +293,13 @@ const PostList = React.memo((props) => {
     const hostname = window.location.hostname
 
     e.preventDefault()
-    if (href && !href.includes(hostname)) {
-      // window.open(href, '_blank')
+    if(href && !href.includes(hostname)) {
+      window.open(href, '_blank')
     } else {
-      if (!href) {
+      if(!href) {
         const link = generateLink(author, permlink)
         saveScrollIndex(scrollIndex)
-        // history.push(link)
-        // setOpenContentModal(true)
-        console.log({link})
+        history.push(link)
       } else {
         const split = href.split('/')
         href = `/${split[3]}`
@@ -406,6 +408,7 @@ const PostList = React.memo((props) => {
               </div>
             </Col>
           </Row>
+          <ContentModal show={openContentModal} onhide={handleClickCloseContentModal} link={contentLink}/>
         </div>
       </div>
     </React.Fragment>

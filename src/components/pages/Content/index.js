@@ -16,6 +16,7 @@ import {
   PostTags,
   PostActions,
   ReplyList,
+  UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
 import { pending } from 'redux-saga-thunk'
@@ -32,6 +33,7 @@ import {
   ContentSkeleton,
   ReplylistSkeleton,
   HelmetGenerator,
+  UpdateFormModal,
 } from 'components'
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
@@ -157,20 +159,16 @@ const Content = (props) => {
 
   const {
     author,
-    body,
     json_metadata,
     created,
     children: replyCount = 0,
     active_votes,
     profile = {},
     cashout_time,
-    depth,
-    root_author,
-    root_title,
-    root_permlink,
-    parent_author = null,
-    parent_permlink,
   } = content || ''
+
+
+  let { body } = content || ''
 
   let {  max_accepted_payout } = content || '0.00'
 
@@ -303,13 +301,6 @@ const Content = (props) => {
     setOpen(false)
   }
 
-  const generateParentLinks = (author, permlink) => {
-    let link = `/@${author}`
-    link = `${link}/c/${permlink}`
-
-    return link
-  }
-
   const handleClickContent = (e) => {
     try {
       const { target } = e
@@ -421,8 +412,15 @@ const Content = (props) => {
               onClose={hanldeCloseMore}
             >
               {!hasUpdateAuthority && (<MenuItem onClick={handleTipClick} target='_blank' className={classes.menuText}>Tip</MenuItem>)}
-              
+              {hasUpdateAuthority && (
+                <React.Fragment>
+                  <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
+                </React.Fragment>
+              )}
             </Menu>
+            {hasUpdateAuthority && (
+              <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
+            )}
           </div>
           <div className={classes.full}>
             <div className={classes.inner}>
@@ -456,6 +454,13 @@ const Content = (props) => {
         <ReplylistSkeleton loading={loadingReplies || loadingContent} />
       )}
       <br />
+      <UserDialog
+        open={open}
+        anchorEl={popoverAnchor.current}
+        onMouseEnter={openPopOver}
+        onMouseLeave={closePopOver}
+        profile={profile}
+      />
     </React.Fragment>
   )
 }

@@ -34,6 +34,9 @@ const useStyles = createUseStyles({
   profileContainer: {
     '@media (min-widht: 1100px': {
       margin: '0 auto !important',
+      '&.container': {
+        maxWidth: '900px',
+      },
     },
   },
 })
