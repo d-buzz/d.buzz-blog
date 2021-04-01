@@ -4,7 +4,6 @@ import {
   Trending,
   Latest,
   Content,
-  // ContentModal,
   Profile,
   AccountPosts,
   AccountReplies,
@@ -34,7 +33,6 @@ const routes =  [
         path: '/@:username/c/:permlink',
         exact: true,
         component: Content,
-        // component: ContentModal,
       },
       {
         path: '/@:username',
