@@ -27,10 +27,11 @@ const useStyles = createUseStyles(theme => ({
   },
 }))
 const ContentModal = (props) => {
+  const { show, onHide } = props
   const classes = useStyles()
-  const { show, onHide, link } = props
-  console.log('content link:')
-  console.log(link)
+
+  console.log('value:')
+  console.log(onHide)
 
   return (
     <React.Fragment>
