@@ -30,9 +30,6 @@ const ContentModal = (props) => {
   const { show, onHide } = props
   const classes = useStyles()
 
-  console.log('value:')
-  console.log(onHide)
-
   return (
     <React.Fragment>
       <Modal
