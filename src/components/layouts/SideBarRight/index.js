@@ -83,7 +83,7 @@ const SideBarRight = (props) => {
       {!profileRoute && (
         <React.Fragment>
           <div style={{ paddingTop: 5 }}>
-            <ListGroup label="Top Trending Communities">
+            <ListGroup label="Top Trending Buzz">
               {items.slice(0, 5).map((item) => (
                 <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
               ))}
