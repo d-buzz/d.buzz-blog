@@ -32,17 +32,17 @@ import {
   ContentSkeleton,
   // ReplylistSkeleton,
   HelmetGenerator,
-  UpdateFormModal,
+  // UpdateFormModal,
 } from 'components'
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
   wrapper: {
+    width: '70%',
     backgroundColor: theme.backgroundColor,
     padding: '2%',
     borderRadius: 5,
-    width: '70%',
     margin: '0 auto',
     marginTop: 0,
     borderBottom: theme.border.primary,
@@ -151,7 +151,7 @@ const Content = (props) => {
   const [originalContent, setOriginalContent] = useState('')
   const classes = useStyles()
   // const [open, setOpen] = useState(false)
-  const [openUpdateForm, setOpenUpdateForm] = useState(false)
+  // const [openUpdateForm, setOpenUpdateForm] = useState(false)
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
   const [isCensored, setIsCensored] = useState(false)
   const [censorType, setCensorType] = useState(null)
@@ -206,13 +206,13 @@ const Content = (props) => {
     }
   }, [body])
 
-  const handleClickCloseUpdateForm = () => {
-    setOpenUpdateForm(false)
-  }
+  // const handleClickCloseUpdateForm = () => {
+  //   setOpenUpdateForm(false)
+  // }
 
   const handleClickOpenUpdateForm = () => {
     setAnchorEl(null)
-    setOpenUpdateForm(true)
+    // setOpenUpdateForm(true)
   }
 
   const handleClickMore = (e) => {
@@ -223,9 +223,9 @@ const Content = (props) => {
     setAnchorEl(null)
   }
 
-  const onUpdateSuccess = (body) => {
-    setOriginalContent(body)
-  }
+  // const onUpdateSuccess = (body) => {
+  //   setOriginalContent(body)
+  // }
 
   if(!cashout_time) {
     const { payout_at: payday } = content
@@ -398,27 +398,27 @@ const Content = (props) => {
                   </React.Fragment>
                 )}
               </Menu>
-              {hasUpdateAuthority && (
+              {/* {hasUpdateAuthority && (
                 <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
-              )}
+              )} */}
               <Row>
-                  <Col>
-                    <PostActions
-                      disableExtraPadding={true}
-                      body={body}
-                      author={username}
-                      permlink={permlink}
-                      hasUpvoted={hasUpvoted}
-                      hideStats={true}
-                      voteCount={upvotes}
-                      replyCount={replyCount}
-                      payout={payout}
-                      payoutAt={payout_at}
-                      replyRef="content"
-                      max_accepted_payout={max_accepted_payout}
-                    />
-                  </Col>
-                </Row>
+                <Col>
+                  <PostActions
+                    disableExtraPadding={true}
+                    body={body}
+                    author={username}
+                    permlink={permlink}
+                    hasUpvoted={hasUpvoted}
+                    hideStats={true}
+                    voteCount={upvotes}
+                    replyCount={replyCount}
+                    payout={payout}
+                    payoutAt={payout_at}
+                    replyRef="content"
+                    max_accepted_payout={max_accepted_payout}
+                  />
+                </Col>
+              </Row>
             </div>
         </React.Fragment>
       )}
