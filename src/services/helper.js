@@ -8,32 +8,9 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import stripHtml from 'string-strip-html'
 import diff_match_patch from 'diff-match-patch'
-import Tooltip from 'react-bootstrap/Tooltip'
-import React from 'react'
+import sanitize from 'sanitize-html'
 
 const dmp = new diff_match_patch()
-
-const remarkable = new Remarkable()
-export default remarkable
-
-/** Removes all markdown leaving just plain text */
-const remarkableStripper = md => {
-  md.renderer.render = (tokens, options, env) => {
-    let str = ''
-    for (let i = 0; i < tokens.length; i++) {
-      if (tokens[i].type === 'inline') {
-        str += md.renderer.render(tokens[i].children, options, env);
-      } else {
-        // console.log('content', tokens[i])
-        const content = tokens[i].content
-        str += (content || '') + ' '
-      }
-    }
-    return str
-  }
-}
-
-remarkable.use(remarkableStripper)
 
 const randomizer = (min, max) => {
   return Math.random() * (max - min) + min
@@ -383,68 +360,69 @@ export const errorMessageComposer = (type = null, errorCode = 0) => {
   return errorMessage
 }
 
-export const renderBoldTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Bold
-  </Tooltip>
-)
 
-export const renderItalicTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Italic
-  </Tooltip>
-)
 
-export const renderHeadingTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Headings
-  </Tooltip>
-)
+const remarkable = new Remarkable()
+export default remarkable
 
-export const renderCodeTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Code
-  </Tooltip>
-)
+const remarkableStripper = md => {
+  md.renderer.render = (tokens, options, env) => {
+    let str = ''
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type === 'inline') {
+        str += md.renderer.render(tokens[i].children, options, env)
+      } else {
+        const content = tokens[i].content
+        str += (content || '') + ' '
+      }
+    }
+    return str
+  }
+}
 
-export const renderQouteTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Qoute
-  </Tooltip>
-)
+remarkable.use(remarkableStripper)
 
-export const renderOrderedListTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Ordered List
-  </Tooltip>
-)
+const htmlCharMap = {
+  amp: '&',
+  quot: '"',
+  lsquo: '‘',
+  rsquo: '’',
+  sbquo: '‚',
+  ldquo: '“',
+  rdquo: '”',
+  bdquo: '„',
+  hearts: '♥',
+  trade: '™',
+  hellip: '…',
+  pound: '£',
+  copy: '',
+}
 
-export const renderUnorderedListTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Unordered List
-  </Tooltip>
-)
+export const htmlDecode = txt => txt.replace(/&[a-z]+;/g, ch => {
+  const char = htmlCharMap[ch.substring(1, ch.length - 1)]
+  return char ? char : ch
+})
 
-export const renderLinkTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Link
-  </Tooltip>
-)
 
-export const renderImageTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Image
-  </Tooltip>
-)
+export function extractBodySummary(body, stripQuotes = false) {
+  let desc = body
 
-export const renderTableTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-    Table
-  </Tooltip>
-)
+  if (stripQuotes) desc = desc.replace(/(^(\n|\r|\s)*)>([\s\S]*?).*\s*/g, '')
+  desc = remarkableStripper.render(desc)
+  desc = sanitize(desc, { allowedTags: [] })
+  desc = htmlDecode(desc)
 
-export const renderEmojiTooltip = (props) => (
-  <Tooltip id="button-tooltip" {...props}>
-   Emoji
-  </Tooltip>
-)
+  desc = desc.replace(/https?:\/\/[^\s]+/g, '')
+
+  desc = desc.trim().split('\n')[0]
+
+  if (desc.length > 200) {
+    desc = desc.substring(0, 200).trim()
+    desc = desc.substring(0, 180)
+      .trim()
+      //eslint-disable-next-line
+      .replace(/[,!\?]?\s+[^\s]+$/, '…')
+  }
+
+  return desc
+}
