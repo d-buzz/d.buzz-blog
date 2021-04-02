@@ -208,9 +208,7 @@ function* getLinkMetaRequest(payload, meta) {
 }
 
 function* getContentRequest(payload, meta) {
-  console.log('this')
   const { author, permlink } = payload
-  console.log({payload})
   const contentRedirect = yield select(state => state.posts.get('contentRedirect'))
 
   try {
