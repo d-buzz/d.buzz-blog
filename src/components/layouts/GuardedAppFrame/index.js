@@ -98,13 +98,13 @@ const GuardedAppFrame = (props) => {
           </Col>
         )}
         {isContentRoute && (
-          <div className={classes.clearPadding}>
+          <Col className={classes.clearPadding}>
             <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
               <React.Fragment>
                 {renderRoutes(route.routes)}
               </React.Fragment>
             </div>
-          </div>
+          </Col>
         )}
       </Row>
     </React.Fragment>
