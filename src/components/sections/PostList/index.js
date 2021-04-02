@@ -9,7 +9,6 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  ContentModal,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
 import { Link } from 'react-router-dom'
@@ -23,6 +22,7 @@ import { isMobile } from 'react-device-detect'
 import classNames from 'classnames'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
+import { useLocation } from 'react-router-dom'
 
 const addHover = (theme) => {
   let style = {
@@ -176,12 +176,13 @@ const useStyle = createUseStyles(theme => ({
 
 const PostList = React.memo((props) => {
   const classes = useStyle()
+  const location = useLocation()
+  const { pathname } = location
   const {
     searchListMode = false,
     author,
     permlink,
     created,
-    body,
     upvotes,
     replyCount,
     meta,
@@ -202,10 +203,19 @@ const PostList = React.memo((props) => {
     opacityUsers,
     disableOpacity,
   } = props
+  let { body } = props
 
-
+  let isContentRoute = false
   let { payout = null, payoutAt = null } = props
   let { max_accepted_payout } = props
+
+  if (pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    isContentRoute = true
+  }
+
+  if (!isContentRoute) {
+    body = `${body.substr(0, 280)} ...`
+  }
 
   if (max_accepted_payout) {
     max_accepted_payout = max_accepted_payout.replace('HBD', '')
@@ -242,13 +252,7 @@ const PostList = React.memo((props) => {
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [muted, setMuted] = useState(false)
-  const [openContentModal, setOpenContentModal] = useState(false)
   const popoverAnchor = useRef(null)
-  let contentLink = ""
-
-  const handleClickCloseContentModal = () => {
-    setOpenContentModal(false)
-  }
 
   useEffect(() => {
     if (!isMobile) {
@@ -373,7 +377,12 @@ const PostList = React.memo((props) => {
                   {!muted && !opacityActivated && disableOpacity && (
                     <div onClick={handleOpenContent}>
                       <h6 className={classes.title}>{title}</h6>
-                      <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                      {isContentRoute && (
+                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                      )}
+                      {!isContentRoute && (
+                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                      )}
                       <PostTags meta={meta} highlightTag={highlightTag} />
                     </div>
                   )}
@@ -408,7 +417,6 @@ const PostList = React.memo((props) => {
               </div>
             </Col>
           </Row>
-          <ContentModal show={openContentModal} onhide={handleClickCloseContentModal} link={contentLink}/>
         </div>
       </div>
     </React.Fragment>
