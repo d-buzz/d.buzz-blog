@@ -15,8 +15,8 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  ReplyList,
-  UserDialog,
+  // ReplyList,
+  // UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
 import { pending } from 'redux-saga-thunk'
@@ -28,10 +28,9 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import stripHtml from 'string-strip-html'
 import {
   ContentSkeleton,
-  ReplylistSkeleton,
+  // ReplylistSkeleton,
   HelmetGenerator,
   UpdateFormModal,
 } from 'components'
@@ -40,15 +39,18 @@ import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
   wrapper: {
-    width: '95%',
+    backgroundColor: theme.backgroundColor,
+    padding: '2%',
+    borderRadius: 5,
+    width: '70%',
     margin: '0 auto',
     marginTop: 0,
     borderBottom: theme.border.primary,
     '& img': {
-      borderRadius: '15px 15px',
+      borderRadius: 5,
     },
     '& iframe': {
-      borderRadius: '15px 15px',
+      borderRadius: 5,
     },
   },
   full: {
@@ -135,10 +137,10 @@ const Content = (props) => {
     match,
     content,
     loadingContent,
-    loadingReplies,
+    // loadingReplies,
     clearReplies,
     user = {},
-    replies,
+    // replies,
     checkHasUpdateAuthorityRequest,
     censorList = [],
     clearAppendReply,
@@ -148,7 +150,7 @@ const Content = (props) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [originalContent, setOriginalContent] = useState('')
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [openUpdateForm, setOpenUpdateForm] = useState(false)
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
   const [isCensored, setIsCensored] = useState(false)
@@ -163,7 +165,7 @@ const Content = (props) => {
     created,
     children: replyCount = 0,
     active_votes,
-    profile = {},
+    // profile = {},
     cashout_time,
   } = content || ''
 
@@ -294,11 +296,11 @@ const Content = (props) => {
   }
 
   const openPopOver = (e) => {
-    setOpen(true)
+    // setOpen(true)
   }
 
   const closePopOver = (e) => {
-    setOpen(false)
+    // setOpen(false)
   }
 
   const handleClickContent = (e) => {
@@ -325,137 +327,116 @@ const Content = (props) => {
       {!loadingContent && author && (
         <React.Fragment>
           <HelmetGenerator content={body} user={author} />
-          <div className={classes.wrapper}>
-            <br />
-            <React.Fragment>
-              <Row>
-                <Col xs="auto" style={{ paddingRight: 0 }}>
-                  <Avatar author={author} />
-                </Col>
-                <Col style={{ paddingLeft: 10 }}>
-                  <div style={{ marginTop: 2 }}>
-                    <Link
-                      ref={popoverAnchor}
-                      to={generateAuthorLink}
-                      className={classes.link}
-                      onMouseEnter={openPopOver}
-                      onMouseLeave={closePopOver}
-                    >
-                      <p className={classes.name}>
-                        {author}
-                      </p>
-                    </Link>
-
-                    <br />
-                    <p className={classes.username}>
-                      {moment(`${created}Z`).local().fromNow()}
-                    </p>
-                  </div>
-                </Col>
-              </Row>
-              <div onClick={handleClickContent}>
-                {isCensored && (
-                  <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
-                )}
-                <MarkdownViewer content={originalContent} minifyAssets={false} />
-              </div>
-              <PostTags meta={meta} />
-              {(`${stripHtml(body)}`.length > 280) && (
+            <div className={classes.wrapper}>
+              <br />
+              <React.Fragment>
                 <Row>
-                  <Col>
-                    <div className={classes.context}>
-                      <div className={classes.contextWrapper}>
-                        <h6 style={{ paddingTop: 5 }}>Content is truncated because it is over 280 characters</h6>
-                        <br />
-                        <ul>
-                          <li>
-                            <a target="_blank" without rel="noopener noreferrer" href={`https://hive.blog/@${author}/${permlink}`}>
-                              <h6>View the full content</h6>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+                  <Col xs="auto" style={{ paddingRight: 0 }}>
+                    <Avatar author={author} />
+                  </Col>
+                  <Col style={{ paddingLeft: 10 }}>
+                    <div style={{ marginTop: 2 }}>
+                      <Link
+                        ref={popoverAnchor}
+                        to={generateAuthorLink}
+                        className={classes.link}
+                        onMouseEnter={openPopOver}
+                        onMouseLeave={closePopOver}
+                      >
+                        <p className={classes.name}>
+                          {author}
+                        </p>
+                      </Link>
+
+                      <br />
+                      <p className={classes.username}>
+                        {moment(`${created}Z`).local().fromNow()}
+                      </p>
                     </div>
                   </Col>
                 </Row>
-              )}
-              <div style={{ marginTop: 10 }}>
-                <label className={classes.meta}>
-                  {moment(`${created}Z`).local().format('LTS • \nLL')}
-                  {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
-                </label>
-              </div>
-            </React.Fragment>
-          </div>
-          <div className={classes.wrapper}>
-            <Row>
-              <Col>
-                <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
-                <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
-              </Col>
-              {is_authenticated && (
-                <Col xs="auto">
-                  <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
-                    <MoreIcon className={classes.iconCursor} />
-                  </div>
-                </Col>
-              )}
-            </Row>
-            <Menu
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={hanldeCloseMore}
-            >
-              {hasUpdateAuthority && (
-                <React.Fragment>
-                  <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
-                </React.Fragment>
-              )}
-            </Menu>
-            {hasUpdateAuthority && (
-              <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
-            )}
-          </div>
-          <div className={classes.full}>
-            <div className={classes.inner}>
+                <div onClick={handleClickContent}>
+                  {isCensored && (
+                    <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
+                  )}
+                  <MarkdownViewer content={originalContent} minifyAssets={false} />
+                </div>
+                <PostTags meta={meta} />
+                
+                <div style={{ marginTop: 10 }}>
+                  <label className={classes.meta}>
+                    {moment(`${created}Z`).local().format('LTS • \nLL')}
+                    {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
+                  </label>
+                </div>
+              </React.Fragment>
+            </div>
+        
+            <div className={classes.wrapper} style={{ marginTop: 15 }}>
               <Row>
                 <Col>
-                  <PostActions
-                    disableExtraPadding={true}
-                    body={body}
-                    author={username}
-                    permlink={permlink}
-                    hasUpvoted={hasUpvoted}
-                    hideStats={true}
-                    voteCount={upvotes}
-                    replyCount={replyCount}
-                    payout={payout}
-                    payoutAt={payout_at}
-                    replyRef="content"
-                    max_accepted_payout={max_accepted_payout}
-                  />
+                  <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
+                  <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
                 </Col>
+                {is_authenticated && (
+                  <Col xs="auto">
+                    <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
+                      <MoreIcon className={classes.iconCursor} />
+                    </div>
+                  </Col>
+                )}
               </Row>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={hanldeCloseMore}
+              >
+                {hasUpdateAuthority && (
+                  <React.Fragment>
+                    <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
+                  </React.Fragment>
+                )}
+              </Menu>
+              {hasUpdateAuthority && (
+                <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
+              )}
+              <Row>
+                  <Col>
+                    <PostActions
+                      disableExtraPadding={true}
+                      body={body}
+                      author={username}
+                      permlink={permlink}
+                      hasUpvoted={hasUpvoted}
+                      hideStats={true}
+                      voteCount={upvotes}
+                      replyCount={replyCount}
+                      payout={payout}
+                      payoutAt={payout_at}
+                      replyRef="content"
+                      max_accepted_payout={max_accepted_payout}
+                    />
+                  </Col>
+                </Row>
             </div>
-          </div>
         </React.Fragment>
       )}
-      {!loadingReplies && !loadingContent &&  (
+      {/* {!loadingReplies && !loadingContent &&  (
         <ReplyList replies={replies} expectedCount={replyCount} />
-      )}
+      )} */}
       <ContentSkeleton loading={loadingContent} />
-      {replyCount !== 0 && (
+      {/* {replyCount !== 0 && (
         <ReplylistSkeleton loading={loadingReplies || loadingContent} />
-      )}
+      )} */}
       <br />
-      <UserDialog
+      {/* <UserDialog
         open={open}
         anchorEl={popoverAnchor.current}
         onMouseEnter={openPopOver}
         onMouseLeave={closePopOver}
         profile={profile}
-      />
+      /> */}
     </React.Fragment>
   )
 }

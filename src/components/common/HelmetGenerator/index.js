@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import stripHtml from 'string-strip-html'
+// import stripHtml from 'string-strip-html'
 import { Helmet } from 'react-helmet'
 import { checkIfImage } from 'services/api'
 import removeMd from 'remove-markdown'
@@ -18,7 +18,7 @@ const HelmetGenerator = (props) => {
     if (content && `${content}`.trim() !== '' && page === 'content') {
       const generateMeta = async () => {
 
-        const stripContent = stripHtml(removeMd(content))
+        const stripContent = removeMd(content)
         let title = stripContent
         let description = stripContent
         const links = markdownLinkExtractor(content)
