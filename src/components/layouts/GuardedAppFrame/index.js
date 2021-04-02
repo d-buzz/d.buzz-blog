@@ -45,9 +45,12 @@ const GuardedAppFrame = (props) => {
   const [hideRightSideBar, setHideRightSideBar] = useState(false)
   const { width } = useWindowDimensions()
   let isProfileRoute = false
+  let isContentRoute = false
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
+  } else if (pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    isContentRoute = true
   }
 
   useEffect(() => {
@@ -63,7 +66,7 @@ const GuardedAppFrame = (props) => {
   return (
     <React.Fragment>
       <Row>
-        {!isProfileRoute && (
+        {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
               <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
@@ -93,6 +96,15 @@ const GuardedAppFrame = (props) => {
               </React.Fragment>
             </div>
           </Col>
+        )}
+        {isContentRoute && (
+          <div className={classes.clearPadding}>
+            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              <React.Fragment>
+                {renderRoutes(route.routes)}
+              </React.Fragment>
+            </div>
+          </div>
         )}
       </Row>
     </React.Fragment>
