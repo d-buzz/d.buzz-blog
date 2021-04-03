@@ -111,5 +111,4 @@ const GuardedAppFrame = (props) => {
   )
 }
 
-
 export default GuardedAppFrame
