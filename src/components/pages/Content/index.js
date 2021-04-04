@@ -419,11 +419,11 @@ const Content = (props) => {
                   />
                 </Col>
               </Row>
+              {!loadingReplies && !loadingContent &&  (
+                <ReplyList replies={replies} expectedCount={replyCount} />
+              )}
             </div>
         </React.Fragment>
-      )}
-      {!loadingReplies && !loadingContent &&  (
-        <ReplyList replies={replies} expectedCount={replyCount} />
       )}
       <ContentSkeleton loading={loadingContent} />
       {/* {replyCount !== 0 && (
