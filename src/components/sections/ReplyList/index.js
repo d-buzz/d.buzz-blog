@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => ({
     width: '100%',
     paddingTop: 20,
     '&:hover': {
+      width: '100%',
       ...theme.postList.hover,
     },
     cursor: 'pointer',
@@ -78,10 +79,10 @@ const useStyles = createUseStyles(theme => ({
   content: {
     width: '100%',
     '& img': {
-      borderRadius: '15px 15px',
+      borderRadius: 5,
     },
     '& iframe': {
-      borderRadius: '15px 15px',
+      borderRadius: 5,
     },
     '& a': {
       color: '#d32f2f',
@@ -121,7 +122,7 @@ const useStyles = createUseStyles(theme => ({
     },
   },
   inner: {
-    width: '95%',
+    width: '100%',
     margin: '0 auto',
   },
   hideNote: {
