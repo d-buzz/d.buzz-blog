@@ -475,3 +475,27 @@ export const saveReceptUpvotes = (response) => ({
   type: SAVE_RECENT_UPVOTES,
   payload: response,
 })
+
+export const PUBLISH_REPLY_REQUEST = 'PUBLISH_REPLY_REQUEST'
+export const PUBLISH_REPLY_SUCCESS = 'PUBLISH_REPLY_SUCCESS'
+export const PUBLISH_REPLY_FAILURE = 'PUBLISH_REPLY_FAILURE'
+
+export const publishReplyRequest = (parent_author, parent_permlink, body, ref, treeHistory) => ({
+  type: PUBLISH_REPLY_REQUEST,
+  payload: { parent_author, parent_permlink, body,  ref, treeHistory},
+  meta: {
+    thunk: true,
+  },
+})
+
+export const publishReplySuccess = (response, meta) => ({
+  type: PUBLISH_REPLY_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const publishReplyFailure = (error, meta) => ({
+  type: PUBLISH_REPLY_FAILURE,
+  payload: error,
+  meta,
+})
