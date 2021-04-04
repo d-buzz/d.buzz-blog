@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, GuardedAppFrame, UnguardedAppFrame } from 'components'
+import { AppBar, GuardedAppFrame, UnguardedAppFrame, ReplyFormModal } from 'components'
 import { createUseStyles } from 'react-jss'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
@@ -84,6 +84,7 @@ const AppFrame = (props) => {
           <img src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif" alt="" width={200} />
         </center>
       )}
+      <ReplyFormModal />
     </React.Fragment>
   )
 }
