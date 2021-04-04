@@ -64,6 +64,10 @@ import {
   upvoteFailure,
 
   saveReceptUpvotes,
+
+  PUBLISH_REPLY_REQUEST,
+  publishReplySuccess,
+  publishReplyFailure,
 } from './actions'
 
 import {
@@ -85,6 +89,7 @@ import {
   generateUpdateOperation,
   keychainUpvote,
   broadcastVote,
+  generateReplyOperation,
 } from 'services/api'
 import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
@@ -557,6 +562,81 @@ function* publishUpdateRequest(payload, meta) {
   }
 }
 
+function* publishReplyRequest(payload, meta) {
+  try {
+    const { parent_author, parent_permlink, ref, treeHistory } = payload
+    const user = yield select(state => state.auth.get('user'))
+    const { username, useKeychain } = user
+
+    let { body } = payload
+
+    body = footnote(body)
+
+    let replyData = {}
+
+    let success = false
+    const operation = yield call(generateReplyOperation, username, body, parent_author, parent_permlink)
+
+    if(useKeychain) {
+      const result = yield call(broadcastKeychainOperation, username, operation)
+      success = result.success
+    } else {
+      let { login_data } = user
+      login_data = extractLoginData(login_data)
+
+      const wif = login_data[1]
+      const result = yield call(broadcastOperation, operation, [wif])
+      success = result.success
+    }
+
+    if(success) {
+      const meta = operation[0]
+
+      let currentDatetime = moment().toISOString()
+      currentDatetime = currentDatetime.replace('Z', '')
+
+      const reply = {
+        author: username,
+        category: 'hive-193084',
+        permlink: meta[1].permlink,
+        title: meta[1].title,
+        body: meta[1].body,
+        replies: [],
+        total_payout_value: '0.000 HBD',
+        curator_payout_value: '0.000 HBD',
+        pending_payout_value: '0.000 HBD',
+        active_votes: [],
+        parent_author,
+        parent_permlink,
+        root_author: parent_author,
+        root_permlink: parent_permlink,
+        children: 0,
+        created: currentDatetime,
+      }
+
+      reply.body = reply.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+
+      reply.refMeta = {
+        ref,
+        author: parent_author,
+        permlink: parent_permlink,
+        treeHistory,
+      }
+      replyData = reply
+    }
+
+    const data = {
+      success,
+      reply: replyData,
+    }
+
+    yield put(publishReplySuccess(data, meta))
+  } catch(error) {
+    const errorMessage = errorMessageComposer('reply', error)
+    yield put(publishReplyFailure({ errorMessage }, meta))
+  }
+}
+
 function* upvoteRequest(payload, meta) {
   try {
     const { author, permlink, percentage } = payload
@@ -655,6 +735,10 @@ function* watchUnfollowRequest({ payload, meta }) {
   yield call(unfollowRequest, payload, meta)
 }
 
+function* watchPublishReplyRequest({ payload, meta }) {
+  yield call(publishReplyRequest, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
@@ -670,4 +754,5 @@ export default function* sagas() {
   yield takeEvery(FOLLOW_REQUEST, watchFollowRequest)
   yield takeEvery(UNFOLLOW_REQUEST, watchUnfollowRequest)
   yield takeEvery(UPVOTE_REQUEST, watchUpvoteRequest)
+  yield takeEvery(PUBLISH_REPLY_REQUEST, watchPublishReplyRequest)
 }
