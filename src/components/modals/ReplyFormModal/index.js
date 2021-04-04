@@ -201,7 +201,6 @@ const ReplyFormModal = (props) => {
 
   const textAreaStyle = { width: '100%' }
   const zeroPadding = { padding: 0 }
-  const iconButtonStyle = { marginTop: -5 }
   // const inputFile = { display: 'none' }
   const replyButtonStyle = { width: 70 }
 
