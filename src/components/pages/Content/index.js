@@ -15,7 +15,7 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  // ReplyList,
+  ReplyList,
   // UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
@@ -137,10 +137,10 @@ const Content = (props) => {
     match,
     content,
     loadingContent,
-    // loadingReplies,
+    loadingReplies,
     clearReplies,
     user = {},
-    // replies,
+    replies,
     checkHasUpdateAuthorityRequest,
     censorList = [],
     clearAppendReply,
@@ -422,9 +422,9 @@ const Content = (props) => {
             </div>
         </React.Fragment>
       )}
-      {/* {!loadingReplies && !loadingContent &&  (
+      {!loadingReplies && !loadingContent &&  (
         <ReplyList replies={replies} expectedCount={replyCount} />
-      )} */}
+      )}
       <ContentSkeleton loading={loadingContent} />
       {/* {replyCount !== 0 && (
         <ReplylistSkeleton loading={loadingReplies || loadingContent} />
