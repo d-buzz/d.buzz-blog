@@ -24,7 +24,6 @@ const useStyles = createUseStyles(theme => ({
     width: '100%',
     paddingTop: 20,
     '&:hover': {
-      width: '100%',
       ...theme.postList.hover,
     },
     cursor: 'pointer',
