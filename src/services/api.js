@@ -654,3 +654,27 @@ export const broadcastVote = (wif, voter, author, permlink, weight) => {
       })
   })
 }
+
+export const generateReplyOperation = (account, body, parent_author, parent_permlink) => {
+
+  const json_metadata = createMeta()
+  let permlink = createPermlink(body.substring(0, 100))
+  permlink = `re-${permlink}`
+  return new Promise((resolve) => {
+
+    const op_comment = [[
+      'comment',
+      {
+        'author': account,
+        'title': '',
+        'body': `${body.trim()}`,
+        parent_author,
+        parent_permlink,
+        permlink,
+        json_metadata,
+      },
+    ]]
+
+    resolve(op_comment)
+  })
+}
