@@ -29,9 +29,7 @@ import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { pending } from 'redux-saga-thunk'
-import FormCheck from 'react-bootstrap/FormCheck'
 import { useHistory } from 'react-router-dom'
-// import { invokeTwitterIntent } from 'services/helper'
 
 const useStyles = createUseStyles(theme => ({
   modal: {
@@ -195,7 +193,7 @@ const ReplyFormModal = (props) => {
   const [body, setBody] = useState('')
   const [wordCount, setWordCount] = useState(0)
   const [replyDone, setReplyDone] = useState(false)
-  const [buzzToTwitter, setBuzzToTwitter] = useState(false)
+  // const [buzzToTwitter, setBuzzToTwitter] = useState(false)
   // const [openGiphy, setOpenGiphy] = useState(false)
   // const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
   // const [emojiAnchorEl, setEmojianchorEl] = useState(null)
@@ -251,7 +249,7 @@ const ReplyFormModal = (props) => {
     if(name !== 'buzz-to-twitter') {
       setContent(value)
     } else {
-      setBuzzToTwitter(!buzzToTwitter)
+      // setBuzzToTwitter(!buzzToTwitter)
     }
   }
 
@@ -367,12 +365,12 @@ const ReplyFormModal = (props) => {
         <div className="container">
           <ModalBody className={classes.modalBody}>
             <div className={classes.actionWrapper}>
-              <IconButton style={iconButtonStyle} onClick={onHide}>
+              <IconButton style={{ float: 'right', marginRight: 10 }} onClick={onHide}>
                 <CloseIcon />
               </IconButton>
             </div>
-            <hr className={classes.break} />
-            <Row>
+            <Row style={{ marginTop: 45 }}>
+              <hr />
               <Col xs="auto">
                 <div className={classes.left}>
                   <Avatar author={author} className={classes.avatar}/>
@@ -416,14 +414,6 @@ const ReplyFormModal = (props) => {
                       onChange={handleOnChange}
                     />
                   )}
-                  <FormCheck
-                    name='buzz-to-twitter'
-                    type='checkbox'
-                    label='Buzz to Twitter'
-                    checked={buzzToTwitter}
-                    onChange={handleOnChange}
-                    className={classNames(classes.checkBox, classes.label)}
-                  />
                   {uploading && (
                     <div className={classes.actionWrapper}>
                       <Box  position="relative" display="inline-flex">
