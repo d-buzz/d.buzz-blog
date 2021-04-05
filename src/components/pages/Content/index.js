@@ -158,7 +158,6 @@ const Content = (props) => {
   const popoverAnchor = useRef(null)
   const history = useHistory()
 
-
   const {
     author,
     json_metadata,
@@ -167,6 +166,7 @@ const Content = (props) => {
     active_votes,
     // profile = {},
     cashout_time,
+    title,
   } = content || ''
 
 
@@ -224,7 +224,7 @@ const Content = (props) => {
   }
 
   // const onUpdateSuccess = (body) => {
-  //   setOriginalContent(body)
+  //   setOriginalContent(body) 
   // }
 
   if(!cashout_time) {
@@ -239,7 +239,7 @@ const Content = (props) => {
     payout = pay
   }
 
-  const { is_authenticated } = user
+  const { isAuthenticated } = user
 
 
   if(json_metadata) {
@@ -270,7 +270,7 @@ const Content = (props) => {
         upvotes = active_votes.length
       }
 
-      if(is_authenticated) {
+      if(isAuthenticated) {
         hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
       }
     }
@@ -359,6 +359,7 @@ const Content = (props) => {
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
                   )}
+                  <h3>{title}</h3> &nbsp;
                   <MarkdownViewer content={originalContent} minifyAssets={false} />
                 </div>
                 <PostTags meta={meta} />
@@ -378,7 +379,7 @@ const Content = (props) => {
                   <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
                   <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
                 </Col>
-                {is_authenticated && (
+                {isAuthenticated && (
                   <Col xs="auto">
                     <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
                       <MoreIcon className={classes.iconCursor} />
