@@ -27,6 +27,7 @@ import {
   UPLOAD_FILE_SUCCESS,
   PUBLISH_POST_SUCCESS,
   SAVE_RECENT_UPVOTES,
+  GET_SEARCH_TAG_SUCCESS,
 } from './actions'
 import { fromJS } from 'immutable'
 
@@ -112,6 +113,8 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('published', payload)
   case SAVE_RECENT_UPVOTES:
     return state.set('recentUpvotes', payload)
+  case GET_SEARCH_TAG_SUCCESS:
+    return state.set('searchTag', payload)
   default:
     return state
   }
