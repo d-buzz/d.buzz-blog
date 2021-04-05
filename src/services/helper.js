@@ -426,3 +426,87 @@ export function extractBodySummary(body, stripQuotes = false) {
 
   return desc
 }
+
+export const getProfileMetaData = (profile = {}) => {
+  let cover = ''
+  let name = ''
+  let about = ''
+  let website = ''
+  if(
+    'json_metadata' in profile
+    && profile.json_metadata.includes('"profile":')
+    && profile.json_metadata.includes('"cover_image":')
+  ) {
+    const meta = JSON.parse(profile.json_metadata)
+    cover = meta.profile.cover_image
+  }
+
+  if(
+    'posting_json_metadata' in profile
+    && profile.posting_json_metadata.includes('"profile":')
+    && profile.posting_json_metadata.includes('"cover_image":')
+  ) {
+    const meta = JSON.parse(profile.posting_json_metadata)
+    cover = meta.profile.cover_image
+  }
+
+  if(
+    'json_metadata' in profile
+    && profile.json_metadata.includes('"profile":')
+    && profile.json_metadata.includes('"name":')
+  ) {
+    const meta = JSON.parse(profile.json_metadata)
+    name = meta.profile.name
+  }
+
+  if(
+    'posting_json_metadata' in profile
+    && profile.posting_json_metadata.includes('"profile":')
+    && profile.posting_json_metadata.includes('"name":')
+  ) {
+    const meta = JSON.parse(profile.posting_json_metadata)
+    name = meta.profile.name
+  }
+
+  if(
+    'json_metadata' in profile
+    && profile.json_metadata.includes('"profile":')
+    && profile.json_metadata.includes('"about":')
+  ) {
+    const meta = JSON.parse(profile.json_metadata)
+    about = meta.profile.about
+  }
+
+  if(
+    'posting_json_metadata' in profile
+    && profile.posting_json_metadata.includes('"profile":')
+    && profile.posting_json_metadata.includes('"about":')
+  ) {
+    const meta = JSON.parse(profile.posting_json_metadata)
+    about = meta.profile.about
+  }
+
+  if(
+    'json_metadata' in profile
+    && profile.json_metadata.includes('"profile":')
+    && profile.json_metadata.includes('"website":')
+  ) {
+    const meta = JSON.parse(profile.json_metadata)
+    website = meta.profile.website
+  }
+
+  if(
+    'posting_json_metadata' in profile
+    && profile.posting_json_metadata.includes('"website":')
+  ) {
+    const meta = JSON.parse(profile.posting_json_metadata)
+    website = meta.profile.website
+  }
+
+  return {
+    cover,
+    name,
+    about,
+    website,
+  }
+}
