@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
+import Badge from '@material-ui/core/Badge'
 import classNames from 'classnames'
 import { 
   Avatar,
@@ -37,6 +38,7 @@ import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
 import { signoutUserRequest } from 'store/auth/actions'
 import { useLastLocation } from 'react-router-last-location'
 import { pending } from 'redux-saga-thunk'
+import { pollNotifRequest } from 'store/polling/actions'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -137,7 +139,14 @@ const useStyles = createUseStyles(theme => ({
 const AppBar = (props) => {
   const classes = useStyles()
   const lastLocation = useLastLocation()
-  const { theme, user, signoutUserRequest, loadingAccount } = props
+  const { 
+    theme, 
+    user, 
+    signoutUserRequest, 
+    loadingAccount, 
+    pollNotifRequest, 
+    count = 0,
+  } = props
   const { isAuthenticated } = user
   const { mode } = theme
   const history = useHistory()
@@ -150,6 +159,11 @@ const AppBar = (props) => {
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
+
+  useEffect(() => {
+    pollNotifRequest()
+    // eslint-disable-next-line
+  }, [])
 
   const handleClickBackButton = () => {
     if(!lastLocation) {
@@ -276,7 +290,7 @@ const AppBar = (props) => {
                               as={Link}
                               to="/notifications"
                             >
-                              <NotificationsNoneIcon classes={{ root: classes.root }} />
+                              <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
                             </MenuLink>
                           </Menu>
                         </div>
@@ -388,12 +402,14 @@ const AppBar = (props) => {
 const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
+  count: state.polling.get('count'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
+    pollNotifRequest, 
   }, dispatch),
 })
 
