@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import moment from 'moment'
-// import Chip from '@material-ui/core/Chip'
+import { clearNotificationsRequest } from 'store/polling/actions'
+import { broadcastNotification } from 'store/interfaces/actions'
+import { ContainedButton } from 'components/elements'
 import { setPageFrom } from 'store/posts/actions'
 import { Link } from 'react-router-dom'
 import { Avatar, Spinner } from 'components/elements'
@@ -140,9 +142,12 @@ const Notification = (props) => {
     loading,
     count,
     setPageFrom,
+    user,
+    clearNotificationsRequest,
   } = props
 
   const classes = useStyle()
+  const { isAuthenticated } = user
 
   useEffect(() => {
     anchorTop()
@@ -169,8 +174,33 @@ const Notification = (props) => {
     return link
   }
 
+  const handleClearNotification = () => {
+    clearNotificationsRequest()
+      .then(result => {
+        if(result.success) {
+          broadcastNotification('success', 'Successfully marked all your notifications as read')
+        } else {
+          broadcastNotification('error', 'Failed marking all notifications as read')
+        }
+      })
+  }
+
   return (
     <React.Fragment>
+      {isAuthenticated && count.unread !== 0 && (
+        <div style={{ width: '100%' }}>
+          <ContainedButton
+            fontSize={12}
+            style={{ float: 'left', marginTop: 5, marginBottom: 10 }}
+            transparent={true}
+            label="Mark all as read"
+            loading={loading}
+            disabled={loading}
+            className={classes.walletButton}
+            onClick={handleClearNotification}
+          />
+        </div>
+      )}
       {notifications.map((item, index) => (
         <React.Fragment key={index}>
           <div className={classNames(classes.wrapper, index < count.unread ? classes.unread : '')}>
@@ -220,12 +250,14 @@ const Notification = (props) => {
 const mapStateToProps = (state) => ({
   notifications: state.polling.get('notifications'),
   count: state.polling.get('count'),
+  user: state.auth.get('user'),
   loading: pending(state, 'POLL_NOTIF_REQUEST'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     setPageFrom,
+    clearNotificationsRequest,
   }, dispatch),
 })
 
