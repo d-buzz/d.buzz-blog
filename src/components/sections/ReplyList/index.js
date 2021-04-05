@@ -279,7 +279,7 @@ const ReplyList = (props) => {
       payout = '0.00'
     }
 
-    const { username, is_authenticated } = user
+    const { username, isAuthenticated } = user
 
     let { replies } = reply
     replies = replies.filter((reply) => !mutelist.includes(reply.author))
@@ -288,7 +288,7 @@ const ReplyList = (props) => {
 
     let authorLink = `/@${author}`
 
-    if(is_authenticated) {
+    if(isAuthenticated) {
       hasUpvoted = active_votes.filter((vote) => vote.voter === username).length !== 0
     } else {
       authorLink = `/ug${authorLink}`
@@ -298,7 +298,7 @@ const ReplyList = (props) => {
 
     const generateLink = (author, permlink) =>  {
       let link = ''
-      if(!is_authenticated) {
+      if(!isAuthenticated) {
         link = '/ug'
       }
 
