@@ -12,6 +12,7 @@ import {
 const visited = []
 
 const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
+const searchUrl = `${appConfig.SEARCH_API}/search`
 const imageUrl = `${appConfig.IMAGE_API}/image`
 
 export const keychainSignIn = (username) => {
@@ -726,6 +727,26 @@ export const getUnreadNotificationsCount = async(account) => {
       } else {
         resolve(data)
       }
+    })
+  })
+}
+
+export const searchPostTags = (tag) => {
+  return new Promise(async(resolve, reject) => {
+    const body = { tag }
+
+    axios({
+      method: 'POST',
+      url: `${searchUrl}/tags`,
+      data: body,
+    }).then(async(result) => {
+      const data = result.data
+
+      // removeFootNote(data.results)
+
+      resolve(data)
+    }).catch((error) => {
+      reject(error)
     })
   })
 }
