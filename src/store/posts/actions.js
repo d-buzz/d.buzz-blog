@@ -499,3 +499,27 @@ export const publishReplyFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const GET_SEARCH_TAG_REQUEST = 'GET_SEARCH_TAG_REQUEST'
+export const GET_SEARCH_TAG_SUCCESS = 'GET_SEARCH_TAG_SUCCESS'
+export const GET_SEARCH_TAG_FAILURE = 'GET_SEARCH_TAG_FAILURE'
+
+export const getSearchTagsRequest = (tag) => ({
+  type: GET_SEARCH_TAG_REQUEST,
+  payload: { tag },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getSearchTagsSuccess = (response, meta) => ({
+  type: GET_SEARCH_TAG_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getSearchTagFailure = (error, meta) => ({
+  type: GET_SEARCH_TAG_FAILURE,
+  payload: error,
+  meta,
+})
