@@ -14,7 +14,29 @@ import {
   broadcastKeychainOperation,
   extractLoginData,
   broadcastOperation,
+  getAccountNotifications,
+  getUnreadNotificationsCount,
 } from 'services/api'
+
+const POLLING_DELAY = 30000
+
+function* poll() {
+  while (true) {
+    try {
+      const user = yield select(state => state.auth.get('user'))
+      const { username } = user
+
+      const notification = yield call(getAccountNotifications, username)
+      const count = yield call(getUnreadNotificationsCount, username)
+
+      yield put(pollNotifSuccess(notification))
+      yield put(pollNotifCount(count))
+      yield delay(POLLING_DELAY)
+    } catch (error) {
+      yield put(pollNotifFailure(error))
+    }
+  }
+}
 
 function* clearNotificationRequest(meta) {
   try {
@@ -60,10 +82,17 @@ function* clearNotificationRequest(meta) {
   }
 }
 
+function* watchPollingTasks() {
+  while (true) {
+    yield race([call(poll)])
+  }
+}
+
 function* watchClearNotificationRequest({ meta }) {
   yield call(clearNotificationRequest, meta)
 }
 
 export default function* sagas() {
+  yield takeLatest(POLL_NOTIF_REQUEST, watchPollingTasks)
   yield takeEvery(CLEAR_NOTIFICATIONS_REQUEST, watchClearNotificationRequest)
 }
