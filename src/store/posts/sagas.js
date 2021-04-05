@@ -68,6 +68,10 @@ import {
   PUBLISH_REPLY_REQUEST,
   publishReplySuccess,
   publishReplyFailure,
+
+  GET_SEARCH_TAG_REQUEST,
+  getSearchTagsSuccess,
+  getSearchTagFailure,
 } from './actions'
 
 import {
@@ -90,6 +94,7 @@ import {
   keychainUpvote,
   broadcastVote,
   generateReplyOperation,
+  searchPostTags,
 } from 'services/api'
 import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
@@ -679,6 +684,17 @@ function* upvoteRequest(payload, meta) {
   }
 }
 
+function* getSearchTags(payload, meta) {
+  try {
+    const { tag } = payload
+    const searchPosts = yield call(searchPostTags, tag)
+
+    yield put(getSearchTagsSuccess(searchPosts, meta))
+  } catch(error) {
+    yield put(getSearchTagFailure(error, meta))
+  }
+}
+
 function* watchUpvoteRequest({ payload, meta }) {
   yield call(upvoteRequest, payload, meta)
 }
@@ -739,6 +755,10 @@ function* watchPublishReplyRequest({ payload, meta }) {
   yield call(publishReplyRequest, payload, meta)
 }
 
+function* watchGetSearchTags({ payload, meta }) {
+  yield call(getSearchTags, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
@@ -755,4 +775,5 @@ export default function* sagas() {
   yield takeEvery(UNFOLLOW_REQUEST, watchUnfollowRequest)
   yield takeEvery(UPVOTE_REQUEST, watchUpvoteRequest)
   yield takeEvery(PUBLISH_REPLY_REQUEST, watchPublishReplyRequest)
+  yield takeEvery(GET_SEARCH_TAG_REQUEST, watchGetSearchTags)
 }
