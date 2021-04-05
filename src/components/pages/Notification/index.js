@@ -44,6 +44,8 @@ const useStyle = createUseStyles(theme => ({
   },
   wrapper: {
     width: '100%',
+    backgroundColor: 'white',
+    borderRadius: 5,
     overflow: 'hidden',
     fontFamily: 'Segoe-Bold',
     fontSize: 14,

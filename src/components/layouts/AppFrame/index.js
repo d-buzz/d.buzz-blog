@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, GuardedAppFrame, UnguardedAppFrame, ReplyFormModal } from 'components'
+import { AppBar, GuardedAppFrame, UnguardedAppFrame, ReplyFormModal, NotificationBox } from 'components'
 import { createUseStyles } from 'react-jss'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
@@ -85,6 +85,7 @@ const AppFrame = (props) => {
         </center>
       )}
       <ReplyFormModal />
+      <NotificationBox />
     </React.Fragment>
   )
 }

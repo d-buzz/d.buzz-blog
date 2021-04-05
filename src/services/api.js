@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import appConfig from 'config'
 import { v4 as uuidv4 } from 'uuid'
 import { 
@@ -676,5 +677,55 @@ export const generateReplyOperation = (account, body, parent_author, parent_perm
     ]]
 
     resolve(op_comment)
+  })
+}
+
+export const generateClearNotificationOperation = (username, lastNotification) => {
+  return new Promise((resolve) => {
+
+    let date = moment().utc().format()
+    date = `${date}`.replace('Z', '')
+
+    const json = JSON.stringify(["setLastRead",{ date }])
+
+    const operation = [
+      [
+        'custom_json',
+        {
+          'required_auths': [],
+          'required_posting_auths': [username],
+          'id': 'notify',
+          json,
+        },
+      ],
+    ]
+
+    resolve(operation)
+  })
+}
+
+export const getAccountNotifications = async(account) => {
+  return new Promise((resolve, reject) => {
+    const params = { account, limit:100 }
+    api.call('bridge.account_notifications', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
+export const getUnreadNotificationsCount = async(account) => {
+  return new Promise((resolve, reject) => {
+    const params = { account }
+    api.call('bridge.unread_notifications', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
   })
 }
