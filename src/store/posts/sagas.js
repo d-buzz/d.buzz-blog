@@ -102,9 +102,14 @@ import {
   searchPostAuthor,
   searchPostGeneral,
   searchPeople,
+  getMutePattern,
 } from 'services/api'
 import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
+
+function patternMute(patterns, data) {
+  return data.filter((item) => !patterns.includes(`${item.body}`.trim()))
+}
 
 const footnote = (body) => {
   const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>'
@@ -203,7 +208,10 @@ function* getLatestPostsRequest(payload, meta) {
 
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+    const patterns = yield call(getMutePattern)
     data = invokeMuteFilter(data, mutelist, opacityUsers)
+
+    data = patternMute(patterns, data)
 
 
     yield put(getLatestPostsSuccess(data, meta))
