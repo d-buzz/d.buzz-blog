@@ -60,7 +60,7 @@ const SearchField = (props) => {
         link = 'ug/search'
       }
 
-      link += `/posts?q=${encodeURIComponent(search)}`
+      link += `/people?q=${encodeURIComponent(search)}`
       history.replace(link)
     }
   }
