@@ -8,6 +8,7 @@ import {
   AccountPosts,
   AccountReplies,
   AccountComments,
+  Notification,
 } from 'components'
   
 const routes =  [
@@ -33,6 +34,11 @@ const routes =  [
         path: '/@:username/c/:permlink',
         exact: true,
         component: Content,
+      },
+      {
+        path: '/notifications',
+        exact: true,
+        component: Notification,
       },
       {
         path: '/@:username',
