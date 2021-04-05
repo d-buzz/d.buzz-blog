@@ -10,6 +10,9 @@ import {
   AccountComments,
   Notification,
   Tags,
+  Search,
+  SearchPeople,
+  SearchPosts,
 } from 'components'
   
 const routes =  [
@@ -17,7 +20,7 @@ const routes =  [
     component: AppFrame,
     routes: [
       {
-        path: "/",
+        path: '/',
         exact: true,
         component: Home,
       },
@@ -44,6 +47,38 @@ const routes =  [
       {
         path: '/tags',
         component: Tags,
+      },
+      {
+        path: '/search',
+        component: Search,
+        routes: [
+          {
+            path: '/search/people',
+            exact: true,
+            component: SearchPeople,
+          },
+          {
+            path: '/search/posts',
+            exact: true,
+            component: SearchPosts,
+          },
+        ],
+      },
+      {
+        path: '/ug/search',
+        component: Search,
+        routes: [
+          {
+            path: '/ug/search/people',
+            exact: true,
+            component: SearchPeople,
+          },
+          {
+            path: '/ug/search/posts',
+            exact: true,
+            component: SearchPosts,
+          },
+        ],
       },
       {
         path: '/@:username',
