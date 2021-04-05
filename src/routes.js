@@ -9,6 +9,7 @@ import {
   AccountReplies,
   AccountComments,
   Notification,
+  Tags,
 } from 'components'
   
 const routes =  [
@@ -39,6 +40,10 @@ const routes =  [
         path: '/notifications',
         exact: true,
         component: Notification,
+      },
+      {
+        path: '/tags',
+        component: Tags,
       },
       {
         path: '/@:username',
