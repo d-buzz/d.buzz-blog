@@ -129,6 +129,9 @@ const useStyles = createUseStyles(theme => ({
       },
     },
   },
+  root: {
+    fill: 'black !important',
+  },
 }))
 
 const AppBar = (props) => {
@@ -267,6 +270,18 @@ const AppBar = (props) => {
                           </div>
                         </div>
                         &nbsp;
+                        <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
+                          <Menu>
+                            <MenuLink 
+                              as={Link}
+                              to="/notifications"
+                            >
+                              <NotificationsNoneIcon classes={{ root: classes.root }} />
+                            </MenuLink>
+                          </Menu>
+                        </div>
+                        
+                        {/* will be added on beta~release
                         <Menu>
                           <MenuButton
                             className={classNames(classes.notificationButton, classes.notificationWrapper)}
@@ -279,7 +294,7 @@ const AppBar = (props) => {
                             <MenuLink>Notifications 3</MenuLink>
                             <MenuLink>Notifications 4</MenuLink>
                           </MenuList>
-                        </Menu>
+                        </Menu> */}
                         &nbsp;
                         <Menu>
                           <MenuButton
