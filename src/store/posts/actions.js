@@ -523,3 +523,27 @@ export const getSearchTagFailure = (error, meta) => ({
   payload: error,
   meta,
 })
+
+export const SEARCH_REQUEST = 'SEARCH_REQUEST'
+export const SEARCH_SUCCESS = 'SEARCH_SUCCESS'
+export const SEARCH_FAILURE = 'SEARCH_FAILURE'
+
+export const searchRequest = (query) => ({
+  type: SEARCH_REQUEST,
+  payload: { query },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const searchSuccess = (response, meta) => ({
+  type: SEARCH_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const searchFailure = (error, meta) => ({
+  type: SEARCH_FAILURE,
+  payload: error,
+  meta,
+})

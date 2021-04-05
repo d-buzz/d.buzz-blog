@@ -72,6 +72,10 @@ import {
   GET_SEARCH_TAG_REQUEST,
   getSearchTagsSuccess,
   getSearchTagFailure,
+
+  SEARCH_REQUEST,
+  searchSuccess,
+  searchFailure,
 } from './actions'
 
 import {
@@ -95,6 +99,9 @@ import {
   broadcastVote,
   generateReplyOperation,
   searchPostTags,
+  searchPostAuthor,
+  searchPostGeneral,
+  searchPeople,
 } from 'services/api'
 import { createPatch, errorMessageComposer } from 'services/helper'
 import moment from 'moment'
@@ -695,6 +702,30 @@ function* getSearchTags(payload, meta) {
   }
 }
 
+function* searchRequest(payload, meta) {
+  try {
+    let { query } = payload
+    let results = []
+
+    if(`${query}`.match(/^@/g)) {
+      query = `${query}`.replace('@', '')
+      results = yield call(searchPostAuthor, query)
+    }else if(`${query}`.match(/^#/g)) {
+      query = `${query}`.replace('#', '')
+      results = yield call(searchPostTags, query)
+    } else {
+      results = yield call(searchPostGeneral, query)
+    }
+
+    const profile = yield call(searchPeople, query)
+    results.people = profile.reputations
+
+    yield put(searchSuccess(results, meta))
+  } catch(error) {
+    yield put(searchFailure(error, meta))
+  }
+}
+
 function* watchUpvoteRequest({ payload, meta }) {
   yield call(upvoteRequest, payload, meta)
 }
@@ -759,6 +790,10 @@ function* watchGetSearchTags({ payload, meta }) {
   yield call(getSearchTags, payload, meta)
 }
 
+function* watchSearchRequest({ payload, meta }) {
+  yield call(searchRequest, payload, meta)
+}
+
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
@@ -776,4 +811,5 @@ export default function* sagas() {
   yield takeEvery(UPVOTE_REQUEST, watchUpvoteRequest)
   yield takeEvery(PUBLISH_REPLY_REQUEST, watchPublishReplyRequest)
   yield takeEvery(GET_SEARCH_TAG_REQUEST, watchGetSearchTags)
+  yield takeEvery(SEARCH_REQUEST, watchSearchRequest)
 }

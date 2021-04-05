@@ -750,3 +750,122 @@ export const searchPostTags = (tag) => {
     })
   })
 }
+
+export const searchPostAuthor = (author) => {
+  return new Promise(async(resolve, reject) => {
+    const body = { author }
+
+    axios({
+      method: 'POST',
+      url: `${searchUrl}/author`,
+      data: body,
+    }).then(async(result) => {
+      const data = result.data
+
+      if(data.results.length !== 0) {
+        const getProfiledata = mapFetchProfile(data.results, false)
+        await Promise.all([getProfiledata])
+        data.results = data.results.filter((item) => item.body.length <= 280)
+      }
+
+      resolve(data)
+    }).catch((error) => {
+      reject(error)
+    })
+
+  })
+}
+
+export const mapFetchProfile = (data, checkFollow = false) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      let count = 0
+      const uniqueAuthors = [ ...new Set(data.map(item => item.author)) ]
+      let profiles = []
+
+      uniqueAuthors.forEach((item, index) => {
+        const profileVisited = visited.filter((profile) => profile.name === item)
+        if(profileVisited.length !== 0) {
+          profiles.push(profileVisited[0])
+          uniqueAuthors.splice(index, 1)
+        }
+      })
+
+      let profilesFetch = []
+
+      if(uniqueAuthors.length !== 0) {
+        profilesFetch = await fetchProfile(uniqueAuthors, checkFollow)
+      }
+
+      profiles = [...profiles, ...profilesFetch]
+
+      data.forEach(async(item, index) => {
+        const info = profiles.filter((profile) => profile.name === item.author)
+        data[index].profile = info[0]
+
+        if(count === (data.length - 1)) {
+          resolve(true)
+        }
+
+        count += 1
+      })
+    } catch(error) {
+      reject(error)
+    }
+  })
+}
+
+export const searchPostGeneral = (query) => {
+  return new Promise(async(resolve, reject) => {
+    const body = { query }
+
+    axios({
+      method: 'POST',
+      url: `${searchUrl}/query`,
+      data: body,
+    }).then(async(result) => {
+      const data = result.data
+
+      if(data.results.length !== 0) {
+        const getProfiledata = mapFetchProfile(data.results, false)
+        await Promise.all([getProfiledata])
+        data.results = data.results.filter((item) => item.body.length <= 280)
+      }
+
+      resolve(data)
+    }).catch((error) => {
+      reject(error)
+    })
+
+  })
+}
+
+export const searchPeople = (username) => {
+  return new Promise((resolve, reject) => {
+    const params = { account_lower_bound: username, limit: 30 }
+
+    api.call('reputation_api.get_account_reputations', params, async(err, data) => {
+      if (err) {
+        reject(err)
+      }else {
+
+        if(data.reputations.length !== 0) {
+          data.reputations.forEach((item, index) => {
+            let score = item.reputation ? formatter.reputation(item.reputation) : 25
+            if(!score || score < 25) {
+              score = 25
+            }
+            data.reputations[index].repscore = score
+            data.reputations[index].author = item.account
+          })
+
+          const getProfiledata = mapFetchProfile(data.reputations)
+          await Promise.all([getProfiledata])
+        }
+
+        resolve(data)
+      }
+    })
+
+  })
+}
