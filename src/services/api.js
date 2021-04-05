@@ -703,3 +703,29 @@ export const generateClearNotificationOperation = (username, lastNotification) =
     resolve(operation)
   })
 }
+
+export const getAccountNotifications = async(account) => {
+  return new Promise((resolve, reject) => {
+    const params = { account, limit:100 }
+    api.call('bridge.account_notifications', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
+export const getUnreadNotificationsCount = async(account) => {
+  return new Promise((resolve, reject) => {
+    const params = { account }
+    api.call('bridge.unread_notifications', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
