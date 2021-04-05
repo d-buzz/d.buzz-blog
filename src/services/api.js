@@ -869,3 +869,12 @@ export const searchPeople = (username) => {
 
   })
 }
+
+export const getMutePattern = () => {
+  return new Promise((resolve) => {
+    axios.get('https://d.buzz/pattern.json')
+      .then(function (result) {
+        resolve(result.data)
+      })
+  })
+}
