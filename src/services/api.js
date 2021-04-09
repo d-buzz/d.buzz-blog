@@ -477,7 +477,7 @@ export const createMeta = (tags = []) => {
   const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
 
   const meta = {
-    app: `d-buzz.blog/${appConfig.VERSION}`,
+    app: `D.Buzz Blog/${appConfig.VERSION}`,
     tags: uniqueTags,
   }
 
