@@ -311,6 +311,7 @@ export const fetchContent = (author, permlink) => {
     api.getContentAsync(author, permlink)
       .then(async(result) => {
         result.body = result.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+        result.body = result.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
         const profile = await fetchProfile([result.author])
         result.profile = profile[0]
         resolve(result)
