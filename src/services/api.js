@@ -237,6 +237,8 @@ export const removeFootNote = (data) => {
   return data.forEach((item) => {
     item.body = item.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
     item.body = item.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz Blog</a>', '')
   })
 }
 
@@ -361,8 +363,10 @@ export const fetchDiscussions = (author, permlink) => {
               content = item
             }
 
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz</a>', '')
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz Blog</a>', '')
 
             if(content.replies.length !== 0) {
               const child = getChildren(content)
@@ -742,7 +746,7 @@ export const searchPostTags = (tag) => {
     }).then(async(result) => {
       const data = result.data
 
-      // removeFootNote(data.results)
+      removeFootNote(data.results)
 
       resolve(data)
     }).catch((error) => {
