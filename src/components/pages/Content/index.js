@@ -52,6 +52,16 @@ const useStyles = createUseStyles(theme => ({
     '& iframe': {
       borderRadius: 5,
     },
+    '@media screen and (max-width: 500px)': {
+      fontWidth: 15,
+      width: '90%',
+    },
+    '@media screen and (max-width: 650px )': {
+      width: '90%',
+    },
+    '@media screen and (max-width: 750px )': {
+      width: '90%',
+    },
   },
   full: {
     width: '100%',
@@ -355,11 +365,11 @@ const Content = (props) => {
                     </div>
                   </Col>
                 </Row>
-                <div onClick={handleClickContent}>
+                <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
                   )}
-                  <h3>{title}</h3> &nbsp;
+                  <strong>{title}</strong>
                   <MarkdownViewer content={originalContent} minifyAssets={false} />
                 </div>
                 <PostTags meta={meta} />
