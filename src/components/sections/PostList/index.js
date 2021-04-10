@@ -376,7 +376,7 @@ const PostList = React.memo((props) => {
                  
                   {!muted && !opacityActivated && disableOpacity && (
                     <div onClick={handleOpenContent}>
-                      <h6 className={classes.title}>{title}</h6>
+                      <strong className={classes.title}>{title}</strong>
                       {isContentRoute && (
                         <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
                       )}
