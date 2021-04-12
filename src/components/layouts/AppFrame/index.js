@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, GuardedAppFrame, UnguardedAppFrame, ReplyFormModal, NotificationBox } from 'components'
+import { AppBar, GuardedAppFrame, UnguardedAppFrame, MobileAppFrame, ReplyFormModal, NotificationBox } from 'components'
 import { createUseStyles } from 'react-jss'
 import { useLocation } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
@@ -74,15 +74,7 @@ const AppFrame = (props) => {
         </Container>
       )}
       {isMobile && (
-        <center>
-          <h1 style={{ paddingTop: 50 }}>
-             In Development...
-          </h1>
-          <br />
-          <br />
-          <br />
-          <img src="https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif" alt="" width={200} />
-        </center>
+        <MobileAppFrame />
       )}
       <ReplyFormModal />
       <NotificationBox />
