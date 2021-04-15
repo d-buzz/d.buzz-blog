@@ -105,7 +105,7 @@ const UserDialog = React.memo((props) => {
   const [reputation, setReputation] = useState(0)
   const [anchorEl, setAnchor] = useState(null)
   const [author, setAuthor] = useState('')
-  const { username, is_authenticated } = user
+  const { username, isAuthenticated } = user
   const [shouldStayOpen, setShouldStayOpen] = useState(false)
   const [hasRecentlyFollowed, setHasRecentlyFollowed] = useState(false)
   const [hasRecentlyUnfollowed, setHasRecentlyUnfollowed] = useState(false)
@@ -246,7 +246,7 @@ const UserDialog = React.memo((props) => {
           vertical: 'top',
           horizontal: 'left',
         }}
-        disableScrollLock={!is_authenticated}
+        disableScrollLock={!isAuthenticated}
         PaperProps={{ onMouseEnter, onMouseLeave }}
         onClose={onMouseLeave}
       >
@@ -261,7 +261,7 @@ const UserDialog = React.memo((props) => {
                 </Col>
                 <Col>
                   <div className={classes.right}>
-                    {is_authenticated && (
+                    {isAuthenticated && (
                       <React.Fragment>
                         {((!isFollowed && !hasRecentlyFollowed) || hasRecentlyUnfollowed) && (username !== author) && (
                           <ContainedButton
