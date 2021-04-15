@@ -28,7 +28,7 @@ const AccountPosts = (props) => {
     <React.Fragment>
       {/* {!muted && ( */}
         <React.Fragment>
-          <InfiniteList disableOpacity={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.is_authenticated}/>
+          <InfiniteList disableOpacity={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.isAuthenticated}/>
           {(!loading && items.length === 0) &&
           (<center><br/><h6>No Buzz's from @{author}</h6></center>)}
         </React.Fragment>
