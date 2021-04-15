@@ -30,7 +30,7 @@ const AccountComments = (props) => {
     <React.Fragment>
       {!muted && (
         <React.Fragment>
-          <InfiniteList title={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.is_authenticated}/>
+          <InfiniteList title={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.isAuthenticated}/>
           {(!loading && items.length === 0) &&
           (<center><br/><h6>No comments from @{author}</h6></center>)}
         </React.Fragment>
