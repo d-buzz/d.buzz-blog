@@ -63,7 +63,10 @@ const AppFrame = (props) => {
         </Container>
       )}
       {isMobile && (
-        <MobileAppFrame />
+        <React.Fragment>
+          <AppBar />
+          <MobileAppFrame />
+        </React.Fragment>
       )}
       <ReplyFormModal />
       <NotificationBox />
