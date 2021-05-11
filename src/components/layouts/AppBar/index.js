@@ -46,6 +46,11 @@ const useStyles = createUseStyles(theme => ({
     backgroundColor: theme.nav.background,
     borderBottom: theme.border.primary,
   },
+  mobileNav: {
+    height: 55,
+    backgroundColor: theme.nav.background,
+    borderBottom: theme.border.primary,
+  },
   search: {
     width: '60%',
     paddingLeft: 5,
@@ -160,6 +165,12 @@ const AppBar = (props) => {
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
 
+  let navbarContainer = classes.nav
+
+  if (isMobile) {
+    navbarContainer = classes.mobileNav
+  }
+
   useEffect(() => {
     pollNotifRequest()
     // eslint-disable-next-line
@@ -251,7 +262,7 @@ const AppBar = (props) => {
 
   return (
     <React.Fragment>
-      <Navbar fixed="top" className={classes.nav}>
+      <Navbar fixed="top" className={navbarContainer}>
         <Container>
           <Navbar.Brand>
             {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
@@ -263,8 +274,18 @@ const AppBar = (props) => {
               </React.Fragment>
             )}
             <Link to="/">
-              {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
-              {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
+              {!isMobile && (
+                <React.Fragment>
+                  {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
+                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
+                </React.Fragment>
+              )}
+              {isMobile && (
+                <React.Fragment>
+                  {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
+                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
+                </React.Fragment>
+              )}
             </Link>
           </Navbar.Brand>
           {!isMobile && (
