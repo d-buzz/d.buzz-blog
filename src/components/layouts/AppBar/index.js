@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import Badge from '@material-ui/core/Badge'
 import classNames from 'classnames'
 import CreateIcon from '@material-ui/icons/Create';
+import queryString from 'query-string'
 import { 
   Avatar,
   BrandIcon, 
@@ -41,6 +42,7 @@ import { signoutUserRequest } from 'store/auth/actions'
 import { useLastLocation } from 'react-router-last-location'
 import { pending } from 'redux-saga-thunk'
 import { pollNotifRequest } from 'store/polling/actions'
+import { searchRequest, clearSearchPosts } from 'store/posts/actions'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -161,6 +163,8 @@ const AppBar = (props) => {
     signoutUserRequest, 
     loadingAccount, 
     pollNotifRequest, 
+    searchRequest,
+    clearSearchPosts,
     count = 0,
   } = props
   const { isAuthenticated } = user
@@ -169,12 +173,16 @@ const AppBar = (props) => {
   const location = useLocation()
   const { pathname } = location
   const { username } = user
+  const params = queryString.parse(location.search) || ''
+  const query = params.q === undefined ? '' : params.q
 
   const minify = false // set value for testing...
   const [open, setOpen] = useState(false)
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
+  const [disableSearchTips, setDisableSearchTips] = useState(false)
+  const [searchkey, setSearchkey] = useState(query)
 
   let navbarContainer = classes.nav
 
@@ -273,6 +281,21 @@ const AppBar = (props) => {
 
   const handleClickSearchButton = () => {
     history.push(`/search/posts?q=`)
+  }
+
+  const handleSearchKey = (e) => {
+    if(e.key === 'Enter') {
+      clearSearchPosts()
+      searchRequest(searchkey)
+      setDisableSearchTips(true)
+      history.push(`/search/posts?q=${encodeURIComponent(searchkey)}`)
+    }
+  }
+
+  const onChangeSearch = (e) => {
+    const { target } = e
+    const { value } = target
+    setSearchkey(value)
   }
 
   return (
@@ -417,72 +440,95 @@ const AppBar = (props) => {
           {isMobile && isAuthenticated && (
             <div className={classes.mobileContainer}>
               <div>
-                <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                  <CreateIcon fontSize="medium" />
-                </IconButton>
-                <IconButton onClick={handleClickSearchButton} size="medium">
-                    <SearchIcon/>
-                  </IconButton>
+                {title !== 'Search' && (
+                  <React.Fragment>
+                    <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                      <CreateIcon fontSize="medium" />
+                    </IconButton>
+                    <IconButton onClick={handleClickSearchButton} size="medium">
+                      <SearchIcon/>
+                    </IconButton>
+                  </React.Fragment>
+                )}
                 <Menu>
-
-                  <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
-                    <Avatar height={33} author={username} />
-                  </MenuButton>
-                  <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
-                    <MenuLink  
-                      style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
-                      as={Link}
-                      to={`/@${username}`}
-                    >
-                      <div>
-                        <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
-                        <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
-                        <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
-                          <span style={{ fontSize: 13 }}>See your Profile</span>
+                {title === 'Search' && (
+                  <div className={classes.searchDiv}>
+                    <SearchField
+                      disableTips={disableSearchTips}
+                      iconTop={-2}
+                      searchWrapperClass={classes.searchWrapper}
+                      style={{ fontSize: 16, height: 35 }}
+                      value={searchkey}
+                      onKeyDown={handleSearchKey}
+                      onChange={onChangeSearch}
+                      placeholder="Search D.Buzz"
+                      autoFocus
+                    />
+                  </div>
+                )}
+                {title !== 'Search' && (
+                  <React.Fragment>
+                    <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                      <Avatar height={33} author={username} />
+                    </MenuButton>
+                    <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                      <MenuLink  
+                        style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                        as={Link}
+                        to={`/@${username}`}
+                      >
+                        <div>
+                          <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                          <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                          <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                            <span style={{ fontSize: 13 }}>See your Profile</span>
+                          </div>
                         </div>
-                      </div>
-                    </MenuLink>
-                    <MenuLink
-                      as={Link}
-                      to="/"
-                    >
-                      <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
-                    </MenuLink>
-                    <MenuLink 
-                      as={Link}
-                      to="/trending"
-                    >
-                      <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
-                    </MenuLink>
-                    <MenuLink 
-                      as={Link}
-                      to="/latest"
-                    >
-                      <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
-                    </MenuLink>
-                    <MenuLink 
-                      as={Link}
-                      to="/notifications"
-                    >
-                      <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
-                      <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
-                    </MenuLink>
-                    <MenuLink 
-                      onSelect={handleClickOpenUserSettingsModal}
-                    >
-                      <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
-                    </MenuLink>
-                    <MenuLink 
-                      onSelect={handleClickOpenSwitchAccountModal}
-                    >
-                      <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
-                    </MenuLink>
-                    <MenuLink 
-                      onSelect={handleClickLogout}
-                    > 
-                      <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
-                    </MenuLink>
-                  </MenuList>
+                      </MenuLink>
+                      <MenuLink
+                        as={Link}
+                        to="/"
+                      >
+                        <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                      </MenuLink>
+                      <MenuLink 
+                        as={Link}
+                        to="/trending"
+                      >
+                        <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                      </MenuLink>
+                      <MenuLink 
+                        as={Link}
+                        to="/latest"
+                      >
+                        <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                      </MenuLink>
+                      <MenuLink 
+                        as={Link}
+                        to="/notifications"
+                      >
+                        <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                        <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                      </MenuLink>
+                      <MenuLink 
+                        onSelect={handleClickOpenUserSettingsModal}
+                      >
+                        <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                      </MenuLink>
+                      <MenuLink 
+                        onSelect={handleClickOpenSwitchAccountModal}
+                      >
+                        <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                      </MenuLink>
+                      <MenuLink 
+                        onSelect={handleClickLogout}
+                      > 
+                        <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                      </MenuLink>
+                    </MenuList>
+                  </React.Fragment>
+                )}
+                  
                 </Menu>
               </div>
               
@@ -521,6 +567,8 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
     pollNotifRequest, 
+    searchRequest,
+    clearSearchPosts,
   }, dispatch),
 })
 
