@@ -46,19 +46,18 @@ const MobileAppFrame = (props) => {
   } else if (pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isContentRoute = true
   }
+  
   return (
     <React.Fragment>
       <Row>
         {!isProfileRoute && !isContentRoute && (
-          <React.Fragment>
-            <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-                <React.Fragment>
-                  {renderRoutes(route.routes)}
-                </React.Fragment>
-              </div>
-            </Col>
-          </React.Fragment>
+          <Col className={classes.clearPadding}>
+            <div style={{ paddingTop: 60, marginTop: 20, paddingRight: 0 }} className={classes.main}>
+              <React.Fragment>
+                {renderRoutes(route.routes)}
+              </React.Fragment>
+            </div>
+          </Col>
         )}
         {isProfileRoute && (
           <Col className={classes.clearPadding}>
