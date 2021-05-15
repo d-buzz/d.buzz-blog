@@ -88,7 +88,7 @@ const SearchField = (props) => {
         onChange={onChange}
         {...otherProps}
       />
-      {!disableTips && (<SearchTips show={openTips || search} className={classes.searchTips} />)}
+      {!disableTips && !isMobile && (<SearchTips show={openTips || search} className={classes.searchTips} />)}
     </React.Fragment>
   )
 }
