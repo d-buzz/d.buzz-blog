@@ -65,7 +65,7 @@ const AppFrame = (props) => {
       {isMobile && (
         <React.Fragment>
           <AppBar />
-          <MobileAppFrame />
+          <MobileAppFrame pathname={pathname} route={route} />
         </React.Fragment>
       )}
       <ReplyFormModal />

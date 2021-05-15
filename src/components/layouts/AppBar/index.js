@@ -9,6 +9,7 @@ import {
   BrandIcon, 
   BrandDarkIcon, 
   BackArrowIcon,  
+  SearchIcon,
 } from 'components/elements'
 import { createUseStyles } from 'react-jss'
 import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
@@ -270,6 +271,10 @@ const AppBar = (props) => {
     }
   }, [loadingAccount])
 
+  const handleClickSearchButton = () => {
+    history.push(`/search/posts?q=`)
+  }
+
   return (
     <React.Fragment>
       <Navbar fixed="top" className={navbarContainer}>
@@ -415,66 +420,70 @@ const AppBar = (props) => {
                 <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
                   <CreateIcon fontSize="medium" />
                 </IconButton>
+                <IconButton onClick={handleClickSearchButton} size="medium">
+                    <SearchIcon/>
+                  </IconButton>
                 <Menu>
-                <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
-                  <Avatar height={40} author={username} />
-                </MenuButton>
-                <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
-                  <MenuLink  
-                    style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
-                    as={Link}
-                    to={`/@${username}`}
-                  >
-                    <div>
-                      <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
-                      <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
-                      <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
-                        <span style={{ fontSize: 13 }}>See your Profile</span>
+
+                  <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                    <Avatar height={33} author={username} />
+                  </MenuButton>
+                  <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                    <MenuLink  
+                      style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                      as={Link}
+                      to={`/@${username}`}
+                    >
+                      <div>
+                        <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                        <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                        <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                          <span style={{ fontSize: 13 }}>See your Profile</span>
+                        </div>
                       </div>
-                    </div>
-                  </MenuLink>
-                  <MenuLink
-                    as={Link}
-                    to="/"
-                  >
-                    <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/trending"
-                  >
-                    <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/latest"
-                  >
-                    <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/notifications"
-                  >
-                    <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
-                    <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickOpenUserSettingsModal}
-                  >
-                    <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickOpenSwitchAccountModal}
-                  >
-                    <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickLogout}
-                  > 
-                    <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
-                  </MenuLink>
-                </MenuList>
-              </Menu>
+                    </MenuLink>
+                    <MenuLink
+                      as={Link}
+                      to="/"
+                    >
+                      <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                    </MenuLink>
+                    <MenuLink 
+                      as={Link}
+                      to="/trending"
+                    >
+                      <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                    </MenuLink>
+                    <MenuLink 
+                      as={Link}
+                      to="/latest"
+                    >
+                      <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                    </MenuLink>
+                    <MenuLink 
+                      as={Link}
+                      to="/notifications"
+                    >
+                      <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                      <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                    </MenuLink>
+                    <MenuLink 
+                      onSelect={handleClickOpenUserSettingsModal}
+                    >
+                      <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                    </MenuLink>
+                    <MenuLink 
+                      onSelect={handleClickOpenSwitchAccountModal}
+                    >
+                      <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                    </MenuLink>
+                    <MenuLink 
+                      onSelect={handleClickLogout}
+                    > 
+                      <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                    </MenuLink>
+                  </MenuList>
+                </Menu>
               </div>
               
               
