@@ -15,10 +15,10 @@ const useStyles = createUseStyles(theme => ({
       border: 'none',
     },
     '@media (max-width: 900px)': {
-      width: '97% !important',
+      width: '100% !important',
       '& div.modal-content': {
         margin: '0 auto',
-        width: '97% !important',
+        width: '100% !important',
       },
     },
   },

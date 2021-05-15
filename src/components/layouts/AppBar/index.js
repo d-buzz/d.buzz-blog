@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Badge from '@material-ui/core/Badge'
 import classNames from 'classnames'
+import CreateIcon from '@material-ui/icons/Create';
 import { 
   Avatar,
   BrandIcon, 
@@ -67,6 +68,9 @@ const useStyles = createUseStyles(theme => ({
     whiteSpace: 'nowrap',
     paddingLeft: 15,
   },
+  mobileContainer: {
+    padding: 5,
+  },
   leftAdjust: {
     marginLeft: 7,
   },
@@ -88,6 +92,12 @@ const useStyles = createUseStyles(theme => ({
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 5,
+  },
+  mobileProfileAvatar: {
+    display: 'table-cell', 
+    width: 'auto', 
+    height: '100%', 
+    border: 'none',
   },
   buzzButton: {
     borderRadius: 35,
@@ -398,6 +408,77 @@ const AppBar = (props) => {
               )}
               
             </React.Fragment>
+          )}
+          {isMobile && isAuthenticated && (
+            <div className={classes.mobileContainer}>
+              <div>
+                <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                  <CreateIcon fontSize="medium" />
+                </IconButton>
+                <Menu>
+                <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                  <Avatar height={40} author={username} />
+                </MenuButton>
+                <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                  <MenuLink  
+                    style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                    as={Link}
+                    to={`/@${username}`}
+                  >
+                    <div>
+                      <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                      <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                      <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                        <span style={{ fontSize: 13 }}>See your Profile</span>
+                      </div>
+                    </div>
+                  </MenuLink>
+                  <MenuLink
+                    as={Link}
+                    to="/"
+                  >
+                    <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/trending"
+                  >
+                    <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/latest"
+                  >
+                    <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/notifications"
+                  >
+                    <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                    <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickOpenUserSettingsModal}
+                  >
+                    <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickOpenSwitchAccountModal}
+                  >
+                    <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickLogout}
+                  > 
+                    <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                  </MenuLink>
+                </MenuList>
+              </Menu>
+              </div>
+              
+              
+            </div>
           )}
           {!isAuthenticated && (
             <div className={classes.buttons}>
