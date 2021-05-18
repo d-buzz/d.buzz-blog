@@ -7,7 +7,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useWindowDimensions } from 'services/helper'
 import { useLocation } from 'react-router-dom'
-import { isMobile } from 'react-device-detect'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -67,7 +66,7 @@ const GuardedAppFrame = (props) => {
   return (
     <React.Fragment>
       <Row>
-        {!isProfileRoute && !isContentRoute && !isMobile && (
+        {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
               <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
@@ -89,7 +88,7 @@ const GuardedAppFrame = (props) => {
             )}
           </React.Fragment>
         )}
-        {isProfileRoute && !isMobile && (
+        {isProfileRoute && (
           <Col className={classes.clearPadding}>
             <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
               <React.Fragment>
