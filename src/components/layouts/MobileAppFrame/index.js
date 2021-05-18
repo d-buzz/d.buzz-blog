@@ -1,58 +1,327 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { bindActionCreators } from 'redux'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import { useLastLocation } from 'react-router-last-location'
+import CreateIcon from '@material-ui/icons/Create'
+import { pending } from 'redux-saga-thunk'
+import queryString from 'query-string'
+import { searchRequest, clearSearchPosts } from 'store/posts/actions'
+import HomeIcon from '@material-ui/icons/Home'
+import TrendingUpIcon from '@material-ui/icons/TrendingUp'
+import UpdateIcon from '@material-ui/icons/Update'
+import SettingsIcon from '@material-ui/icons/Settings'
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
+import Badge from '@material-ui/core/Badge'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
+import { signoutUserRequest } from 'store/auth/actions'
+import { 
+  Avatar,
+  BrandIcon, 
+  BrandDarkIcon, 
+  BackArrowIcon,  
+  SearchIcon,
+} from 'components/elements'
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuLink,
+} from '@reach/menu-button'
+import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
+import { 
+  Button, 
+  Hidden,
+  IconButton,
+} from '@material-ui/core'
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import { isMobile } from 'react-device-detect'
 import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 const useStyles = createUseStyles(theme => ({
   main: {
     minHeight: '100vh',
-  },
-  inner: {
-    width: '98%',
     margin: '0 auto',
   },
-  nav: {
-    borderBottom: '1px solid #e6ecf0',
-    borderLeft: '1px solid #e6ecf0',
-    borderRight: '1px solid #e6ecf0',
-    backgroundColor: 'white',
-    zIndex: 2,
-    overflow: 'hidden',
-    width: '100%',
+  mobileNav: {
+    height: 55,
+    backgroundColor: theme.nav.background,
+    borderBottom: theme.border.primary,
   },
-  trendingWrapper: {
-    width: '100%',
-    minHeight: '100vh',
-    border: '1px solid #e6ecf0',
+  backButton: {
+    display: 'inline-block',
+    ...theme.icon,
   },
   clearPadding: {
     paddingLeft: 0,
     paddingRight: 0,
   },
+  menulistWrapper: {
+    display: 'block',
+    whiteSpace: 'nowrap',
+    borderRadius: 5,
+    background: 'hsla(0, 100%, 100%, 0.99)',
+    outline: 'none',
+    padding: '1rem 0',
+    fontSize: '85%',
+    cursor: 'pointer',
+    '& a': {
+      display: 'block',
+      color: 'inherit',
+      font: 'inherit',
+      textDecoration: 'initial',
+      padding: '5px 20px',
+      '&:hover': {
+        backgroundColor: '#f5f8fa',
+      },
+    },
+  },
 }))
 
 const MobileAppFrame = (props) => {
+  const { 
+    route, 
+    theme,
+    user,
+    signoutUserRequest,
+    loadingAccount, 
+    pollNotifRequest, 
+    searchRequest,
+    clearSearchPosts,
+    count = 0,
+   } = props
+   const { username } = user
+  const { mode } = theme
+  const lastLocation = useLastLocation()
+  const history = useHistory()
+  const classes = useStyles()
   const location = useLocation()
   const { pathname } = location
-  const classes = useStyles()
-  const { route } = props
+  const params = queryString.parse(location.search) || ''
+  const query = params.q === undefined ? '' : params.q
+  const [openBuzzModal, setOpenBuzzModal] = useState(false)
+  const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
+  const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
+  const [disableSearchTips, setDisableSearchTips] = useState(false)
+  const [searchkey, setSearchkey] = useState(query)
   let isProfileRoute = false
   let isContentRoute = false
+
+  const handleClickOpenBuzzModal = () => {
+    setOpenBuzzModal(true)
+  }
+
+  const handleClickCloseBuzzModal = () => {
+    setOpenBuzzModal(false)
+  }
+
+  const handleClickBackButton = () => {
+    if(!lastLocation) {
+      history.replace('/')
+    } else {
+      history.goBack()
+    }
+  }
+
+  const handleClickSearchButton = () => {
+    history.push(`/search/posts?q=`)
+  }
+
+  const handleSearchKey = (e) => {
+    if(e.key === 'Enter') {
+      clearSearchPosts()
+      searchRequest(searchkey)
+      setDisableSearchTips(true)
+      history.push(`/search/posts?q=${encodeURIComponent(searchkey)}`)
+    }
+  }
+
+  const onChangeSearch = (e) => {
+    const { target } = e
+    const { value } = target
+    setSearchkey(value)
+  }
+
+  const handleClickOpenUserSettingsModal = () => {
+    setOpenUserSettingsModal(true)
+  }
+
+  const handleClickCloseUserSettingsModal = () => {
+    setOpenUserSettingsModal(false)
+  }
+
+  const handleClickOpenSwitchAccountModal = () => {
+    setOpenSwitchAccountModal(true)
+  }
+
+  const handleClickCloseSwitchAccountModal = () => {
+    setOpenSwitchAccountModal(false)
+  }
+
+  const handleClickLogout = () => {
+    signoutUserRequest()
+  }
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
   } else if (pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isContentRoute = true
   }
+
+  let title = 'Home'
+
+  if(pathname.match(/(\/c\/)/)) {
+    title = 'Buzz'
+  }
+
+  if(pathname.match(/^\/trending/)) {
+    title = 'Trending'
+  }
+
+  if(pathname.match(/^\/latest/)) {
+    title = 'Latest'
+  }
+
+  if(!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
+    title = 'Profile'
+  }
+
+  if(pathname.match(/(\/notifications)/)) {
+    title = 'Notifications'
+  }
+
+  if(pathname.match(/(\/tags?)/)) {
+    title = 'Tags'
+  }
+
+  if(pathname.match(/(\/search?)/)) {
+    title = 'Search'
+  }
   
   return (
     <React.Fragment>
+      <Navbar fixed="top" className={classes.mobileNav}>
+        <Container>
+          <Navbar.Brand>
+            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
+              <React.Fragment>
+                <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
+                  <BackArrowIcon />
+                </IconButton>
+                &nbsp;
+              </React.Fragment>
+            )}
+            <Link to="/">
+              <React.Fragment>
+                {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
+                {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
+              </React.Fragment>
+            </Link>
+          </Navbar.Brand>
+          <div>
+            {title !== 'Search' && (
+              <React.Fragment>
+                <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                  <CreateIcon fontSize="medium" />
+                </IconButton>
+                <IconButton onClick={handleClickSearchButton} size="medium">
+                  <SearchIcon/>
+                </IconButton>
+              </React.Fragment>
+            )}
+            <Menu>
+            {title === 'Search' && (
+              <div className={classes.searchDiv}>
+                <SearchField
+                  disableTips={disableSearchTips}
+                  iconTop={-2}
+                  searchWrapperClass={classes.searchWrapper}
+                  style={{ fontSize: 16, height: 35 }}
+                  value={searchkey}
+                  onKeyDown={handleSearchKey}
+                  onChange={onChangeSearch}
+                  placeholder="Search D.Buzz"
+                  autoFocus
+                />
+              </div>
+            )}
+            {title !== 'Search' && (
+              <React.Fragment>
+                <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                  <Avatar height={33} author={username} />
+                </MenuButton>
+                <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                  <MenuLink  
+                    style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                    as={Link}
+                    to={`/@${username}`}
+                  >
+                    <div>
+                      <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                      <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                      <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                        <span style={{ fontSize: 13 }}>See your Profile</span>
+                      </div>
+                    </div>
+                  </MenuLink>
+                  <MenuLink
+                    as={Link}
+                    to="/"
+                  >
+                    <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/trending"
+                  >
+                    <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/latest"
+                  >
+                    <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                  </MenuLink>
+                  <MenuLink 
+                    as={Link}
+                    to="/notifications"
+                  >
+                    <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                    <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickOpenUserSettingsModal}
+                  >
+                    <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickOpenSwitchAccountModal}
+                  >
+                    <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                  </MenuLink>
+                  <MenuLink 
+                    onSelect={handleClickLogout}
+                  > 
+                    <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                  </MenuLink>
+                </MenuList>
+              </React.Fragment>
+            )}
+              
+            </Menu>
+          </div>
+        </Container>
+        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+      </Navbar>
       <Row>
         {!isProfileRoute && !isContentRoute && (
           <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20, paddingRight: 0 }} className={classes.main}>
+            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
               <React.Fragment>
                 {renderRoutes(route.routes)}
               </React.Fragment>
@@ -75,6 +344,7 @@ const MobileAppFrame = (props) => {
                 {renderRoutes(route.routes)}
               </React.Fragment>
             </div>
+  
           </Col>
         )}
       </Row>
@@ -82,4 +352,17 @@ const MobileAppFrame = (props) => {
   )
 }
 
-export default MobileAppFrame
+const mapStateToProps = (state) => ({
+  theme: state.settings.get('theme'),
+  user: state.auth.get('user'),
+  count: state.polling.get('count'),
+  loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    clearSearchPosts,
+  }, dispatch),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps) (MobileAppFrame)
