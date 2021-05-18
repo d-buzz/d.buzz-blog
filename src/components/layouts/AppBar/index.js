@@ -71,9 +71,6 @@ const useStyles = createUseStyles(theme => ({
     whiteSpace: 'nowrap',
     paddingLeft: 15,
   },
-  mobileContainer: {
-    padding: 5,
-  },
   leftAdjust: {
     marginLeft: 7,
   },
@@ -438,7 +435,6 @@ const AppBar = (props) => {
             </React.Fragment>
           )}
           {isMobile && isAuthenticated && (
-            <div className={classes.mobileContainer}>
               <div>
                 {title !== 'Search' && (
                   <React.Fragment>
@@ -532,8 +528,6 @@ const AppBar = (props) => {
                 </Menu>
               </div>
               
-              
-            </div>
           )}
           {!isAuthenticated && (
             <div className={classes.buttons}>
