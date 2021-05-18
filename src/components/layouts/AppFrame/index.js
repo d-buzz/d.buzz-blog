@@ -64,7 +64,6 @@ const AppFrame = (props) => {
       )}
       {isMobile && (
         <React.Fragment>
-          <AppBar />
           <MobileAppFrame pathname={pathname} route={route} />
         </React.Fragment>
       )}
