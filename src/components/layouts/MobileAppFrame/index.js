@@ -357,36 +357,38 @@ const MobileAppFrame = (props) => {
         <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
         <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
       </Navbar>
-      <Row>
-        {!isProfileRoute && !isContentRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-          </Col>
-        )}
-        {isProfileRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-          </Col>
-        )}
-        {isContentRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-  
-          </Col>
-        )}
-      </Row>
+      <div style={{ display: 'flex !important' }}>
+        <Row>
+          {!isProfileRoute && !isContentRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+            </Col>
+          )}
+          {isProfileRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+            </Col>
+          )}
+          {isContentRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+    
+            </Col>
+          )}
+        </Row>
+      </div>
     </React.Fragment>
   )
 }
