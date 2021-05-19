@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { bindActionCreators } from 'redux'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -15,6 +15,8 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
 import Badge from '@material-ui/core/Badge'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
+import { pollNotifRequest } from 'store/polling/actions'
+import { signupHiveOnboard } from 'services/helper'
 import { signoutUserRequest } from 'store/auth/actions'
 import { 
   Avatar,
@@ -32,12 +34,10 @@ import {
 import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
 import { 
   Button, 
-  Hidden,
   IconButton,
 } from '@material-ui/core'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
-import { isMobile } from 'react-device-detect'
 import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
 import { useLocation, useHistory, Link } from 'react-router-dom'
@@ -95,7 +95,7 @@ const MobileAppFrame = (props) => {
     clearSearchPosts,
     count = 0,
    } = props
-   const { username } = user
+  const { username, isAuthenticated } = user
   const { mode } = theme
   const lastLocation = useLastLocation()
   const history = useHistory()
@@ -104,6 +104,7 @@ const MobileAppFrame = (props) => {
   const { pathname } = location
   const params = queryString.parse(location.search) || ''
   const query = params.q === undefined ? '' : params.q
+  const [open, setOpen] = useState(false)
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
@@ -167,6 +168,29 @@ const MobileAppFrame = (props) => {
     signoutUserRequest()
   }
 
+  const handleClickOpenLoginModal = () => {
+    setOpen(true)
+  }
+
+  const handleClickCloseLoginModal = () => {
+    setOpen(false)
+  }
+
+  const handleSignupOnHive = () => {
+    signupHiveOnboard()
+  }
+
+  useEffect(() => {
+    if (!loadingAccount) {
+      setOpen(false)
+    }
+  }, [loadingAccount])
+
+  useEffect(() => {
+    pollNotifRequest()
+    // eslint-disable-next-line
+  }, [])
+
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
   } else if (pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
@@ -224,7 +248,7 @@ const MobileAppFrame = (props) => {
             </Link>
           </Navbar.Brand>
           <div>
-            {title !== 'Search' && (
+            {title !== 'Search' && isAuthenticated && (
               <React.Fragment>
                 <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
                   <CreateIcon fontSize="medium" />
@@ -235,7 +259,7 @@ const MobileAppFrame = (props) => {
               </React.Fragment>
             )}
             <Menu>
-            {title === 'Search' && (
+            {title === 'Search' && isAuthenticated && (
               <div className={classes.searchDiv}>
                 <SearchField
                   disableTips={disableSearchTips}
@@ -250,7 +274,7 @@ const MobileAppFrame = (props) => {
                 />
               </div>
             )}
-            {title !== 'Search' && (
+            {title !== 'Search' && isAuthenticated && (
               <React.Fragment>
                 <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
                   <Avatar height={33} author={username} />
@@ -315,39 +339,56 @@ const MobileAppFrame = (props) => {
               
             </Menu>
           </div>
+          {!isAuthenticated && (
+            <div className={classes.buttons}>
+              <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
+                Sign in
+              </Button>
+              &nbsp;
+              <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
+                Sign up
+              </Button>
+            </div>
+          )}
         </Container>
         <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+        <LoginModal show={open} onHide={handleClickCloseLoginModal} />
+        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+        <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
+        <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
       </Navbar>
-      <Row>
-        {!isProfileRoute && !isContentRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-          </Col>
-        )}
-        {isProfileRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-          </Col>
-        )}
-        {isContentRoute && (
-          <Col className={classes.clearPadding}>
-            <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-              <React.Fragment>
-                {renderRoutes(route.routes)}
-              </React.Fragment>
-            </div>
-  
-          </Col>
-        )}
-      </Row>
+      <div style={{ display: 'flex !important' }}>
+        <Row>
+          {!isProfileRoute && !isContentRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+            </Col>
+          )}
+          {isProfileRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+            </Col>
+          )}
+          {isContentRoute && (
+            <Col className={classes.clearPadding}>
+              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+                <React.Fragment>
+                  {renderRoutes(route.routes)}
+                </React.Fragment>
+              </div>
+    
+            </Col>
+          )}
+        </Row>
+      </div>
     </React.Fragment>
   )
 }
@@ -361,6 +402,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
+    signoutUserRequest,
+    pollNotifRequest, 
+    searchRequest,
     clearSearchPosts,
   }, dispatch),
 })
