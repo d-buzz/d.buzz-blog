@@ -248,7 +248,7 @@ const MobileAppFrame = (props) => {
             </Link>
           </Navbar.Brand>
           <div>
-            {title !== 'Search' && (
+            {title !== 'Search' && isAuthenticated && (
               <React.Fragment>
                 <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
                   <CreateIcon fontSize="medium" />
@@ -259,7 +259,7 @@ const MobileAppFrame = (props) => {
               </React.Fragment>
             )}
             <Menu>
-            {title === 'Search' && (
+            {title === 'Search' && isAuthenticated && (
               <div className={classes.searchDiv}>
                 <SearchField
                   disableTips={disableSearchTips}
@@ -274,7 +274,7 @@ const MobileAppFrame = (props) => {
                 />
               </div>
             )}
-            {title !== 'Search' && (
+            {title !== 'Search' && isAuthenticated && (
               <React.Fragment>
                 <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
                   <Avatar height={33} author={username} />
