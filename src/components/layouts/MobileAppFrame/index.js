@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { bindActionCreators } from 'redux'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -15,6 +15,8 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount'
 import Badge from '@material-ui/core/Badge'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
+import { pollNotifRequest } from 'store/polling/actions'
+import { signupHiveOnboard } from 'services/helper'
 import { signoutUserRequest } from 'store/auth/actions'
 import { 
   Avatar,
@@ -32,12 +34,10 @@ import {
 import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
 import { 
   Button, 
-  Hidden,
   IconButton,
 } from '@material-ui/core'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
-import { isMobile } from 'react-device-detect'
 import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
 import { useLocation, useHistory, Link } from 'react-router-dom'
@@ -95,7 +95,7 @@ const MobileAppFrame = (props) => {
     clearSearchPosts,
     count = 0,
    } = props
-   const { username } = user
+  const { username, isAuthenticated } = user
   const { mode } = theme
   const lastLocation = useLastLocation()
   const history = useHistory()
@@ -104,6 +104,7 @@ const MobileAppFrame = (props) => {
   const { pathname } = location
   const params = queryString.parse(location.search) || ''
   const query = params.q === undefined ? '' : params.q
+  const [open, setOpen] = useState(false)
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
@@ -166,6 +167,29 @@ const MobileAppFrame = (props) => {
   const handleClickLogout = () => {
     signoutUserRequest()
   }
+
+  const handleClickOpenLoginModal = () => {
+    setOpen(true)
+  }
+
+  const handleClickCloseLoginModal = () => {
+    setOpen(false)
+  }
+
+  const handleSignupOnHive = () => {
+    signupHiveOnboard()
+  }
+
+  useEffect(() => {
+    if (!loadingAccount) {
+      setOpen(false)
+    }
+  }, [loadingAccount])
+
+  useEffect(() => {
+    pollNotifRequest()
+    // eslint-disable-next-line
+  }, [])
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -315,8 +339,23 @@ const MobileAppFrame = (props) => {
               
             </Menu>
           </div>
+          {!isAuthenticated && (
+            <div className={classes.buttons}>
+              <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
+                Sign in
+              </Button>
+              &nbsp;
+              <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
+                Sign up
+              </Button>
+            </div>
+          )}
         </Container>
         <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+        <LoginModal show={open} onHide={handleClickCloseLoginModal} />
+        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+        <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
+        <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
       </Navbar>
       <Row>
         {!isProfileRoute && !isContentRoute && (
@@ -361,6 +400,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
+    signoutUserRequest,
+    pollNotifRequest, 
+    searchRequest,
     clearSearchPosts,
   }, dispatch),
 })
