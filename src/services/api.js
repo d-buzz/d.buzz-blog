@@ -237,8 +237,8 @@ export const removeFootNote = (data) => {
   return data.forEach((item) => {
     item.body = item.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
     item.body = item.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
-    item.body = item.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
-    item.body = item.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz Blog</a>', '')
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
+    item.body = item.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">Blog | D.Buzz</a>', '')
   })
 }
 
@@ -311,7 +311,7 @@ export const fetchContent = (author, permlink) => {
     api.getContentAsync(author, permlink)
       .then(async(result) => {
         result.body = result.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
-        result.body = result.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
+        result.body = result.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
         const profile = await fetchProfile([result.author])
         result.profile = profile[0]
         resolve(result)
@@ -366,8 +366,8 @@ export const fetchDiscussions = (author, permlink) => {
 
             content.body = content.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
             content.body = content.body.replace('<br /><br /> Posted via <a href="https://next.d.buzz/" data-link="promote-link">D.Buzz</a>', '')
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">D.Buzz Blog</a>', '')
-            content.body = content.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">D.Buzz Blog</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
+            content.body = content.body.replace('<br /><br /> Posted via <a href="https://nextblog.d.buzz/" data-link="promote-link">Blog | D.Buzz</a>', '')
 
             if(content.replies.length !== 0) {
               const child = getChildren(content)
@@ -478,7 +478,7 @@ export const createMeta = (tags = []) => {
   const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
 
   const meta = {
-    app: `D.Buzz Blog/${appConfig.VERSION}`,
+    app: `Blog | D.Buzz/${appConfig.VERSION}`,
     tags: uniqueTags,
   }
 

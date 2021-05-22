@@ -27,11 +27,11 @@ const App = () => {
   return (
     <React.Fragment>  
       <Helmet>
-        <meta property="og:title" content="D.Buzz Blog" />
-        <meta property="og:description" content="D.Buzz Blog | Blogging for HIVE" />
+        <meta property="og:title" content="Blog | D.Buzz" />
+        <meta property="og:description" content="Blog D.Buzz | Blogging for HIVE" />
         <meta property="og:image" content="https://d.buzz/dbuzz.svg" />
-        <meta property="title" content="D.Buzz Blog" />
-        <meta property="description" content="D.Buzz Blog | Blogging for HIVE" />
+        <meta property="title" content="Blog | D.Buzz" />
+        <meta property="description" content="Blog D.Buzz | Blogging for HIVE" />
         <meta property="image" content="https://d.buzz/dbuzz.svg" />
       </Helmet>
       <LastLocationProvider>

@@ -27,7 +27,7 @@ const HelmetGenerator = (props) => {
           title = `${title.substr(0, 80)} ...`
         }
 
-        title = `${title} | D.Buzz Blog`
+        title = `${title} Blog | D.Buzz`
 
         if (description > 120) {
           description = `${description.substr(0, 120)} ...`
