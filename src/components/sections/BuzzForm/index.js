@@ -247,7 +247,7 @@ const BuzzForm = (props) => {
             </Tooltip>
 
             <ContainedButton
-              disabled={ publishing || (title.length === 0 && body.length === 0) }
+              disabled={ (title.length === 0 || body.length === 0 || tags.length === 0) || publishing }
               label="Buzz"
               onClick={handleClickPublishPost}
             />

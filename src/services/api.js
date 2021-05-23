@@ -430,7 +430,7 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
         'title': title,
         'body': body,
         'parent_author': '',
-        'parent_permlink': `${appConfig.TAG}`,
+        'parent_permlink': permlink,
         permlink,
         json_metadata,
       },
