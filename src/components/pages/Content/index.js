@@ -177,8 +177,15 @@ const Content = (props) => {
     // profile = {},
     cashout_time,
     title,
+    depth,
+    root_author,
+    root_title,
+    root_permlink,
+    parent_author = null,
+    parent_permlink,
   } = content || ''
 
+  console.log({depth})
 
   let { body } = content || ''
 
@@ -304,6 +311,13 @@ const Content = (props) => {
     const link = `/@${author}`
     return link
   }
+  
+  const generateParentLinks = (author, permlink) => {
+    let link = `/@${author}`
+    link = `${link}/c/${permlink}`
+
+    return link
+  }
 
   const openPopOver = (e) => {
     // setOpen(true)
@@ -340,6 +354,22 @@ const Content = (props) => {
             <div className={classes.wrapper}>
               <br />
               <React.Fragment>
+                {depth !== 0 && parent_author !== null && (
+                  <Row>
+                    <Col>
+                      <div className={classes.context}>
+                        <div className={classes.contextWrapper}>
+                          <h6 style={{ paddingTop: 5 }}>You are viewing a single comment's thread from:</h6>
+                          <h5>RE: {root_title}</h5>
+                          <ul>
+                            <li><Link to={generateParentLinks(root_author, root_permlink)}>View the full context</Link></li>
+                            <li><Link to={generateParentLinks(parent_author, parent_permlink)}>View the direct parent</Link></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                )}
                 <Row>
                   <Col xs="auto" style={{ paddingRight: 0 }}>
                     <Avatar author={author} />
