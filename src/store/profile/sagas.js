@@ -4,7 +4,7 @@ import {
   getProfileSuccess,
   getProfileFailure,
 
-  GET_ACCOUNT_POSTS_REQUEST,
+  GET_ACCOUNT_BLOG_REQUEST,
   getAccountBlogSuccess,
   getAccountBlogFailure,
   setLastAccountBlog,
@@ -52,7 +52,7 @@ function* getProfileRequest(payload, meta) {
   }
 }
 
-function* getAccountPostRequest(payload, meta) {
+function* getAccountBlogRequest(payload, meta) {
   try{
     const { username, start_permlink, start_author } = payload
     const old = yield select(state => state.profile.get('posts'))
@@ -111,8 +111,8 @@ function* watchGetProfileRequest({ payload, meta }) {
   yield call(getProfileRequest, payload, meta)
 }
 
-function* watchGetAccountPostRequest({ payload, meta }) {
-  yield call(getAccountPostRequest, payload, meta)
+function* watchGetAccountBlogRequest({ payload, meta }) {
+  yield call(getAccountBlogRequest, payload, meta)
 }
 
 function* watchGetAccountRepliesRequest({ payload, meta }) {
@@ -125,7 +125,7 @@ function* watchGetAccountCommentsRequest({ payload, meta }) {
 
 export default function* sagas() {
   yield takeEvery(GET_PROFILE_REQUEST, watchGetProfileRequest)
-  yield takeEvery(GET_ACCOUNT_POSTS_REQUEST, watchGetAccountPostRequest)
+  yield takeEvery(GET_ACCOUNT_BLOG_REQUEST, watchGetAccountBlogRequest)
   yield takeEvery(GET_ACCOUNT_REPLIES_REQUEST, watchGetAccountRepliesRequest)
   yield takeEvery(GET_ACCOUNT_COMMENTS_REQUEST, watchGetAccountCommentsRequest)
 }
