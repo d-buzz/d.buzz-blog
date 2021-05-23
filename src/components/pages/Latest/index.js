@@ -18,7 +18,7 @@ import {
 } from 'store/posts/actions'
 import {
   setProfileIsVisited,
-  clearAccountPosts,
+  clearAccountBlog,
   clearAccountReplies,
 } from 'store/profile/actions'
 import { pending } from 'redux-saga-thunk'
@@ -36,7 +36,7 @@ const Latest = (props) => {
     clearHomePosts,
     clearTrendingPosts,
     setProfileIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     items,
     last,
@@ -66,7 +66,7 @@ const Latest = (props) => {
     clearAppendReply()
     clearSearchPosts()
     clearLastSearchTag()
-    clearAccountPosts()
+    clearAccountBlog()
     clearAccountReplies()
     clearTagsPost()
     clearReplies()
@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => ({
     clearHomePosts,
     clearTrendingPosts,
     setProfileIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,

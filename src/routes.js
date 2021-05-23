@@ -5,7 +5,7 @@ import {
   Latest,
   Content,
   Profile,
-  AccountPosts,
+  AccountBlog,
   AccountReplies,
   AccountComments,
   Notification,
@@ -87,12 +87,12 @@ const routes =  [
           {
             path: '/@:username/',
             exact: true,
-            component: AccountPosts,
+            component: AccountBlog,
           },
           {
-            path: '/@:username/t/buzz',
+            path: '/@:username/t/blog',
             exact: true,
-            component: AccountPosts,
+            component: AccountBlog,
           },
           {
             path: '/@:username/t/replies',

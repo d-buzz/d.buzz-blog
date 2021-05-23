@@ -23,7 +23,7 @@ import {
 } from 'store/posts/actions'
 import {
   setProfileIsVisited,
-  clearAccountPosts,
+  clearAccountBlog,
   clearAccountReplies,
 } from 'store/profile/actions'
 import { clearScrollIndex, clearRefreshRouteStatus} from 'store/interfaces/actions'
@@ -54,7 +54,7 @@ const Feeds = React.memo((props) => {
     setProfileIsVisited,
     clearTrendingPosts,
     clearLatestPosts,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,
@@ -88,7 +88,7 @@ const Feeds = React.memo((props) => {
     clearAppendReply()
     clearSearchPosts()
     clearLastSearchTag()
-    clearAccountPosts()
+    clearAccountBlog()
     clearAccountReplies()
     clearContent()
     clearReplies()
@@ -152,7 +152,7 @@ const mapDispatchToProps = (dispatch) => ({
     setProfileIsVisited,
     clearTrendingPosts,
     clearLatestPosts,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,

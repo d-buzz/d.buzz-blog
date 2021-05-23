@@ -539,7 +539,7 @@ export const fetchAccounts = (username) => {
   })
 }
 
-export const fetchAccountPosts = (account, start_permlink = null, start_author = null, sort = 'posts') => {
+export const fetchAccountBlog = (account, start_permlink = null, start_author = null, sort = 'blog') => {
   return new Promise((resolve, reject) => {
     const params = {
       sort,
