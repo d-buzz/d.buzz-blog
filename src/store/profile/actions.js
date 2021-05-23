@@ -41,12 +41,12 @@ export const getProfileFailure = (error, meta) => ({
   meta,
 })
 
-export const GET_ACCOUNT_POSTS_REQUEST = 'GET_ACCOUNT_POSTS_REQUEST'
-export const GET_ACCOUNT_POSTS_SUCCESS = 'GET_ACCOUNT_POSTS_SUCCESS'
-export const GET_ACCOUNT_POSTS_FAILURE = 'GET_ACCOUNT_POSTS_FAILURE'
+export const GET_ACCOUNT_BLOG_REQUEST = 'GET_ACCOUNT_BLOG_REQUEST'
+export const GET_ACCOUNT_BLOG_SUCCESS = 'GET_ACCOUNT_BLOG_SUCCESS'
+export const GET_ACCOUNT_BLOG_FAILURE = 'GET_ACCOUNT_BLOG_FAILURE'
 
 export const getAccountBlogRequest = (username, start_permlink = null, start_author = null) => ({
-  type: GET_ACCOUNT_POSTS_REQUEST,
+  type: GET_ACCOUNT_BLOG_REQUEST,
   payload: { username, start_permlink, start_author },
   meta: {
     thunk: true,
@@ -54,21 +54,21 @@ export const getAccountBlogRequest = (username, start_permlink = null, start_aut
 })
 
 export const getAccountBlogSuccess = (response, meta) => ({
-  type: GET_ACCOUNT_POSTS_SUCCESS,
+  type: GET_ACCOUNT_BLOG_SUCCESS,
   payload: response,
   meta,
 })
 
 export const getAccountBlogFailure = (error, meta) => ({
-  type: GET_ACCOUNT_POSTS_FAILURE,
+  type: GET_ACCOUNT_BLOG_FAILURE,
   payload: error,
   meta,
 })
 
-export const SET_LAST_ACCOUNT_POSTS = 'SET_LAST_ACCOUNT_POSTS'
+export const SET_LAST_ACCOUNT_BLOG = 'SET_LAST_ACCOUNT_BLOG'
 
 export const setLastAccountBlog = (response) => ({
-  type: SET_LAST_ACCOUNT_POSTS,
+  type: SET_LAST_ACCOUNT_BLOG,
   payload: response,
 })
 
