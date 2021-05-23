@@ -1,6 +1,6 @@
 export const CLEAR_ACCOUNT_POSTS = 'CLEAR_ACCOUNT_POSTS'
 
-export const clearAccountPosts = () => ({
+export const clearAccountBlog = () => ({
   type: CLEAR_ACCOUNT_POSTS,
 })
 
@@ -45,7 +45,7 @@ export const GET_ACCOUNT_POSTS_REQUEST = 'GET_ACCOUNT_POSTS_REQUEST'
 export const GET_ACCOUNT_POSTS_SUCCESS = 'GET_ACCOUNT_POSTS_SUCCESS'
 export const GET_ACCOUNT_POSTS_FAILURE = 'GET_ACCOUNT_POSTS_FAILURE'
 
-export const getAccountPostsRequest = (username, start_permlink = null, start_author = null) => ({
+export const getAccountBlogRequest = (username, start_permlink = null, start_author = null) => ({
   type: GET_ACCOUNT_POSTS_REQUEST,
   payload: { username, start_permlink, start_author },
   meta: {
@@ -53,13 +53,13 @@ export const getAccountPostsRequest = (username, start_permlink = null, start_au
   },
 })
 
-export const getAccountPostsSuccess = (response, meta) => ({
+export const getAccountBlogSuccess = (response, meta) => ({
   type: GET_ACCOUNT_POSTS_SUCCESS,
   payload: response,
   meta,
 })
 
-export const getAccountPostsFailure = (error, meta) => ({
+export const getAccountBlogFailure = (error, meta) => ({
   type: GET_ACCOUNT_POSTS_FAILURE,
   payload: error,
   meta,
@@ -67,7 +67,7 @@ export const getAccountPostsFailure = (error, meta) => ({
 
 export const SET_LAST_ACCOUNT_POSTS = 'SET_LAST_ACCOUNT_POSTS'
 
-export const setLastAccountPosts = (response) => ({
+export const setLastAccountBlog = (response) => ({
   type: SET_LAST_ACCOUNT_POSTS,
   payload: response,
 })

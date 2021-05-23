@@ -17,7 +17,7 @@ import {
 } from 'store/posts/actions'
 import {
   setProfileIsVisited,
-  clearAccountPosts,
+  clearAccountBlog,
   clearAccountReplies,
 } from 'store/profile/actions'
 import { anchorTop } from 'services/helper'
@@ -38,7 +38,7 @@ const Trending = (props) => {
     clearLatestPosts,
     setLatestIsVisited,
     setProfileIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,
@@ -62,7 +62,7 @@ const Trending = (props) => {
     }
     clearSearchPosts()
     clearLastSearchTag()
-    clearAccountPosts()
+    clearAccountBlog()
     clearAccountReplies()
     clearTagsPost()
     setTagsIsVisited(false)
@@ -101,7 +101,7 @@ const mapDispatchToProps = (dispatch) => ({
     setLatestIsVisited,
     clearLatestPosts,
     setProfileIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,

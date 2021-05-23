@@ -5,9 +5,9 @@ import {
   getProfileFailure,
 
   GET_ACCOUNT_POSTS_REQUEST,
-  getAccountPostsSuccess,
-  getAccountPostsFailure,
-  setLastAccountPosts,
+  getAccountBlogSuccess,
+  getAccountBlogFailure,
+  setLastAccountBlog,
 
   GET_ACCOUNT_REPLIES_REQUEST,
   getAccountRepliesSuccess,
@@ -24,7 +24,7 @@ import {
   fetchGlobalProperties,
   fetchSingleProfile,
   fetchAccounts,
-  fetchAccountPosts,
+  fetchAccountBlog,
 } from 'services/api'
 
 function* getProfileRequest(payload, meta) {
@@ -56,17 +56,17 @@ function* getAccountPostRequest(payload, meta) {
   try{
     const { username, start_permlink, start_author } = payload
     const old = yield select(state => state.profile.get('posts'))
-    let data = yield call(fetchAccountPosts, username, start_permlink, start_author)
+    let data = yield call(fetchAccountBlog, username, start_permlink, start_author)
 
     data = [...old, ...data]
     data = data.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
     })
 
-    yield put(setLastAccountPosts(data[data.length-1]))
-    yield put(getAccountPostsSuccess(data, meta))
+    yield put(setLastAccountBlog(data[data.length-1]))
+    yield put(getAccountBlogSuccess(data, meta))
   } catch(error) {
-    yield put(getAccountPostsFailure(error, meta))
+    yield put(getAccountBlogFailure(error, meta))
   }
 }
 
@@ -74,7 +74,7 @@ function* getAccountRepliesRequest(payload, meta) {
   try {
     const { username, start_permlink, start_author } = payload
     const old = yield select(state => state.profile.get('replies'))
-    let data = yield call(fetchAccountPosts, username, start_permlink, start_author, 'replies')
+    let data = yield call(fetchAccountBlog, username, start_permlink, start_author, 'replies')
 
     data = [...old, ...data]
     data = data.filter((obj, pos, arr) => {
@@ -92,7 +92,7 @@ function* getCommentsAccountRequest(payload, meta) {
   try {
     const { username, start_permlink, start_author } = payload
     const old = yield select(state => state.profile.get('comments'))
-    let data = yield call(fetchAccountPosts, username, start_permlink, start_author, 'comments')
+    let data = yield call(fetchAccountBlog, username, start_permlink, start_author, 'comments')
 
     data = [...old, ...data]
     data = data.filter((obj, pos, arr) => {

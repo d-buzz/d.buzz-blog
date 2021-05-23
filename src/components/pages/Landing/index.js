@@ -16,7 +16,7 @@ import {
   clearReplies,
 } from 'store/posts/actions'
 import {
-  clearAccountPosts,
+  clearAccountBlog,
   clearAccountReplies,
 } from 'store/profile/actions'
 import { setFromLanding } from 'store/auth/actions'
@@ -52,7 +52,7 @@ const Landing = (props) => {
     setTrendingIsVisited,
     setLatestIsVisited,
     setTagsIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearAppendReply,
     clearReplies,
@@ -67,7 +67,7 @@ const Landing = (props) => {
     clearLatestPosts()
     clearTagsPost()
     clearHomePosts()
-    clearAccountPosts()
+    clearAccountBlog()
     clearAccountReplies()
     clearReplies()
     setHomeIsVisited(false)
@@ -100,7 +100,7 @@ const mapDispatchToProps = (dispatch) => ({
     setTrendingIsVisited,
     setLatestIsVisited,
     setTagsIsVisited,
-    clearAccountPosts,
+    clearAccountBlog,
     clearAccountReplies,
     clearAppendReply,
     clearReplies,
