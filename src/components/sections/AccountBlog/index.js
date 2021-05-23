@@ -39,7 +39,7 @@ const AccountBlog = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  items: state.profile.get('posts'),
+  items: state.profile.get('blog'),
   loading: pending(state, 'GET_ACCOUNT_POSTS_REQUEST'),
   last: state.profile.get('last'),
   user: state.auth.get('user'),
