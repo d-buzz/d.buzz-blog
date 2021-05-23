@@ -28,7 +28,6 @@ import {
 } from 'store/profile/actions'
 import { clearScrollIndex, clearRefreshRouteStatus} from 'store/interfaces/actions'
 import { anchorTop } from 'services/helper'
-// import { isMobile } from 'react-device-detect'
 import { Link } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { Container, Row } from 'react-bootstrap'
@@ -140,7 +139,7 @@ const Feeds = React.memo((props) => {
                 Hi there! it looks like you haven't followed anyone yet, <br />
                 you may start following people by reading the&nbsp;
                 <Link to="/latest">latest</Link> <br /> or <Link to="/trending">trending</Link>&nbsp;
-                buzzes on d.buzz today.
+                Blogs on Blog | D.buzz today.
               </h6>
             </center>
           )}
@@ -152,7 +151,7 @@ const Feeds = React.memo((props) => {
                     Hi there! it looks like you haven't followed anyone yet,
                     you may start following people by reading the&nbsp;
                     <Link to="/latest">latest</Link> or <Link to="/trending">trending</Link>&nbsp;
-                    buzzes on d.buzz today.
+                    Blogs on Blog | D.buzz today.
                   </p>
                 </center>
               </Row>
