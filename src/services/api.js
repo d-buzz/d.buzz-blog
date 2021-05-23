@@ -8,12 +8,18 @@ import {
   broadcast,
   formatter,
 } from '@hiveio/hive-js'
+import { stripHtml } from 'string-strip-html'
 
 const visited = []
 
 const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
 const searchUrl = `${appConfig.SEARCH_API}/search`
 const imageUrl = `${appConfig.IMAGE_API}/image`
+
+export const invokeFilter = (item) => {
+  const body = stripHtml(item.body)
+  return (body.length >= 280)
+}
 
 export const keychainSignIn = (username) => {
   const challenge = { token: uuidv4() }
@@ -747,6 +753,7 @@ export const searchPostTags = (tag) => {
     }).then(async(result) => {
       const data = result.data
 
+      data.results = data.results.filter(item => invokeFilter(item))
       removeFootNote(data.results)
 
       resolve(data)
@@ -770,7 +777,7 @@ export const searchPostAuthor = (author) => {
       if(data.results.length !== 0) {
         const getProfiledata = mapFetchProfile(data.results, false)
         await Promise.all([getProfiledata])
-        data.results = data.results.filter((item) => item.body.length <= 280)
+        data.results = data.results.filter((item) => item.body.length >= 280)
       }
 
       resolve(data)
@@ -834,7 +841,7 @@ export const searchPostGeneral = (query) => {
       if(data.results.length !== 0) {
         const getProfiledata = mapFetchProfile(data.results, false)
         await Promise.all([getProfiledata])
-        data.results = data.results.filter((item) => item.body.length <= 280)
+        data.results = data.results.filter((item) => item.body.length >= 280)
       }
 
       resolve(data)
