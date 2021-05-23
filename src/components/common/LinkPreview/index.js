@@ -66,12 +66,18 @@ const LinkPreview = (props) => {
   const classes = useStyles()
 
   const links  = markdownLinkExtractor(content)
+  console.log({links})
+  console.log(links.length)
   let isValidUrl = false
   let url = ''
 
   if (links.length !== 0) {
     for(let index = links.length; index > 0 ; index--) {
       const link = links[index-1]
+      if (link === null) {
+        break
+      }
+
       if (!link.includes('images.hive.blog')
           && !link.includes('youtu.be')
           && !link.includes('files.peakd')
@@ -97,6 +103,11 @@ const LinkPreview = (props) => {
           && !link.match(/(?:https?:\/\/(?:(?:3speak\.tv\/watch\?v=(.*))))/i)
           && !link.match(/(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?)\/embed)))/i)
           && !link.match(/(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?))))/i)
+          && !link.match(/^https?:\/\/(soundcloud\.com|snd\.sc)\/(.*)$/)
+          && !link.match(/((http:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*))|(https:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*)))/i)
+          && !link.match(/(?:https?:\/\/(?:(?:odysee\.com)))/i)
+          && !link.match(/(?:https?:\/\/(?:(?:music\.apple\.com\/(.*?))))/i)
+          && !link.match(/(?:https?:\/\/(?:(?:embed\.music\.apple\.com\/(.*?))))/i)
           && !link.match(/\.(jpeg|jpg|gif|png|pdf|JPG)$/)) {
         url = link
         isValidUrl = true
