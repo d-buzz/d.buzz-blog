@@ -30,15 +30,30 @@ import { clearScrollIndex, clearRefreshRouteStatus} from 'store/interfaces/actio
 import { anchorTop } from 'services/helper'
 // import { isMobile } from 'react-device-detect'
 import { Link } from 'react-router-dom'
+import { isMobile } from 'react-device-detect'
+import { Container, Row } from 'react-bootstrap'
 
 const useStyles = createUseStyles(theme => ({
   wrapper: {
     ...theme.font,
     paddingTop: '5%',
+    paddingBottom: '5%',
+    backgroundColor: 'white',
+    borderRadius: 5,
     '& a': {
       color: '#e53934 !important',
     },
   },
+  mobileWrapper: {
+    ...theme.font,
+    position: 'fixed', 
+    top: '15%', 
+    left: '5%', 
+    right: '5%',
+    '& a': {
+      color: '#e53934 !important',
+    },
+  }
 }))
 
 const Feeds = React.memo((props) => {
@@ -119,14 +134,30 @@ const Feeds = React.memo((props) => {
       <HelmetGenerator page='Home' />
       {(items.length === 0) && !loading && (
         <React.Fragment>
-          <center>
-            <h6 className={classes.wrapper}>
-              Hi there! it looks like you haven't followed anyone yet, <br />
-              you may start following people by reading the&nbsp;
-              <Link to="/latest">latest</Link> <br /> or <Link to="/trending">trending</Link>&nbsp;
-              buzzes on d.buzz today.
-            </h6>
-          </center>
+          {!isMobile && (
+            <center>
+              <h6 className={classes.wrapper}>
+                Hi there! it looks like you haven't followed anyone yet, <br />
+                you may start following people by reading the&nbsp;
+                <Link to="/latest">latest</Link> <br /> or <Link to="/trending">trending</Link>&nbsp;
+                buzzes on d.buzz today.
+              </h6>
+            </center>
+          )}
+          {isMobile && (
+            <Container fluid >
+              <Row>
+                <center>
+                  <p className={classes.mobileWrapper}>
+                    Hi there! it looks like you haven't followed anyone yet,
+                    you may start following people by reading the&nbsp;
+                    <Link to="/latest">latest</Link> or <Link to="/trending">trending</Link>&nbsp;
+                    buzzes on d.buzz today.
+                  </p>
+                </center>
+              </Row>
+            </Container>
+          )}
         </React.Fragment>
       )}
       <InfiniteList loading={loading} items={items} onScroll={loadMorePosts} />
