@@ -1,6 +1,6 @@
 import {
   GET_PROFILE_SUCCESS,
-  GET_ACCOUNT_POSTS_SUCCESS,
+  GET_ACCOUNT_BLOG_SUCCESS,
   GET_ACCOUNT_COMMENTS_SUCCESS,
   GET_ACCOUNT_REPLIES_SUCCESS,
   CLEAR_ACCOUNT_POSTS,
@@ -20,7 +20,7 @@ export const profile = (state = defaultState, { type, payload }) => {
   switch (type) {
   case GET_PROFILE_SUCCESS:
     return state.set('profile', payload)
-  case GET_ACCOUNT_POSTS_SUCCESS:
+  case GET_ACCOUNT_BLOG_SUCCESS:
     return state.set('posts', payload)
   case GET_ACCOUNT_COMMENTS_SUCCESS:
     return state.set('comments', payload)
