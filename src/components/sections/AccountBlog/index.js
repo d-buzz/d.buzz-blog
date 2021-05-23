@@ -30,7 +30,7 @@ const AccountBlog = (props) => {
         <React.Fragment>
           <InfiniteList disableOpacity={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.isAuthenticated}/>
           {(!loading && items.length === 0) &&
-          (<center><br/><h6>No Buzz's from @{author}</h6></center>)}
+          (<center><br/><h6>No Blog from @{author}</h6></center>)}
         </React.Fragment>
       {/* )} */}
       {/* {muted && <center><br /><h6>This user is on your mutelist, unmute this user to view their buzzes</h6></center>} */}
