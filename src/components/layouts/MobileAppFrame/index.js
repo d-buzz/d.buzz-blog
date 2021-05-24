@@ -361,7 +361,7 @@ const MobileAppFrame = (props) => {
         <Row>
           {!isProfileRoute && !isContentRoute && (
             <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                 <React.Fragment>
                   {renderRoutes(route.routes)}
                 </React.Fragment>
@@ -370,7 +370,7 @@ const MobileAppFrame = (props) => {
           )}
           {isProfileRoute && (
             <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 5, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+              <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                 <React.Fragment>
                   {renderRoutes(route.routes)}
                 </React.Fragment>
