@@ -37,6 +37,8 @@ import queryString from 'query-string'
 import { anchorTop } from 'services/helper'
 import { clearScrollIndex, broadcastNotification, openMuteDialog } from 'store/interfaces/actions'
 import { pending } from 'redux-saga-thunk'
+import { useWindowDimensions } from 'services/helper'
+import { isMobile } from 'react-device-detect'
 
 const useStyles = createUseStyles(theme => ({
   cover: {
@@ -52,11 +54,18 @@ const useStyles = createUseStyles(theme => ({
     },
   },
   wrapper: {
-    width: '100%',
     margin: '0 auto',
     height: 'max-content',
     borderRadius: '5px', 
     paddingBottom: 15,
+    backgroundColor: theme.background.secondary,
+  },
+  mobileWrapper: {
+    margin: '0 auto',
+    height: 'max-content',
+    borderRadius: '5px', 
+    paddingBottom: 15,
+    textAlign: 'center',
     backgroundColor: theme.background.secondary,
   },
   avatar: {
@@ -80,6 +89,13 @@ const useStyles = createUseStyles(theme => ({
       color: '#d32f2f',
     },
   },
+  fullName: {
+    fontSize: '18px !important',
+    fontWeight: 'bold',
+    padding: 0,
+    fontFamily: 'Segoe-Bold !important',
+    ...theme.font,
+  },
 }))
 
 
@@ -88,6 +104,8 @@ const Profile = (props) => {
   const classes = useStyles()
   const history = useHistory()
   const location = useLocation()
+  const { width } = useWindowDimensions()
+  const [mainWidth, setMainWidth] = useState(400)
   const { pathname } = location
   const {
     match, 
@@ -109,6 +127,16 @@ const Profile = (props) => {
     getAccountCommentsRequest,
     getAccountRepliesRequest,
   } = props
+
+  useEffect(() => {
+    if (width <= 360 ) {
+      setMainWidth(340)
+    } else if (width <= 390) {
+      setMainWidth(370)
+    } else {
+      setMainWidth(400)
+    }
+  }, [width])
   
   // const { username: loginuser, isAuthenticated } = user
   
@@ -209,83 +237,149 @@ const Profile = (props) => {
   return (
     <React.Fragment>
       <HelmetGenerator page='Profile' />
-      <ProfileSkeleton loading={loading} />
       <Container>
+      <ProfileSkeleton loading={loading} />
         {!loading && (
           <React.Fragment>
-            <Row className={classes.wrapper}>
-              <div className={classes.cover}>
-                {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
-              </div>
-              <Col>
-                <div className={classes.avatar}>
-                  <Avatar border={true} height="140" author={username} size="medium" />
-                </div>
-                <Col xs="auto">
-                  <p className={classNames(classes.paragraph, classes.fullName)}>
-                    {name || username}&nbsp;
-                    <Chip component="span"  size="small" label={`${reputation} Rep`} />&nbsp;
-                    <Chip component="span"  size="small" label={`${parseFloat(hivepower).toFixed(2)} HP`} />
-                  </p>
-                </Col>
-                <Row>
-                  <Col xs="auto">
-                    <p className={classes.paragraph}>
-                      {about}
-                    </p>
+            {isMobile && (
+              <React.Fragment>
+                <Row className={classes.mobileWrapper} >
+                  <div style={{ width: mainWidth }}>
+                    <div className={classes.cover}>
+                      {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
+                    </div>
+                    <Col>
+                      <div className={classes.avatar}>
+                        <Avatar border={true} height="140" author={username} size="medium" />
+                      </div>
+                      <Col xs="auto" style={{ paddingTop: 10 }}>
+                        <p className={classNames(classes.paragraph, classes.fullName)}>
+                          {name || username}&nbsp;
+                          <Chip component="span"  size="small" label={`${reputation} Rep`} />&nbsp;
+                          <Chip component="span"  size="small" label={`${parseFloat(hivepower).toFixed(2)} HP`} />
+                        </p>
+                      </Col>
+                      <Row>
+                        <Col xs="auto">
+                          <p className={classes.paragraph}>
+                            {about}
+                          </p>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col xs="auto">
+                          <p className={classes.paragraph}>
+                            <a href={website} target="_blank" rel="noopener noreferrer" className={classes.weblink}>
+                              {website}
+                            </a>
+                          </p>
+                        </Col>
+                      </Row>
+                      <Row style={{ paddingTop: 10, paddingLeft: '30%' }}>
+                        <Col xs="auto">
+                          <p className={classes.paragraph}>
+                            {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
+                              <b>{following}</b> Following
+                            {/* </Link>  */}
+                            &nbsp;
+                            {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
+                              <b>{followers}</b> Follower
+                            {/* </Link>  */}
+                            &nbsp;
+                          </p>
+                        </Col>
+                      </Row>
+                      <br />
+                      <Tabs
+                        value={index}
+                        centered
+                        onChange={onChange}
+                        className={classes.tabContainer}
+                      >
+                        <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Blog" />
+                        <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
+                        <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
+                      </Tabs>
+                    </Col> 
+                  </div> 
+                </Row>  
+              </React.Fragment>
+            )}
+            {!isMobile && (
+              <React.Fragment>
+                <Row className={classes.wrapper}>
+
+                  <div className={classes.cover}>
+                    {cover_image !== '' && (<img src={`https://images.hive.blog/0x0/${cover_image}`} alt="cover"/>)}
+                  </div>
+                  <Col>
+                    <div className={classes.avatar}>
+                      <Avatar border={true} height="140" author={username} size="medium" />
+                    </div>
+                    <Col xs="auto">
+                      <p className={classNames(classes.paragraph, classes.fullName)}>
+                        {name || username}&nbsp;
+                        <Chip component="span"  size="small" label={`${reputation} Rep`} />&nbsp;
+                        <Chip component="span"  size="small" label={`${parseFloat(hivepower).toFixed(2)} HP`} />
+                      </p>
+                    </Col>
+                    <Row>
+                      <Col xs="auto">
+                        <p className={classes.paragraph}>
+                          {about}
+                        </p>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="auto">
+                        <p className={classes.paragraph}>
+                          <a href={website} target="_blank" rel="noopener noreferrer" className={classes.weblink}>
+                            {website}
+                          </a>
+                        </p>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs="auto">
+                        <p className={classes.paragraph}>
+                          {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
+                            <b>{following}</b> Following
+                          {/* </Link>  */}
+                          &nbsp;
+                          {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
+                            <b>{followers}</b> Follower
+                          {/* </Link>  */}
+                          &nbsp;
+                        </p>
+                      </Col>
+                    </Row>
+                    <br />
+                    <Tabs
+                      value={index}
+                      centered
+                      onChange={onChange}
+                      className={classes.tabContainer}
+                    >
+                      <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Blog" />
+                      <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
+                      <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
+                    </Tabs>
                   </Col>
                 </Row>
-                <Row>
-                  <Col xs="auto">
-                    <p className={classes.paragraph}>
-                      <a href={website} target="_blank" rel="noopener noreferrer" className={classes.weblink}>
-                        {website}
-                      </a>
-                    </p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs="auto">
-                    <p className={classes.paragraph}>
-                      {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
-                        <b>{following}</b> Following
-                      {/* </Link>  */}
-                      &nbsp;
-                      {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
-                        <b>{followers}</b> Follower
-                      {/* </Link>  */}
-                      &nbsp;
-                    </p>
-                  </Col>
-                </Row>
-                <br />
-                <Tabs
-                  value={index}
-                  centered
-                  onChange={onChange}
-                  className={classes.tabContainer}
-                >
-                  <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Blog" />
-                  <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
-                  <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
-                </Tabs>
-              </Col>  
+              </React.Fragment>
+            )}
+            <Row>
+              <Col sm={3} />
+              <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
+                <React.Fragment>
+                  {renderRoutes(route.routes, { author: username })}
+                </React.Fragment>
+              </Col>
+              <Col sm={3} />
             </Row>
           </React.Fragment>
         )}
-        
-        <Row>
-          <Col sm={3} />
-          <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
-            <React.Fragment>
-              {renderRoutes(route.routes, { author: username })}
-            </React.Fragment>
-          </Col>
-          <Col sm={3} />
-        </Row>
       </Container>
-      
-      
     </React.Fragment>
   )
 }
