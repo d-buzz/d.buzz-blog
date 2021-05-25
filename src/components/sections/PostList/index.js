@@ -48,7 +48,7 @@ const useStyle = createUseStyles(theme => ({
     display: 'inline-block',
   },
   row: {
-    width: '95%',
+    width: 'max-content',
     margin: '0 auto',
     paddingTop: 20,
     marginBottom: 10,
