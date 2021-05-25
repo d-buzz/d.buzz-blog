@@ -304,43 +304,6 @@ const prepareBitchuteEmbeds = (content) => {
   return body
 }
 
-const prepareFacebookEmbeds = (content) => {
-  const facebookRegex = /(?:https?:\/\/(?:(?:www\.facebook\.com\/(.*?))))/i
-  const facebookRegexEmbeds = /(?<=src=").*?(?=[.?"])/i
-  let body = content
-
-  const links = textParser.getUrls(content)
-
-  const matchData = content.match(facebookRegexEmbeds)
-  
-  if (matchData) {
-    const input = matchData['input'].split('src=')[1].split(/[ >]/)[0]
-    const url = input.replace(/['"]+/g, '')
-    body = body.replace(body, `~~~~~~.^.~~~:facebook:${url}:${'embed'}:~~~~~~.^.~~~`)
-  } else {
-    links.forEach((link) => {
-      try {
-        link = link.replace(/&amp;/g, '&')
-        let match = ''
-        let id = ''
-        let id1 = ''
-        if(link.match(facebookRegex)){
-          match = link.match(facebookRegex)
-          const input = match['input']
-          const data = input.split('/')
-          id = data[3]
-          id1 = data[5]
-        }
-
-        if(match){
-          body = body.replace(link, `~~~~~~.^.~~~:facebook:${id}:${id1}:~~~~~~.^.~~~`)
-        }
-      } catch(error) { }
-    })
-  }
-  return body
-}
-
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex) => {
 
   if(content.includes(':twitter:')) {
@@ -412,9 +375,7 @@ const MarkdownViewer = React.memo((props) => {
         content = prepareLbryEmbeds(content)
       } else if(link.includes('www.bitchute.com')) {
         content = prepareBitchuteEmbeds(content)
-      } else if(link.includes('www.facebook.com')) {
-        content = prepareFacebookEmbeds(content)
-      }
+      } 
     } catch(error) { }
   })
 
