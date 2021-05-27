@@ -11,7 +11,6 @@ import Modal from 'react-bootstrap/Modal'
 import ModalBody from 'react-bootstrap/ModalBody'
 import IconButton from '@material-ui/core/IconButton'
 import classNames from 'classnames'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import { publishReplyRequest, uploadFileRequest } from 'store/posts/actions'
 import { broadcastNotification, closeReplyModal } from 'store/interfaces/actions'
 import { 
@@ -181,8 +180,6 @@ const ReplyFormModal = (props) => {
 
   const history = useHistory()
 
-  const CircularProgressStyle = { float: 'right', marginRight: 5, marginTop: 15 }
-
   const { username } = user
   // const inputRef = useRef(null)
   const [content, setContent] = useState('')
@@ -192,7 +189,6 @@ const ReplyFormModal = (props) => {
   const [author, setAuthor] = useState('')
   const [permlink, setPermlink] = useState('')
   const [body, setBody] = useState('')
-  const [wordCount, setWordCount] = useState(0)
   const [replyDone, setReplyDone] = useState(false)
   // const [buzzToTwitter, setBuzzToTwitter] = useState(false)
   // const [openGiphy, setOpenGiphy] = useState(false)
@@ -203,11 +199,6 @@ const ReplyFormModal = (props) => {
   const zeroPadding = { padding: 0 }
   // const inputFile = { display: 'none' }
   const replyButtonStyle = { width: 70 }
-
-
-  useEffect(() => {
-    setWordCount(Math.floor((content.length/280) * 100))
-  }, [content])
 
   useEffect(() => {
     if(modalData.hasOwnProperty('open') && typeof modalData === 'object') {
@@ -406,7 +397,6 @@ const ReplyFormModal = (props) => {
                     <TextArea
                       style={textAreaStyle}
                       minRows={3}
-                      maxLength="280"
                       label="Buzz your reply"
                       value={content}
                       onKeyUp={handleOnChange}
@@ -463,15 +453,6 @@ const ReplyFormModal = (props) => {
                       className={classes.float}
                       onClick={handleSubmitReply}
                       disabled={loading || `${content}`.trim() === ''}
-                    />
-                    <CircularProgress
-                      style={CircularProgressStyle}
-                      classes={{
-                        circle: classes.circle,
-                      }}
-                      size={30}
-                      value={wordCount}
-                      variant="static"
                     />
                   </div>
                 </div>
