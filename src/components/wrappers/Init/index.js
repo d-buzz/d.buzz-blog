@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getTrendingTagsRequest } from 'store/posts/actions'
 import { getSavedUserRequest } from 'store/auth/actions'
+import { readSession } from '../../../services/helper'
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -43,6 +44,22 @@ const Init = (props) => {
     children } = props
 
   const [init, setInit] = useState(false)
+
+  let accounts = window.localStorage.getItem('user')
+  
+  accounts = JSON.parse(accounts)
+    
+  if (accounts !== null) {
+    accounts.forEach((account) => {
+      try{
+        const decrypt = readSession(account)
+        console.log(decrypt)
+      } catch (e) {
+        console.log(e)
+        window.localStorage.clear()
+      }
+    })
+  } 
 
   useEffect(() => {
     getBestRpcNode().then(() => {
