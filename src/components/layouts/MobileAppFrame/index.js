@@ -42,6 +42,8 @@ import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { isMobile } from 'react-device-detect'
+import { useWindowDimensions } from 'services/helper'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -95,6 +97,7 @@ const MobileAppFrame = (props) => {
     clearSearchPosts,
     count = 0,
    } = props
+   const { width } = useWindowDimensions()
   const { username, isAuthenticated } = user
   const { mode } = theme
   const lastLocation = useLastLocation()
@@ -110,8 +113,19 @@ const MobileAppFrame = (props) => {
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [disableSearchTips, setDisableSearchTips] = useState(false)
   const [searchkey, setSearchkey] = useState(query)
+  const [mainWidth, setMainWidth] = useState(400)
   let isProfileRoute = false
   let isContentRoute = false
+
+  useEffect(() => {
+    if (width <= 360 ) {
+      setMainWidth(340)
+    } else if (width <= 390) {
+      setMainWidth(370)
+    } else {
+      setMainWidth(400)
+    }
+  }, [width])
 
   const handleClickOpenBuzzModal = () => {
     setOpenBuzzModal(true)
@@ -229,166 +243,171 @@ const MobileAppFrame = (props) => {
   
   return (
     <React.Fragment>
-      <Navbar fixed="top" className={classes.mobileNav}>
-        <Container>
-          <Navbar.Brand>
-            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
-              <React.Fragment>
-                <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
-                  <BackArrowIcon />
-                </IconButton>
-                &nbsp;
-              </React.Fragment>
-            )}
-            <Link to="/">
-              <React.Fragment>
-                {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
-                {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
-              </React.Fragment>
-            </Link>
-          </Navbar.Brand>
-          <div>
-            {title !== 'Search' && isAuthenticated && (
-              <React.Fragment>
-                <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                  <CreateIcon fontSize="medium" />
-                </IconButton>
-                <IconButton onClick={handleClickSearchButton} size="medium">
-                  <SearchIcon/>
-                </IconButton>
-              </React.Fragment>
-            )}
-            <Menu>
-            {title === 'Search' && isAuthenticated && (
-              <div className={classes.searchDiv}>
-                <SearchField
-                  disableTips={disableSearchTips}
-                  iconTop={-2}
-                  searchWrapperClass={classes.searchWrapper}
-                  style={{ fontSize: 16, height: 35 }}
-                  value={searchkey}
-                  onKeyDown={handleSearchKey}
-                  onChange={onChangeSearch}
-                  placeholder="Search D.Buzz"
-                  autoFocus
-                />
-              </div>
-            )}
-            {title !== 'Search' && isAuthenticated && (
-              <React.Fragment>
-                <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
-                  <Avatar height={33} author={username} />
-                </MenuButton>
-                <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
-                  <MenuLink  
-                    style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
-                    as={Link}
-                    to={`/@${username}`}
-                  >
-                    <div>
-                      <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
-                      <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
-                      <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
-                        <span style={{ fontSize: 13 }}>See your Profile</span>
-                      </div>
+      {isMobile && (
+        <React.Fragment>
+          <div style={{ width: mainWidth }}>
+            <Navbar fixed="top" className={classes.mobileNav}>
+              <Container>
+                <Navbar.Brand>
+                  {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
+                    <React.Fragment>
+                      <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
+                        <BackArrowIcon />
+                      </IconButton>
+                      &nbsp;
+                    </React.Fragment>
+                  )}
+                  <Link to="/">
+                    <React.Fragment>
+                      {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
+                      {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
+                    </React.Fragment>
+                  </Link>
+                </Navbar.Brand>
+                <div>
+                  {title !== 'Search' && isAuthenticated && (
+                    <React.Fragment>
+                      <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                        <CreateIcon fontSize="medium" />
+                      </IconButton>
+                      <IconButton onClick={handleClickSearchButton} size="medium">
+                        <SearchIcon/>
+                      </IconButton>
+                    </React.Fragment>
+                  )}
+                  <Menu>
+                  {title === 'Search' && isAuthenticated && (
+                    <div className={classes.searchDiv}>
+                      <SearchField
+                        disableTips={disableSearchTips}
+                        iconTop={-2}
+                        searchWrapperClass={classes.searchWrapper}
+                        style={{ fontSize: 16, height: 35 }}
+                        value={searchkey}
+                        onKeyDown={handleSearchKey}
+                        onChange={onChangeSearch}
+                        placeholder="Search D.Buzz"
+                        autoFocus
+                      />
                     </div>
-                  </MenuLink>
-                  <MenuLink
-                    as={Link}
-                    to="/"
-                  >
-                    <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/trending"
-                  >
-                    <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/latest"
-                  >
-                    <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
-                  </MenuLink>
-                  <MenuLink 
-                    as={Link}
-                    to="/notifications"
-                  >
-                    <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
-                    <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickOpenUserSettingsModal}
-                  >
-                    <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickOpenSwitchAccountModal}
-                  >
-                    <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
-                  </MenuLink>
-                  <MenuLink 
-                    onSelect={handleClickLogout}
-                  > 
-                    <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
-                  </MenuLink>
-                </MenuList>
-              </React.Fragment>
-            )}
-              
-            </Menu>
+                  )}
+                  {title !== 'Search' && isAuthenticated && (
+                    <React.Fragment>
+                      <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                        <Avatar height={33} author={username} />
+                      </MenuButton>
+                      <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                        <MenuLink  
+                          style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                          as={Link}
+                          to={`/@${username}`}
+                        >
+                          <div>
+                            <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                            <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                            <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                              <span style={{ fontSize: 13 }}>See your Profile</span>
+                            </div>
+                          </div>
+                        </MenuLink>
+                        <MenuLink
+                          as={Link}
+                          to="/"
+                        >
+                          <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                        </MenuLink>
+                        <MenuLink 
+                          as={Link}
+                          to="/trending"
+                        >
+                          <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                        </MenuLink>
+                        <MenuLink 
+                          as={Link}
+                          to="/latest"
+                        >
+                          <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                        </MenuLink>
+                        <MenuLink 
+                          as={Link}
+                          to="/notifications"
+                        >
+                          <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                          <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                        </MenuLink>
+                        <MenuLink 
+                          onSelect={handleClickOpenUserSettingsModal}
+                        >
+                          <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                        </MenuLink>
+                        <MenuLink 
+                          onSelect={handleClickOpenSwitchAccountModal}
+                        >
+                          <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                        </MenuLink>
+                        <MenuLink 
+                          onSelect={handleClickLogout}
+                        > 
+                          <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                        </MenuLink>
+                      </MenuList>
+                    </React.Fragment>
+                  )}
+                    
+                  </Menu>
+                </div>
+                {!isAuthenticated && (
+                  <div className={classes.buttons}>
+                    <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
+                      Sign in
+                    </Button>
+                    &nbsp;
+                    <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
+                      Sign up
+                    </Button>
+                  </div>
+                )}
+              </Container>
+              <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+              <LoginModal show={open} onHide={handleClickCloseLoginModal} />
+              <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
+              <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
+              <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
+            </Navbar>
+          
+            <Row>
+              {!isProfileRoute && !isContentRoute && (
+                <Col className={classes.clearPadding}>
+                  <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                    <React.Fragment>
+                      {renderRoutes(route.routes)}
+                    </React.Fragment>
+                  </div>
+                </Col>
+              )}
+              {isProfileRoute && (
+                <Col className={classes.clearPadding}>
+                  <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                    <React.Fragment>
+                      {renderRoutes(route.routes)}
+                    </React.Fragment>
+                  </div>
+                </Col>
+              )}
+              {isContentRoute && (
+                <Col className={classes.clearPadding}>
+                  <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+                    <React.Fragment>
+                      {renderRoutes(route.routes)}
+                    </React.Fragment>
+                  </div>
+        
+                </Col>
+              )}
+            </Row>
           </div>
-          {!isAuthenticated && (
-            <div className={classes.buttons}>
-              <Button variant="outlined" color="secondary" onClick={handleClickOpenLoginModal}>
-                Sign in
-              </Button>
-              &nbsp;
-              <Button p={1} variant="contained" color="secondary" disableElevation onClick={handleSignupOnHive}>
-                Sign up
-              </Button>
-            </div>
-          )}
-        </Container>
-        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
-        <LoginModal show={open} onHide={handleClickCloseLoginModal} />
-        <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
-        <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
-        <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
-      </Navbar>
-      <div style={{ display: 'flex !important' }}>
-        <Row>
-          {!isProfileRoute && !isContentRoute && (
-            <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20,  width: 500, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
-                <React.Fragment>
-                  {renderRoutes(route.routes)}
-                </React.Fragment>
-              </div>
-            </Col>
-          )}
-          {isProfileRoute && (
-            <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
-                <React.Fragment>
-                  {renderRoutes(route.routes)}
-                </React.Fragment>
-              </div>
-            </Col>
-          )}
-          {isContentRoute && (
-            <Col className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
-                <React.Fragment>
-                  {renderRoutes(route.routes)}
-                </React.Fragment>
-              </div>
-    
-            </Col>
-          )}
-        </Row>
-      </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   )
 }
