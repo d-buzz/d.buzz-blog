@@ -1,6 +1,7 @@
 {
   "name": "d.buzz-blog",
   "version": "1.0.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@hiveio/hive-js": "^0.8.13",
