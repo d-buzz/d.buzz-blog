@@ -106,13 +106,14 @@ export const fetchTrendingTags = () => {
   return new Promise((resolve, reject) => {
     // note: initialized due to needs to execute during first API call
     setRPCNode()
-    api.getTrendingTagsAsync(null, 100)
-      .then((result) => {
-        resolve(result)
-      })
-      .catch((error) => {
-        reject(error)
-      })
+    const params = [null, 100]
+    api.call('condenser_api.get_trending_tags', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
   })
 }
 
@@ -144,42 +145,45 @@ export const fetchProfile = (username, checkFollow = false) => {
   const user = JSON.parse(localStorage.getItem('user'))
 
   return new Promise((resolve, reject) => {
-    api.getAccountsAsync(username)
-      .then(async(result) => {
-        result.forEach(async(item, index) => {
+    const params = [username]
+    api.call('condenser_api.get_accounts', params, async(err, data) => {
+      if (err) {
+        reject(err)
+        console.log(err)
+      } else {
+        console.log(data)
+        data.forEach(async(item, index) => {
           const repscore = item.reputation
           let score = formatter.reputation(repscore)
-
+    
           if (!score || score < 25) {
             score = 25
           }
-
-          result[index].reputation = score
-
+    
+          data[index].reputation = score
+    
           if (checkFollow) {
-
+    
             const follow_count = await fetchFollowCount(item.name)
-            result[index].follow_count = follow_count
-
+            data[index].follow_count = follow_count
+    
             let isFollowed = false
-
+    
             if (user) {
               isFollowed = await isFollowing(user.username, item.name)
             }
-
-            result[index].isFollowed = isFollowed
+    
+            data[index].isFollowed = isFollowed
           }
-
-          visited.push(result[index])
-
-          if (index === result.length - 1) {
-            resolve(result)
+    
+          visited.push(data[index])
+    
+          if (index === data.length - 1) {
+            resolve(data)
           }
         })
-
-      }).catch((error) => {
-        reject(error)
-      })
+      }
+    })
   })
 }
 
@@ -314,29 +318,34 @@ export const broadcastOperation = (operations, keys) => {
 
 export const fetchContent = (author, permlink) => {
   return new Promise((resolve, reject) => {
-    api.getContentAsync(author, permlink)
-      .then(async(result) => {
-        result.body = result.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
-        result.body = result.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
-        const profile = await fetchProfile([result.author])
-        result.profile = profile[0]
-        resolve(result)
-      })
-      .catch((error) => {
-        reject(error)
-      })
+    const params = [author, permlink]
+    api.call('condenser_api.get_content', params, async(err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        data.body = data.body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+        data.body = data.body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
+        const profile = await fetchProfile([data.author])
+        data.profile = profile[0]
+        resolve(data)
+      }
+    })
   })
 }
 
 export const fetchDiscussions = (author, permlink) => {
   return new Promise((resolve, reject) => {
-    const params = {"author":`${author}`, "permlink": `${permlink}`}
+    const params = {"author":`${author}`, "permlink": `${permlink}`
+  }
     api.call('bridge.get_discussion', params, async(err, data) => {
       if(err) {
         reject(err)
+        console.log(err)
       } else {
         const authors = []
         let profile = []
+
+        console.log(data)
 
         const arr = Object.values(data)
         const uniqueAuthors = [ ...new Set(arr.map(item => item.author)) ]
@@ -352,9 +361,12 @@ export const fetchDiscussions = (author, permlink) => {
           }
         })
 
-        if(authors.length !== 0 ) {
+        console.log(authors)
+
+        if(authors.length !== 0) {
           const info = await fetchProfile(authors)
           profile = [ ...profile, ...info]
+          console.log(info)
         }
 
         const parent = data[`${author}/${permlink}`]
@@ -498,11 +510,12 @@ export const createPermlink = () => {
 
 export const fetchGlobalProperties = () => {
   return new Promise((resolve, reject) => {
-    api.getDynamicGlobalProperties((err, result) => {
+    const params = []
+    api.call('condenser_api.get_dynamic_global_properties', params, (err, data) => {
       if (err) {
         reject(err)
       } else {
-        resolve(result)
+        resolve(data)
       }
     })
   })
@@ -512,11 +525,11 @@ export const fetchSingleProfile = (account) => {
   const user = localStorage.getItem('active')
 
   return new Promise((resolve, reject) => {
-    const params = {account}
+    const params = {"account": `${account}`}
     api.call('bridge.get_profile', params, async(err, data) => {
       if (err) {
         reject(err)
-      }else {
+      } else {
         let isFollowed = false
 
         if(user && `${user}`.trim() !== '') {
@@ -527,8 +540,8 @@ export const fetchSingleProfile = (account) => {
         }
 
         data.isFollowed = isFollowed
-
         resolve(data)
+        console.log(data)
       }
     })
   })
@@ -536,12 +549,14 @@ export const fetchSingleProfile = (account) => {
 
 export const fetchAccounts = (username) => {
   return new Promise((resolve, reject) => {
-    api.getAccountsAsync([username])
-      .then(async(result) => {
-        resolve(result)
-      }).catch((error) => {
-        reject(error)
-      })
+    const params = [[username]]
+    api.call('condenser_api.get_accounts', params, (err, data) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
   })
 }
 
@@ -884,7 +899,7 @@ export const searchPeople = (username) => {
 
 export const getMutePattern = () => {
   return new Promise((resolve) => {
-    axios.get('https://d.buzz/pattern.json')
+    axios.get('https://endpoint.d.buzz/pattern.json')
       .then(function (result) {
         resolve(result.data)
       })

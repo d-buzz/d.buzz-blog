@@ -137,6 +137,10 @@ const Profile = (props) => {
       setMainWidth(400)
     }
   }, [width])
+
+  useEffect(() => {
+    console.log(profile);
+  }, [profile])
   
   // const { username: loginuser, isAuthenticated } = user
   
@@ -369,13 +373,13 @@ const Profile = (props) => {
               </React.Fragment>
             )}
             <Row>
-              <Col sm={3} />
-              <Col sm={6} xs="true" style={{ marginTop: '1%'}}>
+              <Col sm={2} />
+              <Col sm={8} xs="true" style={{ marginTop: '1%'}}>
                 <React.Fragment>
                   {renderRoutes(route.routes, { author: username })}
                 </React.Fragment>
               </Col>
-              <Col sm={3} />
+              <Col sm={2} />
             </Row>
           </React.Fragment>
         )}

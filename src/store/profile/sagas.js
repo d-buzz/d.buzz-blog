@@ -48,6 +48,7 @@ function* getProfileRequest(payload, meta) {
 
     yield put(getProfileSuccess(profile, meta))
   } catch(error) {
+    console.log(error)
     yield put(getProfileFailure(error, meta))
   }
 }
