@@ -76,7 +76,7 @@ const GuardedAppFrame = (props) => {
               </div>
             </Col>
             {!hideRightSideBar && (
-              <Col xs={4}>
+              <Col xs={3}>
                 <Sticky>
                   {({ style }) => (
                     <div style={{ ...style, paddingTop: 60 }}>

@@ -45,6 +45,7 @@ const useStyle = createUseStyles(theme => ({
     ...theme.unread,
   },
   wrapper: {
+    margin: '5px 0',
     width: '100%',
     backgroundColor: 'white',
     borderRadius: 5,

@@ -104,6 +104,7 @@ const useStyles = createUseStyles(theme => ({
     margin: 'auto',
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
+    cursor: 'pointer',
     ...theme.nav.buzz.wrapper,
   },
   buzzWrapper: {
@@ -308,7 +309,7 @@ const AppBar = (props) => {
                 &nbsp;
               </React.Fragment>
             )}
-            <Link to="/">
+            <a href="/">
               {!isMobile && (
                 <React.Fragment>
                   {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
@@ -321,7 +322,7 @@ const AppBar = (props) => {
                   {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
                 </React.Fragment>
               )}
-            </Link>
+            </a>
           </Navbar.Brand>
           {!isMobile && (
             <React.Fragment>

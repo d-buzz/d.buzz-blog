@@ -19,7 +19,7 @@ const useStyles = createUseStyles({
     '@media (min-width: 1100px)': {
       margin: '0 auto !important',
       '&.container': {
-        maxWidth: '900px',
+        maxWidth: '1100px',
       },
     },
   },
@@ -63,7 +63,7 @@ const AppFrame = (props) => {
         </Container>
       )}
       {isMobile && (
-        <React.Fragment>
+      <React.Fragment>
           <MobileAppFrame pathname={pathname} route={route} />
         </React.Fragment>
       )}
