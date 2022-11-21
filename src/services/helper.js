@@ -514,3 +514,10 @@ export const getProfileMetaData = (profile = {}) => {
     website,
   }
 }
+
+export const redirectToUserProfile = () => {
+  if(window.location.href.includes("@") && !window.location.href.includes("#/@")){
+    const account = window.location.href.split("@")
+    window.location = (`/#/@${account[1].replace("#/", "")}`)
+  }
+}
