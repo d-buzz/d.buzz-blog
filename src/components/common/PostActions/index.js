@@ -15,7 +15,7 @@ import Chip from '@material-ui/core/Chip'
 import moment from 'moment'
 import Slider from '@material-ui/core/Slider'
 import IconButton from '@material-ui/core/IconButton'
-import { broadcastNotification } from 'store/interfaces/actions'
+import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
 import { createUseStyles } from 'react-jss'
 import { withStyles } from '@material-ui/core/styles'
 import { upvoteRequest } from 'store/posts/actions'
@@ -23,6 +23,7 @@ import { openReplyModal } from 'store/interfaces/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { isMobile } from 'react-device-detect'
+import { useHistory } from 'react-router'
 
 const PrettoSlider = withStyles({
   root: {
@@ -176,18 +177,19 @@ const PostActions = (props) => {
     upvoteRequest,
     hasUpvoted = false,
     user,
-    body = null,
+    // body = null,
     replyRef = 'list',
-    treeHistory = 0,
+    // treeHistory = 0,
     payoutAt = null,
     disableExtraPadding = false,
-    openReplyModal,
+    // openReplyModal,
     broadcastNotification,
     disableUpvote = false,
     scrollIndex = 0,
     recomputeRowIndex = () => {},
     max_accepted_payout,
     recentUpvotes,
+    saveScrollIndex,
   } = props
 
   let payoutAdditionalStyle = {}
@@ -207,6 +209,8 @@ const PostActions = (props) => {
   const [upvoted, setUpvoted] = useState(hasUpvoted)
 
   const { isAuthenticated } = user
+
+  const history = useHistory()
 
   let extraPadding = { paddingTop: 10 }
 
@@ -261,13 +265,42 @@ const PostActions = (props) => {
       })
   }
 
-  const handleClickReply = () => {
-    openReplyModal(author, permlink, body, treeHistory, replyRef)
-  }
+  // const handleClickReply = () => {
+  //   openReplyModal(author, permlink, body, treeHistory, replyRef)
+  // }
 
   const getPayoutDate = (date) => {
     const semantic =  moment(`${date}Z`).local().fromNow()
     return semantic !== '51 years ago' ? semantic : ''
+  }
+
+  const generateLink = (author, permlink) =>  {
+    let link = ''
+
+    link += `/@${author}/c/${permlink}`
+
+    return link
+  }
+  
+  const handleOpenContent = (e) => {
+    const { target } = e
+    let { href } = target
+    const hostname = window.location.hostname
+
+    e.preventDefault()
+    if(href && !href.includes(hostname)) {
+      window.open(href, '_blank')
+    } else {
+      if(!href) {
+        const link = generateLink(author, permlink)
+        saveScrollIndex(scrollIndex)
+        history.push(link)
+      } else {
+        const split = href.split('/')
+        href = `/${split[3]}`
+        history.push(href)
+      }
+    }
   }
 
   return (
@@ -326,7 +359,7 @@ const PostActions = (props) => {
                 icon={<IconButton classes={{ root: classes.iconButton  }} size="small" disabled={!isAuthenticated}><CommentIcon /></IconButton>}
                 hideStats={hideStats}
                 disabled={!isAuthenticated}
-                onClick={handleClickReply}
+                onClick={handleOpenContent}
                 stat={(
                   <label style={{ marginLeft: 5 }}>
                     {replyCount}
@@ -397,6 +430,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
+    saveScrollIndex,
     upvoteRequest,
     openReplyModal,
     broadcastNotification,

@@ -1,19 +1,21 @@
-import { 
-  AppFrame,
-  Home,
-  Trending,
-  Latest,
-  Content,
-  Profile,
-  AccountBlog,
-  AccountReplies,
-  AccountComments,
-  Notification,
-  Tags,
-  Search,
-  SearchPeople,
-  SearchPosts,
-} from 'components'
+import React from 'react'
+
+const AppFrame = React.lazy(() => import('./components/layouts/AppFrame'))
+const Home = React.lazy(() => import('./components/pages/Home'))
+const Trending = React.lazy(() => import('./components/pages/Trending'))
+const Latest = React.lazy(() => import('./components/pages/Latest'))
+const Content = React.lazy(() => import('./components/pages/Content'))
+const Profile = React.lazy(() => import('./components/pages/Profile'))
+const AccountBlog = React.lazy(() => import('./components/sections/AccountBlog'))
+const AccountReplies = React.lazy(() => import('./components/sections/AccountReplies'))
+const AccountComments = React.lazy(() => import('./components/sections/AccountComments'))
+const Notification = React.lazy(() => import('./components/pages/Notification'))
+const Tags = React.lazy(() => import('./components/pages/Tags'))
+const Search = React.lazy(() => import('./components/pages/Search'))
+const SearchPosts = React.lazy(() => import('./components/sections/SearchPosts'))
+const SearchPeople = React.lazy(() => import('./components/sections/SearchPeople'))
+
+
   
 const routes =  [
   {

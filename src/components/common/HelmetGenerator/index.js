@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-// import stripHtml from 'string-strip-html'
 import { Helmet } from 'react-helmet'
 import { checkIfImage } from 'services/api'
 import removeMd from 'remove-markdown'

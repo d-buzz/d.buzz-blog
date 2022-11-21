@@ -6,9 +6,12 @@ import sha256 from 'crypto-js/sha256'
 import { Remarkable } from 'remarkable'
 import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
-import stripHtml from 'string-strip-html'
 import diff_match_patch from 'diff-match-patch'
 import sanitize from 'sanitize-html'
+
+export const stripHtml = (content) => {
+  return content.replace(/(<([^>]+)>)/gi, '')
+}
 
 const dmp = new diff_match_patch()
 
@@ -246,6 +249,7 @@ const render = (content) => {
                     frameBorder='0'
                     height='400'
                     width='100%'
+                    loading='lazy'
                   ></iframe>`    
     } else {
       contentBody = renderer.render(item)

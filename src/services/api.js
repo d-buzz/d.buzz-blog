@@ -8,7 +8,7 @@ import {
   broadcast,
   formatter,
 } from '@hiveio/hive-js'
-import { stripHtml } from 'string-strip-html'
+import { stripHtml } from './helper'
 
 const visited = []
 

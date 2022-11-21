@@ -72,8 +72,20 @@ const SideBarRight = (props) => {
     {
       name: 'Discord',
       label: 'dbuzzAPP',
-      imagePath: `${window.location.origin}/discord.png`,
+      imagePath: `${window.location.origin}/discord.svg`,
       url: 'https://discord.gg/kCZGPs7',
+    },
+    {
+      name: 'Element',
+      label: '#d.buzz:matrix.org',
+      imagePath: `${window.location.origin}/element.svg`,
+      url: 'https://matrix.to/#/#d.buzz:matrix.org',
+    },
+    {
+      name: 'Twitter',
+      label: '@dbuzzAPP',
+      imagePath: `${window.location.origin}/twitter.svg`,
+      url: 'https://twitter.com/dbuzzAPP',
     },
   ]
 

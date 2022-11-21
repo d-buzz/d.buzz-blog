@@ -25,26 +25,28 @@ const AppWrapper = ({ children }) => {
 
 const App = () => {
   return (
-    <React.Fragment>  
-      <Helmet>
-        <meta property="og:title" content="Blog | D.Buzz" />
-        <meta property="og:description" content="Blog D.Buzz | Blogging for HIVE" />
-        <meta property="og:image" content="https://d.buzz/dbuzz.svg" />
-        <meta property="title" content="Blog | D.Buzz" />
-        <meta property="description" content="Blog D.Buzz | Blogging for HIVE" />
-        <meta property="image" content="https://d.buzz/dbuzz.svg" />
-      </Helmet>
-      <LastLocationProvider>
-        <ThemeLoader>
-          <Init>
-            <AuthGuard>
-              <AppWrapper>
-                {renderRoutes(routes)}
-              </AppWrapper>
-            </AuthGuard>
-          </Init>
-        </ThemeLoader>
-      </LastLocationProvider>
+    <React.Fragment>
+      <React.Suspense fallback={<span> </span>}>
+        <Helmet>
+          <meta property="og:title" content="Blog | D.Buzz" />
+          <meta property="og:description" content="Blog D.Buzz | Blogging for HIVE" />
+          <meta property="og:image" content="https://d.buzz/dbuzz.svg" />
+          <meta property="title" content="Blog | D.Buzz" />
+          <meta property="description" content="Blog D.Buzz | Blogging for HIVE" />
+          <meta property="image" content="https://d.buzz/dbuzz.svg" />
+        </Helmet>
+        <LastLocationProvider>
+          <ThemeLoader>
+            <Init>
+              <AuthGuard>
+                <AppWrapper>
+                  {renderRoutes(routes)}
+                </AppWrapper>
+              </AuthGuard>
+            </Init>
+          </ThemeLoader>
+        </LastLocationProvider>
+      </React.Suspense>
     </React.Fragment>
   )
 }
