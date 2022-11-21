@@ -10,10 +10,15 @@ const useStyles = createUseStyles(theme => ({
   },
   wrapper: {
     cursor: 'pointer',
-    widt: '100%',
+    width: '100%',
     borderBottom: theme.border.primary,
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
+    borderRadius: 15,
+    marginTop: 2.5,
+    marginBottom: 2.5,
+    paddingLeft: 10,
+    paddingRight: 10,
     '&:hover': {
       ...theme.right.list.hover,
     },
@@ -21,13 +26,11 @@ const useStyles = createUseStyles(theme => ({
   label: {
     color: theme.font.color,
     paddingTop: 10,
-    paddingLeft: 15,
     fontWeight: 'bold',
     fontSize: 14,
   },
   subLabel: {
     fontSize: 13,
-    paddingLeft: 15,
     color: '#657786',
   },
   linkWrapper: {
