@@ -66,8 +66,7 @@ const LinkPreview = (props) => {
   const classes = useStyles()
 
   const links  = markdownLinkExtractor(content)
-  console.log({links})
-  console.log(links.length)
+  
   let isValidUrl = false
   let url = ''
 
@@ -194,7 +193,7 @@ const LinkPreview = (props) => {
     let image = meta.image
 
     if (!`${image}`.includes('https') || !`${image}`.includes('http') || image === '') {
-      image = `${window.location.origin}/no-img.png`
+      image = `${window.location.origin}/no-img.svg`
     }
 
     if (image.match(/^\//g)) {

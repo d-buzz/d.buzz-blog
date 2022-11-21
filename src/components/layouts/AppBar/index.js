@@ -34,7 +34,7 @@ import {
   MenuButton,
   MenuLink,
 } from '@reach/menu-button'
-import AddIcon from '@material-ui/icons/Add'
+// import AddIcon from '@material-ui/icons/Add'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { bindActionCreators } from 'redux'
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone'
@@ -334,12 +334,12 @@ const AppBar = (props) => {
                   {!minify && (
                     <React.Fragment>
                       <div style={{ display: 'inline-flex' }}>
-                        &nbsp;
+                        {/* &nbsp;
                         <div className={classes.buzzButton}>
                           <div className={classes.buzzWrapper} onClick={handleClickOpenBuzzModal}>
                             <AddIcon />
                           </div>
-                        </div>
+                        </div> */}
                         &nbsp;
                         <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
                           <Menu>

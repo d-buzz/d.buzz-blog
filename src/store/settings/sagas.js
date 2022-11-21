@@ -25,7 +25,6 @@ import config from 'config'
 
 function* getBestRPCNode(meta) {
   const node = yield call(getBestRpcNode)
-  console.log({ node })
   yield call([localStorage, localStorage.setItem], 'rpc', node)
   
   yield put(setRpcNode(node, meta))

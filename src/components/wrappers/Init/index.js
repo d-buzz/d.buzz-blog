@@ -52,8 +52,7 @@ const Init = (props) => {
   if (accounts !== null) {
     accounts.forEach((account) => {
       try{
-        const decrypt = readSession(account)
-        console.log(decrypt)
+        readSession(account)
       } catch (e) {
         console.log(e)
         window.localStorage.clear()
