@@ -147,6 +147,24 @@ const useStyles = createUseStyles(theme => ({
       },
     },
   },
+  marginLeft0:{
+    marginLeft: 0,
+  },
+  marginRight0:{
+    marginRight: 0,
+  },
+  displayFlex:{
+    display: 'flex',
+  },
+  justifyContentCenter:{
+    justifyContent: 'center'
+  },
+  alignItemsCenter:{
+    alignItems: 'center',
+  },
+  minWidth100:{
+    minWidth: '100%',
+  },
   root: {
     fill: 'black !important',
   },
@@ -173,7 +191,7 @@ const AppBar = (props) => {
   const { username } = user
   const params = queryString.parse(location.search) || ''
   const query = params.q === undefined ? '' : params.q
-
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
   const minify = false // set value for testing...
   const [open, setOpen] = useState(false)
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
@@ -190,6 +208,9 @@ const AppBar = (props) => {
 
   useEffect(() => {
     pollNotifRequest()
+    if (pathname === '/create-post') {
+      setIsCreatePostPage(true)
+    }
     // eslint-disable-next-line
   }, [])
 
@@ -299,36 +320,40 @@ const AppBar = (props) => {
   return (
     <React.Fragment>
       <Navbar fixed="top" className={navbarContainer}>
-        <Container>
-          <Navbar.Brand>
-            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
-              <React.Fragment>
-                <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
-                  <BackArrowIcon />
-                </IconButton>
-                &nbsp;
-              </React.Fragment>
-            )}
-            <a href="/">
-              {!isMobile && (
+        <Container className={classNames(!isCreatePostPage?classes.marginLeft0:'', !isCreatePostPage?classes.marginRight0:'', !isCreatePostPage?classes.minWidth100:'')}>
+          <div className={classNames(classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>
+            <Navbar.Brand>
+              {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
                 <React.Fragment>
-                  {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
-                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
+                  <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
+                    <BackArrowIcon />
+                  </IconButton>
+                  &nbsp;
                 </React.Fragment>
               )}
-              {isMobile && (
-                <React.Fragment>
-                  {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
-                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
-                </React.Fragment>
-              )}
-            </a>
-          </Navbar.Brand>
+              <a href="/">
+                {!isMobile && (
+                  <React.Fragment>
+                    {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
+                  </React.Fragment>
+                )}
+                {isMobile && (
+                  <React.Fragment>
+                    {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
+                  </React.Fragment>
+                )}
+              </a>
+            </Navbar.Brand>
+            <Hidden only="xs">
+              <SearchField className={classes.search} disableTips={true} />
+            </Hidden>   
+          </div>
+          
           {!isMobile && (
             <React.Fragment>
-              <Hidden only="xs">
-                <SearchField className={classes.search} disableTips={true} />
-              </Hidden>            
+                      
               {isAuthenticated && (
                 <React.Fragment>
                   {!minify && (
@@ -543,6 +568,7 @@ const AppBar = (props) => {
           )}
           
         </Container>
+        
         <LoginModal show={open} onHide={handleClickCloseLoginModal} />
         <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
         <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />

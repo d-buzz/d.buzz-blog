@@ -14,6 +14,47 @@ input:focus, textarea:focus, select:focus{
   outline: none;
 }
 
+.height150 {
+  height: 150px;
+}
+
+.positionFixed{
+  position: fixed;
+}
+.left0{
+  left: 0;
+}
+
+.right0{
+  right: 0;
+}
+
+.bottom0{
+  bottom: 0;
+}
+
+.zindex600{
+  z-index: 600;
+}
+
+.backgroundColorFa{
+  background-color: #fafafa;
+}
+
+.displayFlex{
+  display: flex
+}
+.justContentCenter{
+  justify-content: center;
+}
+.alignItemsCenter{
+  align-items: center;
+}
+
+.height100{
+  height: 100%;
+}
+
 .pull-right {
   float: right!important;
   height: max-content !important;

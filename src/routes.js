@@ -6,6 +6,7 @@ const Trending = React.lazy(() => import('./components/pages/Trending'))
 const Latest = React.lazy(() => import('./components/pages/Latest'))
 const Content = React.lazy(() => import('./components/pages/Content'))
 const Profile = React.lazy(() => import('./components/pages/Profile'))
+const Post = React.lazy(() => import('./components/pages/Post'))
 const AccountBlog = React.lazy(() => import('./components/sections/AccountBlog'))
 const AccountReplies = React.lazy(() => import('./components/sections/AccountReplies'))
 const AccountComments = React.lazy(() => import('./components/sections/AccountComments'))
@@ -25,6 +26,11 @@ const routes =  [
         path: '/',
         exact: true,
         component: Home,
+      },
+      {
+        path: '/create-post',
+        exact: true,
+        component: Post,
       },
       {
         path: '/trending',
