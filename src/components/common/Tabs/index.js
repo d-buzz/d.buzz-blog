@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import React from 'react'
 import { createUseStyles } from 'react-jss'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 const useStyles = createUseStyles(theme => ({
    width90:{
     width: '90%'
@@ -68,6 +68,8 @@ const useStyles = createUseStyles(theme => ({
 const Tabs = () => {
   const classes = useStyles()
   const history = useHistory()
+  const location = useLocation()
+  const { pathname } = location
 
   const redirectPage = (url) => {
     history.push(url)
@@ -89,13 +91,13 @@ const Tabs = () => {
         <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
             <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
                 <div className={classNames(classes.displayFlex)}>
-                    <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, classes.borderBottomSolid1p, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname == '/trending'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Trending
                     </div>
                     <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Following
                     </div>
-                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname == '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Latest
                     </div>
                     <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
