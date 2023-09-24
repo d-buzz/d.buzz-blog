@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import React from 'react'
 import { createUseStyles } from 'react-jss'
+import { useHistory } from 'react-router'
 const useStyles = createUseStyles(theme => ({
    width90:{
     width: '90%'
@@ -63,6 +64,13 @@ const useStyles = createUseStyles(theme => ({
   }))
 const Tabs = () => {
   const classes = useStyles()
+  const history = useHistory()
+
+  const redirectPage = (url) => {
+    history.push(url)
+  }
+
+  
   return (
     <div className={classNames(classes.paddingBottom50)}>
     {/* 2 div
@@ -84,7 +92,7 @@ const Tabs = () => {
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Following
                     </div>
-                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Latest
                     </div>
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
