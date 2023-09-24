@@ -8,8 +8,8 @@ const useStyles = createUseStyles(theme => ({
    marginAuto: {
     margin: 'auto'
    },
-   height39:{
-    height: 39,
+   height43:{
+    height: 43,
    },
    boxShadow242:{
     boxShadow: 'rgb(242, 242, 242) 0px -1px 0px inset'
@@ -23,6 +23,40 @@ const useStyles = createUseStyles(theme => ({
    displayBLock: {
     display: 'block',
    },
+   displayFlex:{
+    display:'flex',
+   },
+   alignItemsCenter:{
+    alignItems: 'center',
+   },
+   padding2by0:{
+    padding: '2px 0px',
+   },
+   overFlowYHidden:{
+    overflowY: 'hidden',
+   },
+   overFLoxXScroll:{
+    overflowX: 'scroll',
+   },
+   borderBottomSolid1p:{
+    borderBottom:'1px solid rgb(36, 36, 36)',
+   },
+   minWidthMaxContent: {
+    minWidth: 'max-content',
+   },
+   paddingBottom16:{
+    paddingBottom: 16,
+   },
+   marginRight32:{
+    marginRight:32,
+   },
+   paddingTop24:{
+    paddingTop: 24,
+   },
+   height16:{
+    height:16,
+   }
+
   }))
 const Tabs = () => {
   const classes = useStyles()
@@ -32,10 +66,32 @@ const Tabs = () => {
         1 for padding
         1 for tabs content
     */}
-    <div className={classNames()}></div>
+    <div className={classNames(classes.paddingTop24)}></div>
     <div className={classNames( classes.width90, classes.marginAuto)}>
-        <div className={classNames( classes.height39, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
+        {/* div for height 16px */}
+        <div className={classes.height16}>
 
+        </div>
+        <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
+            <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
+                <div className={classNames(classes.displayFlex)}>
+                    <div className={classNames(classes.borderBottomSolid1p, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        For you
+                    </div>
+                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        Following
+                    </div>
+                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        Science
+                    </div>
+                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        Justice
+                    </div>
+                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        Art
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     </>
