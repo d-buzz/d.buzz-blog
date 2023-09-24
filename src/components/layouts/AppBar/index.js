@@ -62,6 +62,17 @@ const useStyles = createUseStyles(theme => ({
     marginTop: 5,
     backgroundColor: '#e6ecf0',
   },
+  search2: {
+    width: '60%',
+    paddingLeft: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    backgroundColor: '#F9F9F9',
+  },
+  box2:{
+    border: '1px solid #F9F9F9',
+    borderRadius: 20,
+  },
   backButton: {
     display: 'inline-block',
     ...theme.icon,
@@ -81,6 +92,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.profile.wrapper,
+    backgroundColor: 'white !important'
   },
   profileUsername: {
     paddingLeft: 10,
@@ -120,6 +132,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.notification.wrapper,
+    backgroundColor: 'white !important'
   },
   notificationWrapper: {
     height: 45,
@@ -167,6 +180,12 @@ const useStyles = createUseStyles(theme => ({
   },
   root: {
     fill: 'black !important',
+  },
+  textWhite:{
+    color: 'white',
+  },
+  textBlack:{
+    color: 'black',
   },
 }))
 
@@ -347,7 +366,7 @@ const AppBar = (props) => {
               </a>
             </Navbar.Brand>
             <Hidden only="xs">
-              <SearchField className={classes.search} disableTips={true} />
+              <SearchField className={ classNames(classes.search2, classes.box2) } disableTips={true} />
             </Hidden>   
           </div>
           
@@ -365,6 +384,19 @@ const AppBar = (props) => {
                             <AddIcon />
                           </div>
                         </div> */}
+                        &nbsp;
+                        <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
+                          <Menu>
+                            <MenuLink 
+                              as={Link}
+                              to="/create-post"
+                            >
+                              <label className={classes.textBlack}>Write</label>
+                              {/* <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge> */}
+                            </MenuLink>
+                          </Menu>
+                        </div>
+                        
                         &nbsp;
                         <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
                           <Menu>
@@ -399,7 +431,7 @@ const AppBar = (props) => {
                           >
                             <div style={{ display: 'inline-flex', top: '50%', bottom: '50%' }}>
                               <Avatar author={username} />
-                              <h6 className={classes.profileUsername}>@{username}</h6>
+                              {/* <h6 className={classes.profileUsername}>@{username}</h6> */}
                             </div>
                           </MenuButton>
                           <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
