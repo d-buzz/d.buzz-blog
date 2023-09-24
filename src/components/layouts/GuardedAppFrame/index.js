@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useWindowDimensions } from 'services/helper'
 import { useLocation } from 'react-router-dom'
+import Tabs from '../../common/Tabs'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -71,6 +72,7 @@ const GuardedAppFrame = (props) => {
             <Col xs={mainWidth} className={classes.clearPadding}>
               <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
                 <React.Fragment>
+                  <Tabs/>
                   {renderRoutes(route.routes)}
                 </React.Fragment>
               </div>
