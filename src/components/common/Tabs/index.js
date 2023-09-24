@@ -59,7 +59,10 @@ const useStyles = createUseStyles(theme => ({
    },
    paddingBottom50:{
     paddingBottom: 50,
-   }
+   },
+   cursorPointer:{
+    cursor: 'pointer',
+   },
 
   }))
 const Tabs = () => {
@@ -70,7 +73,7 @@ const Tabs = () => {
     history.push(url)
   }
 
-  
+
   return (
     <div className={classNames(classes.paddingBottom50)}>
     {/* 2 div
@@ -86,22 +89,22 @@ const Tabs = () => {
         <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
             <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
                 <div className={classNames(classes.displayFlex)}>
-                    <div className={classNames(classes.borderBottomSolid1p, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div className={classNames(classes.cursorPointer, classes.borderBottomSolid1p, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Trending
                     </div>
-                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Following
                     </div>
-                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Latest
                     </div>
-                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         News
                     </div>
-                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Hive
                     </div>
-                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         DBuzz
                     </div>
                 </div>
