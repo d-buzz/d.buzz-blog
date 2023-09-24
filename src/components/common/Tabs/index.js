@@ -7,7 +7,22 @@ const useStyles = createUseStyles(theme => ({
    },
    marginAuto: {
     margin: 'auto'
-   }
+   },
+   height39:{
+    height: 39,
+   },
+   boxShadow242:{
+    boxShadow: 'rgb(242, 242, 242) 0px -1px 0px inset'
+   },
+   overFlowHidden:{
+    overflow: 'hidden',
+   },
+   positionRelative:{
+    position: 'relative',
+   },
+   displayBLock: {
+    display: 'block',
+   },
   }))
 const Tabs = () => {
   const classes = useStyles()
@@ -19,7 +34,9 @@ const Tabs = () => {
     */}
     <div className={classNames()}></div>
     <div className={classNames( classes.width90, classes.marginAuto)}>
-        tabs here
+        <div className={classNames( classes.height39, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
+
+        </div>
     </div>
     </>
   )
