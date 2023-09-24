@@ -55,13 +55,16 @@ const useStyles = createUseStyles(theme => ({
    },
    height16:{
     height:16,
+   },
+   paddingBottom50:{
+    paddingBottom: 50,
    }
 
   }))
 const Tabs = () => {
   const classes = useStyles()
   return (
-    <>
+    <div className={classNames(classes.paddingBottom50)}>
     {/* 2 div
         1 for padding
         1 for tabs content
@@ -94,7 +97,7 @@ const Tabs = () => {
             </div>
         </div>
     </div>
-    </>
+    </div>
   )
 }
 
