@@ -79,19 +79,22 @@ const Tabs = () => {
             <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
                 <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.borderBottomSolid1p, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        For you
+                        Trending
                     </div>
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Following
                     </div>
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Science
+                        Latest
                     </div>
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Justice
+                        News
                     </div>
                     <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Art
+                        Hive
+                    </div>
+                    <div className={classNames(classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                        DBuzz
                     </div>
                 </div>
             </div>
