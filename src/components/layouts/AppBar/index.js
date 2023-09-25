@@ -187,6 +187,15 @@ const useStyles = createUseStyles(theme => ({
   textBlack:{
     color: 'black',
   },
+  transitionOpacity:{
+    transition: 'opacity 0.5s',
+  },
+  opacity0:{
+    opacity: 0,
+  },
+  opacity1:{
+    opacity: 1
+  }
 }))
 
 const AppBar = (props) => {
@@ -335,10 +344,28 @@ const AppBar = (props) => {
     const { value } = target
     setSearchkey(value)
   }
+  const [isTop, setIstop] = useState(true)
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY; // => scroll position
+    if (scrollPosition <= 50) {
+        setIstop(true)
+    }else{
+        setIstop(false)
+    }
+    // console.log(scrollPosition);
+};
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    }, []);
 
   return (
     <React.Fragment>
-      <Navbar fixed="top" className={navbarContainer}>
+      <Navbar fixed="top" className={classNames(navbarContainer, isTop?classes.opacity1:classes.opacity0, classes.transitionOpacity)}>
         <Container className={classNames(!isCreatePostPage?classes.marginLeft0:'', !isCreatePostPage?classes.marginRight0:'', !isCreatePostPage?classes.minWidth100:'')}>
           <div className={classNames(classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>
             <Navbar.Brand>
