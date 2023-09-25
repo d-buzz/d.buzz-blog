@@ -91,13 +91,13 @@ const Tabs = () => {
         <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
             <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
                 <div className={classNames(classes.displayFlex)}>
-                    <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname == '/trending'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Trending
                     </div>
                     <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Following
                     </div>
-                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname == '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                         Latest
                     </div>
                     <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>

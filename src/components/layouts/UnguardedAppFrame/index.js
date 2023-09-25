@@ -81,7 +81,7 @@ const UnguardedAppFrame = (props) => {
       setHideRightSideBar(true)
       setIsCreatePostPage(true)
     }
-  },[])
+  },[pathname])
 
   useEffect(() => {
     if (width < 800) {
@@ -96,7 +96,7 @@ const UnguardedAppFrame = (props) => {
         setHideRightSideBar(false)
       }
     }
-  }, [width])
+  }, [width, pathname])
 
   return (
     <React.Fragment>
