@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useHistory, useLocation } from 'react-router'
 const useStyles = createUseStyles(theme => ({
@@ -54,6 +54,9 @@ const useStyles = createUseStyles(theme => ({
    paddingTop24:{
     paddingTop: 24,
    },
+   paddingTop50:{
+    paddingTop: 50,
+   },
    height16:{
     height:16,
    },
@@ -63,6 +66,21 @@ const useStyles = createUseStyles(theme => ({
    cursorPointer:{
     cursor: 'pointer',
    },
+   positionSticky:{
+    position: 'sticky',
+   },
+   top57:{
+    top: 57,
+   },
+   top0:{
+    top: 0,
+   },
+   zindex1050:{
+    zIndex:'1050',
+   },
+   backGroundWhite:{
+    background:'white',
+   },
 
   }))
 const Tabs = () => {
@@ -70,19 +88,36 @@ const Tabs = () => {
   const history = useHistory()
   const location = useLocation()
   const { pathname } = location
+  const [isTop, setIstop] = useState(true)
 
   const redirectPage = (url) => {
     history.push(url)
   }
 
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY; // => scroll position
+    if (scrollPosition <= 50) {
+        setIstop(true)
+    }else{
+        setIstop(false)
+    }
+    // console.log(scrollPosition);
+};
+  useEffect(() => {
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    }, []);
 
   return (
-    <div className={classNames(classes.paddingBottom50)}>
+    <div className={classNames(isTop?classes.top57:classes.top0, isTop? classes.paddingTop24:'', classes.positionSticky, classes.backGroundWhite, !isTop?classes.zindex1050:'' )}>
     {/* 2 div
         1 for padding
         1 for tabs content
     */}
-    <div className={classNames(classes.paddingTop24)}></div>
+    {/* <div className={classNames(classes.paddingTop24)}></div> */}
     <div className={classNames( classes.width90, classes.marginAuto)}>
         {/* div for height 16px */}
         <div className={classes.height16}>
