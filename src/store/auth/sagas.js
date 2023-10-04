@@ -135,11 +135,11 @@ function* authenticateUserRequest(payload, meta) {
       window.location.reload()
     }
 
-      yield put(authenticateUserSuccess(user, meta))
-    } catch(error) {
-      yield put(authenticateUserFailure(error, meta))
-    }
+    yield put(authenticateUserSuccess(user, meta))
+  } catch(error) {
+    yield put(authenticateUserFailure(error, meta))
   }
+}
 
 function* getSavedUserRequest(meta) {
   let user = { username: '', useKeychain: false, isAuthenticated: false }

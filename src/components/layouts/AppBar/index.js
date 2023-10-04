@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Badge from '@material-ui/core/Badge'
 import classNames from 'classnames'
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from '@material-ui/icons/Create'
 import queryString from 'query-string'
 import { 
   Avatar,
@@ -92,7 +92,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.profile.wrapper,
-    backgroundColor: 'white !important'
+    backgroundColor: 'white !important',
   },
   profileUsername: {
     paddingLeft: 10,
@@ -132,7 +132,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.notification.wrapper,
-    backgroundColor: 'white !important'
+    backgroundColor: 'white !important',
   },
   notificationWrapper: {
     height: 45,
@@ -170,7 +170,7 @@ const useStyles = createUseStyles(theme => ({
     display: 'flex',
   },
   justifyContentCenter:{
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   alignItemsCenter:{
     alignItems: 'center',
@@ -194,8 +194,8 @@ const useStyles = createUseStyles(theme => ({
     opacity: 0,
   },
   opacity1:{
-    opacity: 1
-  }
+    opacity: 1,
+  },
 }))
 
 const AppBar = (props) => {
@@ -347,21 +347,21 @@ const AppBar = (props) => {
   const [isTop, setIstop] = useState(true)
 
   const handleScroll = () => {
-    const scrollPosition = window.scrollY; // => scroll position
+    const scrollPosition = window.scrollY // => scroll position
     if (scrollPosition <= 50) {
-        setIstop(true)
+      setIstop(true)
     }else{
-        setIstop(false)
+      setIstop(false)
     }
     // console.log(scrollPosition);
-};
+  }
   useEffect(() => {
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-    }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <React.Fragment>
@@ -393,7 +393,7 @@ const AppBar = (props) => {
               </a>
             </Navbar.Brand>
             <Hidden only="xs">
-              <SearchField className={ classNames(classes.search2, classes.box2) } disableTips={true} />
+              <SearchField className={classNames(classes.search2, classes.box2)} disableTips={true} />
             </Hidden>   
           </div>
           
@@ -520,18 +520,18 @@ const AppBar = (props) => {
             </React.Fragment>
           )}
           {isMobile && isAuthenticated && (
-              <div>
-                {title !== 'Search' && (
-                  <React.Fragment>
-                    <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                      <CreateIcon fontSize="medium" />
-                    </IconButton>
-                    <IconButton onClick={handleClickSearchButton} size="medium">
-                      <SearchIcon/>
-                    </IconButton>
-                  </React.Fragment>
-                )}
-                <Menu>
+            <div>
+              {title !== 'Search' && (
+                <React.Fragment>
+                  <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                    <CreateIcon fontSize="medium" />
+                  </IconButton>
+                  <IconButton onClick={handleClickSearchButton} size="medium">
+                    <SearchIcon/>
+                  </IconButton>
+                </React.Fragment>
+              )}
+              <Menu>
                 {title === 'Search' && (
                   <div className={classes.searchDiv}>
                     <SearchField
@@ -610,8 +610,8 @@ const AppBar = (props) => {
                   </React.Fragment>
                 )}
                   
-                </Menu>
-              </div>
+              </Menu>
+            </div>
               
           )}
           {!isAuthenticated && (

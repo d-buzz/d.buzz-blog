@@ -70,7 +70,7 @@ const GuardedAppFrame = (props) => {
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-            <Tabs/>
+              <Tabs/>
               <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
                 <React.Fragment>
                  

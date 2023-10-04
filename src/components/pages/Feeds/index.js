@@ -52,7 +52,7 @@ const useStyles = createUseStyles(theme => ({
     '& a': {
       color: '#e53934 !important',
     },
-  }
+  },
 }))
 
 const Feeds = React.memo((props) => {

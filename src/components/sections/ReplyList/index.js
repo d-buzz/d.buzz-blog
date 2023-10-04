@@ -267,7 +267,7 @@ const ReplyList = (props) => {
       payout_at,
     } = reply
 
-    let { body } = reply
+    const { body } = reply
 
     let { payout } = reply
 

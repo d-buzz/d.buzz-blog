@@ -78,22 +78,20 @@ const AppFrame = (props) => {
         </Container>
       )}
       {isMobile && (
-      <React.Fragment>
+        <React.Fragment>
           <MobileAppFrame pathname={pathname} route={route} />
         </React.Fragment>
       )}
       {/* <div className={classNames(classes.height150, classes.positionFixed, classes.left0, classes.right0, classes.bottom0, classes.zindex600)}> */}
-      {
-        isCreatePostPage && (
-          <React.Fragment>
-            <div className={'height150 positionFixed left0 right0 bottom0 zindex600'}>
-              <div className={'backgroundColorFa displayFlex justContentCenter alignItemsCenter height100'}>
-                Select text to change formatting, add headers, or create links.
-              </div>
+      {isCreatePostPage && (
+        <React.Fragment>
+          <div className={'height150 positionFixed left0 right0 bottom0 zindex600'}>
+            <div className={'backgroundColorFa displayFlex justContentCenter alignItemsCenter height100'}>
+              Select text to change formatting, add headers, or create links.
             </div>
-          </React.Fragment>
-        )
-      }
+          </div>
+        </React.Fragment>
+      )}
      
       <ReplyFormModal />
       <NotificationBox />

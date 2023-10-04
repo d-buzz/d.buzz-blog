@@ -3,86 +3,86 @@ import React, { useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useHistory, useLocation } from 'react-router'
 const useStyles = createUseStyles(theme => ({
-   width90:{
-    width: '90%'
-   },
-   marginAuto: {
-    margin: 'auto'
-   },
-   height43:{
+  width90:{
+    width: '90%',
+  },
+  marginAuto: {
+    margin: 'auto',
+  },
+  height43:{
     height: 43,
-   },
-   boxShadow242:{
-    boxShadow: 'rgb(242, 242, 242) 0px -1px 0px inset'
-   },
-   overFlowHidden:{
+  },
+  boxShadow242:{
+    boxShadow: 'rgb(242, 242, 242) 0px -1px 0px inset',
+  },
+  overFlowHidden:{
     overflow: 'hidden',
-   },
-   positionRelative:{
+  },
+  positionRelative:{
     position: 'relative',
-   },
-   displayBLock: {
+  },
+  displayBLock: {
     display: 'block',
-   },
-   displayFlex:{
+  },
+  displayFlex:{
     display:'flex',
-   },
-   alignItemsCenter:{
+  },
+  alignItemsCenter:{
     alignItems: 'center',
-   },
-   padding2by0:{
+  },
+  padding2by0:{
     padding: '2px 0px',
-   },
-   overFlowYHidden:{
+  },
+  overFlowYHidden:{
     overflowY: 'hidden',
-   },
-   overFLoxXScroll:{
+  },
+  overFLoxXScroll:{
     overflowX: 'scroll',
-   },
-   borderBottomSolid1p:{
+  },
+  borderBottomSolid1p:{
     borderBottom:'1px solid rgb(36, 36, 36)',
-   },
-   minWidthMaxContent: {
+  },
+  minWidthMaxContent: {
     minWidth: 'max-content',
-   },
-   paddingBottom16:{
+  },
+  paddingBottom16:{
     paddingBottom: 16,
-   },
-   marginRight32:{
+  },
+  marginRight32:{
     marginRight:32,
-   },
-   paddingTop24:{
+  },
+  paddingTop24:{
     paddingTop: 24,
-   },
-   paddingTop50:{
+  },
+  paddingTop50:{
     paddingTop: 50,
-   },
-   height16:{
+  },
+  height16:{
     height:16,
-   },
-   paddingBottom50:{
+  },
+  paddingBottom50:{
     paddingBottom: 50,
-   },
-   cursorPointer:{
+  },
+  cursorPointer:{
     cursor: 'pointer',
-   },
-   positionSticky:{
+  },
+  positionSticky:{
     position: 'sticky',
-   },
-   top57:{
+  },
+  top57:{
     top: 57,
-   },
-   top0:{
+  },
+  top0:{
     top: 0,
-   },
-   zindex1050:{
+  },
+  zindex1050:{
     zIndex:'1050',
-   },
-   backGroundWhite:{
+  },
+  backGroundWhite:{
     background:'white',
-   },
+  },
 
-  }))
+}))
 const Tabs = () => {
   const classes = useStyles()
   const history = useHistory()
@@ -95,59 +95,59 @@ const Tabs = () => {
   }
 
   const handleScroll = () => {
-    const scrollPosition = window.scrollY; // => scroll position
+    const scrollPosition = window.scrollY // => scroll position
     if (scrollPosition <= 50) {
-        setIstop(true)
+      setIstop(true)
     }else{
-        setIstop(false)
+      setIstop(false)
     }
     // console.log(scrollPosition);
-};
+  }
   useEffect(() => {
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-    }, []);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <div className={classNames(isTop?classes.top57:classes.top0, isTop? classes.paddingTop24:'', classes.positionSticky, classes.backGroundWhite, !isTop?classes.zindex1050:'' )}>
-    {/* 2 div
+    	{/* 2 div
         1 for padding
         1 for tabs content
-    */}
-    {/* <div className={classNames(classes.paddingTop24)}></div> */}
-    <div className={classNames( classes.width90, classes.marginAuto)}>
+    	*/}
+    	{/* <div className={classNames(classes.paddingTop24)}></div> */}
+    	<div className={classNames( classes.width90, classes.marginAuto)}>
         {/* div for height 16px */}
         <div className={classes.height16}>
 
         </div>
-        <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
-            <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
-                <div className={classNames(classes.displayFlex)}>
-                    <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Trending
-                    </div>
-                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Following
-                    </div>
-                    <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Latest
-                    </div>
-                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        News
-                    </div>
-                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        Hive
-                    </div>
-                    <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                        DBuzz
-                    </div>
-                </div>
+			 <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
+          <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
+          	<div className={classNames(classes.displayFlex)}>
+              <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    Trending
+              </div>
+              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    Following
+              </div>
+              <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    Latest
+              </div>
+              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                    News
+              </div>
+              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                Hive
+              </div>
+              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                  DBuzz
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
     </div>
   )
 }

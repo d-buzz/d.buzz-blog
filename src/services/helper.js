@@ -176,7 +176,7 @@ export const extractImageLinks = (links) => {
 }
 
 const prepareImages = (content) => {
-  let contentReplaced = content
+  const contentReplaced = content
   const splitContent = contentReplaced.split(' ')
   splitContent.forEach((item, index) => {
     // remove 3speak thumbnails
@@ -201,7 +201,7 @@ const prepareEmbeds = (content) => {
         item = item[0]
       }
 
-      let splitLink = item.split('watch?v=')
+      const splitLink = item.split('watch?v=')
 
       let idToFormat = splitLink[1]
       idToFormat = idToFormat.replace(/\)/g, '')
@@ -363,7 +363,6 @@ export const errorMessageComposer = (type = null, errorCode = 0) => {
 
   return errorMessage
 }
-
 
 
 const remarkable = new Remarkable()

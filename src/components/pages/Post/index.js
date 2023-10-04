@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
+import classNames from "classnames"
+import React, { useState } from "react"
+import Container from "react-bootstrap/Container"
 import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(theme => ({
   marginLeft0:{
@@ -16,10 +16,10 @@ const useStyles = createUseStyles(theme => ({
     display: 'none',
   },
   justifyContentCenter:{
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   justifyContentStart:{
-    justifyContent: 'start'
+    justifyContent: 'start',
   },
   alignItemsCenter:{
     alignItems: 'center',
@@ -49,13 +49,13 @@ const useStyles = createUseStyles(theme => ({
     marginTop: 10,
   },
   letterSpacing3em:{
-    letterSpacing: '-.003em'
+    letterSpacing: '-.003em',
   },
   paddingTop16: {
     paddingTop: 16,
   },
   fontSize42: {
-    fontSize:42
+    fontSize:42,
   },
  
   lineHeight125:{
@@ -75,7 +75,7 @@ const useStyles = createUseStyles(theme => ({
   },
   marginRight20:{
     marginRight: 20,
-  }
+  },
 }))
 const Post = () => {
   const classes = useStyles()
@@ -108,7 +108,7 @@ const Post = () => {
       </form>
       
     </Container>
-  );
-};
+  )
+}
 
-export default Post;
+export default Post

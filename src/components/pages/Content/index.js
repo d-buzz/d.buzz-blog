@@ -187,7 +187,7 @@ const Content = (props) => {
 
   console.log({depth})
 
-  let { body } = content || ''
+  const { body } = content || ''
 
   let {  max_accepted_payout } = content || '0.00'
 
@@ -351,119 +351,119 @@ const Content = (props) => {
       {!loadingContent && author && (
         <React.Fragment>
           <HelmetGenerator content={body} user={author} />
-            <div className={classes.wrapper}>
-              <br />
-              <React.Fragment>
-                {depth !== 0 && parent_author !== null && (
-                  <Row>
-                    <Col>
-                      <div className={classes.context}>
-                        <div className={classes.contextWrapper}>
-                          <h6 style={{ paddingTop: 5 }}>You are viewing a single comment's thread from:</h6>
-                          <h5>RE: {root_title}</h5>
-                          <ul>
-                            <li><Link to={generateParentLinks(root_author, root_permlink)}>View the full context</Link></li>
-                            <li><Link to={generateParentLinks(parent_author, parent_permlink)}>View the direct parent</Link></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
+          <div className={classes.wrapper}>
+            <br />
+            <React.Fragment>
+              {depth !== 0 && parent_author !== null && (
                 <Row>
-                  <Col xs="auto" style={{ paddingRight: 0 }}>
-                    <Avatar author={author} />
-                  </Col>
-                  <Col style={{ paddingLeft: 10 }}>
-                    <div style={{ marginTop: 2 }}>
-                      <Link
-                        ref={popoverAnchor}
-                        to={generateAuthorLink}
-                        className={classes.link}
-                        onMouseEnter={openPopOver}
-                        onMouseLeave={closePopOver}
-                      >
-                        <p className={classes.name}>
-                          {author}
-                        </p>
-                      </Link>
-
-                      <br />
-                      <p className={classes.username}>
-                        {moment(`${created}Z`).local().fromNow()}
-                      </p>
+                  <Col>
+                    <div className={classes.context}>
+                      <div className={classes.contextWrapper}>
+                        <h6 style={{ paddingTop: 5 }}>You are viewing a single comment's thread from:</h6>
+                        <h5>RE: {root_title}</h5>
+                        <ul>
+                          <li><Link to={generateParentLinks(root_author, root_permlink)}>View the full context</Link></li>
+                          <li><Link to={generateParentLinks(parent_author, parent_permlink)}>View the direct parent</Link></li>
+                        </ul>
+                      </div>
                     </div>
                   </Col>
                 </Row>
-                <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
-                  {isCensored && (
-                    <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
-                  )}
-                  <strong>{title}</strong>
-                  <MarkdownViewer content={originalContent} minifyAssets={false} />
-                </div>
-                <PostTags meta={meta} />
-                
-                <div style={{ marginTop: 10 }}>
-                  <label className={classes.meta}>
-                    {moment(`${created}Z`).local().format('LTS • \nLL')}
-                    {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
-                  </label>
-                </div>
-              </React.Fragment>
-            </div>
-        
-            <div className={classes.wrapper} style={{ marginTop: 15 }}>
-              <Row>
-                <Col>
-                  <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
-                  <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
-                </Col>
-                {isAuthenticated && (
-                  <Col xs="auto">
-                    <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
-                      <MoreIcon className={classes.iconCursor} />
-                    </div>
-                  </Col>
-                )}
-              </Row>
-              <Menu
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={hanldeCloseMore}
-              >
-                {hasUpdateAuthority && (
-                  <React.Fragment>
-                    <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
-                  </React.Fragment>
-                )}
-              </Menu>
-              {/* {hasUpdateAuthority && (
-                <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
-              )} */}
-              <Row>
-                <Col>
-                  <PostActions
-                    disableExtraPadding={true}
-                    body={body}
-                    author={username}
-                    permlink={permlink}
-                    hasUpvoted={hasUpvoted}
-                    hideStats={true}
-                    voteCount={upvotes}
-                    replyCount={replyCount}
-                    payout={payout}
-                    payoutAt={payout_at}
-                    replyRef="content"
-                    max_accepted_payout={max_accepted_payout}
-                  />
-                </Col>
-              </Row>
-              {!loadingReplies && !loadingContent &&  (
-                <ReplyList replies={replies} expectedCount={replyCount} />
               )}
-            </div>
+              <Row>
+                <Col xs="auto" style={{ paddingRight: 0 }}>
+                  <Avatar author={author} />
+                </Col>
+                <Col style={{ paddingLeft: 10 }}>
+                  <div style={{ marginTop: 2 }}>
+                    <Link
+                      ref={popoverAnchor}
+                      to={generateAuthorLink}
+                      className={classes.link}
+                      onMouseEnter={openPopOver}
+                      onMouseLeave={closePopOver}
+                    >
+                      <p className={classes.name}>
+                        {author}
+                      </p>
+                    </Link>
+
+                    <br />
+                    <p className={classes.username}>
+                      {moment(`${created}Z`).local().fromNow()}
+                    </p>
+                  </div>
+                </Col>
+              </Row>
+              <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
+                {isCensored && (
+                  <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
+                )}
+                <strong>{title}</strong>
+                <MarkdownViewer content={originalContent} minifyAssets={false} />
+              </div>
+              <PostTags meta={meta} />
+              
+              <div style={{ marginTop: 10 }}>
+                <label className={classes.meta}>
+                  {moment(`${created}Z`).local().format('LTS • \nLL')}
+                  {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
+                </label>
+              </div>
+            </React.Fragment>
+          </div>
+        
+          <div className={classes.wrapper} style={{ marginTop: 15 }}>
+            <Row>
+              <Col>
+                <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
+                <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
+              </Col>
+              {isAuthenticated && (
+                <Col xs="auto">
+                  <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
+                    <MoreIcon className={classes.iconCursor} />
+                  </div>
+                </Col>
+              )}
+            </Row>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={hanldeCloseMore}
+            >
+              {hasUpdateAuthority && (
+                <React.Fragment>
+                  <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
+                </React.Fragment>
+              )}
+            </Menu>
+            {/* {hasUpdateAuthority && (
+              <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
+            )} */}
+            <Row>
+              <Col>
+                <PostActions
+                  disableExtraPadding={true}
+                  body={body}
+                  author={username}
+                  permlink={permlink}
+                  hasUpvoted={hasUpvoted}
+                  hideStats={true}
+                  voteCount={upvotes}
+                  replyCount={replyCount}
+                  payout={payout}
+                  payoutAt={payout_at}
+                  replyRef="content"
+                  max_accepted_payout={max_accepted_payout}
+                />
+              </Col>
+            </Row>
+            {!loadingReplies && !loadingContent &&  (
+              <ReplyList replies={replies} expectedCount={replyCount} />
+            )}
+          </div>
         </React.Fragment>
       )}
       <ContentSkeleton loading={loadingContent} />

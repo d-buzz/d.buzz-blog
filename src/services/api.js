@@ -335,8 +335,8 @@ export const fetchContent = (author, permlink) => {
 
 export const fetchDiscussions = (author, permlink) => {
   return new Promise((resolve, reject) => {
-    const params = {"author":`${author}`, "permlink": `${permlink}`
-  }
+    const params = {"author":`${author}`, "permlink": `${permlink}`,
+    }
     api.call('bridge.get_discussion', params, async(err, data) => {
       if(err) {
         reject(err)

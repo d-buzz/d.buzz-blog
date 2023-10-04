@@ -16,7 +16,6 @@ const Search = React.lazy(() => import('./components/pages/Search'))
 const SearchPosts = React.lazy(() => import('./components/sections/SearchPosts'))
 const SearchPeople = React.lazy(() => import('./components/sections/SearchPeople'))
 
-
   
 const routes =  [
   {

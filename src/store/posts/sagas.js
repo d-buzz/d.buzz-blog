@@ -341,85 +341,85 @@ function* publishPostRequest(payload, meta) {
       const operations = yield call(generatePostOperations, username, title, body, tags, payout)
       console.log({operations})
       console.log('done operations')
-   
-
-    let success = false
-    const comment_options = operations[1]
-    const permlink = comment_options[1].permlink
-    console.log({permlink})
-
-    console.log({useKeychain})
-
-    if(useKeychain) {
-      console.log('in')
-      const result = yield call(broadcastKeychainOperation, username, operations)
-      success = result.success
-      console.log('success')
-      console.log({success})
-
-      if(!success) {
-        yield put(publishPostFailure('Unable to publish post', meta))
-      }
-    } else if (!useKeychain) {
-      let { login_data } = user
-      login_data = extractLoginData(login_data)
-      console.log({login_data})
-
-      const wif = login_data[1]
-      const result = yield call(broadcastOperation, operations, [wif])
-
-      success = result.success
-    }
     
 
-    if(success) {
-      const comment = operations[0]
-      const json_metadata = comment[1].json_metadata
+      let success = false
+      const comment_options = operations[1]
+      const permlink = comment_options[1].permlink
+      console.log({permlink})
 
-      let currentDatetime = moment().toISOString()
-      currentDatetime = currentDatetime.replace('Z', '')
+      console.log({useKeychain})
 
-      let cashout_time = moment().add(7, 'days').toISOString()
-      cashout_time = cashout_time.replace('Z', '')
+      if(useKeychain) {
+        console.log('in')
+        const result = yield call(broadcastKeychainOperation, username, operations)
+        success = result.success
+        console.log('success')
+        console.log({success})
 
-      let body = comment[1].body
-      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
+        if(!success) {
+          yield put(publishPostFailure('Unable to publish post', meta))
+        }
+      } else if (!useKeychain) {
+        let { login_data } = user
+        login_data = extractLoginData(login_data)
+        console.log({login_data})
+
+        const wif = login_data[1]
+        const result = yield call(broadcastOperation, operations, [wif])
+
+        success = result.success
+      }
+      
+
+      if(success) {
+        const comment = operations[0]
+        const json_metadata = comment[1].json_metadata
+
+        let currentDatetime = moment().toISOString()
+        currentDatetime = currentDatetime.replace('Z', '')
+
+        let cashout_time = moment().add(7, 'days').toISOString()
+        cashout_time = cashout_time.replace('Z', '')
+
+        let body = comment[1].body
+        body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
 
 
-      const content = {
+        const content = {
+          author: username,
+          category: '',
+          permlink,
+          title: comment[1].title,
+          body: body,
+          replies: [],
+          total_payout_value: '0.000 HBD',
+          curator_payout_value: '0.000 HBD',
+          pending_payout_value: '0.000 HBD',
+          active_votes: [],
+          root_author: "",
+          parent_author: null,
+          parent_permlink: "",
+          root_permlink: permlink,
+          root_title: title,
+          json_metadata,
+          children: 0,
+          created: currentDatetime,
+          cashout_time,
+          max_accepted_payout: `${payout.toFixed(3)} HBD`,
+        }
+
+        yield put(setContentRedirect(content))
+      }
+
+      const data = {
+        success,
         author: username,
-        category: '',
         permlink,
-        title: comment[1].title,
-        body: body,
-        replies: [],
-        total_payout_value: '0.000 HBD',
-        curator_payout_value: '0.000 HBD',
-        pending_payout_value: '0.000 HBD',
-        active_votes: [],
-        root_author: "",
-        parent_author: null,
-        parent_permlink: "",
-        root_permlink: permlink,
-        root_title: title,
-        json_metadata,
-        children: 0,
-        created: currentDatetime,
-        cashout_time,
-        max_accepted_payout: `${payout.toFixed(3)} HBD`,
       }
-
-      yield put(setContentRedirect(content))
-    }
-
-    const data = {
-      success,
-      author: username,
-      permlink,
-    }
-    
-    yield put(publishPostSuccess(data, meta))
-  } catch(e) { console.log(e)}
+      
+      yield put(publishPostSuccess(data, meta))
+    } catch(e) { console.log(e)}
 
   } catch (error) {
     const errorMessage = errorMessageComposer('post', error)

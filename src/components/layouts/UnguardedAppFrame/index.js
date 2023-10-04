@@ -45,7 +45,7 @@ const useStyles = createUseStyles(theme => ({
     display: 'flex',
   },
   justifyContentCenter:{
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   alignItemsCenter:{
     alignItems: 'center',
