@@ -47,6 +47,9 @@ const useStyles = createUseStyles(theme => ({
   padding38:{
     padding: '3px 8px',
   },
+  margin22:{
+    margin: '22px 0px',
+  },
   wrapper: {
     width: '70%',
     backgroundColor: theme.backgroundColor,
@@ -406,7 +409,7 @@ const Content = (props) => {
                 </Col>
               </Row>
               {/* add div here for comment */}
-            <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38)}>
+            <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22)}>
             <CommentIcon />
             </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
