@@ -41,6 +41,12 @@ const useStyles = createUseStyles(theme => ({
   borderTopGrey: {
     borderTop: '1px solid rgb(242, 242, 242)',
   },
+  borderBottomGrey: {
+    borderBottom: '1px solid rgb(242, 242, 242)',
+  },
+  padding38:{
+    padding: '3px 8px',
+  },
   wrapper: {
     width: '70%',
     backgroundColor: theme.backgroundColor,
@@ -400,8 +406,8 @@ const Content = (props) => {
                 </Col>
               </Row>
               {/* add div here for comment */}
-            <div className={classNames(classes.borderTopGrey)}>
-              comment here
+            <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38)}>
+              
             </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                 {isCensored && (
