@@ -38,6 +38,9 @@ import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
+  borderTopGrey: {
+    borderTop: '1px solid rgb(242, 242, 242)',
+  },
   wrapper: {
     width: '70%',
     backgroundColor: theme.backgroundColor,
@@ -352,7 +355,8 @@ const Content = (props) => {
         <React.Fragment>
           <HelmetGenerator content={body} user={author} />
           <div className={classes.wrapper}>
-            <br />
+            
+            {/* <br /> */}
             <React.Fragment>
               {depth !== 0 && parent_author !== null && (
                 <Row>
@@ -395,6 +399,10 @@ const Content = (props) => {
                   </div>
                 </Col>
               </Row>
+              {/* add div here for comment */}
+            <div className={classNames(classes.borderTopGrey)}>
+              comment here
+            </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                 {isCensored && (
                   <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
