@@ -38,6 +38,9 @@ import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => ({
+  cursorPointer:{
+    cursor: 'pointer',
+  },
   borderTopGrey: {
     borderTop: '1px solid rgb(242, 242, 242)',
   },
@@ -409,7 +412,7 @@ const Content = (props) => {
                 </Col>
               </Row>
               {/* add div here for comment */}
-            <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22)}>
+            <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22, classes.cursorPointer)}>
             <CommentIcon />
             </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
