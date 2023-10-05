@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -407,7 +407,7 @@ const Content = (props) => {
               </Row>
               {/* add div here for comment */}
             <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38)}>
-              
+            <CommentIcon />
             </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                 {isCensored && (
