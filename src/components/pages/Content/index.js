@@ -165,6 +165,10 @@ const useStyles = createUseStyles(theme => ({
   transition1:{
     transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s',
   },
+  boxShadow1:{
+    boxShadow: 'rgba(0, 0, 0, 0.15) 0px 4px 12px',
+  },
+
 }))
 
 const Content = (props) => {
