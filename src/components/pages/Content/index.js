@@ -408,7 +408,7 @@ const Content = (props) => {
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
-          <div className={classNames(classes.visibilityVisible, classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111)}>
+          <div className={classNames(classes.visibilityVisible, classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0)}>
             reply section here
           </div>
           <div>
