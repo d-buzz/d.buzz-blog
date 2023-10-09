@@ -408,7 +408,7 @@ const Content = (props) => {
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
-          <div className={classNames(classes.visibilityVisible)}>
+          <div className={classNames(classes.visibilityVisible, classes.transformtranslateX414)}>
             reply section here
           </div>
           <div>
