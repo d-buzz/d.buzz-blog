@@ -155,7 +155,10 @@ const useStyles = createUseStyles(theme => ({
   },
   left100per:{
     left: '100%',
-  }
+  },
+  visibilityVisible: {
+    visibility: 'visible',
+  },
 }))
 
 const Content = (props) => {
