@@ -409,7 +409,10 @@ const Content = (props) => {
       {!loadingContent && author && (
         <React.Fragment>
           <div className={classNames(classes.visibilityVisible, classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
-            reply section here
+            <div className='div1'></div>
+            <div className='div2'></div>
+            <div className='div3'></div>
+            <div className='div4'></div>
           </div>
           <div>
           <HelmetGenerator content={body} user={author} />
