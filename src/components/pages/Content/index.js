@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentIcon, CloseIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -443,7 +443,9 @@ const Content = (props) => {
               <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
                 <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe,)}>Responses (2)</h2>
               </div>
-              <div></div>
+              <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
+                <CloseIcon color='black' />
+              </div>
             </div>
             <div className='div2'></div>
             <div className='div3'></div>
