@@ -195,6 +195,9 @@ const useStyles = createUseStyles(theme => ({
   height100:{
     height: '100%',
   },
+  padding24:{
+    padding: 24,
+  },
 
 }))
 
