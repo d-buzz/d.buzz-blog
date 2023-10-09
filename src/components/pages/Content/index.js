@@ -161,7 +161,10 @@ const useStyles = createUseStyles(theme => ({
   },
   transformtranslateX414:{
     transform:'translateX(-414px)'
-  }
+  },
+  transition1:{
+    transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s',
+  },
 }))
 
 const Content = (props) => {
