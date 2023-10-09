@@ -192,6 +192,9 @@ const useStyles = createUseStyles(theme => ({
   boxSizingBorderBox:{
     boxSizing: 'border-box',
   },
+  height100:{
+    height: '100%',
+  },
 
 }))
 
