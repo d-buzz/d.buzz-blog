@@ -153,6 +153,9 @@ const useStyles = createUseStyles(theme => ({
     marginTop: 5,
     marginBottom: 5,
   },
+  left100per:{
+    left: '100%',
+  }
 }))
 
 const Content = (props) => {
