@@ -198,6 +198,9 @@ const useStyles = createUseStyles(theme => ({
   padding24:{
     padding: 24,
   },
+  flexDirectionRow:{
+    flexDirection: 'row',
+  },
 
 }))
 
