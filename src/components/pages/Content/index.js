@@ -217,6 +217,9 @@ const useStyles = createUseStyles(theme => ({
   fontWeight500:{
     fontWeight: 500,
   },
+  lineHeight0:{
+    lineHeight:0,
+  },
   lineHeight24:{
     lineHeight: 24,
   },
@@ -283,6 +286,30 @@ const useStyles = createUseStyles(theme => ({
   alignItemsCenter: {
     alignItems: 'center',
   },
+  backgroundColorf2f2f2:{
+    backgroundColor: '#F2F2F2'
+  },
+   width32:{
+    width:32,
+   },
+   height32:{
+    height: 32,
+   },
+   borderRadius50per:{
+    borderRadius:'50%',
+   },
+   alignItemsFlexStart:{
+    alignItems:'flex-start',
+   },
+   justifyContentCenter:{
+    justifyContent: 'center',
+   },
+   marginLeft12:{
+    marginLeft:12,
+   },
+   marginBottom0:{
+    marginBottom:0,
+   }
 
   
 
@@ -522,10 +549,12 @@ const Content = (props) => {
                         <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                           <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                             <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                              <img src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/>
+                              <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/>
                             </div>
                           </div>
-                          <div className={classNames()}></div>
+                          <div className={classNames(classes.flexDirectionColumn,classes.alignItemsFlexStart, classes.justifyContentCenter, classes.lineHeight0, classes.marginLeft12, classes.displayFlex)}>
+                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}>Juneroy Derano</p>
+                          </div>
                         </div>
                         {/* for text areaa */}
                         <div></div>
