@@ -522,7 +522,7 @@ const Content = (props) => {
                         <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                           <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                             <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                              
+                              <img src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/>
                             </div>
                           </div>
                           <div className={classNames()}></div>
