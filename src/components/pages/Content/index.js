@@ -365,6 +365,10 @@ const Content = (props) => {
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
+          <div>
+            reply section here
+          </div>
+          <div>
           <HelmetGenerator content={body} user={author} />
           <div className={classes.wrapper}>
             
@@ -413,7 +417,7 @@ const Content = (props) => {
               </Row>
               {/* add div here for comment */}
             <div className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22, classes.cursorPointer)}>
-            <CommentIcon />
+              <CommentIcon />
             </div>
               <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                 {isCensored && (
@@ -484,6 +488,7 @@ const Content = (props) => {
               <ReplyList replies={replies} expectedCount={replyCount} />
             )}
           </div>
+        </div>
         </React.Fragment>
       )}
       <ContentSkeleton loading={loadingContent} />
