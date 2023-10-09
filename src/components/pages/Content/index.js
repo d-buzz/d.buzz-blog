@@ -168,6 +168,9 @@ const useStyles = createUseStyles(theme => ({
   boxShadow1:{
     boxShadow: 'rgba(0, 0, 0, 0.15) 0px 4px 12px',
   },
+  overflowAuto:{
+    overflow: 'auto',
+  },
 
 }))
 
