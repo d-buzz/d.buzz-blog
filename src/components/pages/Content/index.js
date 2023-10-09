@@ -265,6 +265,24 @@ const useStyles = createUseStyles(theme => ({
   borderRadius4:{
     borderRadius: 4,
   },
+  marginBottom6:{
+    marginBottom: 6,
+  },
+  transition3:{
+    transition: 'opacity 400ms ease 0s, max-height 400ms ease 0s, margin-bottom 400ms ease 0s',
+  },
+  maxHeight100:{
+    maxHeight: 100,
+  },
+  padding014:{
+    padding: '0px 14px',
+  },
+  positionRelative:{
+    position: 'relative',
+  },
+  alignItemsCenter: {
+    alignItems: 'center',
+  },
 
   
 
@@ -498,7 +516,22 @@ const Content = (props) => {
               <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.lineHeight20,classes.fontWeight400)}>
                 <div className={classNames(classes.lineHeight24)}>
                   <div className={classNames(classes.marginBottom20,classes.padding024)}>
-                    <div className={classNames(classes.paddingBottom14,classes.paddingTop14, classes.transition2, classes.boxShadow2, classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4,classes.displayFlex)}></div>
+                    <div className={classNames(classes.paddingBottom14,classes.paddingTop14, classes.transition2, classes.boxShadow2, classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4,classes.displayFlex)}>
+                      <div className={classNames(classes.marginBottom6,classes.transition3, classes.maxHeight100, classes.padding014,classes.opacity1, classes.positionRelative, classes.justifyContentSpaceBetween, classes.displayFlex, classes.alignItemsCenter)}>
+                        {/* for avatar and name */}
+                        <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                          <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                              
+                            </div>
+                          </div>
+                          <div className={classNames()}></div>
+                        </div>
+                        {/* for text areaa */}
+                        <div></div>
+                      </div>
+                      <div className={classNames()}></div>
+                    </div>
                   </div>
                 </div>
               </div>
