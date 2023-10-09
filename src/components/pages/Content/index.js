@@ -171,6 +171,9 @@ const useStyles = createUseStyles(theme => ({
   overflowAuto:{
     overflow: 'auto',
   },
+  backgroundColorWhite:{
+    backgroundColor: 'white',
+  },
 
 }))
 
