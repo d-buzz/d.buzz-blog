@@ -185,7 +185,13 @@ const useStyles = createUseStyles(theme => ({
   },
   opacity1:{
     opacity: 1,
-  }
+  },
+  positionFixed:{
+    position: 'fixed',
+  },
+  boxSizingBorderBox:{
+    boxSizing: 'border-box',
+  },
 
 }))
 
