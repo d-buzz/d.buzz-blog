@@ -201,6 +201,12 @@ const useStyles = createUseStyles(theme => ({
   flexDirectionRow:{
     flexDirection: 'row',
   },
+  justifyContentSpaceBetween:{
+    justifyContent: 'space-between',
+  },
+  displayFlex:{
+    display: 'flex',
+  },
 
 }))
 
