@@ -324,7 +324,10 @@ const useStyles = createUseStyles(theme => ({
    },
    borderNone:{
     border:'none',
-   }
+   },
+   borderBottomSolidGray:{
+    borderBottom:'1px solid rgb(242, 242, 242)',
+   },
 
   
 
@@ -586,7 +589,7 @@ const Content = (props) => {
                                 <div></div>
                                 <div>
                                   <button className='btn btn-default'>Cancel</button>
-                                  <button className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
+                                  <button disabled className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
                                 </div>
                             </div>
                         </div>
@@ -595,7 +598,7 @@ const Content = (props) => {
                 </div>
               </div>
             </div>
-            <div className='div3'></div>
+            <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'></div>
           </div>
           <div>
