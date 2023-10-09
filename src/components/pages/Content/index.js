@@ -174,6 +174,9 @@ const useStyles = createUseStyles(theme => ({
   backgroundColorWhite:{
     backgroundColor: 'white',
   },
+  width414:{
+    width:414,
+  },
 
 }))
 
