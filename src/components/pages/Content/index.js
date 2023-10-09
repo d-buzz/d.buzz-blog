@@ -408,7 +408,7 @@ const Content = (props) => {
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
-          <div>
+          <div className={classNames(classes.visibilityVisible)}>
             reply section here
           </div>
           <div>
