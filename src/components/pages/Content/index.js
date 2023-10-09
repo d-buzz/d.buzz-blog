@@ -256,6 +256,7 @@ const Content = (props) => {
   const popoverAnchor = useRef(null)
   const history = useHistory()
 
+  const [showReply, setshowReply] = useState(false)
   const {
     author,
     json_metadata,
