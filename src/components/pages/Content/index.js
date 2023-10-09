@@ -328,6 +328,42 @@ const useStyles = createUseStyles(theme => ({
    borderBottomSolidGray:{
     borderBottom:'1px solid rgb(242, 242, 242)',
    },
+   marginRight24:{
+    marginRight:24,
+   },
+   marginLeft24:{
+    marginLeft:24,
+   },
+   width100:{
+    width:100,
+   },
+   paddingBottom25:{
+    paddingBottom: 25,
+   },
+   paddingTop25:{
+    paddingTop: 25,
+   },
+   paddingLeft12:{
+    paddingLeft:12,
+   },
+   margin0:{
+    margin: 0,
+   },
+   padding0:{
+    padding:0,
+   },
+   textDecorationNone:{
+    textDecoration:'none',
+   },
+   widthMaxContent:{
+    width:'max-content',
+   },
+   colorGray:{
+    color:'gray',
+   },
+   colorBlack:{
+    color:'black',
+   },
 
   
 
@@ -599,7 +635,46 @@ const Content = (props) => {
               </div>
             </div>
             <div className={classNames(classes.borderBottomSolidGray)}></div>
-            <div className='div4'></div>
+            <div className='div4'>
+              <div>
+                {/* post here */}
+                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
+                  <div>
+                    <div className={classNames(classes.width100, classes.height100, )}>
+                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
+                          {/* avatar */}
+                          <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
+                            <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
+                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                                <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
+                                </div>
+                              </div>
+                              <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
+                                {/* name here */}
+                                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                                    <a href='#' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
+                                </div>
+                                <a href='#' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
+                              </div>
+                            </div>
+                            <div></div>
+                          </div>
+
+                          {/* content */}
+                          <div></div>
+
+                          {/* read more */}
+                          <div></div>
+
+                          {/* footer */}
+                          <div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div>
           <HelmetGenerator content={body} user={author} />
