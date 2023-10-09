@@ -159,6 +159,9 @@ const useStyles = createUseStyles(theme => ({
   visibilityVisible: {
     visibility: 'visible',
   },
+  transformtranslateX414:{
+    transform:'translateX(-414px)'
+  }
 }))
 
 const Content = (props) => {
