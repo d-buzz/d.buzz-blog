@@ -171,6 +171,7 @@ const useStyles = createUseStyles(theme => ({
   boxShadow1:{
     boxShadow: 'rgba(0, 0, 0, 0.15) 0px 4px 12px',
   },
+ 
   overflowAuto:{
     overflow: 'auto',
   },
@@ -228,6 +229,43 @@ const useStyles = createUseStyles(theme => ({
   fontFamilySohe:{
     fontFamily: 'sohne, "Helvetica Neue", Helvetica, Arial, sans-serif',
   },
+  fontSize14:{
+    fontSize: 14,
+  },
+  lineHeight20:{
+    lineHeight: 20,
+  },
+  fontWeight400:{
+    fontWeight: 400,
+  },
+  marginBottom20:{
+    marginBottom: 20,
+  },
+  padding024:{
+    padding: '0 24px',
+  },
+  displayBlock:{
+    display:'block',
+  },
+  paddingBottom14:{
+    paddingBottom: 14,
+  },
+  paddingTop14:{
+    paddingTop: 14,
+  },
+  transition2:{
+    transition: 'padding-top 400ms ease 0s, padding-bottom 400ms ease 0s',
+  },
+  boxShadow2:{
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 8px',
+  },
+  flexDirectionColumn:{
+    flexDirection:'column',
+  },
+  borderRadius4:{
+    borderRadius: 4,
+  },
+  
   
 
 }))
@@ -456,7 +494,15 @@ const Content = (props) => {
                 <CloseIcon  />
               </div>
             </div>
-            <div className='div2'></div>
+            <div className='div2'>
+              <div>
+                <div>
+                  <div>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className='div3'></div>
             <div className='div4'></div>
           </div>
