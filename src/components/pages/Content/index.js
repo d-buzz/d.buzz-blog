@@ -256,7 +256,11 @@ const Content = (props) => {
   const popoverAnchor = useRef(null)
   const history = useHistory()
 
-  const [showReply, setshowReply] = useState(false)
+  const [showReply, setshowReply] = useState(true)
+  const updateReply = (boolean) => {
+    console.log('test')
+    setshowReply(boolean)
+  }
   const {
     author,
     json_metadata,
@@ -439,13 +443,13 @@ const Content = (props) => {
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
-          <div className={classNames(classes.visibilityVisible, classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
+          <div className={classNames(classes.visibilityVisible, showReply? classes.transformtranslateX414:'', classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
             <div className={classNames(classes.padding24, classes.justifyContentSpaceBetween, classes.flexDirectionRow, classes.displayFlex)}>
               <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
                 <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe,)}>Responses (2)</h2>
               </div>
-              <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
-                <CloseIcon color='black' />
+              <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
+                <CloseIcon  color='black' />
               </div>
             </div>
             <div className='div2'></div>
