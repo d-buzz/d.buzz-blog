@@ -225,6 +225,7 @@ const useStyles = createUseStyles(theme => ({
   fontFamilySohe:{
     fontFamily: 'sohne, "Helvetica Neue", Helvetica, Arial, sans-serif',
   },
+  
 
 }))
 
@@ -448,8 +449,8 @@ const Content = (props) => {
               <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
                 <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe,)}>Responses (2)</h2>
               </div>
-              <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
-                <CloseIcon  color='black' />
+              <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.cursorPointer)}>
+                <CloseIcon  />
               </div>
             </div>
             <div className='div2'></div>
