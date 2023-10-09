@@ -309,6 +309,21 @@ const useStyles = createUseStyles(theme => ({
    },
    marginBottom0:{
     marginBottom:0,
+   },
+   minHeight100:{
+    minHeight: 100,
+   },
+   transition4:{
+    transition: 'min-height 400ms ease 0s',
+   },
+   margin10:{
+    margin:10,
+   },
+   borderRadius20:{
+    borderRadius:20,
+   },
+   borderNone:{
+    border:'none',
    }
 
   
@@ -557,9 +572,24 @@ const Content = (props) => {
                           </div>
                         </div>
                         {/* for text areaa */}
-                        <div></div>
+                        {/* <div className={classNames(classes.flexDirectionColumn, classes.displayFlex)}>
+                            <div className={classNames(classes.transition4, classes.minHeight100)}>
+                              <textarea cols={'10'} rows={'10'}></textarea>
+                            </div>
+                        </div> */}
                       </div>
-                      <div className={classNames()}></div>
+                      <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
+                            <div className={classNames(classes.transition4, classes.minHeight100)}>
+                             <textarea placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
+                                <div></div>
+                                <div>
+                                  <button className='btn btn-default'>Cancel</button>
+                                  <button className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                   </div>
                 </div>
