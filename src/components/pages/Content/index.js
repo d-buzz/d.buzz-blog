@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentIcon, CloseIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentIcon, CloseIcon,HeartIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -160,10 +160,10 @@ const useStyles = createUseStyles(theme => ({
     visibility: 'visible',
   },
   transformtranslateX414Neg:{
-    transform:'translateX(-414px)'
+    transform:'translateX(-414px)',
   },
   transformtranslateX414:{
-    transform:'translateX(414px)'
+    transform:'translateX(414px)',
   },
   transition1:{
     transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s',
@@ -287,86 +287,104 @@ const useStyles = createUseStyles(theme => ({
     alignItems: 'center',
   },
   backgroundColorf2f2f2:{
-    backgroundColor: '#F2F2F2'
+    backgroundColor: '#F2F2F2',
   },
-   width32:{
+  width32:{
     width:32,
-   },
-   height32:{
+  },
+  height32:{
     height: 32,
-   },
-   borderRadius50per:{
+  },
+  borderRadius50per:{
     borderRadius:'50%',
-   },
-   alignItemsFlexStart:{
+  },
+  alignItemsFlexStart:{
     alignItems:'flex-start',
-   },
-   justifyContentCenter:{
+  },
+  justifyContentCenter:{
     justifyContent: 'center',
-   },
-   marginLeft12:{
+  },
+  marginLeft12:{
     marginLeft:12,
-   },
-   marginBottom0:{
+  },
+  marginBottom0:{
     marginBottom:0,
-   },
-   minHeight100:{
+  },
+  minHeight100:{
     minHeight: 100,
-   },
-   transition4:{
+  },
+  transition4:{
     transition: 'min-height 400ms ease 0s',
-   },
-   margin10:{
+  },
+  margin10:{
     margin:10,
-   },
-   borderRadius20:{
+  },
+  borderRadius20:{
     borderRadius:20,
-   },
-   borderNone:{
+  },
+  borderNone:{
     border:'none',
-   },
-   borderBottomSolidGray:{
+  },
+  borderBottomSolidGray:{
     borderBottom:'1px solid rgb(242, 242, 242)',
-   },
-   marginRight24:{
+  },
+  marginRight24:{
     marginRight:24,
-   },
-   marginLeft24:{
+  },
+  marginLeft24:{
     marginLeft:24,
-   },
-   width100:{
-    width:100,
-   },
-   paddingBottom25:{
+  },
+  width100:{
+    width:'100%',
+  },
+  paddingBottom25:{
     paddingBottom: 25,
-   },
-   paddingTop25:{
+  },
+  paddingTop25:{
     paddingTop: 25,
-   },
-   paddingLeft12:{
+  },
+  paddingLeft12:{
     paddingLeft:12,
-   },
-   margin0:{
+  },
+  margin0:{
     margin: 0,
-   },
-   padding0:{
+  },
+  padding0:{
     padding:0,
-   },
-   textDecorationNone:{
+  },
+  textDecorationNone:{
     textDecoration:'none',
-   },
-   widthMaxContent:{
+  },
+  widthMaxContent:{
     width:'max-content',
-   },
-   colorGray:{
+  },
+  colorGray:{
     color:'gray',
-   },
-   colorBlack:{
+  },
+  colorBlack:{
     color:'black',
-   },
-
-  
-
+  },
+  marginTop5:{
+    marginTop: 5,
+  },
+  wordBreakBreakWord:{
+    wordBreak:'break-word',
+  },
+  whiteSpacePreWrap:{
+    whiteSpace:'pre-wrap',
+  },
+  padding050:{
+    padding:'5px 0px',
+  },
+  colorGreen:{
+    color:'#1A8917',
+  },
+  marginTop24:{
+    marginTop:24,
+  },
+  marginLeft5:{
+    marginLeft:5,
+  },
 }))
 
 const Content = (props) => {
@@ -587,7 +605,7 @@ const Content = (props) => {
           <div className={classNames(classes.visibilityVisible, showReply? classes.transformtranslateX414Neg:classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
             <div className={classNames(classes.padding24, classes.justifyContentSpaceBetween, classes.flexDirectionRow, classes.displayFlex)}>
               <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
-                <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe,)}>Responses (2)</h2>
+                <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe)}>Responses (2)</h2>
               </div>
               <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.cursorPointer)}>
                 <CloseIcon  />
@@ -618,17 +636,17 @@ const Content = (props) => {
                         </div> */}
                       </div>
                       <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
-                            <div className={classNames(classes.transition4, classes.minHeight100)}>
-                             <textarea placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
-                            </div>
-                            <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
-                                <div></div>
-                                <div>
-                                  <button className='btn btn-default'>Cancel</button>
-                                  <button disabled className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
-                                </div>
-                            </div>
+                        <div className={classNames(classes.transition4, classes.minHeight100)}>
+                          <textarea placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
+                        <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
+                          <div></div>
+                          <div>
+                            <button className='btn btn-default'>Cancel</button>
+                            <button disabled className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -640,35 +658,156 @@ const Content = (props) => {
                 {/* post here */}
                 <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
                   <div>
-                    <div className={classNames(classes.width100, classes.height100, )}>
+                    <div className={classNames(classes.width100, classes.height100 )}>
                       <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
-                          {/* avatar */}
-                          <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
-                            <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
+                        {/* avatar */}
+                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
+                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
+                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                               <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
-                                </div>
-                              </div>
-                              <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
-                                {/* name here */}
-                                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                    <a href='#' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
-                                </div>
-                                <a href='#' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
+                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
                               </div>
                             </div>
-                            <div></div>
+                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
+                              {/* name here */}
+                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
+                              </div>
+                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
+                            </div>
                           </div>
-
-                          {/* content */}
                           <div></div>
+                        </div>
 
-                          {/* read more */}
-                          <div></div>
+                        {/* content */}
+                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
+                          <pre className={classNames(classes.whiteSpacePreWrap)}>
+                            <div className={classNames(classes.padding050, classes.displayBlock)}>
+                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                                <p>
+                                1.. typing "playwright cypress migrate" into browser doesn't give any insight aside from tech bloggers monetizing on both tools, and also, maybe on Microsoft investments into marketing.
+                                </p>
+                              </div>
+                            </div>
+                          </pre>
+                        </div>
 
-                          {/* footer */}
+                        {/* read more */}
+                        <div>
+                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
+                        </div>
+
+                        {/* footer */}
+                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
+                          <div>
+                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>72</label>
+                          </div>
+                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
+                  <div>
+                    <div className={classNames(classes.width100, classes.height100 )}>
+                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
+                        {/* avatar */}
+                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
+                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
+                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*qPc2fjivlDm6lQcgyaIJqg@2x.jpeg`} alt="cover"/>
+                              </div>
+                            </div>
+                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
+                              {/* name here */}
+                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Abdelfattah Sekak</a>
+                              </div>
+                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>9 days ago</a>
+                            </div>
+                          </div>
                           <div></div>
+                        </div>
+
+                        {/* content */}
+                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
+                          <pre className={classNames(classes.whiteSpacePreWrap)}>
+                            <div className={classNames(classes.padding050, classes.displayBlock)}>
+                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                                <p>
+                                I, myself, implemented Cypress in my current company two years ago because I liked the product and the documentation. However, when I had the chance to experiment with Playwright recently, I quickly changed my opinion and started considering a…
+                                </p>
+                              </div>
+                            </div>
+                          </pre>
+                        </div>
+
+                        {/* read more */}
+                        <div>
+                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
+                        </div>
+
+                        {/* footer */}
+                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
+                          <div>
+                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>10</label>
+                          </div>
+                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
+                  <div>
+                    <div className={classNames(classes.width100, classes.height100 )}>
+                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
+                        {/* avatar */}
+                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
+                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
+                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
+                              </div>
+                            </div>
+                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
+                              {/* name here */}
+                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
+                              </div>
+                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
+                            </div>
+                          </div>
+                          <div></div>
+                        </div>
+
+                        {/* content */}
+                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
+                          <pre className={classNames(classes.whiteSpacePreWrap)}>
+                            <div className={classNames(classes.padding050, classes.displayBlock)}>
+                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                                <p>
+                                Looks good to me, great job!
+                                </p>
+                              </div>
+                            </div>
+                          </pre>
+                        </div>
+
+                        {/* read more */}
+                        <div>
+                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
+                        </div>
+
+                        {/* footer */}
+                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
+                          <div>
+                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>11</label>
+                          </div>
+                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -677,126 +816,126 @@ const Content = (props) => {
             </div>
           </div>
           <div>
-          <HelmetGenerator content={body} user={author} />
-          <div className={classes.wrapper}>
-            
-            {/* <br /> */}
-            <React.Fragment>
-              {depth !== 0 && parent_author !== null && (
-                <Row>
-                  <Col>
-                    <div className={classes.context}>
-                      <div className={classes.contextWrapper}>
-                        <h6 style={{ paddingTop: 5 }}>You are viewing a single comment's thread from:</h6>
-                        <h5>RE: {root_title}</h5>
-                        <ul>
-                          <li><Link to={generateParentLinks(root_author, root_permlink)}>View the full context</Link></li>
-                          <li><Link to={generateParentLinks(parent_author, parent_permlink)}>View the direct parent</Link></li>
-                        </ul>
+            <HelmetGenerator content={body} user={author} />
+            <div className={classes.wrapper}>
+              
+              {/* <br /> */}
+              <React.Fragment>
+                {depth !== 0 && parent_author !== null && (
+                  <Row>
+                    <Col>
+                      <div className={classes.context}>
+                        <div className={classes.contextWrapper}>
+                          <h6 style={{ paddingTop: 5 }}>You are viewing a single comment's thread from:</h6>
+                          <h5>RE: {root_title}</h5>
+                          <ul>
+                            <li><Link to={generateParentLinks(root_author, root_permlink)}>View the full context</Link></li>
+                            <li><Link to={generateParentLinks(parent_author, parent_permlink)}>View the direct parent</Link></li>
+                          </ul>
+                        </div>
                       </div>
+                    </Col>
+                  </Row>
+                )}
+                <Row>
+                  <Col xs="auto" style={{ paddingRight: 0 }}>
+                    <Avatar author={author} />
+                  </Col>
+                  <Col style={{ paddingLeft: 10 }}>
+                    <div style={{ marginTop: 2 }}>
+                      <Link
+                        ref={popoverAnchor}
+                        to={generateAuthorLink}
+                        className={classes.link}
+                        onMouseEnter={openPopOver}
+                        onMouseLeave={closePopOver}
+                      >
+                        <p className={classes.name}>
+                          {author}
+                        </p>
+                      </Link>
+
+                      <br />
+                      <p className={classes.username}>
+                        {moment(`${created}Z`).local().fromNow()}
+                      </p>
                     </div>
                   </Col>
                 </Row>
-              )}
+                {/* add div here for comment */}
+                <div onClick={() => updateReply(true)}  className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22, classes.cursorPointer)}>
+                  <CommentIcon  />
+                </div>
+                <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
+                  {isCensored && (
+                    <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
+                  )}
+                  <strong>{title}</strong>
+                  <MarkdownViewer content={originalContent} minifyAssets={false} />
+                </div>
+                <PostTags meta={meta} />
+                
+                <div style={{ marginTop: 10 }}>
+                  <label className={classes.meta}>
+                    {moment(`${created}Z`).local().format('LTS • \nLL')}
+                    {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
+                  </label>
+                </div>
+              </React.Fragment>
+            </div>
+      
+            <div className={classes.wrapper} style={{ marginTop: 15 }}>
               <Row>
-                <Col xs="auto" style={{ paddingRight: 0 }}>
-                  <Avatar author={author} />
+                <Col>
+                  <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
+                  <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
                 </Col>
-                <Col style={{ paddingLeft: 10 }}>
-                  <div style={{ marginTop: 2 }}>
-                    <Link
-                      ref={popoverAnchor}
-                      to={generateAuthorLink}
-                      className={classes.link}
-                      onMouseEnter={openPopOver}
-                      onMouseLeave={closePopOver}
-                    >
-                      <p className={classes.name}>
-                        {author}
-                      </p>
-                    </Link>
-
-                    <br />
-                    <p className={classes.username}>
-                      {moment(`${created}Z`).local().fromNow()}
-                    </p>
-                  </div>
+                {isAuthenticated && (
+                  <Col xs="auto">
+                    <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
+                      <MoreIcon className={classes.iconCursor} />
+                    </div>
+                  </Col>
+                )}
+              </Row>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={hanldeCloseMore}
+              >
+                {hasUpdateAuthority && (
+                  <React.Fragment>
+                    <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
+                  </React.Fragment>
+                )}
+              </Menu>
+              {/* {hasUpdateAuthority && (
+                <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
+              )} */}
+              <Row>
+                <Col>
+                  <PostActions
+                    disableExtraPadding={true}
+                    body={body}
+                    author={username}
+                    permlink={permlink}
+                    hasUpvoted={hasUpvoted}
+                    hideStats={true}
+                    voteCount={upvotes}
+                    replyCount={replyCount}
+                    payout={payout}
+                    payoutAt={payout_at}
+                    replyRef="content"
+                    max_accepted_payout={max_accepted_payout}
+                  />
                 </Col>
               </Row>
-              {/* add div here for comment */}
-            <div onClick={() => updateReply(true)}  className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22, classes.cursorPointer)}>
-              <CommentIcon  />
+              {!loadingReplies && !loadingContent &&  (
+                <ReplyList replies={replies} expectedCount={replyCount} />
+              )}
             </div>
-              <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
-                {isCensored && (
-                  <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
-                )}
-                <strong>{title}</strong>
-                <MarkdownViewer content={originalContent} minifyAssets={false} />
-              </div>
-              <PostTags meta={meta} />
-              
-              <div style={{ marginTop: 10 }}>
-                <label className={classes.meta}>
-                  {moment(`${created}Z`).local().format('LTS • \nLL')}
-                  {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
-                </label>
-              </div>
-            </React.Fragment>
           </div>
-        
-          <div className={classes.wrapper} style={{ marginTop: 15 }}>
-            <Row>
-              <Col>
-                <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
-                <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
-              </Col>
-              {isAuthenticated && (
-                <Col xs="auto">
-                  <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
-                    <MoreIcon className={classes.iconCursor} />
-                  </div>
-                </Col>
-              )}
-            </Row>
-            <Menu
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={hanldeCloseMore}
-            >
-              {hasUpdateAuthority && (
-                <React.Fragment>
-                  <MenuItem onClick={handleClickOpenUpdateForm}>Edit</MenuItem>
-                </React.Fragment>
-              )}
-            </Menu>
-            {/* {hasUpdateAuthority && (
-              <UpdateFormModal onSuccess={onUpdateSuccess} author={author} permlink={permlink} body={originalContent} open={openUpdateForm} onClose={handleClickCloseUpdateForm} />
-            )} */}
-            <Row>
-              <Col>
-                <PostActions
-                  disableExtraPadding={true}
-                  body={body}
-                  author={username}
-                  permlink={permlink}
-                  hasUpvoted={hasUpvoted}
-                  hideStats={true}
-                  voteCount={upvotes}
-                  replyCount={replyCount}
-                  payout={payout}
-                  payoutAt={payout_at}
-                  replyRef="content"
-                  max_accepted_payout={max_accepted_payout}
-                />
-              </Col>
-            </Row>
-            {!loadingReplies && !loadingContent &&  (
-              <ReplyList replies={replies} expectedCount={replyCount} />
-            )}
-          </div>
-        </div>
         </React.Fragment>
       )}
       <ContentSkeleton loading={loadingContent} />
