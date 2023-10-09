@@ -183,6 +183,9 @@ const useStyles = createUseStyles(theme => ({
   top0:{
     top: 0,
   },
+  opacity1:{
+    opacity: 1,
+  }
 
 }))
 
