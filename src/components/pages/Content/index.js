@@ -265,7 +265,7 @@ const useStyles = createUseStyles(theme => ({
   borderRadius4:{
     borderRadius: 4,
   },
-  
+
   
 
 }))
@@ -495,10 +495,10 @@ const Content = (props) => {
               </div>
             </div>
             <div className='div2'>
-              <div>
-                <div>
-                  <div>
-                    <div></div>
+              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.lineHeight20,classes.fontWeight400)}>
+                <div className={classNames(classes.lineHeight24)}>
+                  <div className={classNames(classes.marginBottom20,classes.padding024)}>
+                    <div className={classNames(classes.paddingBottom14,classes.paddingTop14, classes.transition2, classes.boxShadow2, classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4,classes.displayFlex)}></div>
                   </div>
                 </div>
               </div>
