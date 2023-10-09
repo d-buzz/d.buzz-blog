@@ -207,6 +207,24 @@ const useStyles = createUseStyles(theme => ({
   displayFlex:{
     display: 'flex',
   },
+  fontSize20:{
+    fontSize: 20,
+  },
+  fontWeight500:{
+    fontWeight: 500,
+  },
+  lineHeight24:{
+    lineHeight: 24,
+  },
+  letterSpacing:{
+    letterSpacing: 0,
+  },
+  color242424:{
+    color: '#242424',
+  },
+  fontFamilySohe:{
+    fontFamily: 'sohne, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  },
 
 }))
 
