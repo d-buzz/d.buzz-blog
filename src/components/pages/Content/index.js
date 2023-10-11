@@ -773,16 +773,16 @@ const Content = (props) => {
                   </div>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <HeartIcon /> <label className={classNames(classes.margin0)}>12</label>
+                      <HeartIcon /> 
                     </div>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0)}>12</label>
+                      <CommentTwoIcon size={17} />  
                     </div>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <HeartIcon /> <label className={classNames(classes.margin0)}>12</label>
+                      <HeartIcon />
                     </div>
                     <div className={classNames(classes.displayFlex)}>
-                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0)}>12</label>
+                      <CommentTwoIcon size={17} /> 
                     </div>
                   </div>
                 </div>
