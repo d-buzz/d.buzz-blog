@@ -384,7 +384,7 @@ const useStyles = createUseStyles(theme => ({
     marginTop:24,
   },
   marginLeft5:{
-    marginLeft:5,
+    marginLeft:"5px",
   },
 }))
 
@@ -697,7 +697,7 @@ const Content = (props) => {
                           <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
                             <div className={classNames(classes.displayFlex)}>
                               <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5,classes.marginBottom0)}>{reply.active_votes.length}</label></div>
-                              <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}> <CommentIcon /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.active_votes.length} reply</label></div>
+                              {reply.replyCount >= 0 && <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}>  <CommentTwoIcon size='17' /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.replyCount}reply</label></div>}
                             </div>
                             <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
                           </div>
