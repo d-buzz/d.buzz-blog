@@ -691,9 +691,9 @@ const Content = (props) => {
                           </div>
 
                           {/* read more */}
-                          <div>
+                          {/* <div>
                             <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
-                          </div>
+                          </div> */}
 
                           {/* footer */}
                           <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
