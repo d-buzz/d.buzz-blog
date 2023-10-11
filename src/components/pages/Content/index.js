@@ -698,7 +698,7 @@ const Content = (props) => {
                           {/* footer */}
                           <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
                             <div>
-                              <HeartIcon /><label className={classNames(classes.marginLeft5)}>72</label>
+                              <HeartIcon /><label className={classNames(classes.marginLeft5)}>{reply.active_votes.length}</label>
                             </div>
                             <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
                           </div>
