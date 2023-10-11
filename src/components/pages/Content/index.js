@@ -662,7 +662,7 @@ const Content = (props) => {
                             <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
                               <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                                 <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
+                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://images.hive.blog/u/${reply.author}/avatar/small`} alt="cover"/>
                                 </div>
                               </div>
                               <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
