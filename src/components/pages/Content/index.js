@@ -649,7 +649,9 @@ const Content = (props) => {
             <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'>
               <div>
-                { replies.map(reply =>(
+                { replies.map(reply =>{
+                  console.log('reply',reply)
+                  return (
                   <>
                     <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
                     <div>
@@ -680,7 +682,7 @@ const Content = (props) => {
                               <div className={classNames(classes.padding050, classes.displayBlock)}>
                                 <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
                                   <p>
-                                  1.. typing "playwright cypress migrate" into browser doesn't give any insight aside from tech bloggers monetizing on both tools, and also, maybe on Microsoft investments into marketing.
+                                    {reply.body}
                                   </p>
                                 </div>
                               </div>
@@ -704,7 +706,7 @@ const Content = (props) => {
                     </div>
                   </div>
                   </>
-                ))}
+                )})}
                 
               </div>
             </div>
