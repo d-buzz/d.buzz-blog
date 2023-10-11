@@ -696,8 +696,8 @@ const Content = (props) => {
                           {/* footer */}
                           <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
                             <div className={classNames(classes.displayFlex)}>
-                              <div> <HeartIcon /><label className={classNames(classes.marginLeft5)}>{reply.active_votes.length}</label></div>
-                              <div className={classNames(classes.marginLeft12)}> <HeartIcon /><label className={classNames(classes.marginLeft5)}>{reply.active_votes.length} reply</label></div>
+                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5,classes.marginBottom0)}>{reply.active_votes.length}</label></div>
+                              <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.active_votes.length} reply</label></div>
                              
                             </div>
                             <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
