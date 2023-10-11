@@ -775,13 +775,13 @@ const Content = (props) => {
                     </div>
                   </div>
                   <div className={classNames(classes.displayFlex)}>
-                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <FavoritesIcon /> 
+                    <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                      <FavoritesIcon size={19}  /> 
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <ShareIcon  />  
+                    <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
+                      <ShareIcon  size={19}  />  
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.paddingTop3)}>
+                    <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
                       <MoreIcon />
                     </div>
                    
