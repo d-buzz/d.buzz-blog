@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, FavoritesIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, FavoritesIcon, ShareIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -776,14 +776,12 @@ const Content = (props) => {
                       <FavoritesIcon /> 
                     </div>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <CommentTwoIcon size={17} />  
+                      <ShareIcon  />  
                     </div>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <HeartIcon />
+                      <ShareIcon />
                     </div>
-                    <div className={classNames(classes.displayFlex)}>
-                      <CommentTwoIcon size={17} /> 
-                    </div>
+                   
                   </div>
                 </div>
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
