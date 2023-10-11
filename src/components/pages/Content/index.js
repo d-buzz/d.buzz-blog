@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, FavoritesIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -773,7 +773,7 @@ const Content = (props) => {
                   </div>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <HeartIcon /> 
+                      <FavoritesIcon /> 
                     </div>
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
                       <CommentTwoIcon size={17} />  
