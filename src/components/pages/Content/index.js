@@ -389,6 +389,9 @@ const useStyles = createUseStyles(theme => ({
   marginLeft5:{
     marginLeft:"5px",
   },
+  paddingTop3:{
+    paddingTop: '3px',
+  },
 }))
 
 const Content = (props) => {
@@ -778,8 +781,8 @@ const Content = (props) => {
                     <div className={classNames(classes.displayFlex, classes.marginRight24)}>
                       <ShareIcon  />  
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
-                      <ShareIcon />
+                    <div className={classNames(classes.displayFlex, classes.paddingTop3)}>
+                      <MoreIcon />
                     </div>
                    
                   </div>
