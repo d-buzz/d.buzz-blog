@@ -37,6 +37,7 @@ import {
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 
+
 const useStyles = createUseStyles(theme => ({
   cursorPointer:{
     cursor: 'pointer',
@@ -670,7 +671,7 @@ const Content = (props) => {
                                 <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                                   <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>{reply.author}</a>
                                 </div>
-                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
+                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>{moment(`${reply.created}Z`).local().fromNow()}</a>
                               </div>
                             </div>
                             <div></div>
