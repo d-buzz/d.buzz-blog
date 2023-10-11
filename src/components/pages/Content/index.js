@@ -668,7 +668,7 @@ const Content = (props) => {
                               <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
                                 {/* name here */}
                                 <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                  <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
+                                  <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>{reply.author}</a>
                                 </div>
                                 <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
                               </div>
