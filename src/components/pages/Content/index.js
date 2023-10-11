@@ -10,7 +10,7 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentIcon, CommentTwoIcon,CloseIcon,HeartIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
