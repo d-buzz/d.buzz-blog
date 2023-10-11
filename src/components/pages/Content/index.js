@@ -51,6 +51,9 @@ const useStyles = createUseStyles(theme => ({
   padding38:{
     padding: '3px 8px',
   },
+  padding1010:{
+    padding: '10px 10px',
+  },
   margin22:{
     margin: '22px 0px',
   },
@@ -759,8 +762,29 @@ const Content = (props) => {
                   </Col>
                 </Row>
                 {/* add div here for comment */}
-                <div onClick={() => updateReply(true)}  className={classNames(classes.borderTopGrey, classes.borderBottomGrey, classes.padding38, classes.margin22, classes.cursorPointer)}>
-                  <CommentTwoIcon  />
+                <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                  <div className={classNames(classes.displayFlex)}>
+                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
+                      <HeartIcon /> <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                    <div className={classNames(classes.displayFlex)}>
+                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                  </div>
+                  <div className={classNames(classes.displayFlex)}>
+                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
+                      <HeartIcon /> <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
+                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                    <div className={classNames(classes.displayFlex, classes.marginRight24)}>
+                      <HeartIcon /> <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                    <div className={classNames(classes.displayFlex)}>
+                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0)}>12</label>
+                    </div>
+                  </div>
                 </div>
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
