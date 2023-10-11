@@ -682,8 +682,8 @@ const Content = (props) => {
                             <pre className={classNames(classes.whiteSpacePreWrap)}>
                               <div className={classNames(classes.padding050, classes.displayBlock)}>
                                 <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
-                                  <p>
-                                    {reply.body}
+                                  <p dangerouslySetInnerHTML={{ __html: reply.body }} >
+                                    {/* {reply.body} */}
                                   </p>
                                 </div>
                               </div>
