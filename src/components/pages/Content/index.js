@@ -628,12 +628,6 @@ const Content = (props) => {
                             <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}>Juneroy Derano</p>
                           </div>
                         </div>
-                        {/* for text areaa */}
-                        {/* <div className={classNames(classes.flexDirectionColumn, classes.displayFlex)}>
-                            <div className={classNames(classes.transition4, classes.minHeight100)}>
-                              <textarea cols={'10'} rows={'10'}></textarea>
-                            </div>
-                        </div> */}
                       </div>
                       <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
                         <div className={classNames(classes.transition4, classes.minHeight100)}>
@@ -655,163 +649,63 @@ const Content = (props) => {
             <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'>
               <div>
-                {/* post here */}
-                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
-                  <div>
-                    <div className={classNames(classes.width100, classes.height100 )}>
-                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
-                        {/* avatar */}
-                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
-                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
-                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                { replies.map(reply =>(
+                  <>
+                    <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
+                    <div>
+                      <div className={classNames(classes.width100, classes.height100 )}>
+                        <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
+                          {/* avatar */}
+                          <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
+                            <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
                               <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
+                                <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
+                                </div>
+                              </div>
+                              <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
+                                {/* name here */}
+                                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                                  <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
+                                </div>
+                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
                               </div>
                             </div>
-                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
-                              {/* name here */}
-                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
-                              </div>
-                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
-                            </div>
+                            <div></div>
                           </div>
-                          <div></div>
-                        </div>
 
-                        {/* content */}
-                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
-                          <pre className={classNames(classes.whiteSpacePreWrap)}>
-                            <div className={classNames(classes.padding050, classes.displayBlock)}>
-                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
-                                <p>
-                                1.. typing "playwright cypress migrate" into browser doesn't give any insight aside from tech bloggers monetizing on both tools, and also, maybe on Microsoft investments into marketing.
-                                </p>
+                          {/* content */}
+                          <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
+                            <pre className={classNames(classes.whiteSpacePreWrap)}>
+                              <div className={classNames(classes.padding050, classes.displayBlock)}>
+                                <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                                  <p>
+                                  1.. typing "playwright cypress migrate" into browser doesn't give any insight aside from tech bloggers monetizing on both tools, and also, maybe on Microsoft investments into marketing.
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          </pre>
-                        </div>
+                            </pre>
+                          </div>
 
-                        {/* read more */}
-                        <div>
-                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
-                        </div>
-
-                        {/* footer */}
-                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
+                          {/* read more */}
                           <div>
-                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>72</label>
+                            <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
                           </div>
-                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+
+                          {/* footer */}
+                          <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
+                            <div>
+                              <HeartIcon /><label className={classNames(classes.marginLeft5)}>72</label>
+                            </div>
+                            <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
-                  <div>
-                    <div className={classNames(classes.width100, classes.height100 )}>
-                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
-                        {/* avatar */}
-                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
-                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
-                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*qPc2fjivlDm6lQcgyaIJqg@2x.jpeg`} alt="cover"/>
-                              </div>
-                            </div>
-                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
-                              {/* name here */}
-                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Abdelfattah Sekak</a>
-                              </div>
-                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>9 days ago</a>
-                            </div>
-                          </div>
-                          <div></div>
-                        </div>
-
-                        {/* content */}
-                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
-                          <pre className={classNames(classes.whiteSpacePreWrap)}>
-                            <div className={classNames(classes.padding050, classes.displayBlock)}>
-                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
-                                <p>
-                                I, myself, implemented Cypress in my current company two years ago because I liked the product and the documentation. However, when I had the chance to experiment with Playwright recently, I quickly changed my opinion and started considering a…
-                                </p>
-                              </div>
-                            </div>
-                          </pre>
-                        </div>
-
-                        {/* read more */}
-                        <div>
-                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
-                        </div>
-
-                        {/* footer */}
-                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
-                          <div>
-                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>10</label>
-                          </div>
-                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
-                  <div>
-                    <div className={classNames(classes.width100, classes.height100 )}>
-                      <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
-                        {/* avatar */}
-                        <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
-                          <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
-                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/1*QBY4yLB-8qciSZmu9tYqpA.jpeg`} alt="cover"/>
-                              </div>
-                            </div>
-                            <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
-                              {/* name here */}
-                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>Tom Tom</a>
-                              </div>
-                              <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>8 days ago</a>
-                            </div>
-                          </div>
-                          <div></div>
-                        </div>
-
-                        {/* content */}
-                        <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
-                          <pre className={classNames(classes.whiteSpacePreWrap)}>
-                            <div className={classNames(classes.padding050, classes.displayBlock)}>
-                              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
-                                <p>
-                                Looks good to me, great job!
-                                </p>
-                              </div>
-                            </div>
-                          </pre>
-                        </div>
-
-                        {/* read more */}
-                        <div>
-                          <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
-                        </div>
-
-                        {/* footer */}
-                        <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
-                          <div>
-                            <HeartIcon /><label className={classNames(classes.marginLeft5)}>11</label>
-                          </div>
-                          <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  </>
+                ))}
+                
               </div>
             </div>
           </div>
