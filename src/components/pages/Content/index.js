@@ -5,7 +5,9 @@ import {
   getRepliesRequest,
   clearReplies,
   clearAppendReply,
+  publishReplyRequest, uploadFileRequest
 } from 'store/posts/actions'
+import {broadcastNotification} from '../../../store/interfaces/actions'
 import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
@@ -15,7 +17,6 @@ import {
   MarkdownViewer,
   PostTags,
   PostActions,
-  ReplyList,
   // UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
@@ -398,6 +399,10 @@ const Content = (props) => {
   const {
     getContentRequest,
     getRepliesRequest,
+    publishReplyRequest,
+    broadcastNotification,
+    modalData,
+    append,
     match,
     content,
     loadingContent,
@@ -418,9 +423,37 @@ const Content = (props) => {
   // const [openUpdateForm, setOpenUpdateForm] = useState(false)
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
   const [isCensored, setIsCensored] = useState(false)
+  const [reRenderReply, setreRenderReply] = useState(true)
+  
   const [censorType, setCensorType] = useState(null)
   const popoverAnchor = useRef(null)
   const history = useHistory()
+
+  const [contentReply, setcontentReply] = useState('')
+  const [repliesList, setrepliesList] = useState([])
+  const [open, setOpen] = useState(false)
+  const [replyRef, setReplyRef] = useState('content')
+  const [treeHistory, setTreeHistory] = useState(0)
+
+  useEffect(() => {
+  },[modalData])
+
+  useEffect(() => {
+    if (append) {
+      repliesList.unshift(append)
+      setreRenderReply(false)
+      setTimeout(() => {
+        setreRenderReply(true)
+      }, 1000)
+    }
+  // eslint-disable-next-line
+  }, [append])
+  useEffect(() => {
+    if (replies) {
+      setrepliesList(replies)
+    }
+  // eslint-disable-next-line
+  }, [replies])
 
   const [showReply, setshowReply] = useState(false)
   const updateReply = (boolean) => {
@@ -605,6 +638,25 @@ const Content = (props) => {
     } catch (e) {}
   }
 
+
+  const submitReply = () => {
+    publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
+    .then(({ success, errorMessage }) => {
+      if(success) {
+        // setLoading(false)
+        broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
+        // setReplyDone(true)
+        // closeReplyModal()
+        // getRepliesRequest()
+        // setReplying(false)
+      } else {
+        // setReplying(false)
+        // setLoading(false)
+        // broadcastNotification('error', 'There was an error while replying to this buzz.')
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       {!loadingContent && author && (
@@ -638,13 +690,13 @@ const Content = (props) => {
                       </div>
                       <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
                         <div className={classNames(classes.transition4, classes.minHeight100)}>
-                          <textarea placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
+                          <textarea value={contentReply} onChange={(e) => setcontentReply(e.target.value)} placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
                           <div></div>
                           <div>
                             <button className='btn btn-default'>Cancel</button>
-                            <button disabled className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
+                            <button onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
                           </div>
                         </div>
                       </div>
@@ -656,7 +708,7 @@ const Content = (props) => {
             <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'>
               <div>
-                { replies.map(reply =>{
+                { reRenderReply && repliesList.map(reply =>{
                   console.log('reply',reply)
                   return (
                   <>
@@ -852,9 +904,9 @@ const Content = (props) => {
                   />
                 </Col>
               </Row>
-              {!loadingReplies && !loadingContent &&  (
+              {/* {!loadingReplies && !loadingContent &&  (
                 <ReplyList replies={replies} expectedCount={replyCount} />
-              )}
+              )} */}
             </div>
           </div>
         </React.Fragment>
@@ -878,6 +930,8 @@ const Content = (props) => {
 const mapStateToProps = (state) => ({
   loadingContent: pending(state, 'GET_CONTENT_REQUEST'),
   loadingReplies: pending(state, 'GET_REPLIES_REQUEST'),
+  modalData: state.interfaces.get('replyModalData'),
+  append: state.posts.get('appendReply'),
   replies: state.posts.get('replies'),
   content: state.posts.get('content'),
   user: state.auth.get('user'),
@@ -887,6 +941,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     getContentRequest,
+    publishReplyRequest,
+    broadcastNotification,
     getRepliesRequest,
     clearReplies,
     checkHasUpdateAuthorityRequest,
