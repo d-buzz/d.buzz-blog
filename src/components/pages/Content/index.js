@@ -424,6 +424,7 @@ const Content = (props) => {
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
   const [isCensored, setIsCensored] = useState(false)
   const [reRenderReply, setreRenderReply] = useState(true)
+  const [replying, setReplying] = useState(false)
   
   const [censorType, setCensorType] = useState(null)
   const popoverAnchor = useRef(null)
@@ -444,7 +445,7 @@ const Content = (props) => {
       setreRenderReply(false)
       setTimeout(() => {
         setreRenderReply(true)
-      }, 1000)
+      }, 500)
     }
   // eslint-disable-next-line
   }, [append])
@@ -640,17 +641,24 @@ const Content = (props) => {
 
 
   const submitReply = () => {
+    setReplying(true)
+    console.log('author',author)
+    console.log('permlink',permlink)
+    console.log('contentReply',contentReply)
+    console.log('replyRef',replyRef)
+    console.log('treeHistory',treeHistory)
     publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
     .then(({ success, errorMessage }) => {
       if(success) {
+        setcontentReply('')
         // setLoading(false)
-        broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
+        // broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
         // setReplyDone(true)
         // closeReplyModal()
         // getRepliesRequest()
-        // setReplying(false)
+        setReplying(false)
       } else {
-        // setReplying(false)
+        setReplying(false)
         // setLoading(false)
         // broadcastNotification('error', 'There was an error while replying to this buzz.')
       }
@@ -695,8 +703,8 @@ const Content = (props) => {
                         <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
                           <div></div>
                           <div>
-                            <button className='btn btn-default'>Cancel</button>
-                            <button onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>Respond</button>
+                            {/* <button className='btn btn-default'>Cancel</button> */}
+                            <button disabled={replying || contentReply === ''?true:false} onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>{replying? 'Responding':'Respond'}</button>
                           </div>
                         </div>
                       </div>
