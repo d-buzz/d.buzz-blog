@@ -393,6 +393,18 @@ const useStyles = createUseStyles(theme => ({
   paddingTop3:{
     paddingTop: '3px',
   },
+  borderLeft3SolidGray:{
+    borderLeft: '3px solid rgb(242, 242, 242)',
+  },
+  marginBottom24:{
+    marginBottom: '24px',
+  },
+  marginLeft8:{
+    marginLeft: '8px',
+  },
+  padding8:{
+    padding: '8px',
+  },
 }))
 
 const Content = (props) => {
@@ -432,7 +444,6 @@ const Content = (props) => {
 
   const [contentReply, setcontentReply] = useState('')
   const [repliesList, setrepliesList] = useState([])
-  const [open, setOpen] = useState(false)
   const [replyRef, setReplyRef] = useState('content')
   const [treeHistory, setTreeHistory] = useState(0)
 
@@ -697,7 +708,7 @@ const Content = (props) => {
                         </div>
                       </div>
                       <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
-                        <div className={classNames(classes.transition4, classes.minHeight100)}>
+                        <div className={classNames('text-area-content',classes.transition4, classes.minHeight100)}>
                           <textarea value={contentReply} onChange={(e) => setcontentReply(e.target.value)} placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
@@ -720,7 +731,7 @@ const Content = (props) => {
                   console.log('reply',reply)
                   return (
                   <>
-                    <div className={classNames(classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
+                    <div className={classNames('main-comment-content',classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
                     <div>
                       <div className={classNames(classes.width100, classes.height100 )}>
                         <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
@@ -766,6 +777,31 @@ const Content = (props) => {
                               {reply.replyCount >= 0 && <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}>  <CommentTwoIcon size='17' /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.replyCount}reply</label></div>}
                             </div>
                             <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* reply content */}
+                    <div className={classNames(classes.borderLeft3SolidGray, classes.marginBottom24, classes.marginLeft8)} style={{width: '100%'}}>
+                      <div>
+                        <div className={classNames(classes.color242424, classes.fontSize14, classes.fontFamilySohe, classes.lineHeight20, classes.fontWeight400)}>
+                          <div className={classNames(classes.lineHeight24)}>
+                            <div className={classNames(classes.marginBottom0, classes.padding024, classes.displayBlock)}>
+                              <div className={classNames(classes.paddingBottom14, classes.paddingTop14, classes.transition2, classes.boxShadow2,classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4, classes.displayFlex)}>
+                                <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.padding8)}>
+                                  <div className={classNames('text-area-content',classes.transition4, classes.minHeight100)}>
+                                    <textarea value={contentReply} onChange={(e) => setcontentReply(e.target.value)} placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
+                                  </div>
+                                  <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
+                                    <div></div>
+                                    <div>
+                                      {/* <button className='btn btn-default'>Cancel</button> */}
+                                      <button disabled={replying || contentReply === ''?true:false} onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>{replying? 'Responding':'Respond'}</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
