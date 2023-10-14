@@ -37,6 +37,8 @@ import {
 } from 'components'
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
+import ReplyContent from '../../sections/ReplyContent'
+import index from 'uuid-random'
 
 
 const useStyles = createUseStyles(theme => ({
@@ -451,8 +453,18 @@ const Content = (props) => {
   },[modalData])
 
   useEffect(() => {
-    if (append) {
-      repliesList.unshift(append)
+    if(append.hasOwnProperty('refMeta')) {
+      const { refMeta, root_author, root_permlink } = append
+      const { ref, treeHistory } = refMeta
+
+      if (ref == 'content') {
+        repliesList.unshift(append)
+      }else{
+        if (ref === 'replies') {
+          // 
+        }
+      }
+     
       setreRenderReply(false)
       setTimeout(() => {
         setreRenderReply(true)
@@ -469,7 +481,6 @@ const Content = (props) => {
 
   const [showReply, setshowReply] = useState(false)
   const updateReply = (boolean) => {
-    console.log('test')
     setshowReply(boolean)
   }
   const {
@@ -653,11 +664,11 @@ const Content = (props) => {
 
   const submitReply = () => {
     setReplying(true)
-    console.log('author',author)
-    console.log('permlink',permlink)
-    console.log('contentReply',contentReply)
-    console.log('replyRef',replyRef)
-    console.log('treeHistory',treeHistory)
+    // console.log('author',author)
+    // console.log('permlink',permlink)
+    // console.log('contentReply',contentReply)
+    // console.log('replyRef',replyRef)
+    // console.log('treeHistory',treeHistory)
     publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
     .then(({ success, errorMessage }) => {
       if(success) {
@@ -727,87 +738,10 @@ const Content = (props) => {
             <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'>
               <div>
-                { reRenderReply && repliesList.map(reply =>{
-                  console.log('reply',reply)
+                { reRenderReply && repliesList.map((reply, index )=>{
+                  // console.log('reply',reply)
                   return (
-                  <>
-                    <div className={classNames('main-comment-content',classes.marginRight24, classes.marginLeft24, classes.borderBottomSolidGray, classes.displayBlock)}>
-                    <div>
-                      <div className={classNames(classes.width100, classes.height100 )}>
-                        <div className={classNames(classes.paddingBottom25, classes.paddingTop25)}>
-                          {/* avatar */}
-                          <div className={classNames(classes.flexDirectionRow, classes.justifyContentSpaceBetween, classes.displayFlex)}>
-                            <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.alignItemsCenter)}>
-                              <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                                  <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://images.hive.blog/u/${reply.author}/avatar/small`} alt="cover"/>
-                                </div>
-                              </div>
-                              <div className={classNames(classes.paddingLeft12, classes.displayBlock, classes.widthMaxContent)}>
-                                {/* name here */}
-                                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                                  <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorBlack, classes.fontSize14)}>{reply.author}</a>
-                                </div>
-                                <a href='https://d.buzz/' className={classNames(classes.textDecorationNone, classes.colorGray, classes.fontSize14)}>{moment(`${reply.created}Z`).local().fromNow()}</a>
-                              </div>
-                            </div>
-                            <div></div>
-                          </div>
-
-                          {/* content */}
-                          <div className={classNames(classes.marginTop5, classes.wordBreakBreakWord, classes.displayBlock)}>
-                            <pre className={classNames(classes.whiteSpacePreWrap)}>
-                              <div className={classNames(classes.padding050, classes.displayBlock)}>
-                                <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
-                                  <MarkdownViewer minifyAssets={false} content={reply.body} />
-                                </div>
-                              </div>
-                            </pre>
-                          </div>
-
-                          {/* read more */}
-                          {/* <div>
-                            <button className={classNames('btn btn-default', classes.colorGreen, classes.padding0, classes.fontSize14)}>Read More</button>
-                          </div> */}
-
-                          {/* footer */}
-                          <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
-                            <div className={classNames(classes.displayFlex)}>
-                              <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5,classes.marginBottom0)}>{reply.active_votes.length}</label></div>
-                              {reply.replyCount >= 0 && <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}>  <CommentTwoIcon size='17' /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.replyCount}reply</label></div>}
-                            </div>
-                            <div className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* reply content */}
-                    <div className={classNames(classes.borderLeft3SolidGray, classes.marginBottom24, classes.marginLeft8)} style={{width: '100%'}}>
-                      <div>
-                        <div className={classNames(classes.color242424, classes.fontSize14, classes.fontFamilySohe, classes.lineHeight20, classes.fontWeight400)}>
-                          <div className={classNames(classes.lineHeight24)}>
-                            <div className={classNames(classes.marginBottom0, classes.padding024, classes.displayBlock)}>
-                              <div className={classNames(classes.paddingBottom14, classes.paddingTop14, classes.transition2, classes.boxShadow2,classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4, classes.displayFlex)}>
-                                <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.padding8)}>
-                                  <div className={classNames('text-area-content',classes.transition4, classes.minHeight100)}>
-                                    <textarea value={contentReply} onChange={(e) => setcontentReply(e.target.value)} placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
-                                  </div>
-                                  <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
-                                    <div></div>
-                                    <div>
-                                      {/* <button className='btn btn-default'>Cancel</button> */}
-                                      <button disabled={replying || contentReply === ''?true:false} onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>{replying? 'Responding':'Respond'}</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </>
+                    <ReplyContent key={index} reply={reply} treeHistory={`${index}`}  match={match}/>
                 )})}
                 
               </div>
