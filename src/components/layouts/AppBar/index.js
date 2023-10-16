@@ -43,7 +43,7 @@ import { useLastLocation } from 'react-router-last-location'
 import { pending } from 'redux-saga-thunk'
 import { pollNotifRequest } from 'store/polling/actions'
 import { searchRequest, clearSearchPosts, publishPostRequest } from '../../../store/posts/actions'
-
+import { WriteIcon } from 'components/elements'
 const useStyles = createUseStyles(theme => ({
   nav: {
     height: 65,
@@ -442,7 +442,7 @@ const AppBar = (props) => {
                 <React.Fragment>
                   {!minify && (
                     <React.Fragment>
-                      <div style={{ display: 'inline-flex', width:'200px' }}>
+                      <div style={{ display: 'inline-flex', width:pathname === '/create-post'?'200px':'220px' }}>
                         {/* &nbsp;
                         <div className={classes.buzzButton}>
                           <div className={classes.buzzWrapper} onClick={handleClickOpenBuzzModal}>
@@ -462,7 +462,11 @@ const AppBar = (props) => {
                                 as={Link}
                                 to="/create-post"
                               >
-                                <label className={classes.textBlack}>Write</label>
+                                <div style={{display:'flex', justifyContent:'space-evenly', alignItems:'center', width:'75px'}}>
+                                  <WriteIcon size={17}/>
+                                  <label style={{margin:'0'}} className={classes.textBlack}>Write</label>
+                                </div>
+                                
                                 {/* <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge> */}
                               </MenuLink>
                             </Menu>
