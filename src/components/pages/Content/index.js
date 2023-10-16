@@ -521,7 +521,7 @@ const Content = (props) => {
   let meta = {}
   let app = null
   let upvotes = 0
-  let hasUpvoted = false
+  // let hasUpvoted = false
   let payout_at = cashout_time
 
   useEffect(() => {
@@ -613,7 +613,7 @@ const Content = (props) => {
       }
 
       if(isAuthenticated) {
-        hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
+        // hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
       }
     }
   }
