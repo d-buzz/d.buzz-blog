@@ -30,6 +30,7 @@ import {
   GET_SEARCH_TAG_SUCCESS,
   SEARCH_SUCCESS,
   PUBLISH_REPLY_SUCCESS,
+  SUCCESS_POST_REQUEST,
 } from './actions'
 import { fromJS } from 'immutable'
 
@@ -55,10 +56,13 @@ const defaultState = fromJS({
   images: [],
   recentUpvotes: [],
   published: {},
+  postContent:{},
 })
 
 export const posts = (state = defaultState, { type, payload }) => {
   switch (type) {
+  case SUCCESS_POST_REQUEST:
+    return state.set('postContent', payload)
   case PUBLISH_REPLY_SUCCESS:
     return state.set('appendReply', payload.reply)
   case SET_LATEST_LAST_POST:

@@ -47,6 +47,7 @@ const GuardedAppFrame = (props) => {
   const { width } = useWindowDimensions()
   let isProfileRoute = false
   let isContentRoute = false
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -55,14 +56,26 @@ const GuardedAppFrame = (props) => {
   }
 
   useEffect(() => {
+    if (pathname === '/create-post') {
+      setHideRightSideBar(true)
+      setIsCreatePostPage(true)
+    }
+  },[pathname])
+
+  useEffect(() => {
     if (width < 800) {
       setMainWidth(12)
       setHideRightSideBar(true)
     } else {
       setMainWidth(8)
-      setHideRightSideBar(false)
+      if (pathname === '/create-post') {
+        setHideRightSideBar(true)
+        setIsCreatePostPage(true)
+      }else{
+        setHideRightSideBar(false)
+      }
     }
-  }, [width])
+  }, [width, pathname])
 
   return (
     <React.Fragment>
@@ -70,7 +83,7 @@ const GuardedAppFrame = (props) => {
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-              <Tabs/>
+              {!isCreatePostPage && (<Tabs/>)}
               <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
                 <React.Fragment>
                  

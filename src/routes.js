@@ -15,6 +15,7 @@ const Tags = React.lazy(() => import('./components/pages/Tags'))
 const Search = React.lazy(() => import('./components/pages/Search'))
 const SearchPosts = React.lazy(() => import('./components/sections/SearchPosts'))
 const SearchPeople = React.lazy(() => import('./components/sections/SearchPeople'))
+// const CreateBuzzForm = React.lazy(() => import('./components/sections/CreateBuzzForm'))
 
   
 const routes =  [

@@ -5,7 +5,7 @@ import {
   getRepliesRequest,
   clearReplies,
   clearAppendReply,
-  publishReplyRequest, uploadFileRequest
+  publishReplyRequest,
 } from 'store/posts/actions'
 import {broadcastNotification} from '../../../store/interfaces/actions'
 import {
@@ -38,7 +38,6 @@ import {
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 import ReplyContent from '../../sections/ReplyContent'
-import index from 'uuid-random'
 
 
 const useStyles = createUseStyles(theme => ({
@@ -414,13 +413,11 @@ const Content = (props) => {
     getContentRequest,
     getRepliesRequest,
     publishReplyRequest,
-    broadcastNotification,
     modalData,
     append,
     match,
     content,
     loadingContent,
-    loadingReplies,
     clearReplies,
     user = {},
     replies,
@@ -428,7 +425,6 @@ const Content = (props) => {
     censorList = [],
     clearAppendReply,
   } = props
-
   const { username, permlink } = match.params
   const [anchorEl, setAnchorEl] = useState(null)
   const [originalContent, setOriginalContent] = useState('')
@@ -446,18 +442,18 @@ const Content = (props) => {
 
   const [contentReply, setcontentReply] = useState('')
   const [repliesList, setrepliesList] = useState([])
-  const [replyRef, setReplyRef] = useState('content')
-  const [treeHistory, setTreeHistory] = useState(0)
+  const [replyRef] = useState('content')
+  const [treeHistory] = useState(0)
 
   useEffect(() => {
   },[modalData])
 
   useEffect(() => {
     if(append.hasOwnProperty('refMeta')) {
-      const { refMeta, root_author, root_permlink } = append
-      const { ref, treeHistory } = refMeta
+      const { refMeta } = append
+      const { ref } = refMeta
 
-      if (ref == 'content') {
+      if (ref === 'content') {
         repliesList.unshift(append)
       }else{
         if (ref === 'replies') {
@@ -670,21 +666,21 @@ const Content = (props) => {
     // console.log('replyRef',replyRef)
     // console.log('treeHistory',treeHistory)
     publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
-    .then(({ success, errorMessage }) => {
-      if(success) {
-        setcontentReply('')
-        // setLoading(false)
-        // broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
-        // setReplyDone(true)
-        // closeReplyModal()
-        // getRepliesRequest()
-        setReplying(false)
-      } else {
-        setReplying(false)
-        // setLoading(false)
-        // broadcastNotification('error', 'There was an error while replying to this buzz.')
-      }
-    })
+      .then(({ success, errorMessage }) => {
+        if(success) {
+          setcontentReply('')
+          // setLoading(false)
+          // broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
+          // setReplyDone(true)
+          // closeReplyModal()
+          // getRepliesRequest()
+          setReplying(false)
+        } else {
+          setReplying(false)
+          // setLoading(false)
+          // broadcastNotification('error', 'There was an error while replying to this buzz.')
+        }
+      })
   }
 
   return (
@@ -701,8 +697,8 @@ const Content = (props) => {
               </div>
             </div>
             <div className='div2'>
-              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.lineHeight20,classes.fontWeight400)}>
-                <div className={classNames(classes.lineHeight24)}>
+              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                <div className={classNames()}>
                   <div className={classNames(classes.marginBottom20,classes.padding024)}>
                     <div className={classNames(classes.paddingBottom14,classes.paddingTop14, classes.transition2, classes.boxShadow2, classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4,classes.displayFlex)}>
                       <div className={classNames(classes.marginBottom6,classes.transition3, classes.maxHeight100, classes.padding014,classes.opacity1, classes.positionRelative, classes.justifyContentSpaceBetween, classes.displayFlex, classes.alignItemsCenter)}>
@@ -710,11 +706,14 @@ const Content = (props) => {
                         <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                           <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                             <div className={classNames(classes.positionRelative, classes.displayBlock)}>
-                              <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/>
+                              {/*  */}
+                              <Avatar author={username} style={{ marginBottom: -10 }} />
+
+                              {/* <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/> */}
                             </div>
                           </div>
                           <div className={classNames(classes.flexDirectionColumn,classes.alignItemsFlexStart, classes.justifyContentCenter, classes.lineHeight0, classes.marginLeft12, classes.displayFlex)}>
-                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}>Juneroy Derano</p>
+                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}> {author}</p>
                           </div>
                         </div>
                       </div>
@@ -738,11 +737,11 @@ const Content = (props) => {
             <div className={classNames(classes.borderBottomSolidGray)}></div>
             <div className='div4'>
               <div>
-                { reRenderReply && repliesList.map((reply, index )=>{
+                {reRenderReply && repliesList.map((reply, index )=>{
                   // console.log('reply',reply)
                   return (
                     <ReplyContent key={index} reply={reply} treeHistory={`${index}`}  match={match}/>
-                )})}
+                  )})}
                 
               </div>
             </div>

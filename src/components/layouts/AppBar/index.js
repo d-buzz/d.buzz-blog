@@ -42,7 +42,7 @@ import { signoutUserRequest } from 'store/auth/actions'
 import { useLastLocation } from 'react-router-last-location'
 import { pending } from 'redux-saga-thunk'
 import { pollNotifRequest } from 'store/polling/actions'
-import { searchRequest, clearSearchPosts } from 'store/posts/actions'
+import { searchRequest, clearSearchPosts, publishPostRequest } from '../../../store/posts/actions'
 
 const useStyles = createUseStyles(theme => ({
   nav: {
@@ -196,6 +196,15 @@ const useStyles = createUseStyles(theme => ({
   opacity1:{
     opacity: 1,
   },
+  width60:{
+    width: "60px",
+  },
+  marginRight10:{
+    marginRight:'10px',
+  },
+  padding0:{
+    padding: 0,
+  },
 }))
 
 const AppBar = (props) => {
@@ -209,6 +218,8 @@ const AppBar = (props) => {
     pollNotifRequest, 
     searchRequest,
     clearSearchPosts,
+    publishPostRequest,
+    postContent,
     count = 0,
   } = props
   const { isAuthenticated } = user
@@ -226,14 +237,18 @@ const AppBar = (props) => {
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
   const [disableSearchTips, setDisableSearchTips] = useState(false)
+  const [posting, setPosting] = useState(false)
   const [searchkey, setSearchkey] = useState(query)
-
+  
   let navbarContainer = classes.nav
 
   if (isMobile) {
     navbarContainer = classes.mobileNav
   }
 
+  useEffect(() => {
+    console.log('postContent',postContent)
+  },[postContent])
   useEffect(() => {
     pollNotifRequest()
     if (pathname === '/create-post') {
@@ -363,6 +378,29 @@ const AppBar = (props) => {
     }
   }, [])
 
+  const postNow = () => {
+    setPosting(true)
+    const buzzContent = postContent.content
+    const tags = postContent.tags
+    const payout = postContent.payout
+    const buzzPermlink = postContent.buzzPermlink
+    console.log('postContent',postContent.tags)
+    publishPostRequest(buzzContent, tags, payout, buzzPermlink)
+      .then((data) => {
+        if (data.success) {
+          const {author, permlink} = data
+          // if (!isThread) {
+          history.push(`/@${author}/c/${permlink}`)
+          // }
+          setPosting(false)
+
+        } else {
+          console.log('error')
+          setPosting(false)
+        }
+      })
+  }
+
   return (
     <React.Fragment>
       <Navbar fixed="top" className={classNames(navbarContainer, isTop?classes.opacity1:classes.opacity0, classes.transitionOpacity)}>
@@ -404,27 +442,33 @@ const AppBar = (props) => {
                 <React.Fragment>
                   {!minify && (
                     <React.Fragment>
-                      <div style={{ display: 'inline-flex' }}>
+                      <div style={{ display: 'inline-flex', width:'200px' }}>
                         {/* &nbsp;
                         <div className={classes.buzzButton}>
                           <div className={classes.buzzWrapper} onClick={handleClickOpenBuzzModal}>
                             <AddIcon />
                           </div>
                         </div> */}
-                        &nbsp;
-                        <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
-                          <Menu>
-                            <MenuLink 
-                              as={Link}
-                              to="/create-post"
-                            >
-                              <label className={classes.textBlack}>Write</label>
-                              {/* <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge> */}
-                            </MenuLink>
-                          </Menu>
+                        <div className={classNames(classes.notificationButton, classes.notificationWrapper, pathname === '/create-post'?classes.width60:'', pathname === '/create-post' || posting?classes.marginRight10:classes.marginRight10, pathname === '/create-post'?classes.padding0:'')}>
+
+                          {pathname === '/create-post' && (
+                            <Menu>
+                              <button onClick={postNow} disabled={postContent.content || posting?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
+                            </Menu>
+                          )}
+                          {pathname !== '/create-post' && (
+                            <Menu>
+                              <MenuLink 
+                                as={Link}
+                                to="/create-post"
+                              >
+                                <label className={classes.textBlack}>Write</label>
+                                {/* <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge> */}
+                              </MenuLink>
+                            </Menu>
+                          )}
                         </div>
                         
-                        &nbsp;
                         <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
                           <Menu>
                             <MenuLink 
@@ -450,7 +494,6 @@ const AppBar = (props) => {
                             <MenuLink>Notifications 4</MenuLink>
                           </MenuList>
                         </Menu> */}
-                        &nbsp;
                         <Menu>
                           <MenuButton
                             className={classNames(classes.profileButton, classes.avatarWrapper)}
@@ -639,6 +682,7 @@ const AppBar = (props) => {
 const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
+  postContent: state.posts.get('postContent'),
   count: state.polling.get('count'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
 })
@@ -647,6 +691,7 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
     pollNotifRequest, 
+    publishPostRequest,
     searchRequest,
     clearSearchPosts,
   }, dispatch),

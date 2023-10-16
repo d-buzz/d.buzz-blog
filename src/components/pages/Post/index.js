@@ -2,6 +2,11 @@ import classNames from "classnames"
 import React, { useState } from "react"
 import Container from "react-bootstrap/Container"
 import { createUseStyles } from 'react-jss'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import {
+  setPostRequest,
+} from 'store/posts/actions'
 const useStyles = createUseStyles(theme => ({
   marginLeft0:{
     marginLeft: 0,
@@ -77,38 +82,47 @@ const useStyles = createUseStyles(theme => ({
     marginRight: 20,
   },
 }))
-const Post = () => {
+const Post = (props) => {
+  const {
+    setPostRequest,
+  } = props
   const classes = useStyles()
-  const [showTitleButton, setShowTitleButton] = useState(false)
+  const [setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
-
-  const updateFromTitle = () => {
-    setShowTitleButton(true)
-    setShowDescButton(false)
-  }
+  const [postContent, setpostContent] = useState('')
   const updateFromDesc = () => {
     setShowTitleButton(false)
     setShowDescButton(true)
   }
+
+  const updateContent = (e) =>{
+    console.log('e.target.value', e.target.value)
+    setpostContent(e.target.value)
+    const tags = []
+    const payout = 1
+    const buzzPermlink = null
+    setPostRequest(e.target.value,tags,payout,buzzPermlink)
+  }
   return (
     <Container>
       <form>
-        <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsCenter)}>
-          {/* <label>Title</label> */}
-         
-          <div  className={classNames(classes.width40, classes.height40, showTitleButton?classes.border1:'', classes.borderRadius50, classes.marginRight20, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showTitleButton?'+':''}</div>
-          
-          <input onFocus={() => updateFromTitle()} onClick={() => updateFromTitle()} placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.paddingTop16, classes.fontSize42, classes.fontWeight400, classes.lineHeight125)} />
-        </div>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           {/* <label>Tell your story</label> */}
           <div   className={classNames(classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, classes.marginRight20, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
-          <textarea  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()} autoFocus placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} ></textarea>
+          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()} autoFocus placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} >{postContent}</textarea>
         </div>
       </form>
       
     </Container>
   )
 }
+const mapStateToProps = (state) => ({
+  user: state.auth.get('user'),
+})
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({
+    setPostRequest,
+  }, dispatch),
+})
 
-export default Post
+export default connect(mapStateToProps, mapDispatchToProps)(Post)
