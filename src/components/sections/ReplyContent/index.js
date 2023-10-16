@@ -399,9 +399,10 @@ const ReplyContent = (props) => {
   const [contentReply, setcontentReply] = useState('')
   const [replying, setReplying] = useState(false)
   const [replyNow, setreplyNow] = useState(false)
+  const [showReplies, setshowReplies] = useState(false)
   const [replyList, setreplyList] = useState(reply.replies)
 
-
+  
   const showReplyForm = () => {
     console.log('reply', reply)
     setreplyNow(true)
@@ -492,8 +493,8 @@ const ReplyContent = (props) => {
             {/* footer */}
             <div className={classNames(classes.marginTop24, classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter)}>
               <div className={classNames(classes.displayFlex)}>
-                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5,classes.marginBottom0)}>{reply.active_votes.length}</label></div>
-                {reply.replyCount >= 0 && <div className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}>  <CommentTwoIcon size='17' /><label className={classNames(classes.marginLeft5, classes.marginBottom0)}>{reply.replyCount}reply</label></div>}
+                <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}> <HeartIcon /><label className={classNames(classes.marginLeft5,classes.marginBottom0)}>{reply.active_votes.length} </label></div>
+                {reply.replies.length > 0 && <div onClick={() => setshowReplies(!showReplies)} className={classNames(classes.marginLeft12, classes.displayFlex, classes.alignItemsCenter)}>  <CommentTwoIcon size='17' /><label className={classNames(classes.marginLeft5, classes.marginBottom0, classes.paddingTop3)}>{!showReplies?reply.replies.length:''}{showReplies? 'Hide replies':reply.replies.length > 1 ?'Replies':'Reply'}</label></div>}
               </div>
               <div onClick={showReplyForm} className={classNames(classes.cursorPointer, classes.fontSize14)}>Reply</div>
             </div>
@@ -529,7 +530,7 @@ const ReplyContent = (props) => {
           </div>
         </>
       )}
-      {<ReplyListTwo replies={replyList}  match={match}/>}
+      {showReplies && <ReplyListTwo replies={replyList}  match={match}/>}
     </div>
   )
 }

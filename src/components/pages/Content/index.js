@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { isMobile } from 'react-device-detect'
+// import Chip from '@material-ui/core/Chip'
+
 import { connect } from 'react-redux'
 import {
   getContentRequest,
@@ -12,11 +15,12 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, FavoritesIcon, ShareIcon } from 'components/elements'
+import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon,
+  HiveIcon,
+  BurnIcon } from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
-  PostActions,
   // UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
@@ -155,10 +159,10 @@ const useStyles = createUseStyles(theme => ({
   iconButton: {
     ...theme.iconButton.hover,
   },
-  chip: {
-    marginTop: 5,
-    marginBottom: 5,
-  },
+  // chip: {
+  //   marginTop: 5,
+  //   marginBottom: 5,
+  // },
   left100per:{
     left: '100%',
   },
@@ -406,6 +410,14 @@ const useStyles = createUseStyles(theme => ({
   padding8:{
     padding: '8px',
   },
+  chip: {
+    border: 'none !important',
+    float: 'right !important',
+    '& span': {
+      fontFamily: 'Segoe-Bold',
+      marginTop: -5,
+    },
+  },
 }))
 
 const Content = (props) => {
@@ -429,6 +441,8 @@ const Content = (props) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [originalContent, setOriginalContent] = useState('')
   const classes = useStyles()
+  console.log('user juneroy', user)
+  const {username: userProfile} = user
   // const [open, setOpen] = useState(false)
   // const [openUpdateForm, setOpenUpdateForm] = useState(false)
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
@@ -543,9 +557,9 @@ const Content = (props) => {
     // setOpenUpdateForm(true)
   }
 
-  const handleClickMore = (e) => {
-    setAnchorEl(e.currentTarget)
-  }
+  // const handleClickMore = (e) => {
+  //   setAnchorEl(e.currentTarget)
+  // }
 
   const hanldeCloseMore = () => {
     setAnchorEl(null)
@@ -683,6 +697,21 @@ const Content = (props) => {
       })
   }
 
+  let payoutAdditionalStyle = {}
+  let iconDetails = {}
+
+  if (parseFloat(max_accepted_payout) === 0) {
+    payoutAdditionalStyle = { textDecoration: 'line-through' }
+    iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
+  }else{
+    iconDetails = <HiveIcon style={{ paddingLeft: 5 }}/>
+  }
+
+  const getPayoutDate = (date) => {
+    const semantic =  moment(`${date}Z`).local().fromNow()
+    return semantic !== '51 years ago' ? semantic : ''
+  }
+
   return (
     <React.Fragment>
       {!loadingContent && author && (
@@ -690,7 +719,7 @@ const Content = (props) => {
           <div className={classNames(classes.visibilityVisible, showReply? classes.transformtranslateX414Neg:classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, classes.left100per, classes.backgroundColorWhite, classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
             <div className={classNames(classes.padding24, classes.justifyContentSpaceBetween, classes.flexDirectionRow, classes.displayFlex)}>
               <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
-                <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe)}>Responses (2)</h2>
+                <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe)}>Responses ({replyCount})</h2>
               </div>
               <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.cursorPointer)}>
                 <CloseIcon  />
@@ -707,13 +736,13 @@ const Content = (props) => {
                           <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                             <div className={classNames(classes.positionRelative, classes.displayBlock)}>
                               {/*  */}
-                              <Avatar author={username} style={{ marginBottom: -10 }} />
+                              <Avatar author={userProfile} style={{ marginBottom: -10 }} />
 
                               {/* <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/> */}
                             </div>
                           </div>
                           <div className={classNames(classes.flexDirectionColumn,classes.alignItemsFlexStart, classes.justifyContentCenter, classes.lineHeight0, classes.marginLeft12, classes.displayFlex)}>
-                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}> {author}</p>
+                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}> {userProfile}</p>
                           </div>
                         </div>
                       </div>
@@ -742,7 +771,6 @@ const Content = (props) => {
                   return (
                     <ReplyContent key={index} reply={reply} treeHistory={`${index}`}  match={match}/>
                   )})}
-                
               </div>
             </div>
           </div>
@@ -793,6 +821,14 @@ const Content = (props) => {
                     </div>
                   </Col>
                 </Row>
+                <div>
+                  <div style={{ marginTop: 10 }}>
+                    <label className={classes.meta}>
+                      {moment(`${created}Z`).local().format('LTS • \nLL')}
+                      {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
+                    </label>
+                  </div>
+                </div>
                 {/* add div here for comment */}
                 <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
@@ -805,11 +841,26 @@ const Content = (props) => {
                   </div>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                      <FavoritesIcon size={19}  /> 
+                      {/* <FavoritesIcon size={19}  />  */}
+                      <Chip
+                        className={classes.chip}
+                        size='small'
+                        icon={iconDetails}
+                        label={(
+                          <span className={classes.payout} style={payoutAdditionalStyle}>
+                            ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                            {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                            {!payout && isMobile ? '0.00' : ''}&nbsp;
+                            {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                          </span>
+                        )}
+                        color="secondary"
+                        variant="outlined"
+                      />
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
+                    {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
                       <ShareIcon  size={19}  />  
-                    </div>
+                    </div> */}
                     <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
                       <MoreIcon />
                     </div>
@@ -834,8 +885,45 @@ const Content = (props) => {
               </React.Fragment>
             </div>
       
-            <div className={classes.wrapper} style={{ marginTop: 15 }}>
-              <Row>
+            <div className={classes.wrapper}>
+              <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
+                <div className={classNames(classes.displayFlex)}>
+                  <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
+                  </div>
+                  <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                    <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                  </div>
+                </div>
+                <div className={classNames(classes.displayFlex)}>
+                  <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    {/* <FavoritesIcon size={19}  />  */}
+                    <Chip
+                      className={classes.chip}
+                      size='small'
+                      icon={iconDetails}
+                      label={(
+                        <span className={classes.payout} style={payoutAdditionalStyle}>
+                          ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                          {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                          {!payout && isMobile ? '0.00' : ''}&nbsp;
+                          {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                        </span>
+                      )}
+                      color="secondary"
+                      variant="outlined"
+                    />
+                  </div>
+                  {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
+                    <ShareIcon  size={19}  />  
+                  </div> */}
+                  <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
+                    <MoreIcon />
+                  </div>
+                  
+                </div>
+              </div>
+              {/* <Row>
                 <Col>
                   <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
                   <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
@@ -847,7 +935,7 @@ const Content = (props) => {
                     </div>
                   </Col>
                 )}
-              </Row>
+              </Row> */}
               <Menu
                 anchorEl={anchorEl}
                 keepMounted
@@ -865,7 +953,8 @@ const Content = (props) => {
               )} */}
               <Row>
                 <Col>
-                  <PostActions
+                
+                  {/* <PostActions
                     disableExtraPadding={true}
                     body={body}
                     author={username}
@@ -878,7 +967,7 @@ const Content = (props) => {
                     payoutAt={payout_at}
                     replyRef="content"
                     max_accepted_payout={max_accepted_payout}
-                  />
+                  /> */}
                 </Col>
               </Row>
               {/* {!loadingReplies && !loadingContent &&  (

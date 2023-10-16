@@ -381,7 +381,7 @@ const ReplyListTwo = ({replies, match, append}) => {
         // console.log('reply',reply)
         return (
           <>
-            <div className={classNames(classes.borderLeft3SolidGray, classes.marginBottom24, classes.marginLeft8)} style={{width: '100%'}}>
+            <div className={classNames(classes.borderLeft3SolidGray, classes.marginLeft8)} style={{width: '100%'}}>
               <div>
                 <ReplyContent key={index} reply={reply} treeHistory={`${index}`}  match={match}/>
               </div>

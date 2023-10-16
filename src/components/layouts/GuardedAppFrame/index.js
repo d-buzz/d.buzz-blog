@@ -8,10 +8,17 @@ import Col from 'react-bootstrap/Col'
 import { useWindowDimensions } from 'services/helper'
 import { useLocation } from 'react-router-dom'
 import Tabs from '../../common/Tabs'
+import classNames from 'classnames'
 
 const useStyles = createUseStyles(theme => ({
   main: {
     minHeight: '100vh',
+  },
+  marginTop60:{
+    marginTop: "60px",
+  },
+  marginTop100:{
+    marginTop: "100px",
   },
   inner: {
     width: '98%',
@@ -84,7 +91,7 @@ const GuardedAppFrame = (props) => {
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
               {!isCreatePostPage && (<Tabs/>)}
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
                  
                   {renderRoutes(route.routes)}

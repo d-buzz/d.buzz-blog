@@ -13,6 +13,12 @@ const useStyles = createUseStyles(theme => ({
   main: {
     minHeight: '100vh',
   },
+  marginTop60:{
+    marginTop: "60px",
+  },
+  marginTop100:{
+    marginTop: "100px",
+  },
   inner: {
     width: '98%',
     margin: '0 auto',
@@ -104,7 +110,7 @@ const UnguardedAppFrame = (props) => {
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
                   {renderRoutes(route.routes)}
                 </React.Fragment>

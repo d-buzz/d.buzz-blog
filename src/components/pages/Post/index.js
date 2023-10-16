@@ -87,10 +87,11 @@ const Post = (props) => {
     setPostRequest,
   } = props
   const classes = useStyles()
-  const [setShowTitleButton] = useState(false)
+  const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
   const [postContent, setpostContent] = useState('')
   const updateFromDesc = () => {
+    console.log('showTitleButton',showTitleButton)
     setShowTitleButton(false)
     setShowDescButton(true)
   }
