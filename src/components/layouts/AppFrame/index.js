@@ -38,6 +38,9 @@ const useStyles = createUseStyles(theme => ({
   marginRight0:{
     marginRight: 0,
   },
+  padding10:{
+    padding: '10px',
+  },
 }))
 
 const AppFrame = (props) => {
@@ -85,8 +88,8 @@ const AppFrame = (props) => {
       {/* <div className={classNames(classes.height150, classes.positionFixed, classes.left0, classes.right0, classes.bottom0, classes.zindex600)}> */}
       {isCreatePostPage && (
         <React.Fragment>
-          <div className={'height150 positionFixed left0 right0 bottom0 zindex600'}>
-            <div className={'backgroundColorFa displayFlex justContentCenter alignItemsCenter height100'}>
+          <div className={classNames('height150 positionFixed left0 right0 bottom0 zindex600')}>
+            <div className={classNames('backgroundColorFa displayFlex justContentCenter alignItemsCenter height100', isMobile?'padding10':'')}>
               Select text to change formatting, add headers, or create links.
             </div>
           </div>

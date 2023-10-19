@@ -3,10 +3,10 @@ import { bindActionCreators } from 'redux'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useLastLocation } from 'react-router-last-location'
-import CreateIcon from '@material-ui/icons/Create'
+// import CreateIcon from '@material-ui/icons/Create'
 import { pending } from 'redux-saga-thunk'
 import queryString from 'query-string'
-import { searchRequest, clearSearchPosts } from 'store/posts/actions'
+import { searchRequest, clearSearchPosts, publishPostRequest } from 'store/posts/actions'
 import HomeIcon from '@material-ui/icons/Home'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import UpdateIcon from '@material-ui/icons/Update'
@@ -20,6 +20,7 @@ import { signupHiveOnboard } from 'services/helper'
 import { signoutUserRequest } from 'store/auth/actions'
 import { 
   Avatar,
+  WriteIcon,
   BrandIcon, 
   BrandDarkIcon, 
   BackArrowIcon,  
@@ -94,6 +95,8 @@ const MobileAppFrame = (props) => {
     loadingAccount, 
     pollNotifRequest, 
     searchRequest,
+    postContent,
+    publishPostRequest,
     clearSearchPosts,
     count = 0,
   } = props
@@ -116,6 +119,35 @@ const MobileAppFrame = (props) => {
   const [mainWidth, setMainWidth] = useState(400)
   let isProfileRoute = false
   let isContentRoute = false
+  const [posting, setPosting] = useState(false)
+
+  useEffect(() => {
+    console.log('postContent for mobile',postContent)
+  },[postContent])
+
+  const postNow = () => {
+    setPosting(true)
+    const buzzContent = postContent.content
+    const tags = postContent.tags
+    const payout = postContent.payout
+    const buzzPermlink = postContent.buzzPermlink
+    console.log('postContent',postContent.tags)
+    publishPostRequest(buzzContent, tags, payout, buzzPermlink)
+      .then((data) => {
+        if (data.success) {
+          const {author, permlink} = data
+          // if (!isThread) {
+          history.push(`/@${author}/c/${permlink}`)
+          // }
+          setPosting(false)
+
+        } else {
+          console.log('error')
+          setPosting(false)
+        }
+      })
+  }
+
 
   useEffect(() => {
     if (width <= 360 ) {
@@ -128,7 +160,8 @@ const MobileAppFrame = (props) => {
   }, [width])
 
   const handleClickOpenBuzzModal = () => {
-    setOpenBuzzModal(true)
+    history.replace('/create-post')
+    // window.location.replace('/#/create-post')
   }
 
   const handleClickCloseBuzzModal = () => {
@@ -268,7 +301,12 @@ const MobileAppFrame = (props) => {
                   {title !== 'Search' && isAuthenticated && (
                     <React.Fragment>
                       <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                        <CreateIcon fontSize="medium" />
+                        {pathname !== '/create-post' && (
+                          <WriteIcon size={25} />
+                        )}
+                        {pathname === '/create-post' && (
+                          <button onClick={postNow} disabled={postContent.content || posting?false:true}  className='btn btn-success' md>{posting?'Posting':'Post'}</button>
+                        )}
                       </IconButton>
                       <IconButton onClick={handleClickSearchButton} size="medium">
                         <SearchIcon/>
@@ -416,6 +454,7 @@ const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
   count: state.polling.get('count'),
+  postContent: state.posts.get('postContent'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
 })
 
@@ -423,6 +462,7 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
     pollNotifRequest, 
+    publishPostRequest,
     searchRequest,
     clearSearchPosts,
   }, dispatch),

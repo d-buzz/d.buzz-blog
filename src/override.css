@@ -18,6 +18,10 @@ input:focus, textarea:focus, select:focus{
   height: 150px;
 }
 
+.padding10 {
+  padding: 10px;
+}
+
 .positionFixed{
   position: fixed;
 }

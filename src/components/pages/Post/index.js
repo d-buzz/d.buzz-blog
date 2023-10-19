@@ -4,6 +4,8 @@ import Container from "react-bootstrap/Container"
 import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { isMobile } from 'react-device-detect'
+
 import {
   setPostRequest,
 } from 'store/posts/actions'
@@ -81,6 +83,15 @@ const useStyles = createUseStyles(theme => ({
   marginRight20:{
     marginRight: 20,
   },
+  margin10: {
+    margin: '10px',
+  },
+  marginTop0: {
+    marginTop: '0px',
+  },
+  width80:{
+    width: '80px',
+  },
 }))
 const Post = (props) => {
   const {
@@ -109,7 +120,7 @@ const Post = (props) => {
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           {/* <label>Tell your story</label> */}
-          <div   className={classNames(classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, classes.marginRight20, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
+          <div   className={classNames(classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
           <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()} autoFocus placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} >{postContent}</textarea>
         </div>
       </form>
