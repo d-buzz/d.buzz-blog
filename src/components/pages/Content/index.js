@@ -821,16 +821,16 @@ const Content = (props) => {
                     </div>
                   </Col>
                 </Row>
-                <div>
+                {/* <div>
                   <div style={{ marginTop: 10 }}>
                     <label className={classes.meta}>
                       {moment(`${created}Z`).local().format('LTS • \nLL')}
                       {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
                     </label>
                   </div>
-                </div>
+                </div> */}
                 {/* add div here for comment */}
-                <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                {/* <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                       <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
@@ -841,7 +841,7 @@ const Content = (props) => {
                   </div>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                      {/* <FavoritesIcon size={19}  />  */}
+                     
                       <Chip
                         className={classes.chip}
                         size='small'
@@ -858,15 +858,12 @@ const Content = (props) => {
                         variant="outlined"
                       />
                     </div>
-                    {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
-                      <ShareIcon  size={19}  />  
-                    </div> */}
                     <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
                       <MoreIcon />
                     </div>
                    
                   </div>
-                </div>
+                </div> */}
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
