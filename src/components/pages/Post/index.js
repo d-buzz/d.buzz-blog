@@ -5,6 +5,7 @@ import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
+import { CloseIcon } from '../../elements'
 
 import {
   setPostRequest,
@@ -251,7 +252,7 @@ const Post = (props) => {
                   return (
                     <li key={index} className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
                       <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>{tag}</div>
-                      <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
+                      <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}><CloseIcon color='grey'/></div>
                   </li>
                   )
                 })}
