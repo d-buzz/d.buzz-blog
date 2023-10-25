@@ -86,11 +86,104 @@ const useStyles = createUseStyles(theme => ({
   margin10: {
     margin: '10px',
   },
+  margin1x2:{
+    margin: '1px 2px',
+  },
   marginTop0: {
     marginTop: '0px',
   },
   width80:{
     width: '80px',
+  },
+  cursorPointer: {
+    cursor: 'pointer',
+  },
+  flexDirectionRow:{
+    flexDirection:"row",
+  },
+  flexGrow1:{
+    flexGrow: 1,
+  },
+  marginBottom0:{
+    marginBottom: '0 !important',
+  },
+  positionRelative:{
+    position: 'relative',
+  },
+  maxWidthUnset:{
+    maxWidth: 'unset',
+  },
+  backgroundColorfff:{
+    backgroundColor: '#fff',
+  },
+  border1solidccc:{
+    border: '1px solid #ccc',
+  },
+  padding4:{
+    padding: '4px',
+  },
+  flexWrapWrap: {
+    flexWrap: 'flex',
+  },
+  width100:{
+    width: '100%',
+  },
+  lineHeight1em:{
+    lineHeight: '1em',
+  },
+  margin0:{
+    margin: 0,
+  },
+  padding0:{
+    padding: 0,
+  },
+  listStyleTypeNone:{
+    listStyleType: 'none',
+  },
+  bg999:{
+    backgroundColor: '#999',
+  },
+  colorfff:{
+    color: '#fff',
+  },
+  borderRadius2:{
+    borderRadius: '2px',
+  },
+  padding3x5:{
+    padding: '3px 5px',
+  },
+  fontSize085em:{
+    fontSize: '.85em',
+  },
+  boxSizingBorderBox: {
+    boxSizing: 'border-box',
+  },
+  borderColor999:{
+    borderColor:'#999',
+  },
+  padding2:{
+    padding: '2px',
+  },
+  padding2x5:{
+    padding: '2px 5px',
+  },
+  marginLeft2:{
+    marginLeft:"2px",
+  },
+  fontSize1p15em:{
+    fontSize: '1.15em',
+  },
+  flex1x0xauto:{
+    flex: '1 0 auto',
+  },
+  margin2:{
+    margin: '2px',
+  },
+  fontSizep85em:{
+    fontSize: '.85em',
+  },
+  minWidth100px:{
+    minWidth: '100px',
   },
 }))
 const Post = (props) => {
@@ -120,11 +213,28 @@ const Post = (props) => {
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           {/* <label>Tell your story</label> */}
-          <div   className={classNames(classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
+          <div   className={classNames( classes.cursorPointer, classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
           <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()} autoFocus placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} >{postContent}</textarea>
         </div>
       </form>
-      
+      <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
+        <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
+          <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
+            <div className={classNames(classes.border1solidccc, classes.displayFlex, classes.padding4, classes.flexWrapWrap)}>
+              <ul className={classNames(classes.displayFlex, classes.flexWrapWrap, classes.width100, classes.lineHeight1em, classes.margin0, classes.padding0, classes.listStyleTypeNone)}>
+                <li className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
+                  <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>test</div>
+                  <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
+                </li>
+                <li className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
+                  <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>hello</div>
+                  <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </Container>
   )
 }
