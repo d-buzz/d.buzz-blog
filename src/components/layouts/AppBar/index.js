@@ -377,14 +377,25 @@ const AppBar = (props) => {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+  const extractAllHashtags = (value) => {
+    let hashtags = value.match(/(?![^()]*\))(?![^[\]]*])#([\w\d!@%^&*)(+=._-]+)/gi)
 
-  const postNow = () => {
+    if (hashtags === null) {
+      hashtags = []
+    } else {
+      hashtags = hashtags.map((item) => item.replace("#", '').toLowerCase())
+    }
+
+    return hashtags
+  }
+  const postNow =  async () => {
     setPosting(true)
     const buzzContent = postContent.content
-    const tags = postContent.tags
+   
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
-    console.log('postContent',postContent.tags)
+    const tagsfromcontent = await extractAllHashtags(postContent.content)
+    const tags = [...postContent.tags, ...tagsfromcontent]
     publishPostRequest(buzzContent, tags, payout, buzzPermlink)
       .then((data) => {
         if (data.success) {
