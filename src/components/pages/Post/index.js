@@ -194,12 +194,23 @@ const Post = (props) => {
   const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
   const [postContent, setpostContent] = useState('')
+  const [tags, setTags] = useState([])
+  const [tag, setTag] = useState('')
   const updateFromDesc = () => {
     console.log('showTitleButton',showTitleButton)
     setShowTitleButton(false)
     setShowDescButton(true)
   }
 
+  const onkeydownTags = (e) => {
+    console.log('e.key', e.key)
+    console.log('e.keyCode', e.keyCode)
+    
+    if (e.keyCode === 13 || e.keyCode === 188) {
+      setTags([...tags, e.target.value])
+      setTag("")
+    }
+  }
   const updateContent = (e) =>{
     console.log('e.target.value', e.target.value)
     setpostContent(e.target.value)
@@ -222,16 +233,16 @@ const Post = (props) => {
           <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
             <div className={classNames(classes.border1solidccc, classes.displayFlex, classes.padding4, classes.flexWrapWrap)}>
               <ul className={classNames(classes.displayFlex, classes.flexWrapWrap, classes.width100, classes.lineHeight1em, classes.margin0, classes.padding0, classes.listStyleTypeNone)}>
-                <li className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
-                  <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>test</div>
-                  <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
-                </li>
-                <li className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
-                  <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>hello</div>
-                  <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
-                </li>
+                {tags.map((tag, index) => {
+                  return (
+                    <li key={index} className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
+                      <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>{tag}</div>
+                      <div className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}>x</div>
+                  </li>
+                  )
+                })}
                 <li className={classNames(classes.displayFlex, classes.flex1x0xauto, classes.padding3x5, classes.margin2, classes.fontSize085em)}>
-                    <input className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
+                    <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyDown={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
                 </li>
               </ul>
             </div>
