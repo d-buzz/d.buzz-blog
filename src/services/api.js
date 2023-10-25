@@ -433,10 +433,10 @@ export const uploadIpfsImage = async(data) => {
   })
 }
 
-export const generatePostOperations = (account, title, body, tags, payout) => {
+export const generatePostOperations = (account, title, body, tags, payout, perm) => {
   const json_metadata = createMeta(tags)
 
-  const permlink = createPermlink()
+  const permlink = perm === null ? createPermlink(title) : perm
 
   const operations = []
 
@@ -445,27 +445,29 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
       'comment',
       {
         'author': account,
-        'title': title,
-        'body': body,
+        'title': stripHtml(title),
+        'body': `${body.trim()}`,
         'parent_author': '',
-        'parent_permlink': permlink,
+        'parent_permlink': `${appConfig.TAG}`,
         permlink,
         json_metadata,
       },
     ]
 
     operations.push(op_comment)
+
     const max_accepted_payout = `${payout.toFixed(3)} HBD`
     const extensions = []
 
 
-    if(payout === 0) {
+    if (payout === 0) {
       extensions.push([
         0,
-        { beneficiaries:
-          [
-            { account: 'null', weight: 10000 },
-          ],
+        {
+          beneficiaries:
+            [
+              {account: 'null', weight: 10000},
+            ],
         },
       ])
     }
@@ -477,7 +479,7 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
         'author': account,
         permlink,
         max_accepted_payout,
-        'percent_hbd': 5000,
+        'percent_hbd': 10000,
         'allow_votes': true,
         'allow_curation_rewards': true,
         extensions,
@@ -493,11 +495,13 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
 
 export const createMeta = (tags = []) => {
 
-  const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
+  const uniqueTags = [ ...new Set(tags.map(item => item)) ]
+  // const uniqueTags = [ ...tags ]
 
   const meta = {
     app: `dBuzz/v3.0.0`,
     tags: uniqueTags,
+    shortForm: true,
   }
 
   return JSON.stringify(meta)
