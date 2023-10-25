@@ -62,7 +62,7 @@ const useStyle = createUseStyles(theme => ({
     marginBottom: 15,
     borderBottom: theme.border.primary,
     '& a': {
-      color: 'black',
+      // color: 'black',
     },
     ...addHover(theme),
     cursor: 'pointer',
@@ -122,7 +122,7 @@ const useStyle = createUseStyles(theme => ({
     width: 'calc(100% - 60px)',
     height: 'max-content',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   popover: {

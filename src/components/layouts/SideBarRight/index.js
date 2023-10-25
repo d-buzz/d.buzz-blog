@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
     fontSize: 14,
     fontFamily: 'Segoe-Bold',
     '& span': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
       fontWeight: 400,
     },
   },

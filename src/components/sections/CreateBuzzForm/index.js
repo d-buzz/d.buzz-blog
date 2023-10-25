@@ -87,7 +87,7 @@ const useStyles = createUseStyles(theme => ({
   note: {
     fontSize: 14,
     fontFamily: 'Segoe-Bold',
-    color: '#d32f2f',
+    // color: '#d32f2f',
   },
   actionLabels: {
     fontFamily: 'Segoe-Bold',
@@ -118,7 +118,7 @@ const useStyles = createUseStyles(theme => ({
     display: 'inline-block',
   },
   payoutNote: {
-    color: '#d32f2f',
+    // color: '#d32f2f',
     fontSize: 12,
     fontWeight: 'bold',
     display: 'block',

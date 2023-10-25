@@ -31,7 +31,7 @@ const PrettoSlider = withStyles({
     height: 5,
     '& .MuiSlider-markLabel': {
       fontSize: 12,
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   thumb: {
@@ -145,7 +145,8 @@ const useStyles = createUseStyles(theme => ({
     ...theme.iconButton.hover,
   },
   payout: {
-    color: '#e53935',
+    // color: '#e53935',
+    color: '#000',
     fontSize: 14,
   },
 }))

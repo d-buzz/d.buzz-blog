@@ -84,9 +84,9 @@ const useStyles = createUseStyles(theme => ({
   },
   weblink: {
     wordWrap: 'break-word',
-    color: '#d32f2f',
+    // color: '#d32f2f',
     '&:hover': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   fullName: {

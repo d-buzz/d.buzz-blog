@@ -110,7 +110,7 @@ const useStyles = createUseStyles(theme => ({
     height: '100%',
     margin: '0 auto',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
     paddingTop: 10,
     paddingBottom: 2,

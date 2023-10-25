@@ -75,7 +75,7 @@ input:focus, textarea:focus, select:focus{
 div.ReactTags__tags {
   position: relative;
   font-family: Segoe-Bold;
-  color: #d32f2f;
+  /* color: #d32f2f; */
 }
 
 /* Styles for the input */

@@ -140,7 +140,7 @@ const useStyles = createUseStyles(theme => ({
     height: '100%',
     margin: '0 auto',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
     paddingTop: 10,
     paddingBottom: 2,
@@ -704,7 +704,7 @@ const Content = (props) => {
     payoutAdditionalStyle = { textDecoration: 'line-through' }
     iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
   }else{
-    iconDetails = <HiveIcon style={{ paddingLeft: 5 }}/>
+    iconDetails = <HiveIcon style={{ paddingLeft: 5, color: '#000' }}/>
   }
 
   const getPayoutDate = (date) => {
@@ -907,7 +907,7 @@ const Content = (props) => {
                           {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
                         </span>
                       )}
-                      color="secondary"
+                      color="#000"
                       variant="outlined"
                     />
                   </div>

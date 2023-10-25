@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => ({
     },
   },
   weblink: {
-    color: '#d32f2f',
+    // color: '#d32f2f',
   },
   topContainer: {
     borderBottom: theme.border.primary,
@@ -52,7 +52,7 @@ const useStyles = createUseStyles(theme => ({
       fontFamily: 'Segoe-Bold',
       paddingTop: 5,
       '& span': {
-        color: '#d32f2f',
+        // color: '#d32f2f',
         fontWeight: 400,
       },
     },
