@@ -106,7 +106,7 @@ import {
   searchPostGeneral,
   searchPeople,
   getMutePattern,
-} from 'services/api'
+} from '../../services/api'
 import { createPatch, errorMessageComposer,stripHtml } from 'services/helper'
 import moment from 'moment'
 
@@ -328,7 +328,6 @@ function* fileUploadRequest(payload, meta) {
   }
 }
 function* setPostRequest(payload, meta) {
-  console.log('i am here nnow', payload)
   yield put(successPostSuccess(payload, meta))
 
 }
@@ -377,6 +376,7 @@ function* publishPostRequest(payload, meta) {
     const is_buzz_post = true
 
     if (useKeychain && is_authenticated) {
+
       const result = yield call(broadcastKeychainOperation, username, operations)
       success = result.success
 
