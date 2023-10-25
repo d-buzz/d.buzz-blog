@@ -185,6 +185,12 @@ const useStyles = createUseStyles(theme => ({
   minWidth100px:{
     minWidth: '100px',
   },
+  color757575:{
+    color: '#757575',
+  },
+  fontSize12:{
+    fontSize: '12px',
+  },
 }))
 const Post = (props) => {
   const {
@@ -205,16 +211,24 @@ const Post = (props) => {
   const onkeydownTags = (e) => {
     console.log('e.key', e.key)
     console.log('e.keyCode', e.keyCode)
-    
-    if (e.keyCode === 13 || e.keyCode === 188) {
-      setTags([...tags, e.target.value])
+    let newtags = []
+    if ((e.keyCode === 13 || e.keyCode === 188 || e.keyCode === 32) && (tags.length < 10)) {
+      const data = e.target.value.replace(/,*$/, '')
+      setTags([...tags, data])
+      newtags = [...tags, data]
+      // setPostRequest(postContent,tags,payout,buzzPermlink)
       setTag("")
     }
+
+    const payout = 1
+    const buzzPermlink = null
+    setPostRequest(postContent,newtags,payout,buzzPermlink)
+    
+   
   }
   const updateContent = (e) =>{
     console.log('e.target.value', e.target.value)
     setpostContent(e.target.value)
-    const tags = []
     const payout = 1
     const buzzPermlink = null
     setPostRequest(e.target.value,tags,payout,buzzPermlink)
@@ -242,11 +256,12 @@ const Post = (props) => {
                   )
                 })}
                 <li className={classNames(classes.displayFlex, classes.flex1x0xauto, classes.padding3x5, classes.margin2, classes.fontSize085em)}>
-                    <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyDown={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
+                    <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyUp={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
                 </li>
               </ul>
             </div>
           </div>
+          <span className={classNames(classes.color757575, classes.fontSize12)}>Topics-Tags to classify your post: {tags.length}/10</span>
         </div>
       </div>
     </Container>
