@@ -141,9 +141,6 @@ const Tabs = () => {
               <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                 Hive
               </div>
-              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                  DBuzz
-              </div>
             </div>
           </div>
         </div>

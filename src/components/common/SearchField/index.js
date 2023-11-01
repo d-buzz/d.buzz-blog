@@ -80,7 +80,7 @@ const SearchField = (props) => {
     <React.Fragment>
       <BoxField
         icon={<SearchIcon top={iconTop} />}
-        placeholder={!isMobile ? 'Search D.Buzz': ''}
+        placeholder={!isMobile ? 'Search Posts': ''}
         className={classes.search}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

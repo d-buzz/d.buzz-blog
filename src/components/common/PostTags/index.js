@@ -10,7 +10,7 @@ const useStyle = createUseStyles({
     width: '100%',
     height: 'max-content',
     fontSize: 14,
-    fontFamily: 'Segoe-Bold',
+    // fontFamily: 'Segoe-Bold',
     '& a': {
       display: 'inline-block',
       whiteSpace: 'nowrap',

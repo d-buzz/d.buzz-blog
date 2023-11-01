@@ -132,8 +132,11 @@ const useStyles = createUseStyles(theme => ({
   chip: {
     border: 'none !important',
     float: 'right !important',
+    fontFamily: 'inherit !important',
+    fontSize: 'inherit !important',
     '& span': {
-      fontFamily: 'Segoe-Bold',
+      fontFamily: 'inherit !important',
+      fontSize: 'inherit !important',
       marginTop: -5,
     },
   },

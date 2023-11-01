@@ -324,7 +324,7 @@ const MobileAppFrame = (props) => {
                           value={searchkey}
                           onKeyDown={handleSearchKey}
                           onChange={onChangeSearch}
-                          placeholder="Search D.Buzz"
+                          placeholder="Search Posts"
                           autoFocus
                         />
                       </div>

@@ -413,8 +413,11 @@ const useStyles = createUseStyles(theme => ({
   chip: {
     border: 'none !important',
     float: 'right !important',
+    fontFamily: 'inherit !important',
+    fontSize: 'inherit !important',
     '& span': {
-      fontFamily: 'Segoe-Bold',
+      fontFamily: 'inherit !important',
+      fontSize: 'inherit !important',
       marginTop: -5,
     },
   },
@@ -830,7 +833,7 @@ const Content = (props) => {
                   </div>
                 </div> */}
                 {/* add div here for comment */}
-                {/* <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                       <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
@@ -854,7 +857,7 @@ const Content = (props) => {
                             {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
                           </span>
                         )}
-                        color="secondary"
+                        color="#000"
                         variant="outlined"
                       />
                     </div>
@@ -863,7 +866,7 @@ const Content = (props) => {
                     </div>
                    
                   </div>
-                </div> */}
+                </div>
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />

@@ -55,6 +55,7 @@ const GuardedAppFrame = (props) => {
   let isProfileRoute = false
   let isContentRoute = false
   const [isCreatePostPage, setIsCreatePostPage] = useState(false)
+  const [isSearchPage, setIsSearchPage] = useState(false)
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -66,6 +67,9 @@ const GuardedAppFrame = (props) => {
     if (pathname === '/create-post') {
       setHideRightSideBar(true)
       setIsCreatePostPage(true)
+    }
+    if (pathname === '/search/people') {
+      setIsSearchPage(true)
     }
   },[pathname])
 
@@ -81,6 +85,12 @@ const GuardedAppFrame = (props) => {
       }else{
         setHideRightSideBar(false)
       }
+
+      if (pathname === '/search/people') {
+        setIsSearchPage(true)
+      }else{
+        setIsSearchPage(false)
+      }
     }
   }, [width, pathname])
 
@@ -90,7 +100,7 @@ const GuardedAppFrame = (props) => {
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-              {!isCreatePostPage && (<Tabs/>)}
+              {!isCreatePostPage && !isSearchPage && (<Tabs/>)}
               <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
                  

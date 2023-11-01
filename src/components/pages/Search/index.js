@@ -121,7 +121,7 @@ const Search = (props) => {
             className={classes.tabContainer}
           >
             <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="People" />
-            <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Buzz's" />
+            <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Posts" />
           </Tabs>
         </div>
         <React.Fragment>
