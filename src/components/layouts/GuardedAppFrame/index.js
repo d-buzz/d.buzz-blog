@@ -94,6 +94,25 @@ const GuardedAppFrame = (props) => {
     }
   }, [width, pathname])
 
+  const [isTop, setIstop] = useState(true)
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY // => scroll position
+    if (scrollPosition <= 50) {
+      setIstop(true)
+    }else{
+      setIstop(false)
+    }
+    // console.log(scrollPosition);
+  }
+  useEffect(() => {
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
   return (
     <React.Fragment>
       <Row>
@@ -112,7 +131,7 @@ const GuardedAppFrame = (props) => {
               <Col xs={3}>
                 <Sticky>
                   {({ style }) => (
-                    <div style={{ ...style, paddingTop: 60 }}>
+                    <div style={{ ...style, paddingTop: isTop?"60px":"0px" }}>
                       <SideBarRight hideSearchBar={true} />
                     </div>
                   )}
