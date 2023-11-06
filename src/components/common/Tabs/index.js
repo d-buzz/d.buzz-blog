@@ -138,7 +138,7 @@ const Tabs = () => {
               <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     News
               </div>
-              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div onClick={() => redirectPage('/hive')} className={classNames(classes.cursorPointer,pathname === '/hive'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Hive
               </div>
             </div>

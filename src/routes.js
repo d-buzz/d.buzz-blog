@@ -4,6 +4,7 @@ const AppFrame = React.lazy(() => import('./components/layouts/AppFrame'))
 const Home = React.lazy(() => import('./components/pages/Home'))
 const Trending = React.lazy(() => import('./components/pages/Trending'))
 const Latest = React.lazy(() => import('./components/pages/Latest'))
+const Hive = React.lazy(() => import('./components/pages/Hive'))
 const Content = React.lazy(() => import('./components/pages/Content'))
 const Profile = React.lazy(() => import('./components/pages/Profile'))
 const Post = React.lazy(() => import('./components/pages/Post'))
@@ -46,6 +47,11 @@ const routes =  [
         path: '/latest',
         exact: true,
         component: Latest,
+      },
+      {
+        path: '/hive',
+        exact: true,
+        component: Hive,
       },
       {
         path: '/@:username/c/:permlink',
