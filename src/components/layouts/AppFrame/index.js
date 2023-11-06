@@ -61,6 +61,8 @@ const AppFrame = (props) => {
   useEffect(() => {
     if (pathname === '/create-post') {
       setIsCreatePostPage(true)
+    }else{
+      setIsCreatePostPage(false)
     }
     // eslint-disable-next-line
   }, [pathname])
