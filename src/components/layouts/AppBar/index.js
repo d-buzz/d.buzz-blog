@@ -430,14 +430,14 @@ const AppBar = (props) => {
               <a href="/">
                 {!isMobile && (
                   <React.Fragment>
-                    {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
-                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
+                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
                   </React.Fragment>
                 )}
                 {isMobile && (
                   <React.Fragment>
-                    {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
-                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
+                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
                   </React.Fragment>
                 )}
               </a>
