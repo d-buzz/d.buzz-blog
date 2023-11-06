@@ -135,7 +135,7 @@ const Tabs = () => {
               <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Latest
               </div>
-              <div className={classNames(classes.cursorPointer, classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div onClick={() => redirectPage('/news')} className={classNames(classes.cursorPointer,pathname === '/news'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     News
               </div>
               <div onClick={() => redirectPage('/hive')} className={classNames(classes.cursorPointer,pathname === '/hive'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
