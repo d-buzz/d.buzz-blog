@@ -208,7 +208,6 @@ function* getHomePostsRequest(payload, meta) {
   const method = 'get_account_posts'
 
   try {
-    console.log('checkCeramicLogin(account)',checkCeramicLogin(account))
     if (!checkCeramicLogin(account)) {
       const old = yield select(state => state.posts.get('home'))
       let data = yield call(callBridge, method, params, false)
