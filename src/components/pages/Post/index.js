@@ -192,6 +192,18 @@ const useStyles = createUseStyles(theme => ({
   fontSize12:{
     fontSize: '12px',
   },
+  border1soliddarkgray:{
+    border: '1px solid darkgray',
+  },
+  marginBottom10:{
+    marginBottom: '10px',
+  },
+  borderRadius7:{
+    borderRadius:'7px',
+  },
+  padding10:{
+    padding: '10px',
+  },
 }))
 const Post = (props) => {
   const {
@@ -254,14 +266,15 @@ const Post = (props) => {
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
-          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Add title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} />
+          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Add title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
         </div>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           <div   className={classNames( classes.cursorPointer, classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
-          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} value={postContent} ></textarea>
+          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} value={postContent} ></textarea>
         </div>
       </form>
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
+        <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
         <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
           <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
             <div className={classNames(classes.border1solidccc, classes.displayFlex, classes.padding4, classes.flexWrapWrap)}>
@@ -274,8 +287,8 @@ const Post = (props) => {
                     </li>
                   )
                 })}
-                <li className={classNames(classes.displayFlex, classes.flex1x0xauto, classes.padding3x5, classes.margin2, classes.fontSize085em)}>
-                  <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyUp={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
+                <li className={classNames(classes.displayFlex, classes.flex1x0xauto, classes.padding3x5, classes.margin2, classes.fontSize085em, classes.borderRadius7)}>
+                  <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyUp={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px,  classes.borderNone, classes.padding0, classes.margin0)} />
                 </li>
               </ul>
             </div>
