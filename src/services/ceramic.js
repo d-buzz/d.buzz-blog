@@ -40,9 +40,9 @@ const normalizeAuthSecret = (authSecret64) => {
   return authSecret
 }
 
-const providerOptions = {
-  /* See Provider Options Section */
-}
+// const providerOptions = {
+//   /* See Provider Options Section */
+// }
 
 let web3Modal
 let web3
@@ -61,10 +61,10 @@ let web3
 //   web3 = new Web3.default()
 // })
 
-const idxAliases = {
-  rootPosts: 'ceramic://kjzl6cwe1jw149xy2w2qycwts4xjpvyzrkptdw20iui7r486bd6sasqb9tgglzp',
-  socialConnectionIndex: 'ceramic://kjzl6cwe1jw145f1327br2k7lkd5acrn6d2omh88xjt70ovnju491moahrxddns',
-}
+// const idxAliases = {
+//   rootPosts: 'ceramic://kjzl6cwe1jw149xy2w2qycwts4xjpvyzrkptdw20iui7r486bd6sasqb9tgglzp',
+//   socialConnectionIndex: 'ceramic://kjzl6cwe1jw145f1327br2k7lkd5acrn6d2omh88xjt70ovnju491moahrxddns',
+// }
 
 export const API_NODE = 'https://us-01.infra.3speak.tv'
 
@@ -140,8 +140,8 @@ export const checkCeramicLogin = () => {
 }
 
 const createIdentity = async(authSecret) => {
-  let provider
-  let resolver
+  // let provider
+  // let resolver
   // import('key-did-provider-ed25519').then((keyDidProvider) => {
   //   provider = new keyDidProvider.Ed25519Provider(authSecret)
   // })

@@ -225,11 +225,12 @@ const Post = (props) => {
     let tagspec = false
     tags.map((tag) => {
       // console.log('tag update', tag)
-      var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+      var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   
       if(format.test(tag) ){
         tagspec = true
       }
+      return true
     })
     console.log('tagspec',tagspec)
     if (tagspec) {

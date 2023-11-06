@@ -257,11 +257,13 @@ const AppBar = (props) => {
         // console.log('tag update', tag)
         // var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
         // var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-        var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   
         if(format.test(tagCheck) ){
           tagspec = true
         }
+
+        return true
   
       })
      
@@ -275,7 +277,7 @@ const AppBar = (props) => {
 
     }
    
-  },[postContent])
+  },[postContent,tagError])
   useEffect(() => {
     pollNotifRequest()
     if (pathname === '/create-post') {

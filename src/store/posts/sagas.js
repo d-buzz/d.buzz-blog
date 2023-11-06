@@ -113,7 +113,7 @@ import {
   checkCeramicLogin,
   getFollowingFeed,
 } from "services/ceramic"
-import { createPatch, errorMessageComposer,stripHtml,censorLinks } from 'services/helper'
+import { createPatch, errorMessageComposer,stripHtml } from 'services/helper'
 import moment from 'moment'
 
 function patternMute(patterns, data) {
@@ -150,23 +150,23 @@ const invokeHideBuzzFilter = (items) => {
   return items.filter((item) => hiddenBuzzes.filter((hidden) => hidden.author === item.author && hidden.permlink === item.permlink).length === 0)
 }
 
-const censorCheck = (content, censoredList) => {
-  const copyContent = content
+// const censorCheck = (content, censoredList) => {
+//   const copyContent = content
 
-  const result = censoredList.filter(({
-    author,
-    permlink,
-  }) => `${author}/${permlink}` === `${content.author}/${content.permlink}`)
+//   const result = censoredList.filter(({
+//     author,
+//     permlink,
+//   }) => `${author}/${permlink}` === `${content.author}/${content.permlink}`)
 
-  copyContent.censored = {status: false, reason: null}
+//   copyContent.censored = {status: false, reason: null}
 
-  if (result.length !== 0) {
-    copyContent.body = censorLinks(copyContent.body)
-    copyContent.censored = {status: true, reason: result[0].type}
-  }
+//   if (result.length !== 0) {
+//     copyContent.body = censorLinks(copyContent.body)
+//     copyContent.censored = {status: true, reason: result[0].type}
+//   }
 
-  return copyContent
-}
+//   return copyContent
+// }
 
 function* getTrendingPostsRequest(payload, meta) {
   const { start_permlink, start_author } = payload
@@ -199,7 +199,7 @@ function* getTrendingPostsRequest(payload, meta) {
 }
 
 function* getHomePostsRequest(payload, meta) {
-  const censoredList = yield select(state => state.auth.get('censorList'))
+  // const censoredList = yield select(state => state.auth.get('censorList'))
   const { start_permlink, start_author } = payload
   const user = yield select(state => state.auth.get('user'))
   const { username: account } = user
