@@ -42,6 +42,9 @@ const useStyles = createUseStyles(theme => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
+  justifyContentCenter:{
+    justifyContent: 'center',
+  },
 }))
 
 const GuardedAppFrame = (props) => {
@@ -115,7 +118,7 @@ const GuardedAppFrame = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
+      <Row className={classNames(isCreatePostPage? classes.justifyContentCenter:'')}>
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
