@@ -246,8 +246,35 @@ const AppBar = (props) => {
     navbarContainer = classes.mobileNav
   }
 
+
+  const [tagError, settagError] = useState(false)
+
   useEffect(() => {
-    console.log('postContent',postContent)
+    console.log('postContent12',postContent)
+    let tagspec = false
+    if (postContent.tags) {
+      postContent.tags.map((tagCheck) => {
+        // console.log('tag update', tag)
+        // var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        // var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  
+        if(format.test(tagCheck) ){
+          tagspec = true
+        }
+  
+      })
+     
+      if (tagspec) {
+        settagError(true)
+      }else{
+        settagError(false)
+      }
+      console.log('tagspec',tagspec)
+      console.log('tagError',tagError)
+
+    }
+   
   },[postContent])
   useEffect(() => {
     pollNotifRequest()
@@ -465,7 +492,7 @@ const AppBar = (props) => {
 
                           {pathname === '/create-post' && (
                             <Menu>
-                              <button onClick={postNow} disabled={postContent.content || posting?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
+                              <button onClick={postNow} disabled={!tagError && (postContent.content || posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
                             </Menu>
                           )}
                           {pathname !== '/create-post' && (

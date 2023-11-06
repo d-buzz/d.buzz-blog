@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Container from "react-bootstrap/Container"
 import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
@@ -189,6 +189,9 @@ const useStyles = createUseStyles(theme => ({
   color757575:{
     color: '#757575',
   },
+  colorRed:{
+    color: 'red',
+  },
   fontSize12:{
     fontSize: '12px',
   },
@@ -216,22 +219,47 @@ const Post = (props) => {
   const [titleContent, settitleContent] = useState('')
   const [tags, setTags] = useState([])
   const [tag, setTag] = useState('')
+  const [tagError, settagError] = useState(false)
+
+  useEffect(() => {
+    let tagspec = false
+    tags.map((tag) => {
+      // console.log('tag update', tag)
+      var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+  
+      if(format.test(tag) ){
+        tagspec = true
+      }
+    })
+    console.log('tagspec',tagspec)
+    if (tagspec) {
+      settagError(true)
+    }else{
+      settagError(false)
+    }
+    
+  }, [tags])
+
   const updateFromDesc = () => {
     console.log('showTitleButton',showTitleButton)
     setShowTitleButton(false)
     setShowDescButton(true)
   }
-  const removeTag = (tag) => {
+  const removeTag = (tagREmove) => {
     setTags(current => current.filter(oldtag => {
-      return oldtag !== tag
+      return oldtag !== tagREmove
     }))
+    const tagsFILTER = tags.filter(old => {
+      return old !== tagREmove
+    })
+    // console.log('tagsFILTER',tagsFILTER)
     const payout = 1
     const buzzPermlink = null
-    setPostRequest(titleContent,postContent,tags,payout,buzzPermlink)
+    setPostRequest(titleContent,postContent,tagsFILTER,payout,buzzPermlink)
   }
   const onkeydownTags = (e) => {
-    console.log('e.key', e.key)
-    console.log('e.keyCode', e.keyCode)
+    // console.log('e.key', e.key)
+    // console.log('e.keyCode', e.keyCode)
     let newtags = []
     if ((e.keyCode === 13 || e.keyCode === 188 || e.keyCode === 32) && (tags.length < 10)) {
       const data = e.target.value.replace(/,*$/, '')
@@ -239,12 +267,10 @@ const Post = (props) => {
       newtags = [...tags, data]
       // setPostRequest(postContent,tags,payout,buzzPermlink)
       setTag("")
-    }
-
-    const payout = 1
-    const buzzPermlink = null
-    setPostRequest(titleContent,postContent,newtags,payout,buzzPermlink)
-    
+      const payout = 1
+      const buzzPermlink = null
+      setPostRequest(titleContent,postContent,newtags,payout,buzzPermlink)
+    }    
    
   }
   const updateTitle = (e) =>{
@@ -293,7 +319,13 @@ const Post = (props) => {
               </ul>
             </div>
           </div>
-          <span className={classNames(classes.color757575, classes.fontSize12)}>Topics-Tags to classify your post: {tags.length}/10</span>
+          
+          {!tagError && (
+            <span className={classNames(classes.color757575, classes.fontSize12)}>Topics-Tags to classify your post: {tags.length}/10</span>
+          )} 
+          {tagError && (
+            <span className={classNames(classes.colorRed, classes.fontSize12)}>Remove special characters from tags (only lowercase characters, numbers and dashes)</span>
+          )}
         </div>
       </div>
     </Container>
