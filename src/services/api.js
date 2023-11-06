@@ -8,7 +8,7 @@ import {
   broadcast,
   formatter,
 } from '@hiveio/hive-js'
-import { stripHtml } from './helper'
+import { stripHtml,calculateOverhead } from './helper'
 
 const visited = []
 
@@ -16,9 +16,44 @@ const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
 const searchUrl = `${appConfig.SEARCH_API}/search`
 const imageUrl = `${appConfig.IMAGE_API}/image`
 
+
+// export const calculateOverhead = (content) => {
+//   let urls = getUrls(content) || []
+  
+//   const markdown = content?.match(/#+\s|[*]|\s+&nbsp;+\s|\s+$/gm) || []
+
+//   let overhead = 0
+
+//   // let overheadItems = []
+
+//   if(markdown.length>0) {
+//     markdown.forEach((item) => {
+//       // overheadItems.push(item)
+//       overhead += item.length
+//     })
+//   }
+  
+//   if((urls.length) > 3) {
+//     urls = urls.slice(0, 2)
+//   }
+  
+//   if(urls && urls.length <= 3){
+//     urls.forEach((item) => {
+//       // overheadItems.push(item)
+//       overhead += item.length
+//     })
+//   }
+
+//   // console.log(overheadItems)
+
+//   return overhead
+// }
 export const invokeFilter = (item) => {
   const body = stripHtml(item.body)
-  return (body.length >= 280)
+  const overhead = calculateOverhead(body)
+
+  const length = body.length - overhead
+  return (length <= 280 && item.category === `${appConfig.TAG}`)
 }
 
 export const keychainSignIn = (username) => {

@@ -8,7 +8,43 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import diff_match_patch from 'diff-match-patch'
 import sanitize from 'sanitize-html'
+import textParser from 'npm-text-parser'
 
+export const getUrls = (text) => {
+  const regexUrls = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[/w@?^=%&/~+#-(a-z)(A-Z)(0-9)])?/gm
+  return text?.match(regexUrls) !== null ? text?.match(regexUrls) : []
+}
+export const calculateOverhead = (content) => {
+  let urls = getUrls(content) || []
+  
+  const markdown = content?.match(/#+\s|[*]|\s+&nbsp;+\s|\s+$/gm) || []
+
+  let overhead = 0
+
+  // let overheadItems = []
+
+  if(markdown.length>0) {
+    markdown.forEach((item) => {
+      // overheadItems.push(item)
+      overhead += item.length
+    })
+  }
+  
+  if((urls.length) > 3) {
+    urls = urls.slice(0, 2)
+  }
+  
+  if(urls && urls.length <= 3){
+    urls.forEach((item) => {
+      // overheadItems.push(item)
+      overhead += item.length
+    })
+  }
+
+  // console.log(overheadItems)
+
+  return overhead
+}
 export const stripHtml = (content) => {
   return content.replace(/(<([^>]+)>)/gi, '')
 }
@@ -519,4 +555,15 @@ export const redirectToUserProfile = () => {
     const account = window.location.href.split("@")
     window.location = (`/#/@${account[1].replace("#/", "")}`)
   }
+}
+
+export const censorLinks = (content) => {
+  const links = textParser.getUrls(content)
+  let contentCopy = content
+
+  links.forEach((item) => {
+    contentCopy = contentCopy.replace(item, '<b>[link removed]</b>')
+  })
+
+  return contentCopy
 }

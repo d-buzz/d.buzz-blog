@@ -1,7 +1,7 @@
 import React from 'react'
 
 const AppFrame = React.lazy(() => import('./components/layouts/AppFrame'))
-// const Home = React.lazy(() => import('./components/pages/Home'))
+const Home = React.lazy(() => import('./components/pages/Home'))
 const Trending = React.lazy(() => import('./components/pages/Trending'))
 const Latest = React.lazy(() => import('./components/pages/Latest'))
 const Content = React.lazy(() => import('./components/pages/Content'))
@@ -26,6 +26,11 @@ const routes =  [
         path: '/',
         exact: true,
         component: Trending,
+      },
+      {
+        path: '/following',
+        exact: true,
+        component: Home,
       },
       {
         path: '/create-post',

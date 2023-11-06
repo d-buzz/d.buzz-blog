@@ -106,8 +106,14 @@ import {
   searchPostGeneral,
   searchPeople,
   getMutePattern,
+  invokeFilter,
 } from '../../services/api'
-import { createPatch, errorMessageComposer,stripHtml } from 'services/helper'
+
+import {
+  checkCeramicLogin,
+  getFollowingFeed,
+} from "services/ceramic"
+import { createPatch, errorMessageComposer,stripHtml,censorLinks } from 'services/helper'
 import moment from 'moment'
 
 function patternMute(patterns, data) {
@@ -130,6 +136,36 @@ function* getTrendingTagsRequests(meta) {
   } catch (error) {
     yield put(getTrendingTagsFailure(error, meta))
   }
+}
+
+const invokeHideBuzzFilter = (items) => {
+  let hiddenBuzzes = localStorage.getItem('hiddenBuzzes')
+
+  if (!hiddenBuzzes) {
+    hiddenBuzzes = []
+  } else {
+    hiddenBuzzes = JSON.parse(hiddenBuzzes)
+  }
+
+  return items.filter((item) => hiddenBuzzes.filter((hidden) => hidden.author === item.author && hidden.permlink === item.permlink).length === 0)
+}
+
+const censorCheck = (content, censoredList) => {
+  const copyContent = content
+
+  const result = censoredList.filter(({
+    author,
+    permlink,
+  }) => `${author}/${permlink}` === `${content.author}/${content.permlink}`)
+
+  copyContent.censored = {status: false, reason: null}
+
+  if (result.length !== 0) {
+    copyContent.body = censorLinks(copyContent.body)
+    copyContent.censored = {status: true, reason: result[0].type}
+  }
+
+  return copyContent
 }
 
 function* getTrendingPostsRequest(payload, meta) {
@@ -163,6 +199,7 @@ function* getTrendingPostsRequest(payload, meta) {
 }
 
 function* getHomePostsRequest(payload, meta) {
+  const censoredList = yield select(state => state.auth.get('censorList'))
   const { start_permlink, start_author } = payload
   const user = yield select(state => state.auth.get('user'))
   const { username: account } = user
@@ -171,23 +208,42 @@ function* getHomePostsRequest(payload, meta) {
   const method = 'get_account_posts'
 
   try {
-    const old = yield select(state => state.posts.get('home'))
-    let data = yield call(callBridge, method, params, false)
+    console.log('checkCeramicLogin(account)',checkCeramicLogin(account))
+    if (!checkCeramicLogin(account)) {
+      const old = yield select(state => state.posts.get('home'))
+      let data = yield call(callBridge, method, params, false)
 
-    data = [...old, ...data]
+      data = [...old, ...data]
 
-    data = data.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
-    })
+      data = data.filter((obj, pos, arr) => {
+        return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+      })
+      
+      yield put(setHomeLastPost(data[data.length - 1]))
+      const mutelist = yield select(state => state.auth.get('mutelist'))
+      data = data.filter(item => invokeFilter(item))
 
-    yield put(setHomeLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
-    const mutelist = yield select(state => state.auth.get('mutelist'))
+      const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
 
-    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
-    data = invokeMuteFilter(data, mutelist, opacityUsers)
+      data = invokeMuteFilter(data, mutelist, opacityUsers)
 
-    yield put(getHomePostsSuccess(data, meta))
+      data = invokeHideBuzzFilter(data)
+
+
+      // having some issue in te censorCheck
+      // data.map((item) => censorCheck(item, censoredList))
+      // console.log('data.map((item) => censorCheck',data)
+
+      yield put(getHomePostsSuccess(data, meta))
+    } else {
+      let data = yield call(getFollowingFeed, account)
+
+      if (data === null) {
+        data = []
+      }
+
+      yield put(getHomePostsSuccess(data, meta))
+    }
   } catch(error) {
     yield put(getHomePostsFailure(error, meta))
   }
