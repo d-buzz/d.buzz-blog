@@ -398,7 +398,7 @@ function* publishPostRequest(payload, meta) {
   const images = body.match(dbuzzImageRegex)
   body = `${body}`.replace(dbuzzImageRegex, '').trimStart()
 
-  let titleContent = stripHtml(title)
+  const titleContent = stripHtml(title)
   title = `${titleContent}`.trim()
 
   // const titleLimit = 82
