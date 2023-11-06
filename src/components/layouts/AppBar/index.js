@@ -390,13 +390,14 @@ const AppBar = (props) => {
   }
   const postNow =  async () => {
     setPosting(true)
+    const buzzTitle = postContent.title
     const buzzContent = postContent.content
    
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
     const tagsfromcontent = await extractAllHashtags(postContent.content)
     const tags = [...postContent.tags, ...tagsfromcontent]
-    publishPostRequest(buzzContent, tags, payout, buzzPermlink)
+    publishPostRequest(buzzTitle,buzzContent, tags, payout, buzzPermlink)
       .then((data) => {
         if (data.success) {
           const {author, permlink} = data
@@ -429,14 +430,14 @@ const AppBar = (props) => {
               <a href="/">
                 {!isMobile && (
                   <React.Fragment>
-                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
-                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
+                    {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
                   </React.Fragment>
                 )}
                 {isMobile && (
                   <React.Fragment>
-                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
-                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
+                    {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
                   </React.Fragment>
                 )}
               </a>

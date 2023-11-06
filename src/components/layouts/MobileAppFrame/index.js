@@ -127,12 +127,13 @@ const MobileAppFrame = (props) => {
 
   const postNow = () => {
     setPosting(true)
+    const buzzTitle = postContent.title
     const buzzContent = postContent.content
     const tags = postContent.tags
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
     console.log('postContent',postContent.tags)
-    publishPostRequest(buzzContent, tags, payout, buzzPermlink)
+    publishPostRequest(buzzTitle,buzzContent, tags, payout, buzzPermlink)
       .then((data) => {
         if (data.success) {
           const {author, permlink} = data

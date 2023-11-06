@@ -342,9 +342,9 @@ export const SET_POST_REQUEST = 'SET_POST_REQUEST'
 export const SUCCESS_POST_REQUEST = 'SUCCESS_POST_REQUEST'
 
 
-export const setPostRequest = (content, tags, payout,buzzPermlink) => ({
+export const setPostRequest = (title,content, tags, payout,buzzPermlink) => ({
   type: SET_POST_REQUEST,
-  payload: { content, tags, payout,buzzPermlink },
+  payload: {title, content, tags, payout,buzzPermlink },
   meta: {
     thunk: true,
   },
@@ -356,9 +356,9 @@ export const successPostSuccess = (response, meta) => ({
   meta,
 })
 
-export const publishPostRequest = (body, tags, payout, perm) => ({
+export const publishPostRequest = (title, body, tags, payout, perm) => ({
   type: PUBLISH_POST_REQUEST,
-  payload: { body, tags, payout, perm },
+  payload: { title, body, tags, payout, perm },
   meta: {
     thunk: true,
   },

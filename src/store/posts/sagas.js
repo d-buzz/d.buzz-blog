@@ -388,7 +388,7 @@ function* setPostRequest(payload, meta) {
 }
 function* publishPostRequest(payload, meta) {
   const {tags, payout, perm} = payload
-  let {body} = payload
+  let {body,title} = payload
   let success = false
 
   const user = yield select(state => state.auth.get('user'))
@@ -398,23 +398,23 @@ function* publishPostRequest(payload, meta) {
   const images = body.match(dbuzzImageRegex)
   body = `${body}`.replace(dbuzzImageRegex, '').trimStart()
 
-  let title = stripHtml(body)
-  title = `${title}`.trim()
+  let titleContent = stripHtml(title)
+  title = `${titleContent}`.trim()
 
-  const titleLimit = 82
+  // const titleLimit = 82
 
-  if (title.length > titleLimit) {
-    const lastSpace = title.substr(0, titleLimit).lastIndexOf(" ")
+  // if (title.length > 0) {
+  //   const lastSpace = title.substr(0, titleLimit).lastIndexOf(" ")
 
-    if (lastSpace !== -1) {
-      title = `${title.substring(0, lastSpace)} ...`
-      body = `... ${body.replace(title.substring(0, lastSpace), '')}`
-    } else {
-      title = ''
-    }
-  } else {
-    title = ''
-  }
+  //   if (lastSpace !== -1) {
+  //     title = `${title.substring(0, lastSpace)} ...`
+  //     body = `... ${body.replace(title.substring(0, lastSpace), '')}`
+  //   } else {
+  //     title = ''
+  //   }
+  // } else {
+  //   title = ''
+  // }
 
   if (images) {
     body += `\n${images.toString().replace(/,/gi, ' ')}`

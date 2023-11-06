@@ -201,6 +201,7 @@ const Post = (props) => {
   const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
   const [postContent, setpostContent] = useState('')
+  const [titleContent, settitleContent] = useState('')
   const [tags, setTags] = useState([])
   const [tag, setTag] = useState('')
   const updateFromDesc = () => {
@@ -214,7 +215,7 @@ const Post = (props) => {
     }))
     const payout = 1
     const buzzPermlink = null
-    setPostRequest(postContent,tags,payout,buzzPermlink)
+    setPostRequest(titleContent,postContent,tags,payout,buzzPermlink)
   }
   const onkeydownTags = (e) => {
     console.log('e.key', e.key)
@@ -230,24 +231,34 @@ const Post = (props) => {
 
     const payout = 1
     const buzzPermlink = null
-    setPostRequest(postContent,newtags,payout,buzzPermlink)
+    setPostRequest(titleContent,postContent,newtags,payout,buzzPermlink)
     
    
+  }
+  const updateTitle = (e) =>{
+    console.log('e.target.value', e.target.value)
+    settitleContent(e.target.value)
+    const payout = 1
+    const buzzPermlink = null
+    setPostRequest(e.target.value,postContent,tags,payout,buzzPermlink)
   }
   const updateContent = (e) =>{
     console.log('e.target.value', e.target.value)
     setpostContent(e.target.value)
     const payout = 1
     const buzzPermlink = null
-    setPostRequest(e.target.value,tags,payout,buzzPermlink)
+    setPostRequest(titleContent,e.target.value,tags,payout,buzzPermlink)
   }
   return (
     <Container>
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
-          {/* <label>Tell your story</label> */}
+          <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Add title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} />
+        </div>
+        <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           <div   className={classNames( classes.cursorPointer, classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
-          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()} autoFocus placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} >{postContent}</textarea>
+          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em)} value={postContent} ></textarea>
         </div>
       </form>
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
