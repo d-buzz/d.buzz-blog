@@ -1,22 +1,63 @@
-import axios from 'axios'
-import moment from 'moment'
+import {api, auth, broadcast, formatter} from '@hiveio/hive-js'
+import {hash} from '@hiveio/hive-js/lib/auth/ecc'
+import {Promise, reject} from 'bluebird'
+import {v4 as uuidv4} from 'uuid'
 import appConfig from 'config'
-import { v4 as uuidv4 } from 'uuid'
-import { 
-  api,
-  auth,
-  broadcast,
-  formatter,
-} from '@hiveio/hive-js'
-import { stripHtml,calculateOverhead } from './helper'
+import config from 'config'
+import axios from 'axios'
+import getSlug from 'speakingurl'
+import moment from 'moment'
+import {ChainTypes, makeBitMaskFilter} from '@hiveio/hive-js/lib/auth/serializer'
+import 'react-app-polyfill/stable'
+import {calculateOverhead, stripHtml} from 'services/helper'
+import {hacManualTransaction, hacUserAuth, hacVote} from "@mintrawa/hive-auth-client"
+
+const searchUrl = `${appConfig.SEARCH_API}/search`
+const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
+const imageUrl = `${appConfig.IMAGE_API}`
+const videoUrl = `${appConfig.VIDEO_API}`
+const censorUrl = `${appConfig.CENSOR_API}`
+const priceChartURL = `${appConfig.PRICE_API}`
+
+const APP_META = {
+  name: config.APP_NAME,
+  description: config.APP_DESCRIPTION,
+  icon: config.APP_ICON,
+}
+
 
 const visited = []
 
-const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
-const searchUrl = `${appConfig.SEARCH_API}/search`
-const imageUrl = `${appConfig.IMAGE_API}/image`
+const defaultNode = process.env.REACT_APP_DEFAULT_RPC_NODEpa
 
 
+export const uploadImage = async (data, progress) => {
+  const formData = new FormData()
+  formData.append('file', data)
+  console.log('data',data)
+  console.log('imageUrl',imageUrl)
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: imageUrl,
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: formData,
+        validateStatus: () => true,
+        onUploadProgress: (progressEvent) => {
+          const {loaded, total} = progressEvent
+          const percent = Math.floor((loaded * 100) / total)
+          progress(percent)
+        },
+      })
+
+      resolve(response.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+}
 // export const calculateOverhead = (content) => {
 //   let urls = getUrls(content) || []
   

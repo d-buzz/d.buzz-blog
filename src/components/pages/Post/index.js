@@ -6,10 +6,20 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { CloseIcon } from '../../elements'
+import {useHistory} from 'react-router-dom'
 
 import {
   setPostRequest,
+  uploadFileRequest,
 } from 'store/posts/actions'
+import Renderer from "../../common/Renderer"
+import UploadIcon from "../../elements/Icons/UploadIcon"
+import PlusIcon from "../../elements/Icons/PlusIcon"
+import GifIcon from "../../elements/Icons/GifIcon"
+import EmojiIcon2 from "../../elements/Icons/EmojiIcon2"
+import heic2any from 'heic2any'
+import { useRef } from "react"
+
 const useStyles = createUseStyles(theme => ({
   marginLeft0:{
     marginLeft: 0,
@@ -72,6 +82,9 @@ const useStyles = createUseStyles(theme => ({
   width40: {
     width: 40,
   },
+  width45: {
+    width: 42,
+  },
   height40: {
     height: 40,
   },
@@ -83,6 +96,9 @@ const useStyles = createUseStyles(theme => ({
   },
   marginRight20:{
     marginRight: 20,
+  },
+  marginRight10:{
+    marginRight: 10,
   },
   margin10: {
     margin: '10px',
@@ -110,6 +126,18 @@ const useStyles = createUseStyles(theme => ({
   },
   positionRelative:{
     position: 'relative',
+  },
+  positionAbsolute:{
+    position: 'absolute',
+  },
+  top0:{
+    top: '0'
+  },
+  left60:{
+    left: '60px',
+  },
+  backgroundWhite:{
+    backgroundColor: 'white',
   },
   maxWidthUnset:{
     maxWidth: 'unset',
@@ -196,7 +224,8 @@ const useStyles = createUseStyles(theme => ({
     fontSize: '12px',
   },
   border1soliddarkgray:{
-    border: '1px solid darkgray',
+    border: '0px solid darkgray',
+    // border: '1px solid darkgray',
   },
   marginBottom10:{
     marginBottom: '10px',
@@ -207,11 +236,36 @@ const useStyles = createUseStyles(theme => ({
   padding10:{
     padding: '10px',
   },
+  paddingTop0:{
+    paddingTop: 0,
+  },
+  imageUploadInput: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: '0 auto',
+    cursor: 'pointer',
+    visibility:  'hidden',
+    opacity: 0,
+  },
+  uploadImageButton: {
+    positions: 'relative',
+    display: 'flex',
+    margin: '0 !important',
+    width: 'fit-content',
+    height: 'fit-content',
+    cursor: 'pointer',
+    overflow: 'hidden',
+  },
 }))
 const Post = (props) => {
   const {
+    uploadFileRequest,
     setPostRequest,
   } = props
+  const history = useHistory()
   const classes = useStyles()
   const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
@@ -220,6 +274,42 @@ const Post = (props) => {
   const [tags, setTags] = useState([])
   const [tag, setTag] = useState('')
   const [tagError, settagError] = useState(false)
+  const [showUploadIcon, setshowUploadIcon] = useState(false)
+  const [buzzAttachedImages, setBuzzAttachedImages] = useState([])
+
+  const [compressing, setCompressing] = useState(false)
+  const buzzAllowedImages = 4
+  const [imagesLength, setImagesLength] = useState(0)
+  const [imageSize, setImageSize] = useState(0)
+  const [imageUploading, setImageUploading] = useState(false)
+  const [imageUploadProgress, setImageUploadProgress] = useState(0)
+  const inputRef = useRef(null)
+
+
+
+
+  const handleImageCompression = async (image) => {
+    let compressedFile = null
+
+    setImageUploading(true)
+
+    const MAX_SIZE = 500 * 1024
+
+    const options = {
+      maxSizeMB: MAX_SIZE / (1024 * 1024),
+      maxWidthOrHeight: 1024,
+      useWebWorker: true,
+    }
+    try {
+      await import('browser-image-compression').then(async ({default: imageCompression}) => {
+        compressedFile = await imageCompression(image, options)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
+    return compressedFile !== null && compressedFile
+  }
 
   useEffect(() => {
     let tagspec = false
@@ -240,6 +330,31 @@ const Post = (props) => {
     }
     
   }, [tags])
+
+  const handleClickContent = (e) => {
+    try {
+      const {target} = e
+      let {href} = target
+      const hostname = window.location.hostname
+
+      e.preventDefault()
+      if (href && !href.includes(hostname)) {
+        window.open(href, '_blank')
+      } else {
+        const split = `${href}`.split('#')
+        if (split.length === 2) {
+          href = `${split[1]}`
+        } else {
+          const split = `${href}`.split('/')
+          href = split[3] ? `/${split[3]}` : '/'
+        }
+        if (href !== '' && href !== undefined) {
+          history.push(href)
+        }
+      }
+    } catch (e) {
+    }
+  }
 
   const updateFromDesc = () => {
     console.log('showTitleButton',showTitleButton)
@@ -288,16 +403,113 @@ const Post = (props) => {
     const buzzPermlink = null
     setPostRequest(titleContent,e.target.value,tags,payout,buzzPermlink)
   }
+
+  
+  const handleFileSelectChange = async (event) => {
+
+    const images = Array.from(event.target.files)
+    const allImages = [...images.filter(image => image.type !== 'image/heic')]
+    const heicImages = images.filter(image => image.type === 'image/heic')
+    const uploadedImages = []
+
+    const remainingImageUploads = (4 - buzzAttachedImages.length) >= 0 ? (4 - buzzAttachedImages.length) : 0
+
+    Promise.all(
+      heicImages.map(async (image) => {
+        setCompressing(true)
+
+        const pngBlob = await heic2any({
+          blob: image,
+          toType: 'image/png',
+          quality: 1,
+        })
+
+        allImages.push(
+          new File([pngBlob], image.name.replace('.heic', ''), {type: 'image/png', size: pngBlob.size}),
+        )
+      }),
+    )
+      .then(async () => {
+        
+        setCompressing(false)
+
+        if ((allImages.length + buzzAttachedImages.length) <= buzzAllowedImages) {
+          
+          setImagesLength(images.length)
+
+          await Promise.all(
+            allImages.map(async (image) => {
+              // calculate image file size
+              const fileSize = image.size / 1e+6
+              setImageSize(Number(fileSize.toFixed(2)))
+
+              // handle image compression and then upload it
+              setCompressing(true)
+              await handleImageCompression(image).then((uri) => {
+               
+                setCompressing(false)
+                setImageSize(Number((uri.size / 1e+6).toFixed(2)))
+               
+                uploadFileRequest(uri, setImageUploadProgress).then((image) => {
+                  const lastImage = image[image.length - 1]
+                  uploadedImages.push(lastImage)
+
+                  if (uploadedImages.length === allImages.length) {
+                    setImageUploading(false)
+                    setBuzzAttachedImages(images => [...images, ...uploadedImages])
+                    document.getElementById('file-upload').value = ''
+
+                    // set the thread if its the thread
+                    // if (Object.keys(buzzThreads).length > 1) {
+                    //   setIsThread(true)
+                    //   setThreadCount(Object.keys(buzzThreads).length)
+                    // }
+                    setImageSize(0)
+                    setImagesLength(0)
+                  }
+                })
+              })
+            }),
+          )
+        } else {
+          alert(`You can only upload 4 images per buzz \n\n Please only upload remaining ${remainingImageUploads <= 1 ? `${remainingImageUploads} image` : `${remainingImageUploads} images`}`)
+        }
+      })
+
+  }
   return (
     <Container>
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
-          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Add title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
+          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
         </div>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
-          <div   className={classNames( classes.cursorPointer, classes.width40, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>{showDescButton?'+':''}</div>
-          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} value={postContent} ></textarea>
+        <div className={classNames(classes.positionRelative, classes.cursorPointer  )}> 
+          <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
+          {showUploadIcon && (
+            <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
+              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
+                <label htmlFor="file-upload" className={classes.uploadImageButton}>
+                  <UploadIcon/>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    name="image"
+                    accept="image/*,image/heic"
+                    multiple={true}
+                    ref={inputRef}
+                    className={classes.imageUploadInput}
+                    onChange={handleFileSelectChange}
+                  />
+                </label>
+              </div>
+              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
+              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
+          </div>
+          )}
+          </div>
+          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
         </div>
       </form>
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
@@ -329,6 +541,21 @@ const Post = (props) => {
           )}
         </div>
       </div>
+      {/* <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.padding10)}> */}
+      <div>
+      <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+      <div className={classNames( classes.padding10)}>
+      <React.Fragment>
+          {/* <p>{postContent}</p> */}
+          {(postContent.length !== 0) &&  (
+            <div className={classes.previewContainer} onClick={handleClickContent}>
+              <Renderer content={postContent} minifyAssets={true} contentImages={0}/>
+            </div>
+          )}
+        </React.Fragment>
+      </div>
+        
+      </div>
     </Container>
   )
 }
@@ -337,6 +564,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
+    uploadFileRequest,
     setPostRequest,
   }, dispatch),
 })

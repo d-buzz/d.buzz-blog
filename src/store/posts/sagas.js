@@ -107,6 +107,7 @@ import {
   searchPeople,
   getMutePattern,
   invokeFilter,
+  uploadImage,
 } from '../../services/api'
 
 import {
@@ -357,22 +358,22 @@ function* fileUploadRequest(payload, meta) {
   try {
     const user = yield select(state => state.auth.get('user'))
     const old = yield select(state => state.posts.get('images'))
-    const { isAuthenticated } = user
-    const { file } = payload
-
-    if(isAuthenticated) {
-
-      const result = yield call(uploadIpfsImage, file)
+    const {is_authenticated} = user
+    const {file, progress} = payload
+    console.log('im here', user)
+    if (is_authenticated) {
+      
+      const result = yield call(uploadImage, file, progress)
 
       let images = []
 
-      if(Array.isArray(old) && old.length !== 0) {
-        images = [ ...old ]
+      if (Array.isArray(old) && old.length !== 0) {
+        images = [...old]
       }
 
-      const ipfsHash = result.hashV0
-      const postUrl = `https://ipfs.io/ipfs/${ipfsHash}`
-      images.push(postUrl)
+      const {imageUrl} = result
+
+      images.push(imageUrl)
 
       yield put(uploadFileSuccess(images, meta))
     } else {

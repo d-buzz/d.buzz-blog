@@ -9,6 +9,7 @@ import markdownLinkExtractor from 'markdown-link-extractor'
 import diff_match_patch from 'diff-match-patch'
 import sanitize from 'sanitize-html'
 import textParser from 'npm-text-parser'
+import axios from 'axios'
 
 export const getUrls = (text) => {
   const regexUrls = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[/w@?^=%&/~+#-(a-z)(A-Z)(0-9)])?/gm
@@ -566,4 +567,59 @@ export const censorLinks = (content) => {
   })
 
   return contentCopy
+}
+
+export const parseUrls = (c) => {
+  return c.match(/((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){1}?(\/+[\w.,@?^=%&:/~+!#-$-']*)*/gm) || []
+}
+
+export const truncateString = (str, num) => {
+  if (str.length > num) {
+    return str.slice(0, num) + "..."
+  } else {
+    return str
+  }
+}
+
+
+export const proxyImage = (url) => {
+  const enabled = true
+  let imageUrl = url
+
+  if(enabled) {
+    if(!isGifImage(url)) {
+      imageUrl = `https://wsrv.nl/?url=${url}&q=50`
+      if(isImageUrl404(imageUrl)){
+        imageUrl = url
+      }
+    }
+  }
+
+  return imageUrl
+}
+
+export const isGifImage = (url) => {
+  return url.endsWith('.gif')
+}
+
+export const isImageUrl404 = async (url) => {
+  try {
+    const response = await axios.head(url)
+    return response.status === 404
+  } catch (error) {
+    return true
+  }
+}
+
+export const getTheme =() => {
+  const theme = JSON.parse(localStorage.getItem('customUserData'))?.settings?.theme
+  let mode = ''
+
+  if(theme && (theme === 'gray' || theme === 'night') ) {
+    mode = theme
+  } else {
+    mode = 'light'
+  }
+
+  return mode
 }

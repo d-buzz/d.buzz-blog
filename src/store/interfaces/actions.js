@@ -13,9 +13,9 @@ export const closeReplyModal = () => ({
 
 export const BROADCAST_NOTIFICATION = 'BROADCAST_NOTIFICATION'
 
-export const broadcastNotification = (severity, message) => ({
+export const broadcastNotification = (severity, message, timeout, link) => ({
   type: BROADCAST_NOTIFICATION,
-  payload: { open: true, severity, message },
+  payload: { open: true, severity, message, timeout: timeout, link: link },
 })
 
 export const OPEN_USER_DIALOG = 'OPEN_USER_DIALOG'
@@ -42,6 +42,20 @@ export const CLEAR_SCROLL_INDEX = 'CLEAR_SCROLL_INDEX'
 
 export const clearScrollIndex = () => ({
   type: CLEAR_SCROLL_INDEX,
+})
+
+export const SET_WHATS_NEW_MODAL_STATUS = 'SET_WHATS_NEW_MODAL_STATUS'
+
+export const setWhatsNewModalStatus = (status) => ({
+  type: SET_WHATS_NEW_MODAL_STATUS,
+  payload: status,
+})
+
+export const SET_BUZZ_CONFIRM_MODAL_STATUS = 'SET_BUZZ_CONFIRM_MODAL_STATUS'
+
+export const setBuzzConfirmModalStatus = (status) => ({
+  type: SET_BUZZ_CONFIRM_MODAL_STATUS,
+  payload: status,
 })
 
 export const SET_BUZZ_MODAL_STATUS = 'SET_BUZZ_MODAL_STATUS'
@@ -105,4 +119,97 @@ export const setRefreshRouteStatus = (pathname, timestamp) => ({
 export const CLEAR_REFRESH_ROUTE_STATUS = 'CLEAR_REFRESH_ROUTE_STATUS'
 export const clearRefreshRouteStatus = () => ({
   type: CLEAR_REFRESH_ROUTE_STATUS,
+})
+
+export const OPEN_FOLLOW_MUTED_DIALOG = 'OPEN_FOLLOW_MUTED_DIALOG'
+export const CLOSE_FOLLOW_MUTED_DIALOG = 'CLOSE_FOLLOW_MUTED_DIALOG'
+
+export const openFollowMutedDialog = (username, followMutedSuccessCallback = null) => ({
+  type: OPEN_FOLLOW_MUTED_DIALOG,
+  payload: { username, followMutedSuccessCallback },
+})
+
+export const closeFollowMutedDialog = () => ({
+  type: CLOSE_FOLLOW_MUTED_DIALOG,
+})
+
+
+export const OPEN_FOLLOW_BLACKLISTS_DIALOG = 'OPEN_FOLLOW_BLACKLISTS_DIALOG'
+export const CLOSE_FOLLOW_BLACKLISTS_DIALOG = 'CLOSE_FOLLOW_BLACKLISTS_DIALOG'
+
+export const openFollowBlacklistsDialog = (username, followBlacklistsSuccessCallback = null) => ({
+  type: OPEN_FOLLOW_BLACKLISTS_DIALOG,
+  payload: { username, followBlacklistsSuccessCallback },
+})
+
+export const closeFollowBlacklistsDialog = () => ({
+  type: CLOSE_FOLLOW_BLACKLISTS_DIALOG,
+})
+
+
+export const OPEN_BLACKLIST_DIALOG = 'OPEN_BLACKLIST_DIALOG'
+export const CLOSE_BLACKLIST_DIALOG = 'CLOSE_BLACKLIST_DIALOG'
+
+export const openBlacklistDialog = (username, blacklistSuccessCallback = null) => ({
+  type: OPEN_BLACKLIST_DIALOG,
+  payload: { username, blacklistSuccessCallback },
+})
+
+export const closeBlacklistDialog = () => ({
+  type: CLOSE_BLACKLIST_DIALOG,
+})
+
+export const SHOW_ACCOUNT_SEARCH_BUTTON = 'SHOW_ACCOUNT_SEARCH_BUTTON'
+export const HIDE_ACCOUNT_SEARCH_BUTTON = 'HIDE_ACCOUNT_SEARCH_BUTTON'
+
+export const showAccountSearchButton = (list_type) => ({
+  type: SHOW_ACCOUNT_SEARCH_BUTTON,
+  payload: { list_type },
+})
+
+export const hideAccountSearchButton = () => ({
+  type: HIDE_ACCOUNT_SEARCH_BUTTON,
+})
+
+export const SET_ACCOUNT_SEARCH_LIST_KEYWORD = 'SET_ACCOUNT_SEARCH_LIST_KEYWORD'
+export const setAccountSearchListKeyword = (keyword) => ({
+  type: SET_ACCOUNT_SEARCH_LIST_KEYWORD,
+  payload: keyword,
+})
+
+// buzz title modal
+export const BUZZ_TITLE_MODAL = 'BUZZ_TITLE'
+
+export const setBuzzTitleModalStatus = (status) => ({
+  type: BUZZ_TITLE_MODAL,
+  payload: status,
+})
+
+// drafts modal
+export const DRAFTS_MODAL = 'DRAFTS_MODAL'
+
+export const setDraftsModalStatus = (status) => ({
+  type: DRAFTS_MODAL,
+  payload: status,
+})
+
+export const SAVE_DRAFTS_MODAL = 'SAVE_DRAFTS_MODAL'
+
+export const setSaveDraftsModalStatus = (status) => ({
+  type: SAVE_DRAFTS_MODAL,
+  payload: status,
+})
+
+export const SET_VIEW_IMAGE_MODAL = 'SET_VIEW_IMAGE_MODAL'
+
+export const setViewImageModal = (value) => ({
+  type: SET_VIEW_IMAGE_MODAL,
+  payload: value,
+})
+
+export const SET_LINK_CONFIRMATION_MODAL = 'SET_LINK_CONFIRMATION_MODAL'
+
+export const setLinkConfirmationModal = (link) => ({
+  type: SET_LINK_CONFIRMATION_MODAL,
+  payload: link,
 })
