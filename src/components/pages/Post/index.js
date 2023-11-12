@@ -298,6 +298,14 @@ const Post = (props) => {
 
   const inputRef = useRef(null)
 
+  console.log('imagesLength',imagesLength)
+  console.log('imageSize',imageSize)
+  console.log('imageUploadProgress',imageUploadProgress)
+  console.log('viewImageUrl',viewImageUrl)
+  console.log('viewImageUrl',viewImageUrl)
+  console.log('videoLimit',videoLimit)
+  console.log('setBuzzLoading',setBuzzLoading)
+  console.log('setCurrentBuzz',setCurrentBuzz)
   const handleImageCompression = async (image) => {
     let compressedFile = null
 

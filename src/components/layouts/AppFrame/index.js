@@ -50,6 +50,7 @@ const AppFrame = (props) => {
   const { isAuthenticated } = user
   const [isCreatePostPage, setIsCreatePostPage] = useState(false)
 
+  console.log('isCreatePostPage',isCreatePostPage)
   
   let containerClass = classes.container
   const profileRoute = (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/))
