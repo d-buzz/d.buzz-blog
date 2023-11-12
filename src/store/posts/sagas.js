@@ -88,7 +88,7 @@ import {
   getLinkMeta,
   fetchContent,
   fetchDiscussions,
-  uploadIpfsImage,
+  // uploadIpfsImage,
   broadcastKeychainOperation,
   broadcastOperation,
   generatePostOperations,

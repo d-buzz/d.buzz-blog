@@ -221,6 +221,7 @@ const AppBar = (props) => {
     publishPostRequest,
     postContent,
     count = 0,
+    images,
   } = props
   const { isAuthenticated } = user
   const { mode } = theme
@@ -420,8 +421,9 @@ const AppBar = (props) => {
   const postNow =  async () => {
     setPosting(true)
     const buzzTitle = postContent.title
-    const buzzContent = postContent.content
-   
+    let buzzContent = postContent.content 
+    buzzContent = images.length >= 1 ? buzzContent + '\n' + images.toString().replace(/,/gi, ' ') : buzzContent
+    console.log('buzzContent',buzzContent)
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
     const tagsfromcontent = await extractAllHashtags(postContent.content)
@@ -441,6 +443,10 @@ const AppBar = (props) => {
         }
       })
   }
+
+  useEffect(() => {
+    console.log('imagesjuneroy',images)
+  },[images])
 
   return (
     <React.Fragment>
@@ -494,7 +500,7 @@ const AppBar = (props) => {
 
                           {pathname === '/create-post' && (
                             <Menu>
-                              <button onClick={postNow} disabled={!tagError && (postContent.content || posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
+                              <button onClick={postNow} disabled={!tagError && (postContent.title || postContent.content || posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
                             </Menu>
                           )}
                           {pathname !== '/create-post' && (
@@ -730,6 +736,7 @@ const mapStateToProps = (state) => ({
   postContent: state.posts.get('postContent'),
   count: state.polling.get('count'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
+  images: state.posts.get('images'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
