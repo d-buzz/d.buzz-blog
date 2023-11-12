@@ -122,7 +122,7 @@ function patternMute(patterns, data) {
 }
 
 const footnote = (body) => {
-  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>'
+  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>'
   body = `${body} ${footnoteAppend}`
 
   return body
@@ -461,11 +461,11 @@ function* publishPostRequest(payload, meta) {
       cashout_time = cashout_time.replace('Z', '')
 
       let body = comment[1].body
-      body = body.replace('<br /><br /> Posted via <a href="https://d.buzz" data-link="promote-link">D.Buzz</a>', '')
+      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
 
       const content = {
         author: username,
-        category: 'hive-193084',
+        category: '',
         permlink,
         title: comment[1].title,
         body: body,
@@ -476,7 +476,7 @@ function* publishPostRequest(payload, meta) {
         active_votes: [],
         root_author: "",
         parent_author: null,
-        parent_permlink: "hive-190384",
+        parent_permlink: "",
         root_permlink: permlink,
         root_title: title,
         json_metadata,

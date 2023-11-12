@@ -579,7 +579,7 @@ export const createMeta = (tags = []) => {
   // const uniqueTags = [ ...tags ]
 
   const meta = {
-    app: `dBuzz/v3.0.0`,
+    app: `blogDBuzz/v3.0.0`,
     tags: uniqueTags,
     shortForm: true,
   }
