@@ -88,7 +88,7 @@ const AppFrame = (props) => {
         </React.Fragment>
       )}
       {/* <div className={classNames(classes.height150, classes.positionFixed, classes.left0, classes.right0, classes.bottom0, classes.zindex600)}> */}
-      {isCreatePostPage && (
+      {/* {isCreatePostPage && (
         <React.Fragment>
           <div className={classNames('height150 positionFixed left0 right0 bottom0 zindex600')}>
             <div className={classNames('backgroundColorFa displayFlex justContentCenter alignItemsCenter height100', isMobile?'padding10':'')}>
@@ -96,7 +96,7 @@ const AppFrame = (props) => {
             </div>
           </div>
         </React.Fragment>
-      )}
+      )} */}
      
       <ReplyFormModal />
       <NotificationBox />

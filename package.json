@@ -62,10 +62,12 @@
     "browser-image-compression": "^1.0.15",
     "heic2any": "^0.0.4",
     "@mintrawa/hive-auth-client": "^0.0.8",
-    "speakingurl": "^14.0.1"
+    "speakingurl": "^14.0.1",
+    "web3": "^1.7.1",
+    "web3modal": "^1.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=2020 react-scripts start",
     "build": "react-scripts build && chmod +X ./change-version.sh",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

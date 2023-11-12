@@ -32,6 +32,8 @@ const defaultNode = process.env.REACT_APP_DEFAULT_RPC_NODEpa
 
 
 export const uploadImage = async (data, progress) => {
+  console.log('progress',progress)
+  console.log('data',data)
   const formData = new FormData()
   formData.append('file', data)
   console.log('data',data)

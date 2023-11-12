@@ -19,6 +19,7 @@ import GifIcon from "../../elements/Icons/GifIcon"
 import EmojiIcon2 from "../../elements/Icons/EmojiIcon2"
 import heic2any from 'heic2any'
 import { useRef } from "react"
+import ImagesContainer from "../../ImagesContainer"
 
 const useStyles = createUseStyles(theme => ({
   marginLeft0:{
@@ -283,6 +284,12 @@ const Post = (props) => {
   const [imageSize, setImageSize] = useState(0)
   const [imageUploading, setImageUploading] = useState(false)
   const [imageUploadProgress, setImageUploadProgress] = useState(0)
+  const [currentBuzz, setCurrentBuzz] = useState(1)
+  const [viewImageUrl, setViewImageUrl] = useState('')
+  const [videoLimit, setVideoLimit] = useState(false)
+  const [videoUploading] = useState(false)
+  const [buzzLoading, setBuzzLoading] = useState(false)
+
   const inputRef = useRef(null)
 
 
@@ -453,11 +460,17 @@ const Post = (props) => {
                 uploadFileRequest(uri, setImageUploadProgress).then((image) => {
                   const lastImage = image[image.length - 1]
                   uploadedImages.push(lastImage)
+                  console.log('uploadedImages.length',uploadedImages.length)
+                  console.log('allImages.length',allImages.length)
 
                   if (uploadedImages.length === allImages.length) {
+                  console.log('uploadFileRequest',image)
+                  console.log('uploadedImages',uploadedImages)
+                  console.log('buzzAttachedImages',buzzAttachedImages)
                     setImageUploading(false)
                     setBuzzAttachedImages(images => [...images, ...uploadedImages])
                     document.getElementById('file-upload').value = ''
+                  console.log('buzzAttachedImages after',buzzAttachedImages)
 
                     // set the thread if its the thread
                     // if (Object.keys(buzzThreads).length > 1) {
@@ -545,6 +558,11 @@ const Post = (props) => {
       <div>
       <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
       <div className={classNames( classes.padding10)}>
+      {buzzAttachedImages.length >= 1 && (<ImagesContainer buzzId={currentBuzz} buzzImages={buzzAttachedImages}
+              upadateBuzzImages={setBuzzAttachedImages}
+              viewFullImage={setViewImageUrl}
+              setVideoLimit={setVideoLimit}
+              loading={compressing || imageUploading || videoUploading || buzzLoading }/>)}
       <React.Fragment>
           {/* <p>{postContent}</p> */}
           {(postContent.length !== 0) &&  (

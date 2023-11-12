@@ -358,10 +358,10 @@ function* fileUploadRequest(payload, meta) {
   try {
     const user = yield select(state => state.auth.get('user'))
     const old = yield select(state => state.posts.get('images'))
-    const {is_authenticated} = user
+    const {isAuthenticated} = user
     const {file, progress} = payload
     console.log('im here', user)
-    if (is_authenticated) {
+    if (isAuthenticated) {
       
       const result = yield call(uploadImage, file, progress)
 
