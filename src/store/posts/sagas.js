@@ -389,6 +389,8 @@ function* setPostRequest(payload, meta) {
 }
 function* publishPostRequest(payload, meta) {
   const {tags, payout, perm} = payload
+  let tagsWithDbuzz = ['dbuzz']
+  tagsWithDbuzz = [...tagsWithDbuzz, ...tags]
   let {body,title} = payload
   let success = false
 
@@ -425,7 +427,7 @@ function* publishPostRequest(payload, meta) {
 
 
   try {
-    const operations = yield call(generatePostOperations, username, title, body, tags, payout, perm)
+    const operations = yield call(generatePostOperations, username, title, body, tagsWithDbuzz, payout, perm)
 
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
@@ -465,7 +467,7 @@ function* publishPostRequest(payload, meta) {
 
       const content = {
         author: username,
-        category: 'hive-193084',
+        category: 'blog',
         permlink,
         title: comment[1].title,
         body: body,
@@ -476,7 +478,7 @@ function* publishPostRequest(payload, meta) {
         active_votes: [],
         root_author: "",
         parent_author: null,
-        parent_permlink: "hive-190384",
+        parent_permlink: "blog",
         root_permlink: permlink,
         root_title: title,
         json_metadata,
