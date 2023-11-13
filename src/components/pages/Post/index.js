@@ -119,6 +119,12 @@ const useStyles = createUseStyles(theme => ({
   flexDirectionRow:{
     flexDirection:"row",
   },
+  flexDirectionColumn:{
+    flexDirection:"column-reverse",
+  },
+  paddingLeft50:{
+    paddingLeft: '50px',
+  },
   flexGrow1:{
     flexGrow: 1,
   },
@@ -132,7 +138,7 @@ const useStyles = createUseStyles(theme => ({
     position: 'absolute',
   },
   top0:{
-    top: '0'
+    top: '0',
   },
   left60:{
     left: '60px',
@@ -292,9 +298,14 @@ const Post = (props) => {
 
   const inputRef = useRef(null)
 
-
-
-
+  console.log('imagesLength',imagesLength)
+  console.log('imageSize',imageSize)
+  console.log('imageUploadProgress',imageUploadProgress)
+  console.log('viewImageUrl',viewImageUrl)
+  console.log('viewImageUrl',viewImageUrl)
+  console.log('videoLimit',videoLimit)
+  console.log('setBuzzLoading',setBuzzLoading)
+  console.log('setCurrentBuzz',setCurrentBuzz)
   const handleImageCompression = async (image) => {
     let compressedFile = null
 
@@ -464,13 +475,13 @@ const Post = (props) => {
                   console.log('allImages.length',allImages.length)
 
                   if (uploadedImages.length === allImages.length) {
-                  console.log('uploadFileRequest',image)
-                  console.log('uploadedImages',uploadedImages)
-                  console.log('buzzAttachedImages',buzzAttachedImages)
+                    // console.log('uploadFileRequest',image)
+                    // console.log('uploadedImages',uploadedImages)
+                    // console.log('buzzAttachedImages',buzzAttachedImages)
                     setImageUploading(false)
                     setBuzzAttachedImages(images => [...images, ...uploadedImages])
                     document.getElementById('file-upload').value = ''
-                  console.log('buzzAttachedImages after',buzzAttachedImages)
+                    // console.log('buzzAttachedImages after',buzzAttachedImages)
 
                     // set the thread if its the thread
                     // if (Object.keys(buzzThreads).length > 1) {
@@ -490,6 +501,15 @@ const Post = (props) => {
       })
 
   }
+
+
+  useEffect(() => {
+    const buzzContent = buzzAttachedImages.length >= 1 ? postContent + '\n' + buzzAttachedImages.toString().replace(/,/gi, ' ') : postContent
+    const rawBuzzContent = buzzContent
+    console.log('rawBuzzContent',rawBuzzContent)
+    // setpostContent(rawBuzzContent)
+    // setBuzzContentStripped(stripHtml(rawBuzzContent))
+  }, [buzzAttachedImages, postContent])
   return (
     <Container>
       <form>
@@ -497,30 +517,30 @@ const Post = (props) => {
           <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
           <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
         </div>
-        <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
-        <div className={classNames(classes.positionRelative, classes.cursorPointer  )}> 
-          <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
-          {showUploadIcon && (
-            <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
-              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
-                <label htmlFor="file-upload" className={classes.uploadImageButton}>
-                  <UploadIcon/>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    name="image"
-                    accept="image/*,image/heic"
-                    multiple={true}
-                    ref={inputRef}
-                    className={classes.imageUploadInput}
-                    onChange={handleFileSelectChange}
-                  />
-                </label>
+        <div className={classNames(isMobile? classes.flexDirectionColumn:'', isMobile?classes.paddingLeft50:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
+          <div className={classNames(classes.positionRelative, classes.cursorPointer  )}> 
+            <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
+            {showUploadIcon && (
+              <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
+                <div htmlFor="file-upload"  className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
+                  <label htmlFor="file-upload" className={classes.uploadImageButton}>
+                    <UploadIcon/>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      name="image"
+                      accept="image/*,image/heic"
+                      multiple={true}
+                      ref={inputRef}
+                      className={classes.imageUploadInput}
+                      onChange={handleFileSelectChange}
+                    />
+                  </label>
+                </div>
+                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
+                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
               </div>
-              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
-              <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width80:'', classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
-          </div>
-          )}
+            )}
           </div>
           <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
         </div>
@@ -556,22 +576,22 @@ const Post = (props) => {
       </div>
       {/* <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.padding10)}> */}
       <div>
-      <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
-      <div className={classNames( classes.padding10)}>
-      {buzzAttachedImages.length >= 1 && (<ImagesContainer buzzId={currentBuzz} buzzImages={buzzAttachedImages}
-              upadateBuzzImages={setBuzzAttachedImages}
-              viewFullImage={setViewImageUrl}
-              setVideoLimit={setVideoLimit}
-              loading={compressing || imageUploading || videoUploading || buzzLoading }/>)}
-      <React.Fragment>
-          {/* <p>{postContent}</p> */}
-          {(postContent.length !== 0) &&  (
-            <div className={classes.previewContainer} onClick={handleClickContent}>
-              <Renderer content={postContent} minifyAssets={true} contentImages={0}/>
-            </div>
-          )}
-        </React.Fragment>
-      </div>
+        <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+        <div className={classNames( classes.padding10)}>
+          {buzzAttachedImages.length >= 1 && (<ImagesContainer buzzId={currentBuzz} buzzImages={buzzAttachedImages}
+            upadateBuzzImages={setBuzzAttachedImages}
+            viewFullImage={setViewImageUrl}
+            setVideoLimit={setVideoLimit}
+            loading={compressing || imageUploading || videoUploading || buzzLoading}/>)}
+          <React.Fragment>
+            {/* <p>{postContent}</p> */}
+            {(postContent.length !== 0) &&  (
+              <div className={classes.previewContainer} onClick={handleClickContent}>
+                <Renderer content={postContent} minifyAssets={true} contentImages={0}/>
+              </div>
+            )}
+          </React.Fragment>
+        </div>
         
       </div>
     </Container>

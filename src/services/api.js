@@ -1,34 +1,36 @@
 import {api, auth, broadcast, formatter} from '@hiveio/hive-js'
-import {hash} from '@hiveio/hive-js/lib/auth/ecc'
-import {Promise, reject} from 'bluebird'
+// import {hash} from '@hiveio/hive-js/lib/auth/ecc'
+import {Promise, 
+  // reject
+} from 'bluebird'
 import {v4 as uuidv4} from 'uuid'
 import appConfig from 'config'
-import config from 'config'
+// import config from 'config'
 import axios from 'axios'
-import getSlug from 'speakingurl'
+// import getSlug from 'speakingurl'
 import moment from 'moment'
-import {ChainTypes, makeBitMaskFilter} from '@hiveio/hive-js/lib/auth/serializer'
+// import {ChainTypes, makeBitMaskFilter} from '@hiveio/hive-js/lib/auth/serializer'
 import 'react-app-polyfill/stable'
 import {calculateOverhead, stripHtml} from 'services/helper'
-import {hacManualTransaction, hacUserAuth, hacVote} from "@mintrawa/hive-auth-client"
+// import {hacManualTransaction, hacUserAuth, hacVote} from "@mintrawa/hive-auth-client"
 
 const searchUrl = `${appConfig.SEARCH_API}/search`
 const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
 const imageUrl = `${appConfig.IMAGE_API}`
-const videoUrl = `${appConfig.VIDEO_API}`
-const censorUrl = `${appConfig.CENSOR_API}`
-const priceChartURL = `${appConfig.PRICE_API}`
+// const videoUrl = `${appConfig.VIDEO_API}`
+// const censorUrl = `${appConfig.CENSOR_API}`
+// const priceChartURL = `${appConfig.PRICE_API}`
 
-const APP_META = {
-  name: config.APP_NAME,
-  description: config.APP_DESCRIPTION,
-  icon: config.APP_ICON,
-}
+// const APP_META = {
+//   name: config.APP_NAME,
+//   description: config.APP_DESCRIPTION,
+//   icon: config.APP_ICON,
+// }
 
 
 const visited = []
 
-const defaultNode = process.env.REACT_APP_DEFAULT_RPC_NODEpa
+// const defaultNode = process.env.REACT_APP_DEFAULT_RPC_NODEpa
 
 
 export const uploadImage = async (data, progress) => {
@@ -577,7 +579,7 @@ export const createMeta = (tags = []) => {
   // const uniqueTags = [ ...tags ]
 
   const meta = {
-    app: `dBuzz/v3.0.0`,
+    app: `blogDBuzz/v3.0.0`,
     tags: uniqueTags,
     shortForm: true,
   }

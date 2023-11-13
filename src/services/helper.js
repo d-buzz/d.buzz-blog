@@ -583,17 +583,17 @@ export const truncateString = (str, num) => {
 
 
 export const proxyImage = (url) => {
-  const enabled = true
-  let imageUrl = url
+  // const enabled = true
+  const imageUrl = url
 
-  if(enabled) {
-    if(!isGifImage(url)) {
-      imageUrl = `https://wsrv.nl/?url=${url}&q=50`
-      if(isImageUrl404(imageUrl)){
-        imageUrl = url
-      }
-    }
-  }
+  // if(enabled) {
+  //   if(!isGifImage(url)) {
+  //     imageUrl = `https://wsrv.nl/?url=${url}&q=50`
+  //     if(isImageUrl404(imageUrl)){
+  //       imageUrl = url
+  //     }
+  //   }
+  // }
 
   return imageUrl
 }

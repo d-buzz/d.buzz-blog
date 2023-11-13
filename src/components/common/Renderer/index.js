@@ -174,7 +174,6 @@ const prepareYoutubeEmbeds = (
 
 
   if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
-  console.log('links1 loop',links)
     
     links.forEach((link) => {
       try {
@@ -1199,10 +1198,8 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
   } else if (content.includes(':dbuzz-embed-container:')) {
     return <UrlVideoEmbed key={`${videoEmbeds[0]?.id}${scrollIndex}url-embed`} embed={videoEmbeds} />
   } 
-//   else if (content.includes(':dbuzz-sound-embed-container:')) {
-//     return <ReactSoundCloud url={`https://soundcloud.com/${soundEmbeds.filter(embed => embed.app === 'soundcloud')[0]?.id}`} />
-//   }
-   else if (content.includes(':dbuzz-twitter-embed-container:')) {
+
+  else if (content.includes(':dbuzz-twitter-embed-container:')) {
     return <TwitterEmbed key={`${twitterEmbeds[0]?.id}${scrollIndex}tweet`} tweet={twitterEmbeds} onIframeLoad={onImageLoad} />
   } else if (content.includes(':dbuzz-tiktok-embed-container:')) {
     return (
@@ -1427,15 +1424,15 @@ const Renderer = React.memo((props) => {
         const buzzImagesPattern = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
 
         if(link.includes('youtube.com') ||link.includes('youtu.be')) {
-            console.log('sulod drea1',content)
-            console.log('buzzImages',buzzImages)
-            console.log('buzzVideos',buzzVideos)
-            console.log('videoEmbeds',videoEmbeds)
-            console.log('soundEmbeds',soundEmbeds)
-            console.log('twitterEmbeds',twitterEmbeds)
-            console.log('contentImages',contentImages)
-            content = prepareYoutubeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-            console.log('sulod drea2',content)
+          console.log('sulod drea1',content)
+          console.log('buzzImages',buzzImages)
+          console.log('buzzVideos',buzzVideos)
+          console.log('videoEmbeds',videoEmbeds)
+          console.log('soundEmbeds',soundEmbeds)
+          console.log('twitterEmbeds',twitterEmbeds)
+          console.log('contentImages',contentImages)
+          content = prepareYoutubeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
+          console.log('sulod drea2',content)
 
         } else if(link.includes('twitter.com') || link.includes('x.com')) {
           content = prepareTwitterEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
