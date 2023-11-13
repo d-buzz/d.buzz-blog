@@ -404,12 +404,10 @@ const ReplyContent = (props) => {
 
   
   const showReplyForm = () => {
-    console.log('reply', reply)
     setreplyNow(true)
     // show form
   }
   const hideReplyForm = () => {
-    console.log('reply', reply)
     setreplyNow(false)
     // show form
   }
@@ -427,11 +425,6 @@ const ReplyContent = (props) => {
   
   const submitReply = () => {
     setReplying(true)
-    console.log('author',author)
-    // console.log('permlink',permlink)
-    console.log('contentReply',contentReply)
-    console.log('replyRef',replyRef)
-    console.log('treeHistory',treeHistory)
     publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
       .then(({ success, errorMessage }) => {
         if(success) {

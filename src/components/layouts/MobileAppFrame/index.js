@@ -122,7 +122,6 @@ const MobileAppFrame = (props) => {
   const [posting, setPosting] = useState(false)
 
   useEffect(() => {
-    console.log('postContent for mobile',postContent)
   },[postContent])
 
   const postNow = () => {
@@ -132,7 +131,6 @@ const MobileAppFrame = (props) => {
     const tags = postContent.tags
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
-    console.log('postContent',postContent.tags)
     publishPostRequest(buzzTitle,buzzContent, tags, payout, buzzPermlink)
       .then((data) => {
         if (data.success) {

@@ -251,7 +251,6 @@ const AppBar = (props) => {
   const [tagError, settagError] = useState(false)
 
   useEffect(() => {
-    console.log('postContent12',postContent)
     let tagspec = false
     if (postContent.tags) {
       postContent.tags.map((tagCheck) => {
@@ -273,8 +272,6 @@ const AppBar = (props) => {
       }else{
         settagError(false)
       }
-      console.log('tagspec',tagspec)
-      console.log('tagError',tagError)
 
     }
    
@@ -423,7 +420,6 @@ const AppBar = (props) => {
     const buzzTitle = postContent.title
     let buzzContent = postContent.content 
     buzzContent = images.length >= 1 ? buzzContent + '\n' + images.toString().replace(/,/gi, ' ') : buzzContent
-    console.log('buzzContent',buzzContent)
     const payout = postContent.payout
     const buzzPermlink = postContent.buzzPermlink
     const tagsfromcontent = await extractAllHashtags(postContent.content)
@@ -445,7 +441,6 @@ const AppBar = (props) => {
   }
 
   useEffect(() => {
-    console.log('imagesjuneroy',images)
   },[images])
 
   return (

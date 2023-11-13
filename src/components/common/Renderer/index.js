@@ -170,7 +170,6 @@ const prepareYoutubeEmbeds = (
   let body = content
   
   const links = parseUrls(content)
-  console.log('links1',links)
 
 
   if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
@@ -299,7 +298,6 @@ const prepareTwitterEmbeds = (
               match = link.match(/(?:https?:\/\/(?:(?:x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
               id = `${match[1]}&${match[2].split(/[?/]/)[0]}`
             }
-            console.log(id)
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
           }else if(link.match(mobileTwitterXRegex)) {
             match = link.match(mobileTwitterXRegex)
@@ -1373,7 +1371,6 @@ const Renderer = React.memo((props) => {
   const original = content
 
   const extracted = parseUrls(content)
-  console.log('extracted', extracted)
   extracted.forEach((item) => {
     const link = item?.replace(/\(/g, '%28').replace(/\)/g, '%29')
     content = content?.replace(item, link)
@@ -1410,10 +1407,10 @@ const Renderer = React.memo((props) => {
   const soundEmbeds = []
   const twitterEmbeds = []
   
-  console.log("JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled'",JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled')
+  // console.log("JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled'",JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled')
 
   if(JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled') {
-    console.log('links',links)
+    // console.log('links',links)
 
     links.forEach((link) => {
       try {
@@ -1424,15 +1421,8 @@ const Renderer = React.memo((props) => {
         const buzzImagesPattern = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
 
         if(link.includes('youtube.com') ||link.includes('youtu.be')) {
-          console.log('sulod drea1',content)
-          console.log('buzzImages',buzzImages)
-          console.log('buzzVideos',buzzVideos)
-          console.log('videoEmbeds',videoEmbeds)
-          console.log('soundEmbeds',soundEmbeds)
-          console.log('twitterEmbeds',twitterEmbeds)
-          console.log('contentImages',contentImages)
           content = prepareYoutubeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-          console.log('sulod drea2',content)
+         
 
         } else if(link.includes('twitter.com') || link.includes('x.com')) {
           content = prepareTwitterEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
@@ -1477,11 +1467,9 @@ const Renderer = React.memo((props) => {
     })
   }
 
-  const assetClass = classes.full
-  console.log('BEFORE splitContent',content)
+  const assetClass = classes.checkForValidURL
 
   let splitContent = content.split(`~~~~~~.^.~~~`)
-  console.log('splitContent',splitContent)
 
   splitContent = splitContent.filter((item) => item !== '')
 

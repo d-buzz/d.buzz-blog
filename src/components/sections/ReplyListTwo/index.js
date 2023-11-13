@@ -378,7 +378,6 @@ const ReplyListTwo = ({replies, match, append}) => {
   return (
     <>
       {replies.length > 0 && replies.map((reply, index) => {
-        // console.log('reply',reply)
         return (
           <>
             <div className={classNames(classes.borderLeft3SolidGray, classes.marginLeft8)} style={{width: '100%'}}>

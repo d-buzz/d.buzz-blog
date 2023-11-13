@@ -444,7 +444,6 @@ const Content = (props) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [originalContent, setOriginalContent] = useState('')
   const classes = useStyles()
-  console.log('user juneroy', user)
   const {username: userProfile} = user
   // const [open, setOpen] = useState(false)
   // const [openUpdateForm, setOpenUpdateForm] = useState(false)

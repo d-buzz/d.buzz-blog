@@ -298,6 +298,7 @@ const Post = (props) => {
 
   const inputRef = useRef(null)
 
+  console.log('showTitleButton',showTitleButton)
   console.log('imagesLength',imagesLength)
   console.log('imageSize',imageSize)
   console.log('imageUploadProgress',imageUploadProgress)
@@ -332,7 +333,6 @@ const Post = (props) => {
   useEffect(() => {
     let tagspec = false
     tags.map((tag) => {
-      // console.log('tag update', tag)
       var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
   
       if(format.test(tag) ){
@@ -340,7 +340,6 @@ const Post = (props) => {
       }
       return true
     })
-    console.log('tagspec',tagspec)
     if (tagspec) {
       settagError(true)
     }else{
@@ -375,7 +374,6 @@ const Post = (props) => {
   }
 
   const updateFromDesc = () => {
-    console.log('showTitleButton',showTitleButton)
     setShowTitleButton(false)
     setShowDescButton(true)
   }
@@ -408,14 +406,12 @@ const Post = (props) => {
    
   }
   const updateTitle = (e) =>{
-    console.log('e.target.value', e.target.value)
     settitleContent(e.target.value)
     const payout = 1
     const buzzPermlink = null
     setPostRequest(e.target.value,postContent,tags,payout,buzzPermlink)
   }
   const updateContent = (e) =>{
-    console.log('e.target.value', e.target.value)
     setpostContent(e.target.value)
     const payout = 1
     const buzzPermlink = null
@@ -471,8 +467,6 @@ const Post = (props) => {
                 uploadFileRequest(uri, setImageUploadProgress).then((image) => {
                   const lastImage = image[image.length - 1]
                   uploadedImages.push(lastImage)
-                  console.log('uploadedImages.length',uploadedImages.length)
-                  console.log('allImages.length',allImages.length)
 
                   if (uploadedImages.length === allImages.length) {
                     // console.log('uploadFileRequest',image)
@@ -481,6 +475,7 @@ const Post = (props) => {
                     setImageUploading(false)
                     setBuzzAttachedImages(images => [...images, ...uploadedImages])
                     document.getElementById('file-upload').value = ''
+                    setshowUploadIcon(current => {return !current})
                     // console.log('buzzAttachedImages after',buzzAttachedImages)
 
                     // set the thread if its the thread
