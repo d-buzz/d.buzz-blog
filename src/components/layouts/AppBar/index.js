@@ -495,7 +495,7 @@ const AppBar = (props) => {
 
                           {pathname === '/create-post' && (
                             <Menu>
-                              <button onClick={postNow} disabled={!tagError && (postContent.title || postContent.content || posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
+                              <button onClick={postNow} disabled={!tagError && (postContent.title && postContent.content) && (!posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
                             </Menu>
                           )}
                           {pathname !== '/create-post' && (
