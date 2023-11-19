@@ -272,6 +272,35 @@ const MobileAppFrame = (props) => {
   if(pathname.match(/(\/search?)/)) {
     title = 'Search'
   }
+
+  const [tagError, settagError] = useState(false)
+
+  useEffect(() => {
+    let tagspec = false
+    if (postContent.tags) {
+      postContent.tags.map((tagCheck) => {
+        // console.log('tag update', tag)
+        // var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        // var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+  
+        if(format.test(tagCheck) ){
+          tagspec = true
+        }
+
+        return true
+  
+      })
+     
+      if (tagspec) {
+        settagError(true)
+      }else{
+        settagError(false)
+      }
+
+    }
+   
+  },[postContent,tagError])
   
   return (
     <React.Fragment>
@@ -304,7 +333,7 @@ const MobileAppFrame = (props) => {
                           <WriteIcon size={25} />
                         )}
                         {pathname === '/create-post' && (
-                          <button onClick={postNow} disabled={postContent.content || posting?false:true}  className='btn btn-success' md>{posting?'Posting':'Post'}</button>
+                          <button onClick={postNow} disabled={!tagError && (postContent.title && postContent.content) && (!posting)?false:true} className='btn btn-success' md>{posting?'Posting':'Post'}</button>
                         )}
                       </IconButton>
                       <IconButton onClick={handleClickSearchButton} size="medium">
