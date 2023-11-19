@@ -274,6 +274,7 @@ const Post = (props) => {
   } = props
   const history = useHistory()
   const classes = useStyles()
+  // eslint-disable-next-line
   const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
   const [postContent, setpostContent] = useState('')
@@ -286,27 +287,25 @@ const Post = (props) => {
 
   const [compressing, setCompressing] = useState(false)
   const buzzAllowedImages = 4
+  // eslint-disable-next-line
   const [imagesLength, setImagesLength] = useState(0)
+  // eslint-disable-next-line
   const [imageSize, setImageSize] = useState(0)
   const [imageUploading, setImageUploading] = useState(false)
+  // eslint-disable-next-line
   const [imageUploadProgress, setImageUploadProgress] = useState(0)
+  // eslint-disable-next-line
   const [currentBuzz, setCurrentBuzz] = useState(1)
+  // eslint-disable-next-line
   const [viewImageUrl, setViewImageUrl] = useState('')
+  // eslint-disable-next-line
   const [videoLimit, setVideoLimit] = useState(false)
   const [videoUploading] = useState(false)
+  // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
 
   const inputRef = useRef(null)
 
-  console.log('showTitleButton',showTitleButton)
-  console.log('imagesLength',imagesLength)
-  console.log('imageSize',imageSize)
-  console.log('imageUploadProgress',imageUploadProgress)
-  console.log('viewImageUrl',viewImageUrl)
-  console.log('viewImageUrl',viewImageUrl)
-  console.log('videoLimit',videoLimit)
-  console.log('setBuzzLoading',setBuzzLoading)
-  console.log('setCurrentBuzz',setCurrentBuzz)
   const handleImageCompression = async (image) => {
     let compressedFile = null
 
@@ -384,14 +383,11 @@ const Post = (props) => {
     const tagsFILTER = tags.filter(old => {
       return old !== tagREmove
     })
-    // console.log('tagsFILTER',tagsFILTER)
     const payout = 1
     const buzzPermlink = null
     setPostRequest(titleContent,postContent,tagsFILTER,payout,buzzPermlink)
   }
   const onkeydownTags = (e) => {
-    // console.log('e.key', e.key)
-    // console.log('e.keyCode', e.keyCode)
     let newtags = []
     if ((e.keyCode === 13 || e.keyCode === 188 || e.keyCode === 32) && (tags.length < 10)) {
       const data = e.target.value.replace(/,*$/, '')
@@ -469,14 +465,10 @@ const Post = (props) => {
                   uploadedImages.push(lastImage)
 
                   if (uploadedImages.length === allImages.length) {
-                    // console.log('uploadFileRequest',image)
-                    // console.log('uploadedImages',uploadedImages)
-                    // console.log('buzzAttachedImages',buzzAttachedImages)
                     setImageUploading(false)
                     setBuzzAttachedImages(images => [...images, ...uploadedImages])
                     document.getElementById('file-upload').value = ''
                     setshowUploadIcon(current => {return !current})
-                    // console.log('buzzAttachedImages after',buzzAttachedImages)
 
                     // set the thread if its the thread
                     // if (Object.keys(buzzThreads).length > 1) {
@@ -497,11 +489,17 @@ const Post = (props) => {
 
   }
 
+  const clickFile = () =>{
+    console.log('test upload')
+    inputRef.current.value = ''
+    var input = document.getElementById("file-upload")
+    input.click()
+  }
 
   useEffect(() => {
     const buzzContent = buzzAttachedImages.length >= 1 ? postContent + '\n' + buzzAttachedImages.toString().replace(/,/gi, ' ') : postContent
+    // eslint-disable-next-line
     const rawBuzzContent = buzzContent
-    console.log('rawBuzzContent',rawBuzzContent)
     // setpostContent(rawBuzzContent)
     // setBuzzContentStripped(stripHtml(rawBuzzContent))
   }, [buzzAttachedImages, postContent])
@@ -517,21 +515,21 @@ const Post = (props) => {
             <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
             {showUploadIcon && (
               <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
-                <div htmlFor="file-upload"  className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
-                  <label htmlFor="file-upload" className={classes.uploadImageButton}>
+                <div onClick={() => clickFile()}    className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
+                  <label  className={classes.uploadImageButton}>
                     <UploadIcon/>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      name="image"
-                      accept="image/*,image/heic"
-                      multiple={true}
-                      ref={inputRef}
-                      className={classes.imageUploadInput}
-                      onChange={handleFileSelectChange}
-                    />
                   </label>
                 </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  name="image"
+                  accept="image/*,image/heic"
+                  multiple={true}
+                  ref={inputRef}
+                  className={classes.imageUploadInput}
+                  onInput={(e) => handleFileSelectChange(e)}
+                />
                 <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
                 <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
               </div>
@@ -579,7 +577,6 @@ const Post = (props) => {
             setVideoLimit={setVideoLimit}
             loading={compressing || imageUploading || videoUploading || buzzLoading}/>)}
           <React.Fragment>
-            {/* <p>{postContent}</p> */}
             {(postContent.length !== 0) &&  (
               <div className={classes.previewContainer} onClick={handleClickContent}>
                 <Renderer content={postContent} minifyAssets={true} contentImages={0}/>
