@@ -304,7 +304,7 @@ const Post = (props) => {
   // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
 
-  const inputRef = useRef(null)
+  const inputRefFileUpload = useRef(null)
 
   const handleImageCompression = async (image) => {
     let compressedFile = null
@@ -491,9 +491,7 @@ const Post = (props) => {
 
   const clickFile = () =>{
     console.log('test upload')
-    inputRef.current.value = ''
-    var input = document.getElementById("file-upload")
-    input.click()
+    inputRefFileUpload.current.click()
   }
 
   useEffect(() => {
@@ -515,7 +513,7 @@ const Post = (props) => {
             <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
             {showUploadIcon && (
               <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
-                <div onClick={() => clickFile()}    className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
+                <div onTouchStart={() => clickFile} onClick={() => clickFile()}    className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
                   <label  className={classes.uploadImageButton}>
                     <UploadIcon/>
                   </label>
@@ -526,9 +524,10 @@ const Post = (props) => {
                   name="image"
                   accept="image/*,image/heic"
                   multiple={true}
-                  ref={inputRef}
+                  ref={inputRefFileUpload}
                   className={classes.imageUploadInput}
                   onInput={(e) => handleFileSelectChange(e)}
+                  
                 />
                 <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
                 <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
