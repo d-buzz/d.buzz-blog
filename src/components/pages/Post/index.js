@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container"
 import { createUseStyles } from 'react-jss'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { isMobile } from 'react-device-detect'
+import { isMobile, isDesktop } from 'react-device-detect'
 import { CloseIcon } from '../../elements'
 import {useHistory} from 'react-router-dom'
 
@@ -254,7 +254,7 @@ const useStyles = createUseStyles(theme => ({
     right: 0,
     margin: '0 auto',
     cursor: 'pointer',
-    visibility:  'hidden',
+    visibility: isDesktop? 'hidden':'0',
     opacity: 0,
   },
   uploadImageButton: {
