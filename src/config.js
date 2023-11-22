@@ -1,6 +1,6 @@
 const config = {
-  // TAG: 'hive-193084',
-  TAG: 'blog',
+  TAG: 'hive-193084',
+  // TAG: 'blog',
   VERSION: process.env.REACT_APP_VERSION || '0.0.0',
   SEARCH_API: process.env.REACT_APP_SEARCH_API || 'http://localhost:3030/api/v1',
   SCRAPE_API: process.env.REACT_APP_SCRAPE_API,
