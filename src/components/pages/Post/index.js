@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import { isMobile, isDesktop } from 'react-device-detect'
 import { CloseIcon } from '../../elements'
 import {useHistory} from 'react-router-dom'
+import {LinearProgress} from '@material-ui/core'
+import {styled} from '@material-ui/styles'
 
 import {
   setPostRequest,
@@ -266,8 +268,28 @@ const useStyles = createUseStyles(theme => ({
     cursor: 'pointer',
     overflow: 'hidden',
   },
+  preparingMedia: {
+    margin: '25px auto',
+    width: 'fit-content',
+    color: theme.font.color,
+    fontSize: '1.2em',
+    fontWeight: 600,
+    textAlign: 'center',
+    padding: '5px 25px',
+    borderRadius: 50,
+    backgroundColor: theme.context.view.backgroundColor,
+    animation: 'showFade infinite 1.5s',
+  },
 }))
 const Post = (props) => {
+  const BorderLinearProgress = styled(LinearProgress)(({theme}) => ({
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#7D3B4A',
+    [`& .MuiLinearProgress-barColorPrimary`]: {
+      backgroundColor: '#E74B5D',
+    },
+  }))
   const {
     uploadFileRequest,
     setPostRequest,
@@ -537,6 +559,21 @@ const Post = (props) => {
           <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
         </div>
       </form>
+      {compressing && (
+        <div style={{width: '100%', paddingTop: 5}}>
+          <div className={classes.preparingMedia}>Compressing Image</div>
+        </div>)}
+      {imageUploading && !compressing && (
+        <div style={{width: '100%', paddingTop: 5}}>
+          {imageUploadProgress !== 100 && imagesLength === 0 ?
+            <div className={classes.uploadProgressBar}>
+              <BorderLinearProgress className={classes.linearProgress} variant="determinate"
+                value={imageUploadProgress}/>
+              <span className="progressPercent">{imageUploadProgress}%</span>
+            </div> :
+            <div
+              className={classes.preparingMedia}>{imagesLength === 1 ? "Preparing Image" : `Preparing ${imagesLength} Images`}</div>}
+        </div>)}
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
         <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
         <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
