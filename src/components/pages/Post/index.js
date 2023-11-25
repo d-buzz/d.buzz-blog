@@ -325,7 +325,7 @@ const Post = (props) => {
   const [videoUploading] = useState(false)
   // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
-
+  const payout = 0
   const inputRefFileUpload = useRef(null)
 
   const handleImageCompression = async (image) => {
@@ -405,7 +405,7 @@ const Post = (props) => {
     const tagsFILTER = tags.filter(old => {
       return old !== tagREmove
     })
-    const payout = 1
+    
     const buzzPermlink = null
     setPostRequest(titleContent,postContent,tagsFILTER,payout,buzzPermlink)
   }
@@ -417,7 +417,6 @@ const Post = (props) => {
       newtags = [...tags, data]
       // setPostRequest(postContent,tags,payout,buzzPermlink)
       setTag("")
-      const payout = 1
       const buzzPermlink = null
       setPostRequest(titleContent,postContent,newtags,payout,buzzPermlink)
     }    
@@ -425,13 +424,11 @@ const Post = (props) => {
   }
   const updateTitle = (e) =>{
     settitleContent(e.target.value)
-    const payout = 1
     const buzzPermlink = null
     setPostRequest(e.target.value,postContent,tags,payout,buzzPermlink)
   }
   const updateContent = (e) =>{
     setpostContent(e.target.value)
-    const payout = 1
     const buzzPermlink = null
     setPostRequest(titleContent,e.target.value,tags,payout,buzzPermlink)
   }
