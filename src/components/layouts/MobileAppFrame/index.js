@@ -45,6 +45,7 @@ import { useLocation, useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { useWindowDimensions } from 'services/helper'
+import classNames from 'classnames'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -59,6 +60,9 @@ const useStyles = createUseStyles(theme => ({
   backButton: {
     display: 'inline-block',
     ...theme.icon,
+  },
+  margin10:{
+    margin: '10px',
   },
   clearPadding: {
     paddingLeft: 0,
@@ -443,7 +447,7 @@ const MobileAppFrame = (props) => {
           
             <Row>
               {!isProfileRoute && !isContentRoute && (
-                <Col className={classes.clearPadding}>
+                <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
                   <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                     <React.Fragment>
                       {renderRoutes(route.routes)}
