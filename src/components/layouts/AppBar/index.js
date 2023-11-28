@@ -15,7 +15,7 @@ import {
 import { createUseStyles } from 'react-jss'
 import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
 import { signupHiveOnboard } from 'services/helper'
-import { useLocation, useHistory, Link } from 'react-router-dom'
+import { useLocation, useHistory, Link, Prompt  } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
 import { 
@@ -443,8 +443,45 @@ const AppBar = (props) => {
   useEffect(() => {
   },[images])
 
+  const [isBlocking, setIsBlocking] = useState(false)
+
+  useEffect(() => {
+    if (pathname === '/create-post') {
+      const handleBeforeUnload = (event) => {
+        if (isBlocking) {
+          const message = "Are you sure you want to leave?"
+          event.returnValue = message
+          return message
+        }
+      }
+  
+      window.addEventListener('beforeunload', handleBeforeUnload)
+  
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+      }
+    }
+   
+  }, [isBlocking,pathname])
+
+  const handleNavigate = (path) => {
+    if (pathname === '/create-post') {
+      const shouldNavigate = window.confirm("Are you sure you want to leave? Changes you made may not be saved.")
+      if (shouldNavigate) {
+        setIsBlocking(false)
+        // Navigate to the desired page
+        history.push(path)
+      }
+    }
+    
+  }
+
   return (
     <React.Fragment>
+      <Prompt
+        when={isBlocking}
+        message="Are you sure you want to leave?"
+      />
       <Navbar fixed="top" className={classNames(navbarContainer, isTop?classes.opacity1:classes.opacity0, classes.transitionOpacity)}>
         <Container className={classNames(!isCreatePostPage?classes.marginLeft0:'', !isCreatePostPage?classes.marginRight0:'', !isCreatePostPage?classes.minWidth100:'')}>
           <div className={classNames(classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>
@@ -472,9 +509,12 @@ const AppBar = (props) => {
                 )}
               </a>
             </Navbar.Brand>
-            <Hidden only="xs">
-              <SearchField className={classNames(classes.search2, classes.box2)} disableTips={true} />
-            </Hidden>   
+            {pathname !== '/create-post' &&(
+              <Hidden  only="xs">
+                <SearchField className={classNames(classes.search2, classes.box2)} disableTips={true} />
+              </Hidden> 
+            )}
+              
           </div>
           
           {!isMobile && (
@@ -520,6 +560,10 @@ const AppBar = (props) => {
                             <MenuLink 
                               as={Link}
                               to="/notifications"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/notifications')
+                              }}
                             >
                               <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
                             </MenuLink>
@@ -555,6 +599,10 @@ const AppBar = (props) => {
                               style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
                               as={Link}
                               to={`/@${username}`}
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate(`/@${username}`)
+                              }}
                             >
                               <div>
                                 <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
@@ -567,18 +615,30 @@ const AppBar = (props) => {
                             <MenuLink
                               as={Link}
                               to="/"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/')
+                              }}
                             >
                               <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/trending"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/trending')
+                              }}
                             >
                               <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/latest"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/latest')
+                              }}
                             >
                               <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
                             </MenuLink>

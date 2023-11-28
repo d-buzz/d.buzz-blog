@@ -368,6 +368,7 @@ const Post = (props) => {
     }
     
   }, [tags])
+  
 
   const handleClickContent = (e) => {
     try {
@@ -520,6 +521,21 @@ const Post = (props) => {
     // setpostContent(rawBuzzContent)
     // setBuzzContentStripped(stripHtml(rawBuzzContent))
   }, [buzzAttachedImages, postContent])
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      const message = "Are you sure you want to leave?"
+      event.returnValue = message
+      return message
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
   return (
     <Container>
       <form>
