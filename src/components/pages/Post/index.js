@@ -233,7 +233,7 @@ const useStyles = createUseStyles(theme => ({
     fontSize: '12px',
   },
   border1soliddarkgray:{
-    border: '0px solid darkgray',
+    border: '.5px solid darkgray',
     // border: '1px solid darkgray',
   },
   marginBottom10:{
@@ -325,7 +325,7 @@ const Post = (props) => {
   const [videoUploading] = useState(false)
   // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
-  const payout = 0
+  const payout = 100000000
   const inputRefFileUpload = useRef(null)
 
   const handleImageCompression = async (image) => {
@@ -591,7 +591,8 @@ const Post = (props) => {
         <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
         <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
           <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
-            <div className={classNames(classes.border1solidccc, classes.displayFlex, classes.padding4, classes.flexWrapWrap)}>
+            {/* juneroy */}
+            <div className={classNames(classes.border1solidccc, classes.borderRadius7, classes.displayFlex, classes.padding4, classes.flexWrapWrap)}>
               <ul className={classNames(classes.displayFlex, classes.flexWrapWrap, classes.width100, classes.lineHeight1em, classes.margin0, classes.padding0, classes.listStyleTypeNone)}>
                 {tags.map((tag, index) => {
                   return (
