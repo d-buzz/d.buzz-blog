@@ -54,6 +54,7 @@ class InfiniteList extends PureComponent {
     }
 
     const rowRenderer = ({ index, parent, key, style }) => {
+      const newStyle = {...style, height: 'auto'}
       return (
         <CellMeasurer
           key={key}
@@ -64,7 +65,7 @@ class InfiniteList extends PureComponent {
         >
           {({measure}) => (
             <ResizeObserver onResize={measure}>
-              <div style={style}>
+              <div style={newStyle}>
                 <PostList
                   disableOpacity={disableOpacity}
                   title={items[index].title}

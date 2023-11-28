@@ -23,6 +23,7 @@ import classNames from 'classnames'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { useLocation } from 'react-router-dom'
+import Renderer from '../../common/Renderer'
 
 const addHover = (theme) => {
   let style = {
@@ -345,7 +346,7 @@ const PostList = React.memo((props) => {
 
   return (
     <React.Fragment>
-      <div className={classes.wrapper}>
+      <div className={classNames(classes.wrapper, 'hehehehe') }>
         <div className={classNames(classes.row, muted || opacityUsers.includes(author) ? classes.muted : {})}>
           <Row>
             <Col xs="auto" className={classes.colLeft}>
@@ -378,10 +379,15 @@ const PostList = React.memo((props) => {
                     <div onClick={handleOpenContent}>
                       <strong className={classes.title}>{title}</strong>
                       {isContentRoute && (
-                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        // <p>{body}</p>
                       )}
                       {!isContentRoute && (
-                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+
+                        // <p>{body}</p>
                       )}
                       <PostTags meta={meta} highlightTag={highlightTag} />
                     </div>
