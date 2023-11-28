@@ -832,12 +832,12 @@ const Content = (props) => {
                   </div>
                 </div> */}
                 {/* add div here for comment */}
-                <div onClick={() => updateReply(true)}  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                       <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                    <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                       <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                     </div>
                   </div>
@@ -890,7 +890,7 @@ const Content = (props) => {
                   <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                     <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
                   </div>
-                  <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                  <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                     <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                   </div>
                 </div>
