@@ -398,6 +398,7 @@ const PostActions = (props) => {
           </Row>
         </div>
       )}
+      {/* juneroy */}
       {showSlider && (
         <div className={classes.sliderWrapper}>
           <Row>

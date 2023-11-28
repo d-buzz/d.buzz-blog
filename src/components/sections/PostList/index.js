@@ -6,7 +6,7 @@ import {
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import {
-  MarkdownViewer,
+  // MarkdownViewer,
   PostTags,
   PostActions,
 } from 'components'
@@ -346,7 +346,7 @@ const PostList = React.memo((props) => {
 
   return (
     <React.Fragment>
-      <div className={classNames(classes.wrapper, 'hehehehe') }>
+      <div className={classNames(classes.wrapper, 'hehehehe')}>
         <div className={classNames(classes.row, muted || opacityUsers.includes(author) ? classes.muted : {})}>
           <Row>
             <Col xs="auto" className={classes.colLeft}>
@@ -381,13 +381,10 @@ const PostList = React.memo((props) => {
                       {isContentRoute && (
                         // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
                         <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-                        // <p>{body}</p>
                       )}
                       {!isContentRoute && (
                         // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
                         <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-
-                        // <p>{body}</p>
                       )}
                       <PostTags meta={meta} highlightTag={highlightTag} />
                     </div>

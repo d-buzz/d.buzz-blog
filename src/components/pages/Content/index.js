@@ -9,15 +9,21 @@ import {
   clearReplies,
   clearAppendReply,
   publishReplyRequest,
+  upvoteRequest,
 } from 'store/posts/actions'
-import {broadcastNotification} from '../../../store/interfaces/actions'
+import {broadcastNotification,saveScrollIndex} from '../../../store/interfaces/actions'
+// import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
+// import { upvoteRequest } from 'store/posts/actions'
+
 import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon,
+import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, HeartIconRed,
   HiveIcon,
-  BurnIcon } from 'components/elements'
+  BurnIcon,
+  ContainedButton,
+} from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
@@ -42,7 +48,90 @@ import {
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
 import ReplyContent from '../../sections/ReplyContent'
+import { withStyles } from '@material-ui/core/styles'
+import Slider from '@material-ui/core/Slider'
 
+const PrettoSlider = withStyles({
+  root: {
+    color: '#e53935',
+    height: 5,
+    '& .MuiSlider-markLabel': {
+      fontSize: 12,
+      // color: '#d32f2f',
+    },
+  },
+  thumb: {
+    height: 15,
+    width: 15,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -5,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 5,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 5,
+    borderRadius: 4,
+  },
+})(Slider)
+
+
+const marks = [
+  {
+    value: 0,
+    label: '0',
+  },
+  {
+    value: 10,
+    label: '10',
+  },
+  {
+    value: 20,
+    label: '20',
+  },
+  {
+    value: 30,
+    label: '30',
+  },
+  {
+    value: 40,
+    label: '40',
+  },
+  {
+    value: 50,
+    label: '50',
+  },
+  {
+    value: 60,
+    label: '60',
+  },
+  {
+    value: 70,
+    label: '70',
+  },
+  {
+    value: 80,
+    label: '80',
+  },
+  {
+    value: 90,
+    label: '90',
+  },
+  {
+    value: 100,
+    label: '100',
+  },
+]
 
 const useStyles = createUseStyles(theme => ({
   cursorPointer:{
@@ -410,6 +499,14 @@ const useStyles = createUseStyles(theme => ({
   padding8:{
     padding: '8px',
   },
+  sliderWrapper: {
+    width: '98%',
+    paddingRight: 30,
+  },
+  button: {
+    height: 33,
+    fontSize: 14,
+  },
   chip: {
     border: 'none !important',
     float: 'right !important',
@@ -430,6 +527,13 @@ const Content = (props) => {
     publishReplyRequest,
     modalData,
     append,
+    voteCount,
+    hasUpvoted = false,
+    // saveScrollIndex,
+    recentUpvotes,
+    upvoteRequest,
+    recomputeRowIndex = () => {},
+    scrollIndex = 0,
     match,
     content,
     loadingContent,
@@ -460,7 +564,55 @@ const Content = (props) => {
   const [repliesList, setrepliesList] = useState([])
   const [replyRef] = useState('content')
   const [treeHistory] = useState(0)
+  const [showSlider, setShowSlider] = useState(false)
+  const [sliderValue, setSliderValue] = useState(0)
+  const [vote, setVote] = useState(voteCount)
+  const [loading, setLoading] = useState(false)
+  const [upvoted, setUpvoted] = useState(hasUpvoted)
 
+  const handleClickShowSlider = () => {
+    setShowSlider(true)
+    if (replyRef === 'list') {
+      recomputeRowIndex(scrollIndex)
+    }
+  }
+
+  const handleChange = (e, value) => {
+    setSliderValue(value)
+  }
+
+  const handleClickHideSlider = () => {
+    setShowSlider(false)
+    if (replyRef === 'list') {
+      recomputeRowIndex(scrollIndex)
+    }
+  }
+  const handleClickUpvote = () => {
+    if (replyRef === 'list') {
+      recomputeRowIndex(scrollIndex)
+    }
+    // setShowSlider(false)
+    setLoading(true)
+    upvoteRequest(author, permlink, sliderValue)
+      .then(({ success, errorMessage }) => {
+        if (success) {
+          setVote(vote + 1)
+          setUpvoted(true)
+          setLoading(false)
+          broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
+        } else {
+          setUpvoted(false)
+          broadcastNotification('error', errorMessage)
+          setLoading(false)
+        }
+      })
+  }
+  useEffect(() => {
+    if (recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
+      setUpvoted(true)
+    }
+    // eslint-disable-next-line
+  }, [recentUpvotes, permlink])
   useEffect(() => {
   },[modalData])
 
@@ -832,11 +984,43 @@ const Content = (props) => {
                   </div>
                 </div> */}
                 {/* add div here for comment */}
+                {showSlider && (
+                  <div className={classes.sliderWrapper}>
+                    <Row>
+                      <Col xs="auto">
+                        <ContainedButton onClick={handleClickUpvote} fontSize={14} label={`Upvote (${sliderValue}%)`} className={classes.button} />
+                      </Col>
+                      <Col style={{ paddingLeft: 0 }}>
+                        <ContainedButton
+                          fontSize={14}
+                          transparent={true}
+                          label="Cancel"
+                          className={classes.button}
+                          onClick={handleClickHideSlider}
+                        />
+                      </Col>
+                    </Row>
+                    <div style={{ paddingLeft: 10 }}>
+                      <PrettoSlider
+                        marks={marks}
+                        value={sliderValue}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                )}
                 <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
-                    <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                      <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
-                    </div>
+                    {!loading && upvoted && (
+                      <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                        <HeartIconRed /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
+                      </div>
+                    )}
+                    {!loading && !upvoted && (
+                      <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                        <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
+                      </div>
+                    )}
                     <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                       <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                     </div>
@@ -883,11 +1067,11 @@ const Content = (props) => {
                 </div>
               </React.Fragment>
             </div>
-      
+                    
             <div className={classes.wrapper}>
               <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
                 <div className={classNames(classes.displayFlex)}>
-                  <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                  <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                     <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
                   </div>
                   <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
@@ -1001,6 +1185,7 @@ const mapStateToProps = (state) => ({
   content: state.posts.get('content'),
   user: state.auth.get('user'),
   censorList: state.auth.get('censorList'),
+  recentUpvotes: state.posts.get('recentUpvotes'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -1012,6 +1197,9 @@ const mapDispatchToProps = (dispatch) => ({
     clearReplies,
     checkHasUpdateAuthorityRequest,
     clearAppendReply,
+    saveScrollIndex,
+    upvoteRequest,
+    // openReplyModal,
   }, dispatch),
 })
 
