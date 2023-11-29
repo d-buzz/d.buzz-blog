@@ -25,6 +25,7 @@ import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, HeartIconRed,
   HiveIcon,
   BurnIcon,
   ContainedButton,
+  Spinner,
 } from 'components/elements'
 import {
   MarkdownViewer,
@@ -598,34 +599,24 @@ const Content = (props) => {
     }
     // setShowSlider(false)
     setLoading(true)
-
+    setShowSlider(false)
     setTimeout(() => {
-      setLoading(false)
-      setgetActiveVotes(getActiveVotes + 1)
-      broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
-    }, 1000);
-    // upvoteRequest(author, permlink, sliderValue)
-    //   .then(({ success, errorMessage }) => {
-    //     console.log('success',success)
-    //     if (success) {
-    //     console.log('if',success)
-
-    //       setVote(vote + 1)
-    //       upvotes = upvotes + 1
-    //       console.log('upvotes',upvotes)
-    //       hasUpvoted= true
-    //       // setUpvoted(true)
-    //       setLoading(false)
-    //       broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
-    //     } else {
-    //     console.log('else',errorMessage)
-
-    //       // setUpvoted(false)
-    //       hasUpvoted= false
-    //       broadcastNotification('error', errorMessage)
-    //       setLoading(false)
-    //     }
-    //   })
+      
+    }, 1000)
+    upvoteRequest(author, permlink, sliderValue)
+      .then(({ success, errorMessage }) => {
+        console.log('success',success)
+        if (success) {
+          setLoading(false)
+          setgetActiveVotes(getActiveVotes + 1)
+          setUpvoted(true)
+          broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
+        } else {
+          setUpvoted(false)
+          broadcastNotification('error', errorMessage)
+          setLoading(false)
+        }
+      })
   }
   useEffect(() => {
     if (recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
@@ -779,7 +770,6 @@ const Content = (props) => {
   }
 
   
-
   useEffect(() => {
     if(active_votes) {
       if(active_votes.length > 0) {
@@ -1047,11 +1037,12 @@ const Content = (props) => {
                 <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
                     
-                      <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                       {!loading && getupvoted && (<HeartIconRed />)}
                       {!loading && !getupvoted && (<HeartIcon />)}
+                      {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
                       <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
-                      </div>
+                    </div>
                    
                     <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                       <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
@@ -1106,6 +1097,7 @@ const Content = (props) => {
                   <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                     {!loading && getupvoted && (<HeartIconRed />)}
                     {!loading && !getupvoted && (<HeartIcon />)}
+                    {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
                     <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                   </div>
                   <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
