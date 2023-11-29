@@ -11,7 +11,9 @@ import {
   publishReplyRequest,
   upvoteRequest,
 } from 'store/posts/actions'
-import {broadcastNotification,saveScrollIndex} from '../../../store/interfaces/actions'
+// import {broadcastNotification,saveScrollIndex} from '../../../store/interfaces/actions'
+import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
+
 // import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
 // import { upvoteRequest } from 'store/posts/actions'
 
@@ -527,8 +529,9 @@ const Content = (props) => {
     publishReplyRequest,
     modalData,
     append,
-    voteCount,
-    hasUpvoted = false,
+    // voteCount,
+    broadcastNotification,
+    // hasUpvoted = false,
     // saveScrollIndex,
     recentUpvotes,
     upvoteRequest,
@@ -566,14 +569,16 @@ const Content = (props) => {
   const [treeHistory] = useState(0)
   const [showSlider, setShowSlider] = useState(false)
   const [sliderValue, setSliderValue] = useState(0)
-  const [vote, setVote] = useState(voteCount)
+  // const [vote, setVote] = useState(voteCount)
   const [loading, setLoading] = useState(false)
-  const [upvoted, setUpvoted] = useState(hasUpvoted)
+  const [getupvoted, setUpvoted] = useState(false)
 
   const handleClickShowSlider = () => {
-    setShowSlider(true)
-    if (replyRef === 'list') {
-      recomputeRowIndex(scrollIndex)
+    if (!getupvoted) {
+      setShowSlider(true)
+      if (replyRef === 'list') {
+        recomputeRowIndex(scrollIndex)
+      }
     }
   }
 
@@ -593,23 +598,39 @@ const Content = (props) => {
     }
     // setShowSlider(false)
     setLoading(true)
-    upvoteRequest(author, permlink, sliderValue)
-      .then(({ success, errorMessage }) => {
-        if (success) {
-          setVote(vote + 1)
-          setUpvoted(true)
-          setLoading(false)
-          broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
-        } else {
-          setUpvoted(false)
-          broadcastNotification('error', errorMessage)
-          setLoading(false)
-        }
-      })
+
+    setTimeout(() => {
+      setLoading(false)
+      setgetActiveVotes(getActiveVotes + 1)
+      broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
+    }, 1000);
+    // upvoteRequest(author, permlink, sliderValue)
+    //   .then(({ success, errorMessage }) => {
+    //     console.log('success',success)
+    //     if (success) {
+    //     console.log('if',success)
+
+    //       setVote(vote + 1)
+    //       upvotes = upvotes + 1
+    //       console.log('upvotes',upvotes)
+    //       hasUpvoted= true
+    //       // setUpvoted(true)
+    //       setLoading(false)
+    //       broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
+    //     } else {
+    //     console.log('else',errorMessage)
+
+    //       // setUpvoted(false)
+    //       hasUpvoted= false
+    //       broadcastNotification('error', errorMessage)
+    //       setLoading(false)
+    //     }
+    //   })
   }
   useEffect(() => {
     if (recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
-      setUpvoted(true)
+      // setUpvoted(true)
+      // hasUpvoted= true
     }
     // eslint-disable-next-line
   }, [recentUpvotes, permlink])
@@ -668,13 +689,13 @@ const Content = (props) => {
 
   const { body } = content || ''
 
-  let {  max_accepted_payout } = content || '0.00'
+  let { max_accepted_payout } = content || '0.00'
 
   max_accepted_payout = `${max_accepted_payout}`.replace('HBD', '')
-
+  const [getActiveVotes, setgetActiveVotes] = useState(0)
   let meta = {}
   let app = null
-  let upvotes = 0
+  // let upvotes = 0
   // let hasUpvoted = false
   let payout_at = cashout_time
 
@@ -757,20 +778,34 @@ const Content = (props) => {
     }
   }
 
-  if(active_votes) {
-    if(active_votes.length > 0) {
+  
 
-      if(active_votes[0].hasOwnProperty('weight')) {
-        upvotes = active_votes.filter((vote) => vote.weight >= 0).length
-      } else {
-        upvotes = active_votes.length
-      }
+  useEffect(() => {
+    if(active_votes) {
+      if(active_votes.length > 0) {
+        
+        if(active_votes[0].hasOwnProperty('weight')) {
+          const upvotes = active_votes.filter((vote) => vote.weight >= 0).length
+          console.log('if upvotes',upvotes)
+          setgetActiveVotes(upvotes)
+        } else {
+          const upvotes = active_votes.length
+          console.log('else upvotes',upvotes)
+          setgetActiveVotes(upvotes)
 
-      if(isAuthenticated) {
-        // hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
+        }
+  
+        if(isAuthenticated) {
+          const gethasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
+          setUpvoted(gethasUpvoted)
+        }
       }
     }
-  }
+  },[active_votes,isAuthenticated,user.username])
+
+  useEffect(() => {
+    console.log('getupvoted',getupvoted)
+  },[getupvoted])
 
   useEffect(() => {
     anchorTop()
@@ -1011,16 +1046,13 @@ const Content = (props) => {
                 )}
                 <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
-                    {!loading && upvoted && (
-                      <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                        <HeartIconRed /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
-                      </div>
-                    )}
-                    {!loading && !upvoted && (
+                    
                       <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                        <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
+                      {!loading && getupvoted && (<HeartIconRed />)}
+                      {!loading && !getupvoted && (<HeartIcon />)}
+                      <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                       </div>
-                    )}
+                   
                     <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                       <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                     </div>
@@ -1072,7 +1104,9 @@ const Content = (props) => {
               <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
                 <div className={classNames(classes.displayFlex)}>
                   <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                    <HeartIcon /> <label className={classNames(classes.margin0, classes.marginLeft5)}>{upvotes}</label>
+                    {!loading && getupvoted && (<HeartIconRed />)}
+                    {!loading && !getupvoted && (<HeartIcon />)}
+                    <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                   </div>
                   <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                     <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
