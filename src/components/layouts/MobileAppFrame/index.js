@@ -319,17 +319,17 @@ const MobileAppFrame = (props) => {
    
   },[postContent,tagError])
 
-  const handleNavigate = (path) => {
-    if (pathname === '/create-post') {
-      const shouldNavigate = window.confirm("Are you sure you want to leave? Changes you made may not be saved.")
-      if (shouldNavigate) {
-        // setIsBlocking(false);
-        // Navigate to the desired page
-        history.push(path)
-      }
-    }
+  // const handleNavigate = (path) => {
+  //   if (pathname === '/create-post') {
+  //     const shouldNavigate = window.confirm("Are you sure you want to leave? Changes you made may not be saved.")
+  //     if (shouldNavigate) {
+  //       // setIsBlocking(false);
+  //       // Navigate to the desired page
+  //       history.push(path)
+  //     }
+  //   }
     
-  }
+  // }
   
   return (
     <React.Fragment>
@@ -348,10 +348,10 @@ const MobileAppFrame = (props) => {
                     </React.Fragment>
                   )}
                   <Link to="/"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      handleNavigate('/')
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault()
+                    //   handleNavigate('/')
+                    // }}
                   >
                     <React.Fragment>
                       {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
@@ -403,10 +403,10 @@ const MobileAppFrame = (props) => {
                             style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
                             as={Link}
                             to={`/@${username}`}
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleNavigate(`/@${username}`)
-                            }}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate(`/@${username}`)
+                            // }}
                           >
                             <div>
                               <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
@@ -419,40 +419,40 @@ const MobileAppFrame = (props) => {
                           <MenuLink
                             as={Link}
                             to="/"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleNavigate("/")
-                            }}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/")
+                            // }}
                           >
                             <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
                           </MenuLink>
                           <MenuLink 
                             as={Link}
                             to="/trending"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleNavigate("/trending")
-                            }}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
                           >
                             <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
                           </MenuLink>
                           <MenuLink 
                             as={Link}
                             to="/latest"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleNavigate("/trending")
-                            }}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
                           >
                             <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
                           </MenuLink>
                           <MenuLink 
                             as={Link}
                             to="/notifications"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleNavigate("/trending")
-                            }}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
                           >
                             <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
                             <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
