@@ -172,6 +172,15 @@ const useStyle = createUseStyles(theme => ({
   muted: {
     opacity: 0.2,
   },
+  profileContent: {
+    display: "flex",
+    justifyContent: "start",
+    width: '100% !important',
+    alignItems: "center",
+  },
+  marginRight15px:{
+    marginRight: "15px",
+  },
 }))
 
 
@@ -349,15 +358,59 @@ const PostList = React.memo((props) => {
       <div className={classNames(classes.wrapper, 'hehehehe')}>
         <div className={classNames(classes.row, muted || opacityUsers.includes(author) ? classes.muted : {})}>
           <Row>
-            <Col xs="auto" className={classes.colLeft}>
+            {/* <Col xs="auto" className={classes.colLeft}>
               <div style={leftWidth} className={classes.left} onClick={handleOpenContent}>
                 <Avatar height={avatarSize} author={author} />
               </div>
-            </Col>
+            </Col> */}
             <Col xs="auto" className={classes.colRight}>
               <div className={classNames('right-content', classes.right)} style={rightWidth}>
                 <div className={classes.content}>
-                  <label className={classes.name}>
+                  {/* new */}
+                <Row>
+                  <Col>
+                  <div>
+                  <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
+                    <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight15px)} />
+                    <label className={classes.name}>
+                    {!disableProfileLink && (
+                      <Link
+                        ref={popoverAnchor}
+                        to={!muted && !opacityActivated && disableOpacity ? authorLink : '#'}
+                        onMouseEnter={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? openPopOver : () => {}}
+                        onMouseLeave={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? closePopOver: () => {}}
+                        onClick={!muted && !opacityActivated ? closePopOver : () => {}}
+                      >
+                        {author}
+                      </Link>
+                    )}
+                    {disableProfileLink && (<span className={classes.spanName}>{author}</span>)}
+                  </label>
+                  
+                  </div>
+                  <strong className={classes.title}>{title}</strong>
+                  </div>
+                  
+                  </Col>
+                  <Col>
+                  {!muted && !opacityActivated && disableOpacity && (
+                    <div onClick={handleOpenContent}>
+                    
+                      {isContentRoute && (
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                      )}
+                      {!isContentRoute && (
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                      )}
+                      {/* <PostTags meta={meta} highlightTag={highlightTag} /> */}
+                    </div>
+                  )} 
+                  </Col>
+                </Row>
+                {/* old */}
+                  {/* <label className={classes.name}>
                     {!disableProfileLink && (
                       <Link
                         ref={popoverAnchor}
@@ -388,7 +441,7 @@ const PostList = React.memo((props) => {
                       )}
                       <PostTags meta={meta} highlightTag={highlightTag} />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {!muted && !opacityActivated && disableOpacity && (
                   <div className={classes.actionWrapper}>

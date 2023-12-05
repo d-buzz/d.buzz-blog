@@ -1217,140 +1217,140 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
     // render normally
 
     // youtube
-    const youtubeRegex = /(https?:\/\/)?((www\.)?(m\.)?youtube\.com|youtu\.?be)\/.+/gi
-    // twitter
-    const twitterRegex = /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))|(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*))))|(<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter\.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>)/gi
-    // vimm
-    const vimmRegex = /https?:\/\/(?:www\.)?vimm\.tv\/(?:c\/)?[\w-]+(?:\/embed(?:\?autoplay=\d)?)?/gi
-    // threespeak
-    const threeSpeakRegex =/(?:https?:\/\/(?:3speak\.online\/watch\?v=(.*)|3speak\.co\/watch\?v=(.*)|3speak\.tv\/watch\?v=(.*)))/gi
-    // rumble
-    const rumbleRegex = /(?:(?:https?:\/\/)?(?:www\.)?(?:(?:rumble\.com\/embed\/[a-zA-Z1-9-./?=-]+)))/gi
-    // odysee
-    const odyseeAndLbryRegex = /(?:(?:https?:\/\/)?(?:www\.)?(?:(?:odysee\.com|lbry\.tv)\/@(.*?)[^ ]\/([a-zA-Z0-9~!@#$%^&*()_+=.:-]*)))/gi
-    // bitchute
-    const bitchuteRegex = /(?:https?:\/\/(?:www\.bitchute\.com\/(?:video\/)?(?:embed\/)?([a-zA-Z0-9/]*)))/gi
-    // banned
-    const bannedRegex = /(?:https?:\/\/(?:(?:banned\.video\/watch\?id=(.*))))/gi
-    // dollarvigilante
-    const dollarVigilanteRegex = /(?:https?:\/\/(?:(?:(www\.)?vigilante\.tv\/w\/([a-zA-Z0-9/]*))))/gi
-    // dapplr
-    const dapplrRegex = /(?:https?:\/\/(?:(?:(www\.)?cdn\.dapplr\.in\/file\/dapplr-videos\/(.*)\/(.*))))/i
-    // freeworldnews
-    const freeWorldNewsRegex = /(?:https?:\/\/(?:(?:freeworldnews\.tv\/watch\?id=(.*))))/gi
-    // dbuzzvideos
-    const dbuzzVideosRegex = /https:\/\/ipfs\.io\/ipfs\/(.*\?dbuzz_video=)|https:\/\/ipfs\.io\/ipfs\/.*\?dbuzz_video=https:\/\/ipfs\.io\/ipfs\/([a-zA-Z0-9]+)/gi
-    // hivetube
-    const hiveTubeRegex = /(http|https?:\/\/)?(www\.)?([\w_-]+)(\.)([a-zA-Z]+)(\/w\/)([0-9A-Za-z]{22})([a-z?=0-9]*)/gi
-    // dtube
-    const dtubeRegex = /^(?:(https?:\/\/)?(?:www\.)?(emb\.)?d\.tube\/v\/.*\/[a-zA-Z0-9-]+)|(?:(https?:\/\/)?(?:www\.)?(d\.tube)\/#!\/v\/.*\/[a-zA-Z0-9-]+)/gi
-    // facebook
-    const facebookRegex = /^http(?:s?):\/\/(?:www\.|web\.|m\.)?facebook\.com\/(?:video\.php\?v=\d+|.*?\/videos\/\d+)|([A-z0-9]+)\/videos(?:\/[0-9A-z].+)?\/(\d+)(?:.+)?$/gi
-    // apple
-    const appleRegex = /(?:https?:\/\/(?:music\.apple\.com\/(.*))|(?:embed\.music\.apple\.com\/(.*)))/gi
+    // const youtubeRegex = /(https?:\/\/)?((www\.)?(m\.)?youtube\.com|youtu\.?be)\/.+/gi
+    // // twitter
+    // const twitterRegex = /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))|(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*))))|(<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter\.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>)/gi
+    // // vimm
+    // const vimmRegex = /https?:\/\/(?:www\.)?vimm\.tv\/(?:c\/)?[\w-]+(?:\/embed(?:\?autoplay=\d)?)?/gi
+    // // threespeak
+    // const threeSpeakRegex =/(?:https?:\/\/(?:3speak\.online\/watch\?v=(.*)|3speak\.co\/watch\?v=(.*)|3speak\.tv\/watch\?v=(.*)))/gi
+    // // rumble
+    // const rumbleRegex = /(?:(?:https?:\/\/)?(?:www\.)?(?:(?:rumble\.com\/embed\/[a-zA-Z1-9-./?=-]+)))/gi
+    // // odysee
+    // const odyseeAndLbryRegex = /(?:(?:https?:\/\/)?(?:www\.)?(?:(?:odysee\.com|lbry\.tv)\/@(.*?)[^ ]\/([a-zA-Z0-9~!@#$%^&*()_+=.:-]*)))/gi
+    // // bitchute
+    // const bitchuteRegex = /(?:https?:\/\/(?:www\.bitchute\.com\/(?:video\/)?(?:embed\/)?([a-zA-Z0-9/]*)))/gi
+    // // banned
+    // const bannedRegex = /(?:https?:\/\/(?:(?:banned\.video\/watch\?id=(.*))))/gi
+    // // dollarvigilante
+    // const dollarVigilanteRegex = /(?:https?:\/\/(?:(?:(www\.)?vigilante\.tv\/w\/([a-zA-Z0-9/]*))))/gi
+    // // dapplr
+    // const dapplrRegex = /(?:https?:\/\/(?:(?:(www\.)?cdn\.dapplr\.in\/file\/dapplr-videos\/(.*)\/(.*))))/i
+    // // freeworldnews
+    // const freeWorldNewsRegex = /(?:https?:\/\/(?:(?:freeworldnews\.tv\/watch\?id=(.*))))/gi
+    // // dbuzzvideos
+    // const dbuzzVideosRegex = /https:\/\/ipfs\.io\/ipfs\/(.*\?dbuzz_video=)|https:\/\/ipfs\.io\/ipfs\/.*\?dbuzz_video=https:\/\/ipfs\.io\/ipfs\/([a-zA-Z0-9]+)/gi
+    // // hivetube
+    // const hiveTubeRegex = /(http|https?:\/\/)?(www\.)?([\w_-]+)(\.)([a-zA-Z]+)(\/w\/)([0-9A-Za-z]{22})([a-z?=0-9]*)/gi
+    // // dtube
+    // const dtubeRegex = /^(?:(https?:\/\/)?(?:www\.)?(emb\.)?d\.tube\/v\/.*\/[a-zA-Z0-9-]+)|(?:(https?:\/\/)?(?:www\.)?(d\.tube)\/#!\/v\/.*\/[a-zA-Z0-9-]+)/gi
+    // // facebook
+    // const facebookRegex = /^http(?:s?):\/\/(?:www\.|web\.|m\.)?facebook\.com\/(?:video\.php\?v=\d+|.*?\/videos\/\d+)|([A-z0-9]+)\/videos(?:\/[0-9A-z].+)?\/(\d+)(?:.+)?$/gi
+    // // apple
+    // const appleRegex = /(?:https?:\/\/(?:music\.apple\.com\/(.*))|(?:embed\.music\.apple\.com\/(.*)))/gi
 
-    // tiktok
-    const tiktokRegex = /((http:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*))|(https:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*)))/gi
+    // // tiktok
+    // const tiktokRegex = /((http:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*))|(https:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*)))/gi
     
-    // soundcloud
-    const soundCloudRegex = /https?:\/\/(soundcloud\.com|snd\.sc)\/([a-zA-Z0-9&?=/_-]+)/gi
+    // // soundcloud
+    // const soundCloudRegex = /https?:\/\/(soundcloud\.com|snd\.sc)\/([a-zA-Z0-9&?=/_-]+)/gi
 
-    // buzz images
-    const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
+    // // buzz images
+    // const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
 
-    // render the non-embed urls
-    // youtube
-    content = content.replace(youtubeRegex, '')
-    // twitter
-    content = content.replace(twitterRegex, '')
-    // vimm
-    content = content.replace(vimmRegex, '')
-    // threespeak
-    content = content.replace(threeSpeakRegex, '')
-    // rumble
-    content = content.replace(rumbleRegex, '')
-    // odysee
-    content = content.replace(odyseeAndLbryRegex, '')
-    // bitchute
-    content = content.replace(bitchuteRegex, '')
-    // banned
-    content = content.replace(bannedRegex, '')
-    // dollarvigilante
-    content = content.replace(dollarVigilanteRegex, '')
-    // dapplr
-    content = content.replace(dapplrRegex, '')
-    // freeworldnews
-    content = content.replace(freeWorldNewsRegex, '')
-    // dbuzzvideos
-    content = content.replace(dbuzzVideosRegex, '')
-    // hivetube
-    content = content.replace(hiveTubeRegex, '')
-    // dtube
-    content = content.replace(dtubeRegex, '')
-    // facebook
-    content = content.replace(facebookRegex, '')
-    // apple
-    content = content.replace(appleRegex, '')
+    // // render the non-embed urls
+    // // youtube
+    // content = content.replace(youtubeRegex, '')
+    // // twitter
+    // content = content.replace(twitterRegex, '')
+    // // vimm
+    // content = content.replace(vimmRegex, '')
+    // // threespeak
+    // content = content.replace(threeSpeakRegex, '')
+    // // rumble
+    // content = content.replace(rumbleRegex, '')
+    // // odysee
+    // content = content.replace(odyseeAndLbryRegex, '')
+    // // bitchute
+    // content = content.replace(bitchuteRegex, '')
+    // // banned
+    // content = content.replace(bannedRegex, '')
+    // // dollarvigilante
+    // content = content.replace(dollarVigilanteRegex, '')
+    // // dapplr
+    // content = content.replace(dapplrRegex, '')
+    // // freeworldnews
+    // content = content.replace(freeWorldNewsRegex, '')
+    // // dbuzzvideos
+    // content = content.replace(dbuzzVideosRegex, '')
+    // // hivetube
+    // content = content.replace(hiveTubeRegex, '')
+    // // dtube
+    // content = content.replace(dtubeRegex, '')
+    // // facebook
+    // content = content.replace(facebookRegex, '')
+    // // apple
+    // content = content.replace(appleRegex, '')
 
-    //tiktok
-    content = content.replace(tiktokRegex, '')
+    // //tiktok
+    // content = content.replace(tiktokRegex, '')
     
-    // soundcloud
-    content = content.replace(soundCloudRegex, '')
+    // // soundcloud
+    // content = content.replace(soundCloudRegex, '')
 
-    // buzz images
-    content = content.replace(dbuzzImageRegex, '')
+    // // buzz images
+    // content = content.replace(dbuzzImageRegex, '')
 
 
-    const checkForMarkdownDefaults = (n) => {
-      return !n.startsWith('[') && !n.startsWith('(')
-    }
+    // const checkForMarkdownDefaults = (n) => {
+    //   return !n.startsWith('[') && !n.startsWith('(')
+    // }
 
-    const checkForImage = (n) => {
-      return !n.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) && !n.match(/ipfs\.io\/ipfs\/[a-zA-Z0-9]+/gi)
-    }
+    // const checkForImage = (n) => {
+    //   return !n.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) && !n.match(/ipfs\.io\/ipfs\/[a-zA-Z0-9]+/gi)
+    // }
 
-    const checkForValidURL = (n) => {
-      return !n.startsWith('@')
-      && !n.startsWith('#')
-      && !n.startsWith('"')
-      && checkForMarkdownDefaults(n)
-    }
+    // const checkForValidURL = (n) => {
+    //   return !n.startsWith('@')
+    //   && !n.startsWith('#')
+    //   && !n.startsWith('"')
+    //   && checkForMarkdownDefaults(n)
+    // }
 
-    const checkForValidUserName = (n) => {
-      return n.startsWith('@')
-    }
+    // const checkForValidUserName = (n) => {
+    //   return n.startsWith('@')
+    // }
 
-    const checkForValidHashTag = (n) => {
-      return n.startsWith('#')
-    }
+    // const checkForValidHashTag = (n) => {
+    //   return n.startsWith('#')
+    // }
 
-    const checkForValidCryptoTicker = (n) => {
-      return n.startsWith('$')
-    }
+    // const checkForValidCryptoTicker = (n) => {
+    //   return n.startsWith('$')
+    // }
 
-    // // render content (supported for all browsers)
-    content = content
-      .replace(/("\S+)|(\[\S+)|(\(\S+)|(@\S+)|(#\S+)|((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){0}?([\w.,@?^=%&:/~+#!-$-]+)?(\/+[\w.,@?^=%&:/~+#!-$-]*)*([a-zA-Z0-9/])+/gi, n => checkForImage(n) && checkForValidURL(n) ? `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>` : n)
-      // // render markdown links  
-      .replace(/\[.*?\]\((.+?)\)/gi, (_m, n) => `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>`)
-      // // render usernames
-      .replace(/([a-zA-Z0-9/-]@\S+)|@([A-Za-z0-9-]+\.?[A-Za-z0-9-]+)/gi, n => checkForValidUserName(n) ? `<b><a href=${window.location.origin}/${n.toLowerCase()}>${n}</a></b>` : n)
-      //   // render hashtags 
-      .replace(/([a-zA-Z0-9/-]#\S+)|#([A-Za-z\d-]+)/gi, n => checkForValidHashTag(n) ? `<b><a href='${window.location.origin}/tags?q=${n.replace('#', '').toLowerCase()}'>${n}</a></b>` : n)
-      // // render crypto tickers
-      .replace(/([a-zA-Z0-9/-]\$\S+)|\$([A-Za-z-]+)/gi, n => checkForValidCryptoTicker(n) && getCoinTicker(n.replace('$', '').toLowerCase()) ? `<b title=${getCoinTicker(n.replace('$', '').toLowerCase()).name}><a href=https://www.coingecko.com/en/coins/${getCoinTicker(n.replace('$', '').toLowerCase()).id}/usd#panel>${n}</a></b>` : n)
-      // // render markdown images
-      .replace(/(!\[[^\]]*?\])\(\)/gi, '')
-      // hide watch video on dbuzz
-      .replace(/\[WATCH THIS VIDEO ON DBUZZ]\(.+\)/gi, '')
+    // // // render content (supported for all browsers)
+    // content = content
+    //   .replace(/("\S+)|(\[\S+)|(\(\S+)|(@\S+)|(#\S+)|((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){0}?([\w.,@?^=%&:/~+#!-$-]+)?(\/+[\w.,@?^=%&:/~+#!-$-]*)*([a-zA-Z0-9/])+/gi, n => checkForImage(n) && checkForValidURL(n) ? `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>` : n)
+    //   // // render markdown links  
+    //   .replace(/\[.*?\]\((.+?)\)/gi, (_m, n) => `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>`)
+    //   // // render usernames
+    //   .replace(/([a-zA-Z0-9/-]@\S+)|@([A-Za-z0-9-]+\.?[A-Za-z0-9-]+)/gi, n => checkForValidUserName(n) ? `<b><a href=${window.location.origin}/${n.toLowerCase()}>${n}</a></b>` : n)
+    //   //   // render hashtags 
+    //   .replace(/([a-zA-Z0-9/-]#\S+)|#([A-Za-z\d-]+)/gi, n => checkForValidHashTag(n) ? `<b><a href='${window.location.origin}/tags?q=${n.replace('#', '').toLowerCase()}'>${n}</a></b>` : n)
+    //   // // render crypto tickers
+    //   .replace(/([a-zA-Z0-9/-]\$\S+)|\$([A-Za-z-]+)/gi, n => checkForValidCryptoTicker(n) && getCoinTicker(n.replace('$', '').toLowerCase()) ? `<b title=${getCoinTicker(n.replace('$', '').toLowerCase()).name}><a href=https://www.coingecko.com/en/coins/${getCoinTicker(n.replace('$', '').toLowerCase()).id}/usd#panel>${n}</a></b>` : n)
+    //   // // render markdown images
+    //   .replace(/(!\[[^\]]*?\])\(\)/gi, '')
+    //   // hide watch video on dbuzz
+    //   .replace(/\[WATCH THIS VIDEO ON DBUZZ]\(.+\)/gi, '')
 
-    return <BuzzRenderer
-      key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-      content={content}
-      className={classNames(markdownClass, assetClass, classes.inputArea)}
-      skipTags={['br']}
-    />
+    // return <BuzzRenderer
+    //   key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+    //   content={content}
+    //   className={classNames(markdownClass, assetClass, classes.inputArea)}
+    //   skipTags={['br']}
+    // />
   }
 
 }
