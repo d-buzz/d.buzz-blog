@@ -540,10 +540,13 @@ const Post = (props) => {
     <Container>
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
-          <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+          {!isMobile && (
+            <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+          )}
           <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
         </div>
-        <div className={classNames(isMobile? classes.flexDirectionColumn:'', isMobile?classes.paddingLeft50:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
+        {/* <div className={classNames(isMobile? classes.flexDirectionColumn:'', isMobile?classes.paddingLeft50:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}> */}
+        <div className={classNames(isMobile? classes.flexDirectionColumn:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           <div className={classNames(classes.positionRelative, classes.cursorPointer  )}> 
             <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
             {showUploadIcon && (
@@ -588,7 +591,9 @@ const Post = (props) => {
               className={classes.preparingMedia}>{imagesLength === 1 ? "Preparing Image" : `Preparing ${imagesLength} Images`}</div>}
         </div>)}
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
-        <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+        {!isMobile && (
+          <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+        )}
         <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
           <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
             {/* juneroy */}

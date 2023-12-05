@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import {
   // MarkdownViewer,
-  PostTags,
+  // PostTags,
   PostActions,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
@@ -91,6 +91,7 @@ const useStyle = createUseStyles(theme => ({
   username: {
     color: '#657786',
     paddingBottom: 0,
+    fontSize:'13px',
   },
   post: {
     color: '#14171a',
@@ -177,9 +178,10 @@ const useStyle = createUseStyles(theme => ({
     justifyContent: "start",
     width: '100% !important',
     alignItems: "center",
+    marginBottom: '15px',
   },
-  marginRight15px:{
-    marginRight: "15px",
+  marginRight5px:{
+    marginRight: "5px",
   },
 }))
 
@@ -195,12 +197,12 @@ const PostList = React.memo((props) => {
     created,
     upvotes,
     replyCount,
-    meta,
+    // meta,
     active_votes = [],
     unguardedLinks,
     user = {},
     profileRef = null,
-    highlightTag = null,
+    // highlightTag = null,
     title = null,
     disableProfileLink = false,
     disableUserMenu = false,
@@ -256,8 +258,9 @@ const PostList = React.memo((props) => {
 
   const { width } = useWindowDimensions()
 
-  const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : 580 })
-  const [avatarSize, setAvatarSize] = useState(isMobile ? 45 : 50)
+  // const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : "100%" })
+  const [rightWidth, setRightWidth] = useState({ width: "100%" })
+  const [avatarSize, setAvatarSize] = useState(isMobile ? 45 : 25)
   const [leftWidth, setLeftWidth] = useState({ width: isMobile ? 50 : 60 })
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -267,9 +270,9 @@ const PostList = React.memo((props) => {
   useEffect(() => {
     if (!isMobile) {
       if (width >= 676) {
-        setAvatarSize(50)
+        setAvatarSize(25)
         setLeftWidth({ width:60 })
-        setRightWidth({ width:580 })
+        setRightWidth({ width:"100%" })
       } else {
         setLeftWidth({ width: 50 })
         setAvatarSize(45)
@@ -363,53 +366,70 @@ const PostList = React.memo((props) => {
                 <Avatar height={avatarSize} author={author} />
               </div>
             </Col> */}
-            <Col xs="auto" className={classes.colRight}>
+            {/* <Col xs="auto" className={classes.colRight}> */}
+            <Col xs="auto">
               <div className={classNames('right-content', classes.right)} style={rightWidth}>
                 <div className={classes.content}>
                   {/* new */}
-                <Row>
-                  <Col>
-                  <div>
-                  <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
-                    <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight15px)} />
-                    <label className={classes.name}>
-                    {!disableProfileLink && (
-                      <Link
-                        ref={popoverAnchor}
-                        to={!muted && !opacityActivated && disableOpacity ? authorLink : '#'}
-                        onMouseEnter={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? openPopOver : () => {}}
-                        onMouseLeave={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? closePopOver: () => {}}
-                        onClick={!muted && !opacityActivated ? closePopOver : () => {}}
-                      >
-                        {author}
-                      </Link>
-                    )}
-                    {disableProfileLink && (<span className={classes.spanName}>{author}</span>)}
-                  </label>
-                  
-                  </div>
-                  <strong className={classes.title}>{title}</strong>
-                  </div>
-                  
-                  </Col>
-                  <Col>
-                  {!muted && !opacityActivated && disableOpacity && (
-                    <div onClick={handleOpenContent}>
+                  <Row>
+                    <Col className='col-8'>
+                      <div>
+                        <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
+                          <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight5px)} />
+                          <div>
+                            <label className={classes.name}>
+                              {!disableProfileLink && (
+                                <Link
+                                  ref={popoverAnchor}
+                                  to={!muted && !opacityActivated && disableOpacity ? authorLink : '#'}
+                                  onMouseEnter={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? openPopOver : () => {}}
+                                  onMouseLeave={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? closePopOver: () => {}}
+                                  onClick={!muted && !opacityActivated ? closePopOver : () => {}}
+                                >
+                                  {author}
+                                </Link>
+                              )}
+                              {disableProfileLink && (<span className={classes.spanName}>{author}</span>)}
+                            </label>
+                            <label style={{marginBottom:0}} className={classes.username}>
+                              &nbsp;&bull;&nbsp;{moment(`${ !searchListMode ? `${created}Z` : created }`).local().fromNow()}
+                            </label>
+                          </div>
+                          
+                        
+                        </div>
+                        <div onClick={handleOpenContent}>
+                          <div>
+                            <strong className={classes.title}>{title}</strong>
+                          </div>
+                          {!isMobile && (
+                            <div>
+                              <Renderer showText={true} showImage={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            </div>
+                          )}
+                        </div>
                     
-                      {isContentRoute && (
-                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-                      )}
-                      {!isContentRoute && (
-                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
-                      )}
-                      {/* <PostTags meta={meta} highlightTag={highlightTag} /> */}
-                    </div>
-                  )} 
-                  </Col>
-                </Row>
-                {/* old */}
+                      </div>
+                    
+                    </Col>
+                    <Col className='col-4'>
+                      {!muted && !opacityActivated && disableOpacity && (
+                        <div onClick={handleOpenContent}>
+                        
+                          {isContentRoute && (
+                            // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            <Renderer showText={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                          )}
+                          {!isContentRoute && (
+                            // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            <Renderer showText={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                          )}
+                          {/* <PostTags meta={meta} highlightTag={highlightTag} /> */}
+                        </div>
+                      )} 
+                    </Col>
+                  </Row>
+                  {/* old */}
                   {/* <label className={classes.name}>
                     {!disableProfileLink && (
                       <Link
@@ -427,7 +447,7 @@ const PostList = React.memo((props) => {
                   <label className={classes.username}>
                     &nbsp;&bull;&nbsp;{moment(`${ !searchListMode ? `${created}Z` : created }`).local().fromNow()}
                   </label>
-                 
+                
                   {!muted && !opacityActivated && disableOpacity && (
                     <div onClick={handleOpenContent}>
                       <strong className={classes.title}>{title}</strong>

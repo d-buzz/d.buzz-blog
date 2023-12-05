@@ -21,9 +21,9 @@ import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon, CommentTwoIcon,CloseIcon,HeartIcon, HeartIconRed,
-  HiveIcon,
-  BurnIcon,
+import { Avatar, CommentTwoIcon,CloseIcon,HeartIcon, HeartIconRed,
+  // HiveIcon,
+  // BurnIcon,
   ContainedButton,
   Spinner,
 } from 'components/elements'
@@ -880,13 +880,13 @@ const Content = (props) => {
   }
 
   let payoutAdditionalStyle = {}
-  let iconDetails = {}
+  // let iconDetails = {}
 
   if (parseFloat(max_accepted_payout) === 0) {
     payoutAdditionalStyle = { textDecoration: 'line-through' }
-    iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
+    // iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
   }else{
-    iconDetails = <HiveIcon style={{ paddingLeft: 5, color: '#000' }}/>
+    // iconDetails = <HiveIcon style={{ paddingLeft: 5, color: '#000' }}/>
   }
 
   const getPayoutDate = (date) => {
@@ -962,6 +962,7 @@ const Content = (props) => {
               
               {/* <br /> */}
               <React.Fragment>
+                <h2 style={{marginBottom:'25px'}}><strong>{title}</strong></h2>
                 {depth !== 0 && parent_author !== null && (
                   <Row>
                     <Col>
@@ -1047,17 +1048,34 @@ const Content = (props) => {
                       <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                     </div>
                    
-                    <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
-                    </div>
+                    {!isMobile &&(
+                      <div className={classNames(classes.displayFlex)}>
+                      
+                        <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                          <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                        </div>
+                      </div>
+                    )}
                   </div>
+                  {isMobile &&(
+                    <div className={classNames(classes.displayFlex)}>
+                    
+                      <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                        <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                      </div>
+                    </div>
+                  )}
                   <div className={classNames(classes.displayFlex)}>
                     <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                     
-                      <Chip
+                      <span className={classes.payout} style={payoutAdditionalStyle}>
+                        ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                        {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                        {!payout && isMobile ? '0.00' : ''}&nbsp;
+                        {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                      </span>
+                      {/* <Chip
                         className={classes.chip}
                         size='small'
-                        icon={iconDetails}
                         label={(
                           <span className={classes.payout} style={payoutAdditionalStyle}>
                             ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
@@ -1068,11 +1086,11 @@ const Content = (props) => {
                         )}
                         color="#000"
                         variant="outlined"
-                      />
+                      /> */}
                     </div>
-                    <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
+                    {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
                       <MoreIcon />
-                    </div>
+                    </div> */}
                    
                   </div>
                 </div>
@@ -1080,7 +1098,7 @@ const Content = (props) => {
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
                   )}
-                  <strong>{title}</strong>
+                 
                   <MarkdownViewer content={originalContent} minifyAssets={false} />
                 </div>
                 <PostTags meta={meta} />
@@ -1097,20 +1115,41 @@ const Content = (props) => {
             <div className={classes.wrapper}>
               <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
                 <div className={classNames(classes.displayFlex)}>
+                      
                   <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                     {!loading && getupvoted && (<HeartIconRed />)}
                     {!loading && !getupvoted && (<HeartIcon />)}
                     {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
                     <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                   </div>
-                  <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                    <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
-                  </div>
+                  
+                  {!isMobile &&(
+                    <div className={classNames(classes.displayFlex)}>
+                    
+                      <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                        <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                      </div>
+                    </div>
+                  )}
                 </div>
+                {isMobile &&(
+                  <div className={classNames(classes.displayFlex)}>
+                  
+                    <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                    </div>
+                  </div>
+                )}
                 <div className={classNames(classes.displayFlex)}>
                   <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
                     {/* <FavoritesIcon size={19}  />  */}
-                    <Chip
+                    <span className={classes.payout} style={payoutAdditionalStyle}>
+                      ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                      {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                      {!payout && isMobile ? '0.00' : ''}&nbsp;
+                      {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                    </span>
+                    {/* <Chip
                       className={classes.chip}
                       size='small'
                       icon={iconDetails}
@@ -1124,14 +1163,14 @@ const Content = (props) => {
                       )}
                       color="#000"
                       variant="outlined"
-                    />
+                    /> */}
                   </div>
                   {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
                     <ShareIcon  size={19}  />  
                   </div> */}
-                  <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
+                  {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
                     <MoreIcon />
-                  </div>
+                  </div> */}
                   
                 </div>
               </div>

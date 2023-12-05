@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import React, { useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 import { createUseStyles } from 'react-jss'
 import { useHistory, useLocation } from 'react-router'
 const useStyles = createUseStyles(theme => ({
@@ -112,7 +113,7 @@ const Tabs = () => {
   }, [])
 
   return (
-    <div className={classNames(isTop?classes.top57:classes.top0, isTop? classes.paddingTop24:'', classes.positionSticky, classes.backGroundWhite, !isTop?classes.zindex1050:'' )}>
+    <div className={classNames(isTop?classes.top57:classes.top0, isTop? classes.paddingTop24:'', classes.positionSticky, classes.backGroundWhite, !isTop || isMobile?classes.zindex1050:'' )}>
     	{/* 2 div
         1 for padding
         1 for tabs content

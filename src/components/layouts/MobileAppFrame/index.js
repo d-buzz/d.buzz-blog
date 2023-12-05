@@ -46,6 +46,7 @@ import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { useWindowDimensions } from 'services/helper'
 import classNames from 'classnames'
+import Tabs from '../../common/Tabs'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -121,9 +122,21 @@ const MobileAppFrame = (props) => {
   const [disableSearchTips, setDisableSearchTips] = useState(false)
   const [searchkey, setSearchkey] = useState(query)
   const [mainWidth, setMainWidth] = useState(400)
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
+  const [isSearchPage, setIsSearchPage] = useState(false)
   let isProfileRoute = false
   let isContentRoute = false
   const [posting, setPosting] = useState(false)
+
+  useEffect(() => {
+    if (pathname === '/create-post') {
+      // setHideRightSideBar(true)
+      setIsCreatePostPage(true)
+    }
+    if (pathname === '/search/people') {
+      setIsSearchPage(true)
+    }
+  },[pathname])
 
   useEffect(() => {
   },[postContent])
@@ -483,8 +496,9 @@ const MobileAppFrame = (props) => {
               <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
               <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
             </Navbar>
-          
+                 
             <Row>
+              {!isCreatePostPage && !isSearchPage && (<Tabs/>)}
               {!isProfileRoute && !isContentRoute && (
                 <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
                   <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
