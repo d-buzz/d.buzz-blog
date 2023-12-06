@@ -359,7 +359,7 @@ const PostList = React.memo((props) => {
 
   return (
     <React.Fragment>
-      <div className={classNames(classes.wrapper, 'hehehehe')}>
+      <div className={classNames(classes.wrapper)}>
         <div className={classNames(classes.row, muted || opacityUsers.includes(author) ? classes.muted : {})}>
           <Row>
             {/* <Col xs="auto" className={classes.colLeft}>
@@ -368,12 +368,12 @@ const PostList = React.memo((props) => {
               </div>
             </Col> */}
             {/* <Col xs="auto" className={classes.colRight}> */}
-            <Col xs="auto">
+            <Col xs="auto" style={{width: "100%"}}>
               <div className={classNames('right-content', classes.right)} style={rightWidth}>
                 <div className={classes.content}>
                   {/* new */}
                   <Row>
-                    <Col className='col-8'>
+                    <Col className='col-9'>
                       <div>
                         <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
                           <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight5px)} />
@@ -413,7 +413,7 @@ const PostList = React.memo((props) => {
                       </div>
                     
                     </Col>
-                    <Col className='col-4'>
+                    <Col className='col-3'>
                       {!muted && !opacityActivated && disableOpacity && (
                         <div onClick={handleOpenContent}>
                         

@@ -1334,23 +1334,45 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
 
       // // render content (supported for all browsers)
       content = content
-        .replace(/("\S+)|(\[\S+)|(\(\S+)|(@\S+)|(#\S+)|((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){0}?([\w.,@?^=%&:/~+#!-$-]+)?(\/+[\w.,@?^=%&:/~+#!-$-]*)*([a-zA-Z0-9/])+/gi, n => checkForImage(n) && checkForValidURL(n) ? `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>` : n)
+        .replace(/("\S+)|(\[\S+)|(\(\S+)|(@\S+)|(#\S+)|((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){0}?([\w.,@?^=%&:/~+#!-$-]+)?(\/+[\w.,@?^=%&:/~+#!-$-]*)*([a-zA-Z0-9/])+/gi, n => checkForImage(n) && checkForValidURL(n) ? `${truncateString(n, 25)}` : n)
         // // render markdown links  
-        .replace(/\[.*?\]\((.+?)\)/gi, (_m, n) => `<span class="hyperlink" id="${n}">${truncateString(n, 25)}</span>`)
+        .replace(/\[.*?\]\((.+?)\)/gi, (_m, n) => `${truncateString(n, 25)}`)
         // // render usernames
-        .replace(/([a-zA-Z0-9/-]@\S+)|@([A-Za-z0-9-]+\.?[A-Za-z0-9-]+)/gi, n => checkForValidUserName(n) ? `<b><a href=${window.location.origin}/${n.toLowerCase()}>${n}</a></b>` : n)
+        .replace(/([a-zA-Z0-9/-]@\S+)|@([A-Za-z0-9-]+\.?[A-Za-z0-9-]+)/gi, n => checkForValidUserName(n) ? `${n}` : n)
         //   // render hashtags 
-        .replace(/([a-zA-Z0-9/-]#\S+)|#([A-Za-z\d-]+)/gi, n => checkForValidHashTag(n) ? `<b><a href='${window.location.origin}/tags?q=${n.replace('#', '').toLowerCase()}'>${n}</a></b>` : n)
+        .replace(/([a-zA-Z0-9/-]#\S+)|#([A-Za-z\d-]+)/gi, n => checkForValidHashTag(n) ? `${n}` : n)
         // // render crypto tickers
-        .replace(/([a-zA-Z0-9/-]\$\S+)|\$([A-Za-z-]+)/gi, n => checkForValidCryptoTicker(n) && getCoinTicker(n.replace('$', '').toLowerCase()) ? `<b title=${getCoinTicker(n.replace('$', '').toLowerCase()).name}><a href=https://www.coingecko.com/en/coins/${getCoinTicker(n.replace('$', '').toLowerCase()).id}/usd#panel>${n}</a></b>` : n)
+        .replace(/([a-zA-Z0-9/-]\$\S+)|\$([A-Za-z-]+)/gi, n => checkForValidCryptoTicker(n) && getCoinTicker(n.replace('$', '').toLowerCase()) ? `${n}` : n)
         // // render markdown images
         .replace(/(!\[[^\]]*?\])\(\)/gi, '')
         // hide watch video on dbuzz
         .replace(/\[WATCH THIS VIDEO ON DBUZZ]\(.+\)/gi, '')
+        .replace(/\[Watch on 3Speak\]\(\)/g, '')
+        .replace(/:dbuzz-images-container:/g, '')
+        .replace(/:dbuzz-embed-container:/g, '')
+        .replace(/:dbuzz-videos-container:/g, '')
+        .replace(/:dbuzz-twitter-embed-container:/g, '')
+        .replace(/:dbuzz-tiktok-embed-container:/g, '')
+        // .replace(/\!\[.*?\]/g, '')
+        .replace(/\n/g, '')
+        .replace(/[!@#$%^&*()]/g, '')
+        .replace(/<\/?hr>/g, '')
+        .replace(/\[[^\]]*\]/g, '')
+        .replace(/\bhttps:\/\/\S*/g, '')
+        .replace(/\b>>\s*\S*/g, '')
+        .replace(/<center>▶️ .*?<\/center>/g, '')
+        .replace(/<liketuimages><center>.*?<\/center>/g, '')
+
+      const maxLength = 100
+      console.log("content.length ",content.length )
+      const truncatedString = content.length > maxLength
+        ? content.substring(0, maxLength - 3) + '...'
+        : content
+      console.log("truncatedString ",truncatedString )
 
       return <BuzzRenderer
         key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-        content={content}
+        content={truncatedString}
         className={classNames(markdownClass, assetClass, classes.inputArea)}
         skipTags={['br']}
       />

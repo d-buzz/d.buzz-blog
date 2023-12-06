@@ -54,6 +54,7 @@ class InfiniteList extends PureComponent {
     }
 
     const rowRenderer = ({ index, parent, key, style }) => {
+      // const newStyle = {...style, height: 'auto'}
       const newStyle = {...style, height: 'auto'}
       return (
         <CellMeasurer
