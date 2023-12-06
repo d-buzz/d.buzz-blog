@@ -127,19 +127,19 @@ const Tabs = () => {
 			 <div className={classNames( classes.height43, classes.boxShadow242, classes.overFlowHidden, classes.positionRelative, classes.displayBLock)}>
           <div className={classNames(classes.padding2by0, classes.overFlowYHidden, classes.alignItemsCenter, classes.displayFlex)}>
           	<div className={classNames(classes.displayFlex)}>
-              <div onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending' || pathname === '/'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending' || pathname === '/'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Trending
               </div>
-              <div onClick={() => redirectPage('/following')} className={classNames(classes.cursorPointer,pathname === '/following'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/following')} className={classNames(classes.cursorPointer,pathname === '/following'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Following
               </div>
-              <div onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Latest
               </div>
-              <div onClick={() => redirectPage('/news')} className={classNames(classes.cursorPointer,pathname === '/news'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/news')} className={classNames(classes.cursorPointer,pathname === '/news'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     News
               </div>
-              <div onClick={() => redirectPage('/hive')} className={classNames(classes.cursorPointer,pathname === '/hive'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/hive')} className={classNames(classes.cursorPointer,pathname === '/hive'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Hive
               </div>
             </div>

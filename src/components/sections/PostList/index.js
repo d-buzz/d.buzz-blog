@@ -79,7 +79,8 @@ const useStyle = createUseStyles(theme => ({
     height: 'max-content',
   },
   name: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily:'RobotoRegular',
     paddingRight: 5,
     paddingBottom: 0,
     marginBottom: 0,
