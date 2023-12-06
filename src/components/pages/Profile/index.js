@@ -84,9 +84,9 @@ const useStyles = createUseStyles(theme => ({
   },
   weblink: {
     wordWrap: 'break-word',
-    color: '#d32f2f',
+    // color: '#d32f2f',
     '&:hover': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   fullName: {
@@ -97,7 +97,6 @@ const useStyles = createUseStyles(theme => ({
     ...theme.font,
   },
 }))
-
 
 
 const Profile = (props) => {
@@ -139,7 +138,7 @@ const Profile = (props) => {
   }, [width])
 
   useEffect(() => {
-    console.log(profile);
+    console.log(profile)
   }, [profile])
   
   // const { username: loginuser, isAuthenticated } = user
@@ -242,7 +241,7 @@ const Profile = (props) => {
     <React.Fragment>
       <HelmetGenerator page='Profile' />
       <Container>
-      <ProfileSkeleton loading={loading} />
+        <ProfileSkeleton loading={loading} />
         {!loading && (
           <React.Fragment>
             {isMobile && (
@@ -283,11 +282,11 @@ const Profile = (props) => {
                         <Col xs="auto">
                           <p className={classes.paragraph}>
                             {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
-                              <b>{following}</b> Following
+                            <b>{following}</b> Following
                             {/* </Link>  */}
                             &nbsp;
                             {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
-                              <b>{followers}</b> Follower
+                            <b>{followers}</b> Follower
                             {/* </Link>  */}
                             &nbsp;
                           </p>
@@ -347,11 +346,11 @@ const Profile = (props) => {
                       <Col xs="auto">
                         <p className={classes.paragraph}>
                           {/* <Link className={classes.followLinks} to={`/@${username}/follow/following`}> */}
-                            <b>{following}</b> Following
+                          <b>{following}</b> Following
                           {/* </Link>  */}
                           &nbsp;
                           {/* <Link className={classes.followLinks} to={`/@${username}/follow/followers`}> */}
-                            <b>{followers}</b> Follower
+                          <b>{followers}</b> Follower
                           {/* </Link>  */}
                           &nbsp;
                         </p>
@@ -416,6 +415,6 @@ const mapDispatchToProps = (dispatch) => ({
     openMuteDialog,
     getAccountCommentsRequest,
     clearAccountComments,
-  }, dispatch)
+  }, dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

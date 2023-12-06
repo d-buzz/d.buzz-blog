@@ -4,8 +4,11 @@ const AppFrame = React.lazy(() => import('./components/layouts/AppFrame'))
 const Home = React.lazy(() => import('./components/pages/Home'))
 const Trending = React.lazy(() => import('./components/pages/Trending'))
 const Latest = React.lazy(() => import('./components/pages/Latest'))
+const Hive = React.lazy(() => import('./components/pages/Hive'))
+const News = React.lazy(() => import('./components/pages/News'))
 const Content = React.lazy(() => import('./components/pages/Content'))
 const Profile = React.lazy(() => import('./components/pages/Profile'))
+const Post = React.lazy(() => import('./components/pages/Post'))
 const AccountBlog = React.lazy(() => import('./components/sections/AccountBlog'))
 const AccountReplies = React.lazy(() => import('./components/sections/AccountReplies'))
 const AccountComments = React.lazy(() => import('./components/sections/AccountComments'))
@@ -14,7 +17,7 @@ const Tags = React.lazy(() => import('./components/pages/Tags'))
 const Search = React.lazy(() => import('./components/pages/Search'))
 const SearchPosts = React.lazy(() => import('./components/sections/SearchPosts'))
 const SearchPeople = React.lazy(() => import('./components/sections/SearchPeople'))
-
+// const CreateBuzzForm = React.lazy(() => import('./components/sections/CreateBuzzForm'))
 
   
 const routes =  [
@@ -24,7 +27,17 @@ const routes =  [
       {
         path: '/',
         exact: true,
+        component: Trending,
+      },
+      {
+        path: '/following',
+        exact: true,
         component: Home,
+      },
+      {
+        path: '/create-post',
+        exact: true,
+        component: Post,
       },
       {
         path: '/trending',
@@ -35,6 +48,16 @@ const routes =  [
         path: '/latest',
         exact: true,
         component: Latest,
+      },
+      {
+        path: '/hive',
+        exact: true,
+        component: Hive,
+      },
+      {
+        path: '/news',
+        exact: true,
+        component: News,
       },
       {
         path: '/@:username/c/:permlink',

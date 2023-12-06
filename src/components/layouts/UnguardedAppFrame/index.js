@@ -7,10 +7,17 @@ import { createUseStyles } from 'react-jss'
 import { renderRoutes } from 'react-router-config'
 import { useLocation } from 'react-router-dom'
 import { useWindowDimensions } from 'services/helper'
+import classNames from 'classnames'
 
 const useStyles = createUseStyles(theme => ({
   main: {
     minHeight: '100vh',
+  },
+  marginTop60:{
+    marginTop: "60px",
+  },
+  marginTop100:{
+    marginTop: "100px",
   },
   inner: {
     width: '98%',
@@ -34,6 +41,27 @@ const useStyles = createUseStyles(theme => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
+  marginLeft0:{
+    marginLeft: 0,
+  },
+  marginRight0:{
+    marginRight: 0,
+  },
+  displayFlex:{
+    display: 'flex',
+  },
+  justifyContentCenter:{
+    justifyContent: 'center',
+  },
+  alignItemsCenter:{
+    alignItems: 'center',
+  },
+  minWidth100:{
+    minWidth: '100%',
+  },
+  borderLeft1grey:{
+    borderLeft: '1px solid #F2F2F2',
+  },
 }))
 
 const UnguardedAppFrame = (props) => {
@@ -46,6 +74,7 @@ const UnguardedAppFrame = (props) => {
   const { width } = useWindowDimensions()
   let isProfileRoute = false
   let isContentRoute = false
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -54,29 +83,41 @@ const UnguardedAppFrame = (props) => {
   }
 
   useEffect(() => {
+    if (pathname === '/create-post') {
+      setHideRightSideBar(true)
+      setIsCreatePostPage(true)
+    }
+  },[pathname])
+
+  useEffect(() => {
     if (width < 800) {
       setMainWidth(12)
       setHideRightSideBar(true)
     } else {
       setMainWidth(8)
-      setHideRightSideBar(false)
+      if (pathname === '/create-post') {
+        setHideRightSideBar(true)
+        setIsCreatePostPage(true)
+      }else{
+        setHideRightSideBar(false)
+      }
     }
-  }, [width])
+  }, [width, pathname])
 
   return (
     <React.Fragment>
-      <Row>
+      <Row className={classNames(isCreatePostPage?classes.displayFlex:'', isCreatePostPage?classes.justifyContentCenter:'', isCreatePostPage?classes.alignItemsCenter:'')}>
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
                   {renderRoutes(route.routes)}
                 </React.Fragment>
               </div>
             </Col>
             {!hideRightSideBar && (
-              <Col xs={4}>
+              <Col className={classes.borderLeft1grey}  xs={4}>
                 <Sticky>
                   {({ style }) => (
                     <div style={{ ...style, paddingTop: 60 }}>
@@ -107,6 +148,7 @@ const UnguardedAppFrame = (props) => {
           </Col>
         )}
       </Row>
+      
     </React.Fragment>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import Box from '@material-ui/core/Box'
 import IconButton from '@material-ui/core/IconButton'
@@ -87,7 +87,7 @@ const useStyles = createUseStyles(theme => ({
   note: {
     fontSize: 14,
     fontFamily: 'Segoe-Bold',
-    color: '#d32f2f',
+    // color: '#d32f2f',
   },
   actionLabels: {
     fontFamily: 'Segoe-Bold',
@@ -118,7 +118,7 @@ const useStyles = createUseStyles(theme => ({
     display: 'inline-block',
   },
   payoutNote: {
-    color: '#d32f2f',
+    // color: '#d32f2f',
     fontSize: 12,
     fontWeight: 'bold',
     display: 'block',
@@ -152,7 +152,7 @@ const tooltips = {
 
 const CreateBuzzForm = (props) => {
   const classes = useStyles()
-  const inputRef = useRef(null)
+  // const inputRef = useRef(null)
   const [wordCount, setWordCount] = useState(0)
   const [payout, setPayout] = useState(1.000)
   const [openPayoutDisclaimer, setOpenPayoutDisclaimer] = useState(false)
@@ -236,7 +236,7 @@ const CreateBuzzForm = (props) => {
     target.click()
   }
 
-
+  // eslint-disable-next-line 
   const handleFileSelectChange = (event) => {
     const files = event.target.files[0]
     uploadFileRequest(files).then((image) => {
@@ -363,7 +363,7 @@ const CreateBuzzForm = (props) => {
                 className={classes.float}
                 onClick={handleClickPublishPost}
               />
-              <input
+              {/* <input
                 id="file-upload"
                 type='file'
                 name='image'
@@ -372,7 +372,7 @@ const CreateBuzzForm = (props) => {
                 ref={inputRef}
                 onChange={handleFileSelectChange}
                 style={{ display: 'none' }}
-              />
+              /> */}
               <label htmlFor="file-upload">
                 <IconButton
                   size="medium"

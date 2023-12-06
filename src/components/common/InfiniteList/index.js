@@ -54,6 +54,8 @@ class InfiniteList extends PureComponent {
     }
 
     const rowRenderer = ({ index, parent, key, style }) => {
+      // const newStyle = {...style, height: 'auto'}
+      const newStyle = {...style, height: 'auto'}
       return (
         <CellMeasurer
           key={key}
@@ -64,7 +66,7 @@ class InfiniteList extends PureComponent {
         >
           {({measure}) => (
             <ResizeObserver onResize={measure}>
-              <div style={style}>
+              <div style={newStyle}>
                 <PostList
                   disableOpacity={disableOpacity}
                   title={items[index].title}
@@ -106,36 +108,36 @@ class InfiniteList extends PureComponent {
         >
           {({ onRowsRendered }) => (
             <WindowScroller onScroll={clearScrollPosition}>
-            {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
-              <AutoSizer disableHeight>
-                {({ width }) => {
-                  return (
-                    <List
-                      rowCount={items.length || 0}
-                      autoHeight
-                      width={width}
-                      height={height}
-                      rowHeight={this.cellMeasurerCache.rowHeight}
-                      rowRenderer={rowRenderer}
-                      deferredMeasurementCache={this.cellMeasurerCache}
-                      overscanRowCount={2}
-                      onRowsRendered={onRowsRendered}
-                      ref={el => {
-                        this.listRef = el
-                        if (el instanceof Element) { registerChild(el) }
-                      }}
-                      isScrolling={isScrolling}
-                      scrollToAlignment="center"
-                      scrollToIndex={scrollToIndex}
-                      onScroll={onChildScroll}
-                      scrollTop={scrollTop}
-                      style={clearOutlineStyle}
-                    />
-                  )
-                }}
-              </AutoSizer>
-            )}
-          </WindowScroller>
+              {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+                <AutoSizer disableHeight>
+                  {({ width }) => {
+                    return (
+                      <List
+                        rowCount={items.length || 0}
+                        autoHeight
+                        width={width}
+                        height={height}
+                        rowHeight={this.cellMeasurerCache.rowHeight}
+                        rowRenderer={rowRenderer}
+                        deferredMeasurementCache={this.cellMeasurerCache}
+                        overscanRowCount={2}
+                        onRowsRendered={onRowsRendered}
+                        ref={el => {
+                          this.listRef = el
+                          if (el instanceof Element) { registerChild(el) }
+                        }}
+                        isScrolling={isScrolling}
+                        scrollToAlignment="center"
+                        scrollToIndex={scrollToIndex}
+                        onScroll={onChildScroll}
+                        scrollTop={scrollTop}
+                        style={clearOutlineStyle}
+                      />
+                    )
+                  }}
+                </AutoSizer>
+              )}
+            </WindowScroller>
           )}
         </InfiniteLoader>
         <PostListSkeleton loading={loading} />

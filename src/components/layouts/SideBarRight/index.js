@@ -1,7 +1,8 @@
 import React from 'react'
 import { createUseStyles } from 'react-jss'
 import { useLocation, Link } from 'react-router-dom'
-import { SearchField, ListAction, ListGroup, ListLink } from 'components'
+// ListLink
+import { SearchField, ListAction, ListGroup } from 'components'
 import { Spinner } from 'components/elements'
 import { pending } from 'redux-saga-thunk'
 import { connect } from 'react-redux'
@@ -35,7 +36,7 @@ const useStyles = createUseStyles({
     fontSize: 14,
     fontFamily: 'Segoe-Bold',
     '& span': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
       fontWeight: 400,
     },
   },
@@ -68,26 +69,26 @@ const SideBarRight = (props) => {
     return link
   }
 
-  const SocialMediaLinks = [
-    {
-      name: 'Discord',
-      label: 'dbuzzAPP',
-      imagePath: `${window.location.origin}/discord.svg`,
-      url: 'https://discord.gg/kCZGPs7',
-    },
-    {
-      name: 'Element',
-      label: '#d.buzz:matrix.org',
-      imagePath: `${window.location.origin}/element.svg`,
-      url: 'https://matrix.to/#/#d.buzz:matrix.org',
-    },
-    {
-      name: 'Twitter',
-      label: '@dbuzzAPP',
-      imagePath: `${window.location.origin}/twitter.svg`,
-      url: 'https://twitter.com/dbuzzAPP',
-    },
-  ]
+  // const SocialMediaLinks = [
+  //   {
+  //     name: 'Discord',
+  //     label: 'dbuzzAPP',
+  //     imagePath: `${window.location.origin}/discord.svg`,
+  //     url: 'https://discord.gg/kCZGPs7',
+  //   },
+  //   {
+  //     name: 'Element',
+  //     label: '#d.buzz:matrix.org',
+  //     imagePath: `${window.location.origin}/element.svg`,
+  //     url: 'https://matrix.to/#/#d.buzz:matrix.org',
+  //   },
+  //   {
+  //     name: 'Twitter',
+  //     label: '@dbuzzAPP',
+  //     imagePath: `${window.location.origin}/twitter.svg`,
+  //     url: 'https://twitter.com/dbuzzAPP',
+  //   },
+  // ]
 
   return (
     <React.Fragment>
@@ -95,9 +96,9 @@ const SideBarRight = (props) => {
       {!profileRoute && (
         <React.Fragment>
           <div style={{ paddingTop: 5 }}>
-            <ListGroup label="Top Trending Buzz">
+            <ListGroup label="Trends for you">
               {items.slice(0, 5).map((item) => (
-                <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} Buzz's`} />
+                <ListAction href={linkGenerator(item.name)} key={`${item.name}-trend`} label={`#${item.name}`} subLabel={`${item.comments + item.top_posts} posts`} />
               ))}
               <Spinner size={50} loading={loading}/> 
             </ListGroup>
@@ -110,13 +111,13 @@ const SideBarRight = (props) => {
               <Spinner size={50} loading={loading}/> 
             </ListGroup>
           </div> */}
-          <div style={{ paddingTop: 15 }}>
+          {/* <div style={{ paddingTop: 15 }}>
             <ListGroup label="Be in touch with us">
               {SocialMediaLinks.map((item) => (
                 <ListLink key={`${item.name}-links`} title={item.name} label={`@${item.label}`} imagePath={item.imagePath} href={item.url} />
               ))}
             </ListGroup>
-          </div>
+          </div> */}
           <div className={classes.footer}>
             <div className={classes.inner}>
               <Link to="/org/en/tos">Terms of Service</Link>

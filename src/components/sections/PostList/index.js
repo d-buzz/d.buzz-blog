@@ -6,8 +6,8 @@ import {
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import {
-  MarkdownViewer,
-  PostTags,
+  // MarkdownViewer,
+  // PostTags,
   PostActions,
 } from 'components'
 import { openUserDialog, saveScrollIndex, openMuteDialog } from 'store/interfaces/actions'
@@ -23,6 +23,7 @@ import classNames from 'classnames'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { useLocation } from 'react-router-dom'
+import Renderer from '../../common/Renderer'
 
 const addHover = (theme) => {
   let style = {
@@ -62,7 +63,7 @@ const useStyle = createUseStyles(theme => ({
     marginBottom: 15,
     borderBottom: theme.border.primary,
     '& a': {
-      color: 'black',
+      // color: 'black',
     },
     ...addHover(theme),
     cursor: 'pointer',
@@ -78,7 +79,8 @@ const useStyle = createUseStyles(theme => ({
     height: 'max-content',
   },
   name: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily:'RobotoRegular',
     paddingRight: 5,
     paddingBottom: 0,
     marginBottom: 0,
@@ -90,6 +92,7 @@ const useStyle = createUseStyles(theme => ({
   username: {
     color: '#657786',
     paddingBottom: 0,
+    fontSize:'13px',
   },
   post: {
     color: '#14171a',
@@ -122,7 +125,7 @@ const useStyle = createUseStyles(theme => ({
     width: 'calc(100% - 60px)',
     height: 'max-content',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   popover: {
@@ -171,6 +174,16 @@ const useStyle = createUseStyles(theme => ({
   muted: {
     opacity: 0.2,
   },
+  profileContent: {
+    display: "flex",
+    justifyContent: "start",
+    width: '100% !important',
+    alignItems: "center",
+    marginBottom: '15px',
+  },
+  marginRight5px:{
+    marginRight: "5px",
+  },
 }))
 
 
@@ -185,12 +198,12 @@ const PostList = React.memo((props) => {
     created,
     upvotes,
     replyCount,
-    meta,
+    // meta,
     active_votes = [],
     unguardedLinks,
     user = {},
     profileRef = null,
-    highlightTag = null,
+    // highlightTag = null,
     title = null,
     disableProfileLink = false,
     disableUserMenu = false,
@@ -246,8 +259,9 @@ const PostList = React.memo((props) => {
 
   const { width } = useWindowDimensions()
 
-  const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : 580 })
-  const [avatarSize, setAvatarSize] = useState(isMobile ? 45 : 50)
+  // const [rightWidth, setRightWidth] = useState({ width: isMobile ? width-90 : "100%" })
+  const [rightWidth, setRightWidth] = useState({ width: "100%" })
+  const [avatarSize, setAvatarSize] = useState(isMobile ? 45 : 25)
   const [leftWidth, setLeftWidth] = useState({ width: isMobile ? 50 : 60 })
   const [delayHandler, setDelayHandler] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -257,9 +271,9 @@ const PostList = React.memo((props) => {
   useEffect(() => {
     if (!isMobile) {
       if (width >= 676) {
-        setAvatarSize(50)
+        setAvatarSize(25)
         setLeftWidth({ width:60 })
-        setRightWidth({ width:580 })
+        setRightWidth({ width:"100%" })
       } else {
         setLeftWidth({ width: 50 })
         setAvatarSize(45)
@@ -345,18 +359,79 @@ const PostList = React.memo((props) => {
 
   return (
     <React.Fragment>
-      <div className={classes.wrapper}>
+      <div className={classNames(classes.wrapper)}>
         <div className={classNames(classes.row, muted || opacityUsers.includes(author) ? classes.muted : {})}>
           <Row>
-            <Col xs="auto" className={classes.colLeft}>
+            {/* <Col xs="auto" className={classes.colLeft}>
               <div style={leftWidth} className={classes.left} onClick={handleOpenContent}>
                 <Avatar height={avatarSize} author={author} />
               </div>
-            </Col>
-            <Col xs="auto" className={classes.colRight}>
+            </Col> */}
+            {/* <Col xs="auto" className={classes.colRight}> */}
+            <Col xs="auto" style={{width: "100%"}}>
               <div className={classNames('right-content', classes.right)} style={rightWidth}>
                 <div className={classes.content}>
-                  <label className={classes.name}>
+                  {/* new */}
+                  <Row>
+                    <Col className='col-9'>
+                      <div>
+                        <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
+                          <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight5px)} />
+                          <div>
+                            <label className={classes.name}>
+                              {!disableProfileLink && (
+                                <Link
+                                  ref={popoverAnchor}
+                                  to={!muted && !opacityActivated && disableOpacity ? authorLink : '#'}
+                                  onMouseEnter={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? openPopOver : () => {}}
+                                  onMouseLeave={(!disableUserMenu && !isMobile && !muted && !opacityActivated && disableOpacity) ? closePopOver: () => {}}
+                                  onClick={!muted && !opacityActivated ? closePopOver : () => {}}
+                                >
+                                  {author}
+                                </Link>
+                              )}
+                              {disableProfileLink && (<span className={classes.spanName}>{author}</span>)}
+                            </label>
+                            <label style={{marginBottom:0}} className={classes.username}>
+                              &nbsp;&bull;&nbsp;{moment(`${ !searchListMode ? `${created}Z` : created }`).local().fromNow()}
+                            </label>
+                          </div>
+                          
+                        
+                        </div>
+                        <div onClick={handleOpenContent}>
+                          <div>
+                            <strong className={classes.title}>{title}</strong>
+                          </div>
+                          {!isMobile && (
+                            <div>
+                              <Renderer showText={true} showImage={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            </div>
+                          )}
+                        </div>
+                    
+                      </div>
+                    
+                    </Col>
+                    <Col className='col-3'>
+                      {!muted && !opacityActivated && disableOpacity && (
+                        <div onClick={handleOpenContent}>
+                        
+                          {isContentRoute && (
+                            // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            <Renderer showText={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                          )}
+                          {!isContentRoute && (
+                            // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                            <Renderer showText={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                          )}
+                          {/* <PostTags meta={meta} highlightTag={highlightTag} /> */}
+                        </div>
+                      )} 
+                    </Col>
+                  </Row>
+                  {/* old */}
+                  {/* <label className={classes.name}>
                     {!disableProfileLink && (
                       <Link
                         ref={popoverAnchor}
@@ -373,19 +448,21 @@ const PostList = React.memo((props) => {
                   <label className={classes.username}>
                     &nbsp;&bull;&nbsp;{moment(`${ !searchListMode ? `${created}Z` : created }`).local().fromNow()}
                   </label>
-                 
+                
                   {!muted && !opacityActivated && disableOpacity && (
                     <div onClick={handleOpenContent}>
                       <strong className={classes.title}>{title}</strong>
                       {isContentRoute && (
-                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
                       )}
                       {!isContentRoute && (
-                        <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        // <MarkdownViewer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                        <Renderer content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
                       )}
                       <PostTags meta={meta} highlightTag={highlightTag} />
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {!muted && !opacityActivated && disableOpacity && (
                   <div className={classes.actionWrapper}>

@@ -315,9 +315,9 @@ export const UPLOAD_FILE_REQUEST = 'UPLOAD_FILE_REQUEST'
 export const UPLOAD_FILE_SUCCESS = 'UPLOAD_FILE_SUCCESS'
 export const UPLOAD_FILE_FAILURE = 'UPLOAD_FILE_FAILURE'
 
-export const uploadFileRequest = (file) => ({
+export const uploadFileRequest = (file,progress) => ({
   type: UPLOAD_FILE_REQUEST,
-  payload: { file },
+  payload: { file, progress },
   meta: {
     thunk: true,
   },
@@ -338,10 +338,27 @@ export const uploadFileError = (error, meta) => ({
 export const PUBLISH_POST_REQUEST = 'PUBLISH_POST_REQUEST'
 export const PUBLISH_POST_SUCCESS = 'PUBLISH_POST_SUCCESS'
 export const PUBLISH_POST_FAILURE = 'PUBLISH_POST_FAILURE'
+export const SET_POST_REQUEST = 'SET_POST_REQUEST'
+export const SUCCESS_POST_REQUEST = 'SUCCESS_POST_REQUEST'
 
-export const publishPostRequest = (title, body, tags, payout) => ({
+
+export const setPostRequest = (title,content, tags, payout,buzzPermlink) => ({
+  type: SET_POST_REQUEST,
+  payload: {title, content, tags, payout,buzzPermlink },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const successPostSuccess = (response, meta) => ({
+  type: SUCCESS_POST_REQUEST,
+  payload: response,
+  meta,
+})
+
+export const publishPostRequest = (title, body, tags, payout, perm) => ({
   type: PUBLISH_POST_REQUEST,
-  payload: { title, body, tags, payout },
+  payload: { title, body, tags, payout, perm },
   meta: {
     thunk: true,
   },

@@ -66,7 +66,7 @@ const useStyles = createUseStyles(theme => ({
     fontSize: 14,
   },
   signup: {
-    color: '#d32f2f !important',
+    // color: '#d32f2f !important',
     wordBreak: 'break-word !important',
     whiteSpace: 'nowrap',
     fontSize: 14,

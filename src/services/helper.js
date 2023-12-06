@@ -8,7 +8,44 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import diff_match_patch from 'diff-match-patch'
 import sanitize from 'sanitize-html'
+import textParser from 'npm-text-parser'
+import axios from 'axios'
 
+export const getUrls = (text) => {
+  const regexUrls = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[/w@?^=%&/~+#-(a-z)(A-Z)(0-9)])?/gm
+  return text?.match(regexUrls) !== null ? text?.match(regexUrls) : []
+}
+export const calculateOverhead = (content) => {
+  let urls = getUrls(content) || []
+  
+  const markdown = content?.match(/#+\s|[*]|\s+&nbsp;+\s|\s+$/gm) || []
+
+  let overhead = 0
+
+  // let overheadItems = []
+
+  if(markdown.length>0) {
+    markdown.forEach((item) => {
+      // overheadItems.push(item)
+      overhead += item.length
+    })
+  }
+  
+  if((urls.length) > 3) {
+    urls = urls.slice(0, 2)
+  }
+  
+  if(urls && urls.length <= 3){
+    urls.forEach((item) => {
+      // overheadItems.push(item)
+      overhead += item.length
+    })
+  }
+
+  // console.log(overheadItems)
+
+  return overhead
+}
 export const stripHtml = (content) => {
   return content.replace(/(<([^>]+)>)/gi, '')
 }
@@ -176,7 +213,7 @@ export const extractImageLinks = (links) => {
 }
 
 const prepareImages = (content) => {
-  let contentReplaced = content
+  const contentReplaced = content
   const splitContent = contentReplaced.split(' ')
   splitContent.forEach((item, index) => {
     // remove 3speak thumbnails
@@ -201,7 +238,7 @@ const prepareEmbeds = (content) => {
         item = item[0]
       }
 
-      let splitLink = item.split('watch?v=')
+      const splitLink = item.split('watch?v=')
 
       let idToFormat = splitLink[1]
       idToFormat = idToFormat.replace(/\)/g, '')
@@ -365,7 +402,6 @@ export const errorMessageComposer = (type = null, errorCode = 0) => {
 }
 
 
-
 const remarkable = new Remarkable()
 export default remarkable
 
@@ -520,4 +556,70 @@ export const redirectToUserProfile = () => {
     const account = window.location.href.split("@")
     window.location = (`/#/@${account[1].replace("#/", "")}`)
   }
+}
+
+export const censorLinks = (content) => {
+  const links = textParser.getUrls(content)
+  let contentCopy = content
+
+  links.forEach((item) => {
+    contentCopy = contentCopy.replace(item, '<b>[link removed]</b>')
+  })
+
+  return contentCopy
+}
+
+export const parseUrls = (c) => {
+  return c.match(/((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){1}?(\/+[\w.,@?^=%&:/~+!#-$-']*)*/gm) || []
+}
+
+export const truncateString = (str, num) => {
+  if (str.length > num) {
+    return str.slice(0, num) + "..."
+  } else {
+    return str
+  }
+}
+
+
+export const proxyImage = (url) => {
+  // const enabled = true
+  const imageUrl = url
+
+  // if(enabled) {
+  //   if(!isGifImage(url)) {
+  //     imageUrl = `https://wsrv.nl/?url=${url}&q=50`
+  //     if(isImageUrl404(imageUrl)){
+  //       imageUrl = url
+  //     }
+  //   }
+  // }
+
+  return imageUrl
+}
+
+export const isGifImage = (url) => {
+  return url.endsWith('.gif')
+}
+
+export const isImageUrl404 = async (url) => {
+  try {
+    const response = await axios.head(url)
+    return response.status === 404
+  } catch (error) {
+    return true
+  }
+}
+
+export const getTheme =() => {
+  const theme = JSON.parse(localStorage.getItem('customUserData'))?.settings?.theme
+  let mode = ''
+
+  if(theme && (theme === 'gray' || theme === 'night') ) {
+    mode = theme
+  } else {
+    mode = 'light'
+  }
+
+  return mode
 }

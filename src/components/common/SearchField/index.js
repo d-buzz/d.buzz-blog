@@ -16,7 +16,7 @@ const useStyles = createUseStyles(theme => ({
     fontFamily: 'Segoe-Bold',
     color: theme.font.color,
     '& span': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
       fontWeight: 400,
     },
   },
@@ -80,7 +80,7 @@ const SearchField = (props) => {
     <React.Fragment>
       <BoxField
         icon={<SearchIcon top={iconTop} />}
-        placeholder={!isMobile ? 'Search D.Buzz': ''}
+        placeholder={!isMobile ? 'Search Posts': ''}
         className={classes.search}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

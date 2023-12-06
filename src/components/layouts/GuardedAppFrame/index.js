@@ -7,10 +7,18 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useWindowDimensions } from 'services/helper'
 import { useLocation } from 'react-router-dom'
+import Tabs from '../../common/Tabs'
+import classNames from 'classnames'
 
 const useStyles = createUseStyles(theme => ({
   main: {
     minHeight: '100vh',
+  },
+  marginTop60:{
+    marginTop: "60px",
+  },
+  marginTop100:{
+    marginTop: "100px",
   },
   inner: {
     width: '98%',
@@ -34,6 +42,9 @@ const useStyles = createUseStyles(theme => ({
     paddingLeft: 0,
     paddingRight: 0,
   },
+  justifyContentCenter:{
+    justifyContent: 'center',
+  },
 }))
 
 const GuardedAppFrame = (props) => {
@@ -46,6 +57,8 @@ const GuardedAppFrame = (props) => {
   const { width } = useWindowDimensions()
   let isProfileRoute = false
   let isContentRoute = false
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
+  const [isSearchPage, setIsSearchPage] = useState(false)
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -54,23 +67,65 @@ const GuardedAppFrame = (props) => {
   }
 
   useEffect(() => {
+    if (pathname === '/create-post') {
+      setHideRightSideBar(true)
+      setIsCreatePostPage(true)
+    }
+    if (pathname === '/search/people') {
+      setIsSearchPage(true)
+    }
+  },[pathname])
+
+  useEffect(() => {
     if (width < 800) {
       setMainWidth(12)
       setHideRightSideBar(true)
     } else {
       setMainWidth(8)
-      setHideRightSideBar(false)
+      if (pathname === '/create-post') {
+        setHideRightSideBar(true)
+        setIsCreatePostPage(true)
+      }else{
+        setHideRightSideBar(false)
+      }
+
+      if (pathname === '/search/people') {
+        setIsSearchPage(true)
+      }else{
+        setIsSearchPage(false)
+      }
     }
-  }, [width])
+  }, [width, pathname])
+
+  const [isTop, setIstop] = useState(true)
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY // => scroll position
+    if (scrollPosition <= 50) {
+      setIstop(true)
+    }else{
+      setIstop(false)
+    }
+    // console.log(scrollPosition);
+  }
+  useEffect(() => {
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   return (
     <React.Fragment>
-      <Row>
+      <Row className={classNames(isCreatePostPage? classes.justifyContentCenter:'')}>
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
-              <div style={{ paddingTop: 60, marginTop: 20 }} className={classes.main}>
+              {!isCreatePostPage && !isSearchPage && (<Tabs/>)}
+              <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
+                 
                   {renderRoutes(route.routes)}
                 </React.Fragment>
               </div>
@@ -79,7 +134,7 @@ const GuardedAppFrame = (props) => {
               <Col xs={3}>
                 <Sticky>
                   {({ style }) => (
-                    <div style={{ ...style, paddingTop: 60 }}>
+                    <div style={{ ...style, paddingTop: isTop?"60px":"0px" }}>
                       <SideBarRight hideSearchBar={true} />
                     </div>
                   )}

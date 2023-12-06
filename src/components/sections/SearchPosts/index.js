@@ -75,7 +75,7 @@ const SearchPosts = (props) => {
         (<center><br/><div className={classes.searchWrapper}>
           <h6>No Buzz's found {query!=='' && 
           (<React.Fragment>
-            for <span style={{ color: '#d32f2f', fontFamily: 'Segoe-Bold', paddingBottom: 10 }}>{query}</span>
+            for <span style={{ color: '#000', fontFamily: 'Segoe-Bold', paddingBottom: 10 }}>{query}</span>
           </React.Fragment>)}</h6></div></center>)}
     </React.Fragment>
   )

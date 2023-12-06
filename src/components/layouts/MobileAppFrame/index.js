@@ -3,10 +3,10 @@ import { bindActionCreators } from 'redux'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { useLastLocation } from 'react-router-last-location'
-import CreateIcon from '@material-ui/icons/Create'
+// import CreateIcon from '@material-ui/icons/Create'
 import { pending } from 'redux-saga-thunk'
 import queryString from 'query-string'
-import { searchRequest, clearSearchPosts } from 'store/posts/actions'
+import { searchRequest, clearSearchPosts, publishPostRequest } from 'store/posts/actions'
 import HomeIcon from '@material-ui/icons/Home'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 import UpdateIcon from '@material-ui/icons/Update'
@@ -20,6 +20,7 @@ import { signupHiveOnboard } from 'services/helper'
 import { signoutUserRequest } from 'store/auth/actions'
 import { 
   Avatar,
+  WriteIcon,
   BrandIcon, 
   BrandDarkIcon, 
   BackArrowIcon,  
@@ -44,6 +45,8 @@ import { useLocation, useHistory, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isMobile } from 'react-device-detect'
 import { useWindowDimensions } from 'services/helper'
+import classNames from 'classnames'
+import Tabs from '../../common/Tabs'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -58,6 +61,9 @@ const useStyles = createUseStyles(theme => ({
   backButton: {
     display: 'inline-block',
     ...theme.icon,
+  },
+  margin10:{
+    margin: '10px',
   },
   clearPadding: {
     paddingLeft: 0,
@@ -94,10 +100,12 @@ const MobileAppFrame = (props) => {
     loadingAccount, 
     pollNotifRequest, 
     searchRequest,
+    postContent,
+    publishPostRequest,
     clearSearchPosts,
     count = 0,
-   } = props
-   const { width } = useWindowDimensions()
+  } = props
+  const { width } = useWindowDimensions()
   const { username, isAuthenticated } = user
   const { mode } = theme
   const lastLocation = useLastLocation()
@@ -114,8 +122,48 @@ const MobileAppFrame = (props) => {
   const [disableSearchTips, setDisableSearchTips] = useState(false)
   const [searchkey, setSearchkey] = useState(query)
   const [mainWidth, setMainWidth] = useState(400)
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
+  const [isSearchPage, setIsSearchPage] = useState(false)
   let isProfileRoute = false
   let isContentRoute = false
+  const [posting, setPosting] = useState(false)
+
+  useEffect(() => {
+    if (pathname === '/create-post') {
+      // setHideRightSideBar(true)
+      setIsCreatePostPage(true)
+    }
+    if (pathname === '/search/people') {
+      setIsSearchPage(true)
+    }
+  },[pathname])
+
+  useEffect(() => {
+  },[postContent])
+
+  const postNow = () => {
+    setPosting(true)
+    const buzzTitle = postContent.title
+    const buzzContent = postContent.content
+    const tags = postContent.tags
+    const payout = postContent.payout
+    const buzzPermlink = postContent.buzzPermlink
+    publishPostRequest(buzzTitle,buzzContent, tags, payout, buzzPermlink)
+      .then((data) => {
+        if (data.success) {
+          const {author, permlink} = data
+          // if (!isThread) {
+          history.push(`/@${author}/c/${permlink}`)
+          // }
+          setPosting(false)
+
+        } else {
+          console.log('error')
+          setPosting(false)
+        }
+      })
+  }
+
 
   useEffect(() => {
     if (width <= 360 ) {
@@ -128,7 +176,8 @@ const MobileAppFrame = (props) => {
   }, [width])
 
   const handleClickOpenBuzzModal = () => {
-    setOpenBuzzModal(true)
+    history.replace('/create-post')
+    // window.location.replace('/#/create-post')
   }
 
   const handleClickCloseBuzzModal = () => {
@@ -240,6 +289,47 @@ const MobileAppFrame = (props) => {
   if(pathname.match(/(\/search?)/)) {
     title = 'Search'
   }
+
+  const [tagError, settagError] = useState(false)
+
+  useEffect(() => {
+    let tagspec = false
+    if (postContent.tags) {
+      postContent.tags.map((tagCheck) => {
+        // console.log('tag update', tag)
+        // var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        // var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+  
+        if(format.test(tagCheck) ){
+          tagspec = true
+        }
+
+        return true
+  
+      })
+     
+      if (tagspec) {
+        settagError(true)
+      }else{
+        settagError(false)
+      }
+
+    }
+   
+  },[postContent,tagError])
+
+  // const handleNavigate = (path) => {
+  //   if (pathname === '/create-post') {
+  //     const shouldNavigate = window.confirm("Are you sure you want to leave? Changes you made may not be saved.")
+  //     if (shouldNavigate) {
+  //       // setIsBlocking(false);
+  //       // Navigate to the desired page
+  //       history.push(path)
+  //     }
+  //   }
+    
+  // }
   
   return (
     <React.Fragment>
@@ -257,7 +347,12 @@ const MobileAppFrame = (props) => {
                       &nbsp;
                     </React.Fragment>
                   )}
-                  <Link to="/">
+                  <Link to="/"
+                    // onClick={(e) => {
+                    //   e.preventDefault()
+                    //   handleNavigate('/')
+                    // }}
+                  >
                     <React.Fragment>
                       {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
                       {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
@@ -268,91 +363,118 @@ const MobileAppFrame = (props) => {
                   {title !== 'Search' && isAuthenticated && (
                     <React.Fragment>
                       <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                        <CreateIcon fontSize="medium" />
+                        {pathname !== '/create-post' && (
+                          <WriteIcon size={25} />
+                        )}
+                        {pathname === '/create-post' && (
+                          <button onClick={postNow} disabled={!tagError && (postContent.title && postContent.content) && (!posting)?false:true} className='btn btn-success' md>{posting?'Posting':'Post'}</button>
+                        )}
                       </IconButton>
-                      <IconButton onClick={handleClickSearchButton} size="medium">
-                        <SearchIcon/>
-                      </IconButton>
+                      {pathname !== '/create-post' && (
+                        <IconButton onClick={handleClickSearchButton} size="medium">
+                          <SearchIcon/>
+                        </IconButton>
+                      )}
                     </React.Fragment>
                   )}
                   <Menu>
-                  {title === 'Search' && isAuthenticated && (
-                    <div className={classes.searchDiv}>
-                      <SearchField
-                        disableTips={disableSearchTips}
-                        iconTop={-2}
-                        searchWrapperClass={classes.searchWrapper}
-                        style={{ fontSize: 16, height: 35 }}
-                        value={searchkey}
-                        onKeyDown={handleSearchKey}
-                        onChange={onChangeSearch}
-                        placeholder="Search D.Buzz"
-                        autoFocus
-                      />
-                    </div>
-                  )}
-                  {title !== 'Search' && isAuthenticated && (
-                    <React.Fragment>
-                      <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
-                        <Avatar height={33} author={username} />
-                      </MenuButton>
-                      <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
-                        <MenuLink  
-                          style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
-                          as={Link}
-                          to={`/@${username}`}
-                        >
-                          <div>
-                            <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
-                            <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
-                            <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
-                              <span style={{ fontSize: 13 }}>See your Profile</span>
+                    {title === 'Search' && isAuthenticated && (
+                      <div className={classes.searchDiv}>
+                        <SearchField
+                          disableTips={disableSearchTips}
+                          iconTop={-2}
+                          searchWrapperClass={classes.searchWrapper}
+                          style={{ fontSize: 16, height: 35 }}
+                          value={searchkey}
+                          onKeyDown={handleSearchKey}
+                          onChange={onChangeSearch}
+                          placeholder="Search Posts"
+                          autoFocus
+                        />
+                      </div>
+                    )}
+                    {title !== 'Search' && isAuthenticated && (
+                      <React.Fragment>
+                        <MenuButton style={{ border: 'none', backgroundColor: 'transparent' }}>
+                          <Avatar height={33} author={username} />
+                        </MenuButton>
+                        <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
+                          <MenuLink  
+                            style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
+                            as={Link}
+                            to={`/@${username}`}
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate(`/@${username}`)
+                            // }}
+                          >
+                            <div>
+                              <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
+                              <strong style={{ paddingLeft: 30, marginBottom: 0, fontSize: 15 }}>Profile</strong>
+                              <div style={{ marginTop: -15, paddingLeft: 50, paddingBottom: 5 }}>
+                                <span style={{ fontSize: 13 }}>See your Profile</span>
+                              </div>
                             </div>
-                          </div>
-                        </MenuLink>
-                        <MenuLink
-                          as={Link}
-                          to="/"
-                        >
-                          <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
-                        </MenuLink>
-                        <MenuLink 
-                          as={Link}
-                          to="/trending"
-                        >
-                          <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
-                        </MenuLink>
-                        <MenuLink 
-                          as={Link}
-                          to="/latest"
-                        >
-                          <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
-                        </MenuLink>
-                        <MenuLink 
-                          as={Link}
-                          to="/notifications"
-                        >
-                          <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
-                          <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
-                        </MenuLink>
-                        <MenuLink 
-                          onSelect={handleClickOpenUserSettingsModal}
-                        >
-                          <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
-                        </MenuLink>
-                        <MenuLink 
-                          onSelect={handleClickOpenSwitchAccountModal}
-                        >
-                          <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
-                        </MenuLink>
-                        <MenuLink 
-                          onSelect={handleClickLogout}
-                        > 
-                          <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
-                        </MenuLink>
-                      </MenuList>
-                    </React.Fragment>
-                  )}
+                          </MenuLink>
+                          <MenuLink
+                            as={Link}
+                            to="/"
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/")
+                            // }}
+                          >
+                            <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
+                          </MenuLink>
+                          <MenuLink 
+                            as={Link}
+                            to="/trending"
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
+                          >
+                            <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
+                          </MenuLink>
+                          <MenuLink 
+                            as={Link}
+                            to="/latest"
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
+                          >
+                            <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
+                          </MenuLink>
+                          <MenuLink 
+                            as={Link}
+                            to="/notifications"
+                            // onClick={(e) => {
+                            //   e.preventDefault()
+                            //   handleNavigate("/trending")
+                            // }}
+                          >
+                            <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
+                            <label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Notifications</label>
+                          </MenuLink>
+                          <MenuLink 
+                            onSelect={handleClickOpenUserSettingsModal}
+                          >
+                            <SettingsIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>User Settings</label>
+                          </MenuLink>
+                          <MenuLink 
+                            onSelect={handleClickOpenSwitchAccountModal}
+                          >
+                            <SupervisorAccountIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Switch Account</label>
+                          </MenuLink>
+                          <MenuLink 
+                            onSelect={handleClickLogout}
+                          > 
+                            <ExitToAppIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Signout</label>
+                          </MenuLink>
+                        </MenuList>
+                      </React.Fragment>
+                    )}
                     
                   </Menu>
                 </div>
@@ -374,10 +496,11 @@ const MobileAppFrame = (props) => {
               <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
               <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
             </Navbar>
-          
+                 
             <Row>
+              {!isCreatePostPage && !isSearchPage && (<Tabs/>)}
               {!isProfileRoute && !isContentRoute && (
-                <Col className={classes.clearPadding}>
+                <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
                   <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                     <React.Fragment>
                       {renderRoutes(route.routes)}
@@ -416,6 +539,7 @@ const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
   count: state.polling.get('count'),
+  postContent: state.posts.get('postContent'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
 })
 
@@ -423,6 +547,7 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
     pollNotifRequest, 
+    publishPostRequest,
     searchRequest,
     clearSearchPosts,
   }, dispatch),

@@ -84,7 +84,7 @@ const useStyles = createUseStyles(theme => ({
       borderRadius: 5,
     },
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
     '&:after': {
       content: '',
@@ -109,7 +109,7 @@ const useStyles = createUseStyles(theme => ({
     width: 'calc(100% - 60px)',
     height: 'max-content',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
   },
   link: {
@@ -129,7 +129,7 @@ const useStyles = createUseStyles(theme => ({
     width: '98%',
     margin: '0 auto',
     marginTop: 10,
-    color: '#d32f2f',
+    // color: '#d32f2f',
     paddingBottom: 10,
     fontFamily: 'Segoe-Bold',
   },
@@ -154,7 +154,7 @@ const useStyles = createUseStyles(theme => ({
     height: '100%',
     margin: '0 auto',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
     paddingTop: 10,
     paddingBottom: 2,
@@ -267,7 +267,7 @@ const ReplyList = (props) => {
       payout_at,
     } = reply
 
-    let { body } = reply
+    const { body } = reply
 
     let { payout } = reply
 

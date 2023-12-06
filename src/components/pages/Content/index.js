@@ -1,21 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { isMobile } from 'react-device-detect'
+// import Chip from '@material-ui/core/Chip'
+
 import { connect } from 'react-redux'
 import {
   getContentRequest,
   getRepliesRequest,
   clearReplies,
   clearAppendReply,
+  publishReplyRequest,
+  upvoteRequest,
 } from 'store/posts/actions'
+// import {broadcastNotification,saveScrollIndex} from '../../../store/interfaces/actions'
+import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
+
+// import { broadcastNotification, saveScrollIndex } from 'store/interfaces/actions'
+// import { upvoteRequest } from 'store/posts/actions'
+
 import {
   checkHasUpdateAuthorityRequest,
 } from 'store/auth/actions'
 import { createUseStyles } from 'react-jss'
-import { Avatar, MoreIcon } from 'components/elements'
+import { Avatar, CommentTwoIcon,CloseIcon,HeartIcon, HeartIconRed,
+  // HiveIcon,
+  // BurnIcon,
+  ContainedButton,
+  Spinner,
+} from 'components/elements'
 import {
   MarkdownViewer,
   PostTags,
-  PostActions,
-  ReplyList,
   // UserDialog,
 } from 'components'
 import { bindActionCreators } from 'redux'
@@ -36,8 +50,111 @@ import {
 } from 'components'
 import Chip from '@material-ui/core/Chip'
 import { useHistory } from 'react-router-dom'
+import ReplyContent from '../../sections/ReplyContent'
+import { withStyles } from '@material-ui/core/styles'
+import Slider from '@material-ui/core/Slider'
+
+const PrettoSlider = withStyles({
+  root: {
+    color: '#e53935',
+    height: 5,
+    '& .MuiSlider-markLabel': {
+      fontSize: 12,
+      // color: '#d32f2f',
+    },
+  },
+  thumb: {
+    height: 15,
+    width: 15,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -5,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 5,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 5,
+    borderRadius: 4,
+  },
+})(Slider)
+
+
+const marks = [
+  {
+    value: 0,
+    label: '0',
+  },
+  {
+    value: 10,
+    label: '10',
+  },
+  {
+    value: 20,
+    label: '20',
+  },
+  {
+    value: 30,
+    label: '30',
+  },
+  {
+    value: 40,
+    label: '40',
+  },
+  {
+    value: 50,
+    label: '50',
+  },
+  {
+    value: 60,
+    label: '60',
+  },
+  {
+    value: 70,
+    label: '70',
+  },
+  {
+    value: 80,
+    label: '80',
+  },
+  {
+    value: 90,
+    label: '90',
+  },
+  {
+    value: 100,
+    label: '100',
+  },
+]
 
 const useStyles = createUseStyles(theme => ({
+  cursorPointer:{
+    cursor: 'pointer',
+  },
+  borderTopGrey: {
+    borderTop: '1px solid rgb(242, 242, 242)',
+  },
+  borderBottomGrey: {
+    borderBottom: '1px solid rgb(242, 242, 242)',
+  },
+  padding38:{
+    padding: '3px 8px',
+  },
+  padding1010:{
+    padding: '10px 10px',
+  },
+  margin22:{
+    margin: '22px 0px',
+  },
   wrapper: {
     width: '70%',
     backgroundColor: theme.backgroundColor,
@@ -115,7 +232,7 @@ const useStyles = createUseStyles(theme => ({
     height: '100%',
     margin: '0 auto',
     '& a': {
-      color: '#d32f2f',
+      // color: '#d32f2f',
     },
     paddingTop: 10,
     paddingBottom: 2,
@@ -134,9 +251,278 @@ const useStyles = createUseStyles(theme => ({
   iconButton: {
     ...theme.iconButton.hover,
   },
-  chip: {
+  // chip: {
+  //   marginTop: 5,
+  //   marginBottom: 5,
+  // },
+  left100per:{
+    left: '100%',
+  },
+  left110per:{
+    left: '110%',
+  },
+  visibilityVisible: {
+    visibility: 'visible',
+  },
+  transformtranslateX414Neg:{
+    transform:'translateX(-414px)',
+  },
+  transformtranslateX414:{
+    transform:'translateX(414px)',
+  },
+  transition1:{
+    transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s, opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0s',
+  },
+  boxShadow1:{
+    boxShadow: 'rgba(0, 0, 0, 0.15) 0px 4px 12px',
+  },
+ 
+  overflowAuto:{
+    overflow: 'auto',
+  },
+  backgroundColorWhite:{
+    backgroundColor: 'white',
+  },
+  width414:{
+    width:414,
+  },
+  zIndex1111:{
+    zIndex: 1111,
+  },
+  top0:{
+    top: 0,
+  },
+  opacity1:{
+    opacity: 1,
+  },
+  positionFixed:{
+    position: 'fixed',
+  },
+  boxSizingBorderBox:{
+    boxSizing: 'border-box',
+  },
+  height100:{
+    height: '100%',
+  },
+  padding24:{
+    padding: 24,
+  },
+  flexDirectionRow:{
+    flexDirection: 'row',
+  },
+  justifyContentSpaceBetween:{
+    justifyContent: 'space-between',
+  },
+  displayFlex:{
+    display: 'flex',
+  },
+  fontSize20:{
+    fontSize: 20,
+  },
+  fontWeight500:{
+    fontWeight: 500,
+  },
+  lineHeight0:{
+    lineHeight:0,
+  },
+  lineHeight24:{
+    lineHeight: 24,
+  },
+  letterSpacing0:{
+    letterSpacing: 0,
+  },
+  color242424:{
+    color: '#242424',
+  },
+  fontFamilySohe:{
+    fontFamily: 'sohne, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  },
+  fontSize14:{
+    fontSize: 14,
+  },
+  lineHeight20:{
+    lineHeight: 20,
+  },
+  fontWeight400:{
+    fontWeight: 400,
+  },
+  marginBottom20:{
+    marginBottom: 20,
+  },
+  padding024:{
+    padding: '0 24px',
+  },
+  displayBlock:{
+    display:'block',
+  },
+  paddingBottom14:{
+    paddingBottom: 14,
+  },
+  paddingTop14:{
+    paddingTop: 14,
+  },
+  transition2:{
+    transition: 'padding-top 400ms ease 0s, padding-bottom 400ms ease 0s',
+  },
+  boxShadow2:{
+    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 2px 8px',
+  },
+  flexDirectionColumn:{
+    flexDirection:'column',
+  },
+  borderRadius4:{
+    borderRadius: 4,
+  },
+  marginBottom6:{
+    marginBottom: 6,
+  },
+  transition3:{
+    transition: 'opacity 400ms ease 0s, max-height 400ms ease 0s, margin-bottom 400ms ease 0s',
+  },
+  maxHeight100:{
+    maxHeight: 100,
+  },
+  padding014:{
+    padding: '0px 14px',
+  },
+  positionRelative:{
+    position: 'relative',
+  },
+  alignItemsCenter: {
+    alignItems: 'center',
+  },
+  backgroundColorf2f2f2:{
+    backgroundColor: '#F2F2F2',
+  },
+  width32:{
+    width:32,
+  },
+  height32:{
+    height: 32,
+  },
+  borderRadius50per:{
+    borderRadius:'50%',
+  },
+  alignItemsFlexStart:{
+    alignItems:'flex-start',
+  },
+  justifyContentCenter:{
+    justifyContent: 'center',
+  },
+  marginLeft12:{
+    marginLeft:12,
+  },
+  marginBottom0:{
+    marginBottom:0,
+  },
+  minHeight100:{
+    minHeight: 100,
+  },
+  transition4:{
+    transition: 'min-height 400ms ease 0s',
+  },
+  margin10:{
+    margin:10,
+  },
+  borderRadius20:{
+    borderRadius:20,
+  },
+  borderNone:{
+    border:'none',
+  },
+  borderBottomSolidGray:{
+    borderBottom:'1px solid rgb(242, 242, 242)',
+  },
+  marginRight24:{
+    marginRight:24,
+  },
+  marginLeft24:{
+    marginLeft:24,
+  },
+  width100:{
+    width:'100%',
+  },
+  paddingBottom25:{
+    paddingBottom: 25,
+  },
+  paddingTop25:{
+    paddingTop: 25,
+  },
+  paddingLeft12:{
+    paddingLeft:12,
+  },
+  margin0:{
+    margin: 0,
+  },
+  padding0:{
+    padding:0,
+  },
+  textDecorationNone:{
+    textDecoration:'none',
+  },
+  widthMaxContent:{
+    width:'max-content',
+  },
+  colorGray:{
+    color:'gray',
+  },
+  colorBlack:{
+    color:'black',
+  },
+  marginTop5:{
     marginTop: 5,
-    marginBottom: 5,
+  },
+  wordBreakBreakWord:{
+    wordBreak:'break-word',
+  },
+  whiteSpacePreWrap:{
+    whiteSpace:'pre-wrap',
+  },
+  padding050:{
+    padding:'5px 0px',
+  },
+  colorGreen:{
+    color:'#1A8917',
+  },
+  marginTop24:{
+    marginTop:24,
+  },
+  marginLeft5:{
+    marginLeft:"5px",
+  },
+  paddingTop3:{
+    paddingTop: '3px',
+  },
+  borderLeft3SolidGray:{
+    borderLeft: '3px solid rgb(242, 242, 242)',
+  },
+  marginBottom24:{
+    marginBottom: '24px',
+  },
+  marginLeft8:{
+    marginLeft: '8px',
+  },
+  padding8:{
+    padding: '8px',
+  },
+  sliderWrapper: {
+    width: '98%',
+    paddingRight: 30,
+  },
+  button: {
+    height: 33,
+    fontSize: 14,
+  },
+  chip: {
+    border: 'none !important',
+    float: 'right !important',
+    fontFamily: 'inherit !important',
+    fontSize: 'inherit !important',
+    '& span': {
+      fontFamily: 'inherit !important',
+      fontSize: 'inherit !important',
+      marginTop: -5,
+    },
   },
 }))
 
@@ -144,10 +530,20 @@ const Content = (props) => {
   const {
     getContentRequest,
     getRepliesRequest,
+    publishReplyRequest,
+    modalData,
+    append,
+    // voteCount,
+    broadcastNotification,
+    // hasUpvoted = false,
+    // saveScrollIndex,
+    recentUpvotes,
+    upvoteRequest,
+    recomputeRowIndex = () => {},
+    scrollIndex = 0,
     match,
     content,
     loadingContent,
-    loadingReplies,
     clearReplies,
     user = {},
     replies,
@@ -155,19 +551,117 @@ const Content = (props) => {
     censorList = [],
     clearAppendReply,
   } = props
-
   const { username, permlink } = match.params
   const [anchorEl, setAnchorEl] = useState(null)
   const [originalContent, setOriginalContent] = useState('')
   const classes = useStyles()
+  const {username: userProfile} = user
   // const [open, setOpen] = useState(false)
   // const [openUpdateForm, setOpenUpdateForm] = useState(false)
   const [hasUpdateAuthority, setHasUpdateAuthority] = useState(false)
   const [isCensored, setIsCensored] = useState(false)
+  const [reRenderReply, setreRenderReply] = useState(true)
+  const [replying, setReplying] = useState(false)
+  
   const [censorType, setCensorType] = useState(null)
   const popoverAnchor = useRef(null)
   const history = useHistory()
 
+  const [contentReply, setcontentReply] = useState('')
+  const [repliesList, setrepliesList] = useState([])
+  const [replyRef] = useState('content')
+  const [treeHistory] = useState(0)
+  const [showSlider, setShowSlider] = useState(false)
+  const [sliderValue, setSliderValue] = useState(0)
+  // const [vote, setVote] = useState(voteCount)
+  const [loading, setLoading] = useState(false)
+  const [getupvoted, setUpvoted] = useState(false)
+
+  const handleClickShowSlider = () => {
+    if (!getupvoted) {
+      setShowSlider(true)
+      if (replyRef === 'list') {
+        recomputeRowIndex(scrollIndex)
+      }
+    }
+  }
+
+  const handleChange = (e, value) => {
+    setSliderValue(value)
+  }
+
+  const handleClickHideSlider = () => {
+    setShowSlider(false)
+    if (replyRef === 'list') {
+      recomputeRowIndex(scrollIndex)
+    }
+  }
+  const handleClickUpvote = () => {
+    if (replyRef === 'list') {
+      recomputeRowIndex(scrollIndex)
+    }
+    // setShowSlider(false)
+    setLoading(true)
+    setShowSlider(false)
+    setTimeout(() => {
+      
+    }, 1000)
+    upvoteRequest(author, permlink, sliderValue)
+      .then(({ success, errorMessage }) => {
+        console.log('success',success)
+        if (success) {
+          setLoading(false)
+          setgetActiveVotes(getActiveVotes + 1)
+          setUpvoted(true)
+          broadcastNotification('success', `Succesfully upvoted @${author}/${permlink} at ${sliderValue}%`)
+        } else {
+          setUpvoted(false)
+          broadcastNotification('error', errorMessage)
+          setLoading(false)
+        }
+      })
+  }
+  useEffect(() => {
+    if (recentUpvotes && permlink && recentUpvotes.includes(permlink)) {
+      // setUpvoted(true)
+      // hasUpvoted= true
+    }
+    // eslint-disable-next-line
+  }, [recentUpvotes, permlink])
+  useEffect(() => {
+  },[modalData])
+
+  useEffect(() => {
+    if(append.hasOwnProperty('refMeta')) {
+      const { refMeta } = append
+      const { ref } = refMeta
+
+      if (ref === 'content') {
+        repliesList.unshift(append)
+      }else{
+        if (ref === 'replies') {
+          // 
+        }
+      }
+     
+      setreRenderReply(false)
+      setTimeout(() => {
+        setreRenderReply(true)
+      }, 500)
+    }
+  // eslint-disable-next-line
+  }, [append])
+  useEffect(() => {
+    if (replies) {
+      setrepliesList(replies)
+    }
+  // eslint-disable-next-line
+  }, [replies])
+
+  const [showReply, setshowReply] = useState(false)
+  const updateReply = (boolean) => {
+    setshowReply(boolean)
+  }
   const {
     author,
     json_metadata,
@@ -187,16 +681,16 @@ const Content = (props) => {
 
   console.log({depth})
 
-  let { body } = content || ''
+  const { body } = content || ''
 
-  let {  max_accepted_payout } = content || '0.00'
+  let { max_accepted_payout } = content || '0.00'
 
   max_accepted_payout = `${max_accepted_payout}`.replace('HBD', '')
-
+  const [getActiveVotes, setgetActiveVotes] = useState(0)
   let meta = {}
   let app = null
-  let upvotes = 0
-  let hasUpvoted = false
+  // let upvotes = 0
+  // let hasUpvoted = false
   let payout_at = cashout_time
 
   useEffect(() => {
@@ -232,9 +726,9 @@ const Content = (props) => {
     // setOpenUpdateForm(true)
   }
 
-  const handleClickMore = (e) => {
-    setAnchorEl(e.currentTarget)
-  }
+  // const handleClickMore = (e) => {
+  //   setAnchorEl(e.currentTarget)
+  // }
 
   const hanldeCloseMore = () => {
     setAnchorEl(null)
@@ -278,20 +772,33 @@ const Content = (props) => {
     }
   }
 
-  if(active_votes) {
-    if(active_votes.length > 0) {
+  
+  useEffect(() => {
+    if(active_votes) {
+      if(active_votes.length > 0) {
+        
+        if(active_votes[0].hasOwnProperty('weight')) {
+          const upvotes = active_votes.filter((vote) => vote.weight >= 0).length
+          console.log('if upvotes',upvotes)
+          setgetActiveVotes(upvotes)
+        } else {
+          const upvotes = active_votes.length
+          console.log('else upvotes',upvotes)
+          setgetActiveVotes(upvotes)
 
-      if(active_votes[0].hasOwnProperty('weight')) {
-        upvotes = active_votes.filter((vote) => vote.weight >= 0).length
-      } else {
-        upvotes = active_votes.length
-      }
-
-      if(isAuthenticated) {
-        hasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
+        }
+  
+        if(isAuthenticated) {
+          const gethasUpvoted = active_votes.filter((vote) => vote.voter === user.username).length !== 0
+          setUpvoted(gethasUpvoted)
+        }
       }
     }
-  }
+  },[active_votes,isAuthenticated,user.username])
+
+  useEffect(() => {
+    console.log('getupvoted',getupvoted)
+  },[getupvoted])
 
   useEffect(() => {
     anchorTop()
@@ -346,14 +853,116 @@ const Content = (props) => {
     } catch (e) {}
   }
 
+
+  const submitReply = () => {
+    setReplying(true)
+    // console.log('author',author)
+    // console.log('permlink',permlink)
+    // console.log('contentReply',contentReply)
+    // console.log('replyRef',replyRef)
+    // console.log('treeHistory',treeHistory)
+    publishReplyRequest(author, permlink, contentReply, replyRef, treeHistory)
+      .then(({ success, errorMessage }) => {
+        if(success) {
+          setcontentReply('')
+          // setLoading(false)
+          // broadcastNotification('success', `Succesfully replied to @${author}/${permlink}`)
+          // setReplyDone(true)
+          // closeReplyModal()
+          // getRepliesRequest()
+          setReplying(false)
+        } else {
+          setReplying(false)
+          // setLoading(false)
+          // broadcastNotification('error', 'There was an error while replying to this buzz.')
+        }
+      })
+  }
+
+  let payoutAdditionalStyle = {}
+  // let iconDetails = {}
+
+  if (parseFloat(max_accepted_payout) === 0) {
+    payoutAdditionalStyle = { textDecoration: 'line-through' }
+    // iconDetails = <BurnIcon style={{ paddingLeft: 5 }}/>
+  }else{
+    // iconDetails = <HiveIcon style={{ paddingLeft: 5, color: '#000' }}/>
+  }
+
+  const getPayoutDate = (date) => {
+    const semantic =  moment(`${date}Z`).local().fromNow()
+    return semantic !== '51 years ago' ? semantic : ''
+  }
+
   return (
     <React.Fragment>
       {!loadingContent && author && (
         <React.Fragment>
-          <HelmetGenerator content={body} user={author} />
+          <div className={classNames(classes.visibilityVisible, showReply? classes.transformtranslateX414Neg:classes.transformtranslateX414, classes.transition1, classes.boxShadow1, classes.overflowAuto, isMobile? classes.left110per:classes.left100per, classes.backgroundColorWhite, isMobile? classes.width100: classes.width414, classes.zIndex1111, classes.top0, classes.opacity1, classes.positionFixed, classes.boxSizingBorderBox, classes.height100)}>
+            <div className={classNames(classes.padding24, classes.justifyContentSpaceBetween, classes.flexDirectionRow, classes.displayFlex)}>
+              <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
+                <h2 className={classNames(classes.fontSize20,classes.fontWeight500,classes.letterSpacing0,classes.color242424,classes.fontFamilySohe)}>Responses ({replyCount})</h2>
+              </div>
+              <div onClick={() => updateReply(false)} className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.cursorPointer)}>
+                <CloseIcon  />
+              </div>
+            </div>
+            <div className='div2'>
+              <div className={classNames(classes.color242424,classes.fontSize14, classes.fontFamilySohe,classes.fontWeight400)}>
+                <div className={classNames()}>
+                  <div className={classNames(classes.marginBottom20,classes.padding024)}>
+                    <div className={classNames(classes.paddingBottom14,classes.paddingTop14, classes.transition2, classes.boxShadow2, classes.backgroundColorWhite, classes.flexDirectionColumn, classes.borderRadius4,classes.displayFlex)}>
+                      <div className={classNames(classes.marginBottom6,classes.transition3, classes.maxHeight100, classes.padding014,classes.opacity1, classes.positionRelative, classes.justifyContentSpaceBetween, classes.displayFlex, classes.alignItemsCenter)}>
+                        {/* for avatar and name */}
+                        <div className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                          <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                            <div className={classNames(classes.positionRelative, classes.displayBlock)}>
+                              {/*  */}
+                              <Avatar author={userProfile} style={{ marginBottom: -10 }} />
+
+                              {/* <img className={classNames(classes.backgroundColorf2f2f2, classes.boxSizingBorderBox,classes.width32, classes.height32, classes.borderRadius50per, classes.displayBlock)} src={`https://miro.medium.com/v2/resize:fill:32:32/0*2DvkmfGfMiWKkctJ.jpg`} alt="cover"/> */}
+                            </div>
+                          </div>
+                          <div className={classNames(classes.flexDirectionColumn,classes.alignItemsFlexStart, classes.justifyContentCenter, classes.lineHeight0, classes.marginLeft12, classes.displayFlex)}>
+                            <p className={classNames(classes.color242424,classes.fontSize14,classes.fontFamilySohe, classes.fontWeight400, classes.lineHeight0, classes.marginBottom0)}> {userProfile}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={classNames(classes.flexDirectionColumn, classes.displayFlex, classes.margin10)}>
+                        <div className={classNames('text-area-content',classes.transition4, classes.minHeight100)}>
+                          <textarea value={contentReply} onChange={(e) => setcontentReply(e.target.value)} placeholder='What are your thoughts?' className={classNames("form-control",classes.borderNone)} id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.alignItemsCenter, classes.lineHeight0)}>
+                          <div></div>
+                          <div>
+                            {/* <button className='btn btn-default'>Cancel</button> */}
+                            <button disabled={replying || contentReply === ''?true:false} onClick={()=> submitReply()} className={classNames('btn btn-success', classes.borderRadius20)}>{replying? 'Responding':'Respond'}</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={classNames(classes.borderBottomSolidGray)}></div>
+            <div className='div4'>
+              <div>
+                {reRenderReply && repliesList.map((reply, index )=>{
+                  // console.log('reply',reply)
+                  return (
+                    <ReplyContent key={index} reply={reply} treeHistory={`${index}`}  match={match}/>
+                  )})}
+              </div>
+            </div>
+          </div>
+          <div>
+            <HelmetGenerator content={body} user={author} />
             <div className={classes.wrapper}>
-              <br />
+              
+              {/* <br /> */}
               <React.Fragment>
+                <h2 style={{marginBottom:'25px'}}><strong>{title}</strong></h2>
                 {depth !== 0 && parent_author !== null && (
                   <Row>
                     <Col>
@@ -395,11 +1004,101 @@ const Content = (props) => {
                     </div>
                   </Col>
                 </Row>
+                {/* <div>
+                  <div style={{ marginTop: 10 }}>
+                    <label className={classes.meta}>
+                      {moment(`${created}Z`).local().format('LTS • \nLL')}
+                      {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
+                    </label>
+                  </div>
+                </div> */}
+                {/* add div here for comment */}
+                {showSlider && (
+                  <div className={classes.sliderWrapper}>
+                    <Row>
+                      <Col xs="auto">
+                        <ContainedButton onClick={handleClickUpvote} fontSize={14} label={`Upvote (${sliderValue}%)`} className={classes.button} />
+                      </Col>
+                      <Col style={{ paddingLeft: 0 }}>
+                        <ContainedButton
+                          fontSize={14}
+                          transparent={true}
+                          label="Cancel"
+                          className={classes.button}
+                          onClick={handleClickHideSlider}
+                        />
+                      </Col>
+                    </Row>
+                    <div style={{ paddingLeft: 10 }}>
+                      <PrettoSlider
+                        marks={marks}
+                        value={sliderValue}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                  <div className={classNames(classes.displayFlex)}>
+                    
+                    <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                      {!loading && getupvoted && (<HeartIconRed />)}
+                      {!loading && !getupvoted && (<HeartIcon />)}
+                      {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
+                      <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
+                    </div>
+                   
+                    {!isMobile &&(
+                      <div className={classNames(classes.displayFlex)}>
+                      
+                        <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                          <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {isMobile &&(
+                    <div className={classNames(classes.displayFlex)}>
+                    
+                      <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                        <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                      </div>
+                    </div>
+                  )}
+                  <div className={classNames(classes.displayFlex)}>
+                    <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                      <span className={classes.payout} style={payoutAdditionalStyle}>
+                        ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                        {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                        {!payout && isMobile ? '0.00' : ''}&nbsp;
+                        {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                      </span>
+                      {/* <Chip
+                        className={classes.chip}
+                        size='small'
+                        label={(
+                          <span className={classes.payout} style={payoutAdditionalStyle}>
+                            ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                            {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                            {!payout && isMobile ? '0.00' : ''}&nbsp;
+                            {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                          </span>
+                        )}
+                        color="#000"
+                        variant="outlined"
+                      /> */}
+                    </div>
+                    {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
+                      <MoreIcon />
+                    </div> */}
+                   
+                  </div>
+                </div>
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
                   )}
-                  <strong>{title}</strong>
+                 
                   <MarkdownViewer content={originalContent} minifyAssets={false} />
                 </div>
                 <PostTags meta={meta} />
@@ -412,9 +1111,70 @@ const Content = (props) => {
                 </div>
               </React.Fragment>
             </div>
-        
-            <div className={classes.wrapper} style={{ marginTop: 15 }}>
-              <Row>
+                    
+            <div className={classes.wrapper}>
+              <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
+                <div className={classNames(classes.displayFlex)}>
+                      
+                  <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    {!loading && getupvoted && (<HeartIconRed />)}
+                    {!loading && !getupvoted && (<HeartIcon />)}
+                    {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
+                    <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
+                  </div>
+                  
+                  {!isMobile &&(
+                    <div className={classNames(classes.displayFlex)}>
+                    
+                      <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                        <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {isMobile &&(
+                  <div className={classNames(classes.displayFlex)}>
+                  
+                    <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                    </div>
+                  </div>
+                )}
+                <div className={classNames(classes.displayFlex)}>
+                  <div className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    {/* <FavoritesIcon size={19}  />  */}
+                    <span className={classes.payout} style={payoutAdditionalStyle}>
+                      ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                      {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                      {!payout && isMobile ? '0.00' : ''}&nbsp;
+                      {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                    </span>
+                    {/* <Chip
+                      className={classes.chip}
+                      size='small'
+                      icon={iconDetails}
+                      label={(
+                        <span className={classes.payout} style={payoutAdditionalStyle}>
+                          ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
+                          {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
+                          {!payout && isMobile ? '0.00' : ''}&nbsp;
+                          {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
+                        </span>
+                      )}
+                      color="#000"
+                      variant="outlined"
+                    /> */}
+                  </div>
+                  {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
+                    <ShareIcon  size={19}  />  
+                  </div> */}
+                  {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
+                    <MoreIcon />
+                  </div> */}
+                  
+                </div>
+              </div>
+              {/* <Row>
                 <Col>
                   <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
                   <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
@@ -426,7 +1186,7 @@ const Content = (props) => {
                     </div>
                   </Col>
                 )}
-              </Row>
+              </Row> */}
               <Menu
                 anchorEl={anchorEl}
                 keepMounted
@@ -444,7 +1204,8 @@ const Content = (props) => {
               )} */}
               <Row>
                 <Col>
-                  <PostActions
+                
+                  {/* <PostActions
                     disableExtraPadding={true}
                     body={body}
                     author={username}
@@ -457,13 +1218,14 @@ const Content = (props) => {
                     payoutAt={payout_at}
                     replyRef="content"
                     max_accepted_payout={max_accepted_payout}
-                  />
+                  /> */}
                 </Col>
               </Row>
-              {!loadingReplies && !loadingContent &&  (
+              {/* {!loadingReplies && !loadingContent &&  (
                 <ReplyList replies={replies} expectedCount={replyCount} />
-              )}
+              )} */}
             </div>
+          </div>
         </React.Fragment>
       )}
       <ContentSkeleton loading={loadingContent} />
@@ -485,19 +1247,27 @@ const Content = (props) => {
 const mapStateToProps = (state) => ({
   loadingContent: pending(state, 'GET_CONTENT_REQUEST'),
   loadingReplies: pending(state, 'GET_REPLIES_REQUEST'),
+  modalData: state.interfaces.get('replyModalData'),
+  append: state.posts.get('appendReply'),
   replies: state.posts.get('replies'),
   content: state.posts.get('content'),
   user: state.auth.get('user'),
   censorList: state.auth.get('censorList'),
+  recentUpvotes: state.posts.get('recentUpvotes'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     getContentRequest,
+    publishReplyRequest,
+    broadcastNotification,
     getRepliesRequest,
     clearReplies,
     checkHasUpdateAuthorityRequest,
     clearAppendReply,
+    saveScrollIndex,
+    upvoteRequest,
+    // openReplyModal,
   }, dispatch),
 })
 

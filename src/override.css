@@ -1,3 +1,75 @@
+@font-face {
+  font-family: 'RobotoRegular';
+  src: local('Roboto Regular'), url('/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RobotoBold';
+  src: local('Roboto Bold'), url('/fonts/roboto/Roboto-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+@font-face {
+  font-family: 'CharterBoldItalic';
+  src: local('Charter Bold Italic'), url('/fonts/charter/Charter-Bold-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CharterBold';
+  src: local('Charter Bold'), url('/fonts/charter/Charter-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CharterItalic';
+  src: local('Charter Italic'), url('/fonts/charter/Charter-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CharterRegular';
+  src: local('Charter Regular'), url('/fonts/charter/Charter-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NoeDisplayMedium';
+  src: local('Noe Display Medium'), url('/fonts/FontsFree-Net-Noe-Display-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body, span{
+  font-family: 'CharterRegular';
+}
+
+div {
+  font-family: 'CharterBold';
+}
+.title-0-2-154{
+  font-family: 'RobotoBold';
+  font-size: 20px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'CharterBold';
+}
+
+p {
+  font-family: 'CharterBold';
+}
+
 @media (min-width: 768px) {
   .container {
     max-width: 750px;
@@ -12,6 +84,51 @@
 
 input:focus, textarea:focus, select:focus{
   outline: none;
+}
+
+.height150 {
+  height: 150px;
+}
+
+.padding10 {
+  padding: 10px;
+}
+
+.positionFixed{
+  position: fixed;
+}
+.left0{
+  left: 0;
+}
+
+.right0{
+  right: 0;
+}
+
+.bottom0{
+  bottom: 0;
+}
+
+.zindex600{
+  z-index: 600;
+}
+
+.backgroundColorFa{
+  background-color: #fafafa;
+}
+
+.displayFlex{
+  display: flex
+}
+.justContentCenter{
+  justify-content: center;
+}
+.alignItemsCenter{
+  align-items: center;
+}
+
+.height100{
+  height: 100%;
 }
 
 .pull-right {
@@ -30,7 +147,7 @@ input:focus, textarea:focus, select:focus{
 div.ReactTags__tags {
   position: relative;
   font-family: Segoe-Bold;
-  color: #d32f2f;
+  /* color: #d32f2f; */
 }
 
 /* Styles for the input */

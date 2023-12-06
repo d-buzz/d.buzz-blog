@@ -76,6 +76,9 @@ import {
   SEARCH_REQUEST,
   searchSuccess,
   searchFailure,
+
+  SET_POST_REQUEST,
+  successPostSuccess,
 } from './actions'
 
 import {
@@ -85,7 +88,7 @@ import {
   getLinkMeta,
   fetchContent,
   fetchDiscussions,
-  uploadIpfsImage,
+  // uploadIpfsImage,
   broadcastKeychainOperation,
   broadcastOperation,
   generatePostOperations,
@@ -103,8 +106,15 @@ import {
   searchPostGeneral,
   searchPeople,
   getMutePattern,
-} from 'services/api'
-import { createPatch, errorMessageComposer } from 'services/helper'
+  invokeFilter,
+  uploadImage,
+} from '../../services/api'
+
+import {
+  checkCeramicLogin,
+  getFollowingFeed,
+} from "services/ceramic"
+import { createPatch, errorMessageComposer,stripHtml } from 'services/helper'
 import moment from 'moment'
 
 function patternMute(patterns, data) {
@@ -112,7 +122,7 @@ function patternMute(patterns, data) {
 }
 
 const footnote = (body) => {
-  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>'
+  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>'
   body = `${body} ${footnoteAppend}`
 
   return body
@@ -128,6 +138,36 @@ function* getTrendingTagsRequests(meta) {
     yield put(getTrendingTagsFailure(error, meta))
   }
 }
+
+const invokeHideBuzzFilter = (items) => {
+  let hiddenBuzzes = localStorage.getItem('hiddenBuzzes')
+
+  if (!hiddenBuzzes) {
+    hiddenBuzzes = []
+  } else {
+    hiddenBuzzes = JSON.parse(hiddenBuzzes)
+  }
+
+  return items.filter((item) => hiddenBuzzes.filter((hidden) => hidden.author === item.author && hidden.permlink === item.permlink).length === 0)
+}
+
+// const censorCheck = (content, censoredList) => {
+//   const copyContent = content
+
+//   const result = censoredList.filter(({
+//     author,
+//     permlink,
+//   }) => `${author}/${permlink}` === `${content.author}/${content.permlink}`)
+
+//   copyContent.censored = {status: false, reason: null}
+
+//   if (result.length !== 0) {
+//     copyContent.body = censorLinks(copyContent.body)
+//     copyContent.censored = {status: true, reason: result[0].type}
+//   }
+
+//   return copyContent
+// }
 
 function* getTrendingPostsRequest(payload, meta) {
   const { start_permlink, start_author } = payload
@@ -160,6 +200,7 @@ function* getTrendingPostsRequest(payload, meta) {
 }
 
 function* getHomePostsRequest(payload, meta) {
+  // const censoredList = yield select(state => state.auth.get('censorList'))
   const { start_permlink, start_author } = payload
   const user = yield select(state => state.auth.get('user'))
   const { username: account } = user
@@ -168,23 +209,41 @@ function* getHomePostsRequest(payload, meta) {
   const method = 'get_account_posts'
 
   try {
-    const old = yield select(state => state.posts.get('home'))
-    let data = yield call(callBridge, method, params, false)
+    if (!checkCeramicLogin(account)) {
+      const old = yield select(state => state.posts.get('home'))
+      let data = yield call(callBridge, method, params, false)
 
-    data = [...old, ...data]
+      data = [...old, ...data]
 
-    data = data.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
-    })
+      data = data.filter((obj, pos, arr) => {
+        return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+      })
+      
+      yield put(setHomeLastPost(data[data.length - 1]))
+      const mutelist = yield select(state => state.auth.get('mutelist'))
+      data = data.filter(item => invokeFilter(item))
 
-    yield put(setHomeLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
-    const mutelist = yield select(state => state.auth.get('mutelist'))
+      const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
 
-    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
-    data = invokeMuteFilter(data, mutelist, opacityUsers)
+      data = invokeMuteFilter(data, mutelist, opacityUsers)
 
-    yield put(getHomePostsSuccess(data, meta))
+      data = invokeHideBuzzFilter(data)
+
+
+      // having some issue in te censorCheck
+      // data.map((item) => censorCheck(item, censoredList))
+      // console.log('data.map((item) => censorCheck',data)
+
+      yield put(getHomePostsSuccess(data, meta))
+    } else {
+      let data = yield call(getFollowingFeed, account)
+
+      if (data === null) {
+        data = []
+      }
+
+      yield put(getHomePostsSuccess(data, meta))
+    }
   } catch(error) {
     yield put(getHomePostsFailure(error, meta))
   }
@@ -299,22 +358,22 @@ function* fileUploadRequest(payload, meta) {
   try {
     const user = yield select(state => state.auth.get('user'))
     const old = yield select(state => state.posts.get('images'))
-    const { isAuthenticated } = user
-    const { file } = payload
-
-    if(isAuthenticated) {
-
-      const result = yield call(uploadIpfsImage, file)
+    const {isAuthenticated} = user
+    const {file, progress} = payload
+    console.log('im here', user)
+    if (isAuthenticated) {
+      
+      const result = yield call(uploadImage, file, progress)
 
       let images = []
 
-      if(Array.isArray(old) && old.length !== 0) {
-        images = [ ...old ]
+      if (Array.isArray(old) && old.length !== 0) {
+        images = [...old]
       }
 
-      const ipfsHash = result.hashV0
-      const postUrl = `https://ipfs.io/ipfs/${ipfsHash}`
-      images.push(postUrl)
+      const {imageUrl} = result
+
+      images.push(imageUrl)
 
       yield put(uploadFileSuccess(images, meta))
     } else {
@@ -324,55 +383,76 @@ function* fileUploadRequest(payload, meta) {
     yield put(uploadFileError(error, meta))
   }
 }
+function* setPostRequest(payload, meta) {
+  yield put(successPostSuccess(payload, meta))
 
+}
 function* publishPostRequest(payload, meta) {
+  const {tags, payout, perm} = payload
+  let tagsWithDbuzz = ['dbuzz']
+  tagsWithDbuzz = [...tagsWithDbuzz, ...tags]
+  let {body,title} = payload
+  let success = false
+
+  const user = yield select(state => state.auth.get('user'))
+  const {username, useKeychain, is_authenticated} = user
+
+  const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/storageapi\.fleek\.co\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
+  const images = body.match(dbuzzImageRegex)
+  body = `${body}`.replace(dbuzzImageRegex, '').trimStart()
+
+  const titleContent = stripHtml(title)
+  title = `${titleContent}`.trim()
+
+  // const titleLimit = 82
+
+  // if (title.length > 0) {
+  //   const lastSpace = title.substr(0, titleLimit).lastIndexOf(" ")
+
+  //   if (lastSpace !== -1) {
+  //     title = `${title.substring(0, lastSpace)} ...`
+  //     body = `... ${body.replace(title.substring(0, lastSpace), '')}`
+  //   } else {
+  //     title = ''
+  //   }
+  // } else {
+  //   title = ''
+  // }
+
+  if (images) {
+    body += `\n${images.toString().replace(/,/gi, ' ')}`
+  }
+
+  body = footnote(body)
+
+
   try {
-    const { title, tags, payout } = payload
-    let { body } = payload
+    const operations = yield call(generatePostOperations, username, title, body, tagsWithDbuzz, payout, perm)
 
-    body = footnote(body)
-
-
-    const user = yield select(state => state.auth.get('user'))
-    const { username, useKeychain } = user
-    console.log({user})
-
-    try {
-      const operations = yield call(generatePostOperations, username, title, body, tags, payout)
-      console.log({operations})
-      console.log('done operations')
-   
-
-    let success = false
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
-    console.log({permlink})
+    const is_buzz_post = true
 
-    console.log({useKeychain})
+    if (useKeychain && is_authenticated) {
 
-    if(useKeychain) {
-      console.log('in')
       const result = yield call(broadcastKeychainOperation, username, operations)
       success = result.success
-      console.log('success')
-      console.log({success})
 
-      if(!success) {
+      if (!success) {
         yield put(publishPostFailure('Unable to publish post', meta))
       }
-    } else if (!useKeychain) {
-      let { login_data } = user
+    } else {
+      let {login_data} = user
       login_data = extractLoginData(login_data)
-      console.log({login_data})
 
       const wif = login_data[1]
-      const result = yield call(broadcastOperation, operations, [wif])
+
+      const result = yield call(broadcastOperation, operations, [wif], is_buzz_post)
 
       success = result.success
     }
-    
 
-    if(success) {
+    if (success) {
       const comment = operations[0]
       const json_metadata = comment[1].json_metadata
 
@@ -383,12 +463,11 @@ function* publishPostRequest(payload, meta) {
       cashout_time = cashout_time.replace('Z', '')
 
       let body = comment[1].body
-      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog | D.Buzz</a>', '')
-
+      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
 
       const content = {
         author: username,
-        category: '',
+        category: 'blog',
         permlink,
         title: comment[1].title,
         body: body,
@@ -399,7 +478,7 @@ function* publishPostRequest(payload, meta) {
         active_votes: [],
         root_author: "",
         parent_author: null,
-        parent_permlink: "",
+        parent_permlink: "blog",
         root_permlink: permlink,
         root_title: title,
         json_metadata,
@@ -417,14 +496,39 @@ function* publishPostRequest(payload, meta) {
       author: username,
       permlink,
     }
-    
-    yield put(publishPostSuccess(data, meta))
-  } catch(e) { console.log(e)}
 
+    yield put(publishPostSuccess(data, meta))
   } catch (error) {
-    const errorMessage = errorMessageComposer('post', error)
-    yield put(publishPostFailure({ errorMessage }, meta))
+    if (error?.data?.stack?.[0]?.data?.last_root_post !== undefined &&
+      error.data.stack[0].data.last_root_post !== null) {
+
+      const last_root_post = new Date(error.data.stack[0].data.last_root_post)
+      const now = new Date(error.data.stack[0].data.now)
+      const differenceInMinutes = getTimeLeftInPostingBuzzAgain(last_root_post, now)
+
+      const errorMessage = errorMessageComposer('post_limit', null, differenceInMinutes)
+
+      yield put(publishPostFailure({errorMessage}, meta))
+
+    } else {
+      const errorMessage = errorMessageComposer('post', error)
+      yield put(publishPostFailure({errorMessage}, meta))
+    }
+
   }
+}
+
+function getTimeLeftInPostingBuzzAgain(last_root_post, now) {
+  // Convert datetime to timestamps
+  const timestamp1 = last_root_post.getTime()
+  const timestamp2 = now.getTime()
+
+  // Calculate the difference in milliseconds
+  const differenceInMilliseconds = timestamp2 - timestamp1
+
+  // Convert milliseconds to minutes
+  const differenceInMinutes = differenceInMilliseconds / (1000 * 60)
+  return differenceInMinutes
 }
 
 function* followRequest(payload, meta) {
@@ -785,6 +889,10 @@ function* watchPublishPostRequest({ payload, meta }) {
   yield call(publishPostRequest, payload, meta)
 }
 
+function* watchSetPostRequest({ payload, meta }) {
+  yield call(setPostRequest, payload, meta)
+}
+
 function* watchFollowRequest({ payload, meta }) {
   yield call(followRequest, payload, meta)
 }
@@ -817,6 +925,7 @@ export default function* sagas() {
   yield takeEvery(GET_REPLIES_REQUEST, watchGetRepliesRequest)
   yield takeEvery(UPLOAD_FILE_REQUEST, watchUploadFileUploadRequest)
   yield takeEvery(PUBLISH_POST_REQUEST, watchPublishPostRequest)
+  yield takeEvery(SET_POST_REQUEST, watchSetPostRequest)
   yield takeEvery(FOLLOW_REQUEST, watchFollowRequest)
   yield takeEvery(UNFOLLOW_REQUEST, watchUnfollowRequest)
   yield takeEvery(UPVOTE_REQUEST, watchUpvoteRequest)

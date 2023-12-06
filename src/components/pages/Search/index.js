@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => ({
     },
   },
   weblink: {
-    color: '#d32f2f',
+    // color: '#d32f2f',
   },
   topContainer: {
     borderBottom: theme.border.primary,
@@ -52,7 +52,7 @@ const useStyles = createUseStyles(theme => ({
       fontFamily: 'Segoe-Bold',
       paddingTop: 5,
       '& span': {
-        color: '#d32f2f',
+        // color: '#d32f2f',
         fontWeight: 400,
       },
     },
@@ -121,7 +121,7 @@ const Search = (props) => {
             className={classes.tabContainer}
           >
             <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="People" />
-            <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Buzz's" />
+            <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Posts" />
           </Tabs>
         </div>
         <React.Fragment>

@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Badge from '@material-ui/core/Badge'
 import classNames from 'classnames'
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from '@material-ui/icons/Create'
 import queryString from 'query-string'
 import { 
   Avatar,
@@ -15,7 +15,7 @@ import {
 import { createUseStyles } from 'react-jss'
 import { SearchField, LoginModal, BuzzFormModal, UserSettingModal, SwitchAccountModal } from 'components'
 import { signupHiveOnboard } from 'services/helper'
-import { useLocation, useHistory, Link } from 'react-router-dom'
+import { useLocation, useHistory, Link, Prompt  } from 'react-router-dom'
 import { isMobile } from 'react-device-detect'
 import { connect } from 'react-redux'
 import { 
@@ -42,8 +42,8 @@ import { signoutUserRequest } from 'store/auth/actions'
 import { useLastLocation } from 'react-router-last-location'
 import { pending } from 'redux-saga-thunk'
 import { pollNotifRequest } from 'store/polling/actions'
-import { searchRequest, clearSearchPosts } from 'store/posts/actions'
-
+import { searchRequest, clearSearchPosts, publishPostRequest } from '../../../store/posts/actions'
+import { WriteIcon } from 'components/elements'
 const useStyles = createUseStyles(theme => ({
   nav: {
     height: 65,
@@ -61,6 +61,17 @@ const useStyles = createUseStyles(theme => ({
     marginBottom: 5,
     marginTop: 5,
     backgroundColor: '#e6ecf0',
+  },
+  search2: {
+    width: '60%',
+    paddingLeft: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    backgroundColor: '#F9F9F9',
+  },
+  box2:{
+    border: '1px solid #F9F9F9',
+    borderRadius: 20,
   },
   backButton: {
     display: 'inline-block',
@@ -81,6 +92,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.profile.wrapper,
+    backgroundColor: 'white !important',
   },
   profileUsername: {
     paddingLeft: 10,
@@ -120,6 +132,7 @@ const useStyles = createUseStyles(theme => ({
     transitionDuration: '0.3s',
     transitionProperty: 'background-color',
     ...theme.nav.notification.wrapper,
+    backgroundColor: 'white !important',
   },
   notificationWrapper: {
     height: 45,
@@ -147,8 +160,50 @@ const useStyles = createUseStyles(theme => ({
       },
     },
   },
+  marginLeft0:{
+    marginLeft: 0,
+  },
+  marginRight0:{
+    marginRight: 0,
+  },
+  displayFlex:{
+    display: 'flex',
+  },
+  justifyContentCenter:{
+    justifyContent: 'center',
+  },
+  alignItemsCenter:{
+    alignItems: 'center',
+  },
+  minWidth100:{
+    minWidth: '100%',
+  },
   root: {
     fill: 'black !important',
+  },
+  textWhite:{
+    color: 'white',
+  },
+  textBlack:{
+    color: 'black',
+  },
+  transitionOpacity:{
+    transition: 'opacity 0.5s',
+  },
+  opacity0:{
+    opacity: 0,
+  },
+  opacity1:{
+    opacity: 1,
+  },
+  width60:{
+    width: "60px",
+  },
+  marginRight10:{
+    marginRight:'10px',
+  },
+  padding0:{
+    padding: 0,
   },
 }))
 
@@ -163,7 +218,10 @@ const AppBar = (props) => {
     pollNotifRequest, 
     searchRequest,
     clearSearchPosts,
+    publishPostRequest,
+    postContent,
     count = 0,
+    images,
   } = props
   const { isAuthenticated } = user
   const { mode } = theme
@@ -173,23 +231,56 @@ const AppBar = (props) => {
   const { username } = user
   const params = queryString.parse(location.search) || ''
   const query = params.q === undefined ? '' : params.q
-
+  const [isCreatePostPage, setIsCreatePostPage] = useState(false)
   const minify = false // set value for testing...
   const [open, setOpen] = useState(false)
   const [openBuzzModal, setOpenBuzzModal] = useState(false)
   const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
   const [openSwitchAccountModal, setOpenSwitchAccountModal] = useState(false)
   const [disableSearchTips, setDisableSearchTips] = useState(false)
+  const [posting, setPosting] = useState(false)
   const [searchkey, setSearchkey] = useState(query)
-
+  
   let navbarContainer = classes.nav
 
   if (isMobile) {
     navbarContainer = classes.mobileNav
   }
 
+
+  const [tagError, settagError] = useState(false)
+
+  useEffect(() => {
+    let tagspec = false
+    if (postContent.tags) {
+      postContent.tags.map((tagCheck) => {
+        // console.log('tag update', tag)
+        // var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+        // var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
+  
+        if(format.test(tagCheck) ){
+          tagspec = true
+        }
+
+        return true
+  
+      })
+     
+      if (tagspec) {
+        settagError(true)
+      }else{
+        settagError(false)
+      }
+
+    }
+   
+  },[postContent,tagError])
   useEffect(() => {
     pollNotifRequest()
+    if (pathname === '/create-post') {
+      setIsCreatePostPage(true)
+    }
     // eslint-disable-next-line
   }, [])
 
@@ -295,57 +386,184 @@ const AppBar = (props) => {
     const { value } = target
     setSearchkey(value)
   }
+  const [isTop, setIstop] = useState(true)
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY // => scroll position
+    if (scrollPosition <= 50) {
+      setIstop(true)
+    }else{
+      setIstop(false)
+    }
+    // console.log(scrollPosition);
+  }
+  useEffect(() => {
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+  const extractAllHashtags = (value) => {
+    let hashtags = value.match(/(?![^()]*\))(?![^[\]]*])#([\w\d!@%^&*)(+=._-]+)/gi)
+
+    if (hashtags === null) {
+      hashtags = []
+    } else {
+      hashtags = hashtags.map((item) => item.replace("#", '').toLowerCase())
+    }
+
+    return hashtags
+  }
+  const postNow =  async () => {
+    setPosting(true)
+    const buzzTitle = postContent.title
+    let buzzContent = postContent.content 
+    buzzContent = images.length >= 1 ? buzzContent + '\n' + images.toString().replace(/,/gi, ' ') : buzzContent
+    const payout = postContent.payout
+    const buzzPermlink = postContent.buzzPermlink
+    const tagsfromcontent = await extractAllHashtags(postContent.content)
+    const tags = [...postContent.tags, ...tagsfromcontent]
+    publishPostRequest(buzzTitle,buzzContent, tags, payout, buzzPermlink)
+      .then((data) => {
+        if (data.success) {
+          const {author, permlink} = data
+          // if (!isThread) {
+          history.push(`/@${author}/c/${permlink}`)
+          // }
+          setPosting(false)
+
+        } else {
+          console.log('error')
+          setPosting(false)
+        }
+      })
+  }
+
+  useEffect(() => {
+  },[images])
+
+  const [isBlocking, setIsBlocking] = useState(false)
+
+  useEffect(() => {
+    if (pathname === '/create-post') {
+      const handleBeforeUnload = (event) => {
+        if (isBlocking) {
+          const message = "Are you sure you want to leave?"
+          event.returnValue = message
+          return message
+        }
+      }
+  
+      window.addEventListener('beforeunload', handleBeforeUnload)
+  
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+      }
+    }
+   
+  }, [isBlocking,pathname])
+
+  const handleNavigate = (path) => {
+    if (pathname === '/create-post') {
+      const shouldNavigate = window.confirm("Are you sure you want to leave? Changes you made may not be saved.")
+      if (shouldNavigate) {
+        setIsBlocking(false)
+        // Navigate to the desired page
+        history.push(path)
+      }
+    }
+    
+  }
 
   return (
     <React.Fragment>
-      <Navbar fixed="top" className={navbarContainer}>
-        <Container>
-          <Navbar.Brand>
-            {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
-              <React.Fragment>
-                <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
-                  <BackArrowIcon />
-                </IconButton>
-                &nbsp;
-              </React.Fragment>
+      <Prompt
+        when={isBlocking}
+        message="Are you sure you want to leave?"
+      />
+      <Navbar fixed="top" className={classNames(navbarContainer, isTop?classes.opacity1:classes.opacity0, classes.transitionOpacity)}>
+        <Container className={classNames(!isCreatePostPage?classes.marginLeft0:'', !isCreatePostPage?classes.marginRight0:'', !isCreatePostPage?classes.minWidth100:'')}>
+          <div className={classNames(classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>
+            <Navbar.Brand>
+              {title !== 'Home' && title !== 'Trending' && title !== 'Latest' && (
+                <React.Fragment>
+                  <IconButton className={classes.backButton} onClick={handleClickBackButton} size="small">
+                    <BackArrowIcon />
+                  </IconButton>
+                  &nbsp;
+                </React.Fragment>
+              )}
+              <a href="/">
+                {!isMobile && (
+                  <React.Fragment>
+                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
+                  </React.Fragment>
+                )}
+                {isMobile && (
+                  <React.Fragment>
+                    {mode === 'light' && (<BrandIcon height={30} top={-3} />)}
+                    {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={30} top={-3} />)}
+                  </React.Fragment>
+                )}
+              </a>
+            </Navbar.Brand>
+            {pathname !== '/create-post' &&(
+              <Hidden  only="xs">
+                <SearchField className={classNames(classes.search2, classes.box2)} disableTips={true} />
+              </Hidden> 
             )}
-            <a href="/">
-              {!isMobile && (
-                <React.Fragment>
-                  {mode === 'light' && (<BrandIcon height={50} top={-3} />)}
-                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={50} top={-3} />)}
-                </React.Fragment>
-              )}
-              {isMobile && (
-                <React.Fragment>
-                  {mode === 'light' && (<BrandIcon height={40} top={-3} />)}
-                  {(mode === 'darknight' || mode === 'grayscale') && (<BrandDarkIcon height={40} top={-3} />)}
-                </React.Fragment>
-              )}
-            </a>
-          </Navbar.Brand>
+              
+          </div>
+          
           {!isMobile && (
             <React.Fragment>
-              <Hidden only="xs">
-                <SearchField className={classes.search} disableTips={true} />
-              </Hidden>            
+                      
               {isAuthenticated && (
                 <React.Fragment>
                   {!minify && (
                     <React.Fragment>
-                      <div style={{ display: 'inline-flex' }}>
+                      <div style={{ display: 'inline-flex', width:pathname === '/create-post'?'200px':'220px' }}>
                         {/* &nbsp;
                         <div className={classes.buzzButton}>
                           <div className={classes.buzzWrapper} onClick={handleClickOpenBuzzModal}>
                             <AddIcon />
                           </div>
                         </div> */}
-                        &nbsp;
+                        <div className={classNames(classes.notificationButton, classes.notificationWrapper, pathname === '/create-post'?classes.width60:'', pathname === '/create-post' || posting?classes.marginRight10:classes.marginRight10, pathname === '/create-post'?classes.padding0:'')}>
+
+                          {pathname === '/create-post' && (
+                            <Menu>
+                              <button onClick={postNow} disabled={!tagError && (postContent.title && postContent.content) && (!posting)?false:true} className='btn btn-success'>{posting?'Posting':'Post'}</button>
+                            </Menu>
+                          )}
+                          {pathname !== '/create-post' && (
+                            <Menu>
+                              <MenuLink 
+                                as={Link}
+                                to="/create-post"
+                              >
+                                <div style={{display:'flex', justifyContent:'space-evenly', alignItems:'center', width:'75px'}}>
+                                  <WriteIcon size={17}/>
+                                  <label style={{margin:'0'}} className={classes.textBlack}>Write</label>
+                                </div>
+                                
+                                {/* <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge> */}
+                              </MenuLink>
+                            </Menu>
+                          )}
+                        </div>
+                        
                         <div className={classNames(classes.notificationButton, classes.notificationWrapper)}>
                           <Menu>
                             <MenuLink 
                               as={Link}
                               to="/notifications"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/notifications')
+                              }}
                             >
                               <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
                             </MenuLink>
@@ -366,7 +584,6 @@ const AppBar = (props) => {
                             <MenuLink>Notifications 4</MenuLink>
                           </MenuList>
                         </Menu> */}
-                        &nbsp;
                         <Menu>
                           <MenuButton
                             className={classNames(classes.profileButton, classes.avatarWrapper)}
@@ -374,7 +591,7 @@ const AppBar = (props) => {
                           >
                             <div style={{ display: 'inline-flex', top: '50%', bottom: '50%' }}>
                               <Avatar author={username} />
-                              <h6 className={classes.profileUsername}>@{username}</h6>
+                              {/* <h6 className={classes.profileUsername}>@{username}</h6> */}
                             </div>
                           </MenuButton>
                           <MenuList style={{ width: 'auto' }} className={classes.menulistWrapper}>
@@ -382,6 +599,10 @@ const AppBar = (props) => {
                               style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
                               as={Link}
                               to={`/@${username}`}
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate(`/@${username}`)
+                              }}
                             >
                               <div>
                                 <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
@@ -394,18 +615,30 @@ const AppBar = (props) => {
                             <MenuLink
                               as={Link}
                               to="/"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/')
+                              }}
                             >
                               <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/trending"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/trending')
+                              }}
                             >
                               <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/latest"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleNavigate('/latest')
+                              }}
                             >
                               <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
                             </MenuLink>
@@ -436,18 +669,18 @@ const AppBar = (props) => {
             </React.Fragment>
           )}
           {isMobile && isAuthenticated && (
-              <div>
-                {title !== 'Search' && (
-                  <React.Fragment>
-                    <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
-                      <CreateIcon fontSize="medium" />
-                    </IconButton>
-                    <IconButton onClick={handleClickSearchButton} size="medium">
-                      <SearchIcon/>
-                    </IconButton>
-                  </React.Fragment>
-                )}
-                <Menu>
+            <div>
+              {title !== 'Search' && (
+                <React.Fragment>
+                  <IconButton size="medium" aria-label="write" onClick={handleClickOpenBuzzModal}>
+                    <CreateIcon fontSize="medium" />
+                  </IconButton>
+                  <IconButton onClick={handleClickSearchButton} size="medium">
+                    <SearchIcon/>
+                  </IconButton>
+                </React.Fragment>
+              )}
+              <Menu>
                 {title === 'Search' && (
                   <div className={classes.searchDiv}>
                     <SearchField
@@ -458,7 +691,7 @@ const AppBar = (props) => {
                       value={searchkey}
                       onKeyDown={handleSearchKey}
                       onChange={onChangeSearch}
-                      placeholder="Search D.Buzz"
+                      placeholder="Search Posts"
                       autoFocus
                     />
                   </div>
@@ -526,8 +759,8 @@ const AppBar = (props) => {
                   </React.Fragment>
                 )}
                   
-                </Menu>
-              </div>
+              </Menu>
+            </div>
               
           )}
           {!isAuthenticated && (
@@ -543,6 +776,7 @@ const AppBar = (props) => {
           )}
           
         </Container>
+        
         <LoginModal show={open} onHide={handleClickCloseLoginModal} />
         <BuzzFormModal show={openBuzzModal} onHide={handleClickCloseBuzzModal} />
         <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
@@ -554,14 +788,17 @@ const AppBar = (props) => {
 const mapStateToProps = (state) => ({
   theme: state.settings.get('theme'),
   user: state.auth.get('user'),
+  postContent: state.posts.get('postContent'),
   count: state.polling.get('count'),
   loadingAccount: pending(state, 'AUTHENTICATE_USER_REQUEST'),
+  images: state.posts.get('images'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     signoutUserRequest,
     pollNotifRequest, 
+    publishPostRequest,
     searchRequest,
     clearSearchPosts,
   }, dispatch),

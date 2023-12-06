@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => ({
     ...theme.markdown.paragraph,
     '& a': {
       wordWrap: 'break-word',
-      color: '#d32f2f !important',
+      // color: '#d32f2f !important',
     },
     '& p': {
       wordWrap: 'break-word',

@@ -10,7 +10,7 @@ const useStyle = createUseStyles({
     width: '100%',
     height: 'max-content',
     fontSize: 14,
-    fontFamily: 'Segoe-Bold',
+    // fontFamily: 'Segoe-Bold',
     '& a': {
       display: 'inline-block',
       whiteSpace: 'nowrap',
@@ -18,12 +18,12 @@ const useStyle = createUseStyles({
   },
   default: {
     marginRight: 5,
-    color: '#d32f2f !important',
+    // color: '#d32f2f !important',
     wordBreak: 'break-word !important',
     whiteSpace: 'nowrap',
   },
   highlighted: {
-    backgroundColor: '#d32f2f',
+    // backgroundColor: '#d32f2f',
     borderRadius: 10,
     paddingLeft: 2,
     paddingRight: 2,

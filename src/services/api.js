@@ -1,24 +1,104 @@
-import axios from 'axios'
-import moment from 'moment'
+import {api, auth, broadcast, formatter} from '@hiveio/hive-js'
+// import {hash} from '@hiveio/hive-js/lib/auth/ecc'
+import {Promise, 
+  // reject
+} from 'bluebird'
+import {v4 as uuidv4} from 'uuid'
 import appConfig from 'config'
-import { v4 as uuidv4 } from 'uuid'
-import { 
-  api,
-  auth,
-  broadcast,
-  formatter,
-} from '@hiveio/hive-js'
-import { stripHtml } from './helper'
+// import config from 'config'
+import axios from 'axios'
+// import getSlug from 'speakingurl'
+import moment from 'moment'
+// import {ChainTypes, makeBitMaskFilter} from '@hiveio/hive-js/lib/auth/serializer'
+import 'react-app-polyfill/stable'
+import {calculateOverhead, stripHtml} from 'services/helper'
+// import {hacManualTransaction, hacUserAuth, hacVote} from "@mintrawa/hive-auth-client"
+
+const searchUrl = `${appConfig.SEARCH_API}/search`
+const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
+const imageUrl = `${appConfig.IMAGE_API}`
+// const videoUrl = `${appConfig.VIDEO_API}`
+// const censorUrl = `${appConfig.CENSOR_API}`
+// const priceChartURL = `${appConfig.PRICE_API}`
+
+// const APP_META = {
+//   name: config.APP_NAME,
+//   description: config.APP_DESCRIPTION,
+//   icon: config.APP_ICON,
+// }
+
 
 const visited = []
 
-const scrapeUrl = `${appConfig.SCRAPE_API}/scrape`
-const searchUrl = `${appConfig.SEARCH_API}/search`
-const imageUrl = `${appConfig.IMAGE_API}/image`
+// const defaultNode = process.env.REACT_APP_DEFAULT_RPC_NODEpa
 
+
+export const uploadImage = async (data, progress) => {
+  console.log('progress',progress)
+  console.log('data',data)
+  const formData = new FormData()
+  formData.append('file', data)
+  console.log('data',data)
+  console.log('imageUrl',imageUrl)
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios({
+        method: 'POST',
+        url: imageUrl,
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: formData,
+        validateStatus: () => true,
+        onUploadProgress: (progressEvent) => {
+          const {loaded, total} = progressEvent
+          const percent = Math.floor((loaded * 100) / total)
+          progress(percent)
+        },
+      })
+
+      resolve(response.data)
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+}
+// export const calculateOverhead = (content) => {
+//   let urls = getUrls(content) || []
+  
+//   const markdown = content?.match(/#+\s|[*]|\s+&nbsp;+\s|\s+$/gm) || []
+
+//   let overhead = 0
+
+//   // let overheadItems = []
+
+//   if(markdown.length>0) {
+//     markdown.forEach((item) => {
+//       // overheadItems.push(item)
+//       overhead += item.length
+//     })
+//   }
+  
+//   if((urls.length) > 3) {
+//     urls = urls.slice(0, 2)
+//   }
+  
+//   if(urls && urls.length <= 3){
+//     urls.forEach((item) => {
+//       // overheadItems.push(item)
+//       overhead += item.length
+//     })
+//   }
+
+//   // console.log(overheadItems)
+
+//   return overhead
+// }
 export const invokeFilter = (item) => {
   const body = stripHtml(item.body)
-  return (body.length >= 280)
+  const overhead = calculateOverhead(body)
+
+  const length = body.length - overhead
+  return (length <= 280 && item.category === `${appConfig.TAG}`)
 }
 
 export const keychainSignIn = (username) => {
@@ -335,8 +415,8 @@ export const fetchContent = (author, permlink) => {
 
 export const fetchDiscussions = (author, permlink) => {
   return new Promise((resolve, reject) => {
-    const params = {"author":`${author}`, "permlink": `${permlink}`
-  }
+    const params = {"author":`${author}`, "permlink": `${permlink}`,
+    }
     api.call('bridge.get_discussion', params, async(err, data) => {
       if(err) {
         reject(err)
@@ -433,10 +513,10 @@ export const uploadIpfsImage = async(data) => {
   })
 }
 
-export const generatePostOperations = (account, title, body, tags, payout) => {
+export const generatePostOperations = (account, title, body, tags, payout, perm) => {
   const json_metadata = createMeta(tags)
 
-  const permlink = createPermlink()
+  const permlink = perm === null ? createPermlink(title) : perm
 
   const operations = []
 
@@ -445,27 +525,30 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
       'comment',
       {
         'author': account,
-        'title': title,
-        'body': body,
+        'title': stripHtml(title),
+        'body': `${body.trim()}`,
         'parent_author': '',
-        'parent_permlink': permlink,
+        // 'parent_permlink': `${appConfig.TAG}`,
+        'parent_permlink': `blog`,
         permlink,
         json_metadata,
       },
     ]
 
     operations.push(op_comment)
+
     const max_accepted_payout = `${payout.toFixed(3)} HBD`
     const extensions = []
 
 
-    if(payout === 0) {
+    if (payout === 0) {
       extensions.push([
         0,
-        { beneficiaries:
-          [
-            { account: 'null', weight: 10000 },
-          ],
+        {
+          beneficiaries:
+            [
+              {account: 'null', weight: 10000},
+            ],
         },
       ])
     }
@@ -477,7 +560,7 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
         'author': account,
         permlink,
         max_accepted_payout,
-        'percent_hbd': 5000,
+        'percent_hbd': 10000,
         'allow_votes': true,
         'allow_curation_rewards': true,
         extensions,
@@ -493,11 +576,13 @@ export const generatePostOperations = (account, title, body, tags, payout) => {
 
 export const createMeta = (tags = []) => {
 
-  const uniqueTags = [ ...new Set(tags.map(item => item.text)) ]
+  const uniqueTags = [ ...new Set(tags.map(item => item)) ]
+  // const uniqueTags = [ ...tags ]
 
   const meta = {
-    app: `dBuzz/v3.0.0`,
+    app: `blogDBuzz/v3.0.0`,
     tags: uniqueTags,
+    shortForm: true,
   }
 
   return JSON.stringify(meta)
