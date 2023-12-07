@@ -8,6 +8,7 @@ import { renderRoutes } from 'react-router-config'
 import { useLocation } from 'react-router-dom'
 import { useWindowDimensions } from 'services/helper'
 import classNames from 'classnames'
+import Tabs from '../../common/Tabs'
 
 const useStyles = createUseStyles(theme => ({
   main: {
@@ -75,6 +76,7 @@ const UnguardedAppFrame = (props) => {
   let isProfileRoute = false
   let isContentRoute = false
   const [isCreatePostPage, setIsCreatePostPage] = useState(false)
+  const [isSearchPage, setIsSearchPage] = useState(false)
 
   if (!pathname.match(/(\/c\/)/) && pathname.match(/^\/@/)) {
     isProfileRoute = true
@@ -86,6 +88,9 @@ const UnguardedAppFrame = (props) => {
     if (pathname === '/create-post') {
       setHideRightSideBar(true)
       setIsCreatePostPage(true)
+    }
+    if (pathname === '/search/people') {
+      setIsSearchPage(true)
     }
   },[pathname])
 
@@ -101,6 +106,12 @@ const UnguardedAppFrame = (props) => {
       }else{
         setHideRightSideBar(false)
       }
+
+      if (pathname === '/search/people') {
+        setIsSearchPage(true)
+      }else{
+        setIsSearchPage(false)
+      }
     }
   }, [width, pathname])
 
@@ -110,6 +121,7 @@ const UnguardedAppFrame = (props) => {
         {!isProfileRoute && !isContentRoute && (
           <React.Fragment>
             <Col xs={mainWidth} className={classes.clearPadding}>
+              {!isCreatePostPage && !isSearchPage && (<Tabs hideFollower={true}/>)}
               <div  className={classNames(classes.main, pathname === '/create-post'? classes.marginTop100:classes.marginTop60)}>
                 <React.Fragment>
                   {renderRoutes(route.routes)}
