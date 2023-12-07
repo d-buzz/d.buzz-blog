@@ -55,7 +55,7 @@ body, span{
 }
 
 div {
-  font-family: 'CharterBold';
+  font-family: 'CharterRegular';
 }
 .title-0-2-154{
   font-family: 'RobotoBold';
@@ -63,11 +63,11 @@ div {
 }
 
 h1, h2, h3, h4, h5 {
-  font-family: 'CharterBold';
+  font-family: 'CharterRegular';
 }
 
 p {
-  font-family: 'CharterBold';
+  font-family: 'CharterRegular';
 }
 
 @media (min-width: 768px) {

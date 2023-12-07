@@ -84,7 +84,8 @@ const useStyles = createUseStyles(theme => ({
   },
 
 }))
-const Tabs = () => {
+const Tabs = (props) => {
+  const {hideFollower,hideLatest} = props
   const classes = useStyles()
   const history = useHistory()
   const location = useLocation()
@@ -130,12 +131,17 @@ const Tabs = () => {
               <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/trending')} className={classNames(classes.cursorPointer, pathname === '/trending' || pathname === '/'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Trending
               </div>
-              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/following')} className={classNames(classes.cursorPointer,pathname === '/following'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+              {!hideFollower && (
+                <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/following')} className={classNames(classes.cursorPointer,pathname === '/following'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Following
-              </div>
-              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                </div>
+              )}
+              {!hideLatest && (
+                <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/latest')} className={classNames(classes.cursorPointer,pathname === '/latest'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     Latest
-              </div>
+                </div>
+              )}
+             
               <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/news')} className={classNames(classes.cursorPointer,pathname === '/news'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     News
               </div>
