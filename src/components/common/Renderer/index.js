@@ -1362,14 +1362,17 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
         .replace(/\b>>\s*\S*/g, '')
         .replace(/<center>▶️ .*?<\/center>/g, '')
         .replace(/<liketuimages><center>.*?<\/center>/g, '')
+        .replace(/<div class="text-justify">>.*?<\/div>/g, '')
+        .replace(/:\s*\S*/g, '')
+        .replace(/---<center>h/g, '')
 
       const maxLength = 100
       console.log("content.length ",content.length )
-      const truncatedString = content.length > maxLength
+      let truncatedString = content.length > maxLength
         ? content.substring(0, maxLength - 3) + '...'
         : content
-      console.log("truncatedString ",truncatedString )
-
+      truncatedString = truncatedString.replace(/(<[^>]*>|[^a-zA-Z0-9\s])/g, ' ').replace(/\bh\b/g, '')
+      // truncatedString = truncatedString.replace(/<\/?[^>]+(>|$)/g, '').replace(/[^\w\s]/g, '');
       return <BuzzRenderer
         key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
         content={truncatedString}

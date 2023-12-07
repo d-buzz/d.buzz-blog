@@ -405,7 +405,7 @@ const PostList = React.memo((props) => {
                           </div>
                           {!isMobile && (
                             <div>
-                              <Renderer showText={true} showImage={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/>
+                              <Renderer showText={true} showImage={false} content={body} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex}/><span style={{fontStyle:'italic'}}>&nbsp;read more...</span>
                             </div>
                           )}
                         </div>
