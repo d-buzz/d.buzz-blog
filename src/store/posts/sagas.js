@@ -23,6 +23,11 @@ import {
   getLatestPostsFailure,
   setLatestLastPost,
 
+  GET_NEWS_POSTS_REQUEST,
+  getNewsPostsSuccess,
+  getNewsPostsFailure,
+  setNewsLastPost,
+
   setContentRedirect,
 
   GET_CONTENT_REQUEST,
@@ -279,6 +284,39 @@ function* getLatestPostsRequest(payload, meta) {
     yield put(getLatestPostsSuccess(data, meta))
   } catch(error) {
     yield put(getLatestPostsFailure(error, meta))
+  }
+}
+
+function* getNewsPostsRequest(payload, meta) {
+  const { start_permlink, start_author } = payload
+
+  const params = { sort: 'created', start_permlink, start_author }
+  const method = 'get_ranked_posts'
+
+  try {
+    const old = yield select(state => state.posts.get('news'))
+    let data = yield call(callBridge, method, params, true, 'news')
+
+    data = [...old, ...data]
+
+    data = data.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+    })
+
+    yield put(setNewsLastPost(data[data.length-1]))
+    data = data.filter((item) => item.body.length >= 280)
+
+    const mutelist = yield select(state => state.auth.get('mutelist'))
+    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+    const patterns = yield call(getMutePattern)
+    data = invokeMuteFilter(data, mutelist, opacityUsers)
+
+    data = patternMute(patterns, data)
+
+
+    yield put(getNewsPostsSuccess(data, meta))
+  } catch(error) {
+    yield put(getNewsPostsFailure(error, meta))
   }
 }
 
@@ -857,6 +895,10 @@ function* watchGetLatestPostsRequest({payload, meta}) {
   yield call(getLatestPostsRequest, payload, meta)
 }
 
+function* watchGetNewsPostsRequest({payload, meta}) {
+  yield call(getNewsPostsRequest, payload, meta)
+}
+
 function* watchGetTrendingTagsRequest({ meta }) {
   yield call(getTrendingTagsRequests, meta)
 }
@@ -915,6 +957,7 @@ function* watchSearchRequest({ payload, meta }) {
 
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
+  yield takeEvery(GET_NEWS_POSTS_REQUEST, watchGetNewsPostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
   yield takeEvery(GET_TRENDING_POSTS_REQUEST, watchGetTrendingPostsRequest)
   yield takeEvery(GET_FOLLOW_DETAILS_REQUEST, watchGetFollowDetailsRequest)
