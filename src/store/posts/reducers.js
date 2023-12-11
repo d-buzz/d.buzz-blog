@@ -3,6 +3,7 @@ import {
   GET_HOME_POSTS_SUCCESS,
   GET_LATEST_POSTS_SUCCESS,
   GET_NEWS_POSTS_SUCCESS,
+  GET_HIVE_POSTS_SUCCESS,
   GET_TRENDING_TAGS_SUCCESS,
   GET_TRENDING_POSTS_SUCCESS,
   SET_TRENDING_LAST_POST,
@@ -13,6 +14,7 @@ import {
   SET_TRENDING_IS_VISITED,
   SET_LATEST_IS_VISITED,
   SET_NEWS_IS_VISITED,
+  SET_HIVE_IS_VISITED,
   SET_LATEST_LAST_POST,
   SET_NEWS_LAST_POST,
   SET_TAGS_IS_VISITED,
@@ -41,6 +43,7 @@ const defaultState = fromJS({
   tags: [],
   latest: [],
   news: [],
+  hive: [],
   content: {},
   search: {},
   searchTag: [],
@@ -51,11 +54,13 @@ const defaultState = fromJS({
   home: [],
   lastLatest: {},
   lastNews: {},
+  lastHive: {},
   isHomeVisited: false,
   isTrendingVisited: false,
   isLatestVisited: false,
   isTagsVisited: false,
   isNewsVisited: false,
+  isHiveVisited: false,
   appendReply: {},
   replies: [],
   pageFrom: '',
@@ -81,6 +86,8 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('latest', payload)
   case GET_NEWS_POSTS_SUCCESS:
     return state.set('news', payload)
+  case GET_HIVE_POSTS_SUCCESS:
+    return state.set('hive', payload)
   case GET_TRENDING_TAGS_SUCCESS:
     return state.set('tags', payload)
   case GET_TRENDING_POSTS_SUCCESS:
@@ -115,6 +122,8 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('isLatestVisited', payload)
   case SET_NEWS_IS_VISITED:
     return state.set('isNewsVisited', payload)
+  case SET_HIVE_IS_VISITED:
+    return state.set('isHiveVisited', payload)
   case SET_TAGS_IS_VISITED: 
     return state.set('isTagsVisited', payload)
   case CLEAR_APPEND_REPLY:

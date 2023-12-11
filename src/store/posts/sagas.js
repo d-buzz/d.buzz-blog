@@ -28,6 +28,11 @@ import {
   getNewsPostsFailure,
   setNewsLastPost,
 
+  GET_HIVE_POSTS_REQUEST,
+  getHivePostsSuccess,
+  getHivePostsFailure,
+  setHiveLastPost,
+
   setContentRedirect,
 
   GET_CONTENT_REQUEST,
@@ -317,6 +322,39 @@ function* getNewsPostsRequest(payload, meta) {
     yield put(getNewsPostsSuccess(data, meta))
   } catch(error) {
     yield put(getNewsPostsFailure(error, meta))
+  }
+}
+
+function* getHivePostsRequest(payload, meta) {
+  const { start_permlink, start_author } = payload
+
+  const params = { sort: 'created', start_permlink, start_author }
+  const method = 'get_ranked_posts'
+
+  try {
+    const old = yield select(state => state.posts.get('hive'))
+    let data = yield call(callBridge, method, params, true, 'hive')
+
+    data = [...old, ...data]
+
+    data = data.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+    })
+
+    yield put(setHiveLastPost(data[data.length-1]))
+    data = data.filter((item) => item.body.length >= 280)
+
+    const mutelist = yield select(state => state.auth.get('mutelist'))
+    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+    const patterns = yield call(getMutePattern)
+    data = invokeMuteFilter(data, mutelist, opacityUsers)
+
+    data = patternMute(patterns, data)
+
+
+    yield put(getHivePostsSuccess(data, meta))
+  } catch(error) {
+    yield put(getHivePostsFailure(error, meta))
   }
 }
 
@@ -899,6 +937,10 @@ function* watchGetNewsPostsRequest({payload, meta}) {
   yield call(getNewsPostsRequest, payload, meta)
 }
 
+function* watchGetHivePostsRequest({payload, meta}) {
+  yield call(getHivePostsRequest, payload, meta)
+}
+
 function* watchGetTrendingTagsRequest({ meta }) {
   yield call(getTrendingTagsRequests, meta)
 }
@@ -958,6 +1000,7 @@ function* watchSearchRequest({ payload, meta }) {
 export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_NEWS_POSTS_REQUEST, watchGetNewsPostsRequest)
+  yield takeEvery(GET_HIVE_POSTS_REQUEST, watchGetHivePostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
   yield takeEvery(GET_TRENDING_POSTS_REQUEST, watchGetTrendingPostsRequest)
   yield takeEvery(GET_FOLLOW_DETAILS_REQUEST, watchGetFollowDetailsRequest)
