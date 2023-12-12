@@ -33,13 +33,37 @@ const useStyles = createUseStyles(theme => ({
     },
     '& p': {
       wordWrap: 'break-word',
-      fontSize: 14,
+      fontSize: 20,
     },
-    fontSize: '14 !important',
+    '& em': {
+      wordWrap: 'break-word',
+      fontSize: 20,
+    },
+    '& h1': {
+      wordWrap: 'break-word',
+      fontSize: 32,
+    },
+    '& h2': {
+      wordWrap: 'break-word',
+      fontSize: 32,
+    },
+    '& h3': {
+      wordWrap: 'break-word',
+      fontSize: 31,
+    },
+    '& h4': {
+      wordWrap: 'break-word',
+      fontSize: 30,
+    },
+    '& h5': {
+      wordWrap: 'break-word',
+      fontSize: 28,
+    },
+    fontSize: '20 !important',
     '& blockquote': {
       padding: '10px 12px',
       margin: '0 0 20px',
-      fontSize: 13,
+      fontSize: 20,
       borderLeft: '5px solid #eee',
     },
   },
