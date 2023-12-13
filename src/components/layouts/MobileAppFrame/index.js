@@ -496,7 +496,7 @@ const MobileAppFrame = (props) => {
               <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
               <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
             </Navbar>
-            {!isCreatePostPage && !isSearchPage && (<Tabs hideFollower={isAuthenticated? false:true}/>)}
+            {!isProfileRoute && !isContentRoute && !isCreatePostPage && !isSearchPage && (<Tabs hideFollower={isAuthenticated? false:true}/>)}
             <Row>
               
               {!isProfileRoute && !isContentRoute && (
