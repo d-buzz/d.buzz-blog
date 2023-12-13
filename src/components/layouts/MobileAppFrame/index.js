@@ -502,7 +502,7 @@ const MobileAppFrame = (props) => {
               
               {!isProfileRoute && !isContentRoute && (
                 <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
-                  <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                  <div style={{ paddingTop: 50, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                     <React.Fragment>
                       {renderRoutes(route.routes)}
                     </React.Fragment>
