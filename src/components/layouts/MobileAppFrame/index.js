@@ -57,6 +57,7 @@ const useStyles = createUseStyles(theme => ({
     height: 55,
     backgroundColor: theme.nav.background,
     borderBottom: theme.border.primary,
+    paddingLeft:"1.8rem",
   },
   backButton: {
     display: 'inline-block',
