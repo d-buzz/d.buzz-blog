@@ -403,7 +403,7 @@ const PostList = React.memo((props) => {
                         </div>
                         <div onClick={handleOpenContent}>
                           <div>
-                            <strong className={classes.title}>{title}</strong>
+                            <strong className={classNames(classes.title,'title-0-2-154')}>{title}</strong>
                           </div>
                           {!isMobile && (
                             <div>
