@@ -8,8 +8,11 @@ const AuthGuard = (props) => {
   const location = useLocation()
   const { pathname } = location
 
+  // const isGuardedRoute = () => {
+  //   return pathname.match(/^(\/latest)/g) || pathname.match(/^(\/trending)/g)
+  // }
   const isGuardedRoute = () => {
-    return pathname.match(/^(\/latest)/g) || pathname.match(/^(\/trending)/g)
+    return pathname.match(/^(\/following)/g)
   }
   
   return (

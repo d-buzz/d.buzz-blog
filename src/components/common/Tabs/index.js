@@ -10,6 +10,9 @@ const useStyles = createUseStyles(theme => ({
   marginAuto: {
     margin: 'auto',
   },
+  marginLeft18rem:{
+    marginLeft: "1.8rem",
+  },
   height43:{
     height: 43,
   },
@@ -55,6 +58,9 @@ const useStyles = createUseStyles(theme => ({
   },
   paddingTop24:{
     paddingTop: 24,
+  },
+  paddingTop0:{
+    paddingTop: 0,
   },
   paddingTop50:{
     paddingTop: 50,
@@ -115,13 +121,13 @@ const Tabs = (props) => {
   }, [])
 
   return (
-    <div className={classNames(isTop?classes.top57:classes.top0, isTop? classes.paddingTop24:'', classes.positionSticky, classes.backGroundWhite, !isTop || isMobile?classes.zindex1050:'' )}>
+    <div className={classNames(isTop?classes.top57:classes.top0, isTop && !isMobile? classes.paddingTop24:isTop && isMobile? classes.paddingTop0:'', classes.positionSticky, classes.backGroundWhite, !isTop || isMobile?classes.zindex1050:'' )}>
     	{/* 2 div
         1 for padding
         1 for tabs content
     	*/}
     	{/* <div className={classNames(classes.paddingTop24)}></div> */}
-    	<div className={classNames( classes.width90, classes.marginAuto)}>
+    	<div className={classNames( classes.width90, classes.marginAuto, isMobile? classes.marginLeft18rem:"")}>
         {/* div for height 16px */}
         <div className={classes.height16}>
 

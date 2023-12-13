@@ -57,6 +57,7 @@ const useStyles = createUseStyles(theme => ({
     height: 55,
     backgroundColor: theme.nav.background,
     borderBottom: theme.border.primary,
+    paddingLeft:"1.8rem",
   },
   backButton: {
     display: 'inline-block',
@@ -496,12 +497,12 @@ const MobileAppFrame = (props) => {
               <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
               <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
             </Navbar>
-            {!isCreatePostPage && !isSearchPage && (<Tabs hideFollower={isAuthenticated? false:true}/>)}
+            {!isProfileRoute && !isContentRoute && !isCreatePostPage && !isSearchPage && (<Tabs hideFollower={isAuthenticated? false:true}/>)}
             <Row>
               
               {!isProfileRoute && !isContentRoute && (
                 <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
-                  <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
+                  <div style={{ paddingTop: 50, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>
                     <React.Fragment>
                       {renderRoutes(route.routes)}
                     </React.Fragment>
