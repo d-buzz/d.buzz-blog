@@ -1,123 +1,123 @@
-import React, { useState, useEffect } from 'react'
-import queryString from 'query-string'
+import React, { useEffect, useCallback } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {
-  getSearchTagsRequest,
+  getNewsPostsRequest,
+  setNewsIsVisited,
+  setHomeIsVisited,
+  setTrendingIsVisited,
+  clearHomePosts,
+  clearTrendingPosts,
   clearTagsPost,
   setTagsIsVisited,
   setPageFrom,
   clearLastSearchTag,
   clearSearchPosts,
+  clearAppendReply,
   clearReplies,
 } from 'store/posts/actions'
-import { connect } from 'react-redux'
-import { PostList } from 'components'
-import { bindActionCreators } from 'redux'
-import { useLocation } from 'react-router-dom'
+import {
+  setProfileIsVisited,
+  clearAccountBlog,
+  clearAccountReplies,
+} from 'store/profile/actions'
 import { pending } from 'redux-saga-thunk'
-import { PostListSkeleton } from 'components'
-import { createUseStyles } from 'react-jss'
+import { anchorTop } from 'services/helper'
+import { InfiniteList, HelmetGenerator } from 'components'
+import { clearScrollIndex } from 'store/interfaces/actions'
 
-const useStyles = createUseStyles(theme => ({
-  searchWrapper: {
-    ...theme.font,
-  },
-}))
-
-const Hive = (props) => {
-  const classes = useStyles()
+const News = (props) => {
   const {
-    getSearchTagsRequest,
-    clearTagsPost,
+    getNewsPostsRequest,
+    setNewsIsVisited,
+    isVisited,
+    setHomeIsVisited,
+    setTrendingIsVisited,
+    clearHomePosts,
+    clearTrendingPosts,
+    setProfileIsVisited,
+    clearAccountBlog,
+    clearAccountReplies,
     items,
+    last,
     loading,
-    visited,
-    clearLastSearchTag,
+    clearTagsPost,
+    setTagsIsVisited,
     setPageFrom,
+    clearLastSearchTag,
     clearSearchPosts,
+    clearAppendReply,
     clearReplies,
+    clearScrollIndex,
   } = props
-  const location = useLocation()
-  const params = queryString.parse(location.search)
-  const tag = 'news'
-  const [results, setResults] = useState([])
 
   useEffect(() => {
+    setPageFrom('news')
+    if(!isVisited) {
+      anchorTop()
+      clearHomePosts()
+      clearScrollIndex()
+      clearTrendingPosts()
+      setNewsIsVisited()
+      getNewsPostsRequest()
+      setHomeIsVisited(false)
+      setTrendingIsVisited(false)
+    }
+    clearAppendReply()
     clearSearchPosts()
-    // eslint-disable-next-line
+    clearLastSearchTag()
+    clearAccountBlog()
+    clearAccountReplies()
+    clearTagsPost()
+    clearReplies()
+    setTagsIsVisited(false)
+    setProfileIsVisited(false)
+    //eslint-disable-next-line
   }, [])
 
-  useEffect(() => {
-    setPageFrom(null)
-    if(!visited) {
-      clearLastSearchTag()
-      setTagsIsVisited()
-      clearTagsPost()
-      getSearchTagsRequest(tag)
-    }
 
-    if(tag !== params.q) {
-      clearLastSearchTag()
-      setTagsIsVisited()
-      clearTagsPost()
-      getSearchTagsRequest(tag)
-    }
-    clearReplies()
-  // eslint-disable-next-line
-  }, [tag])
-
-  useEffect(() => {
-    setResults(items.results || [])
-  // eslint-disable-next-line
-  }, [items])
+  const loadMorePosts =  useCallback(() => {
+    const { permlink, author } = last
+    getNewsPostsRequest(permlink, author)
+    // eslint-disable-next-line
+  }, [last])
 
   return (
     <React.Fragment>
-      {results.map((item) => (
-        <React.Fragment key={item.id}>
-          <PostList
-            disableUpvote={true}
-            searchListMode={true}
-            profileRef="tags"
-            active_votes={item.total_votes}
-            author={item.author}
-            permlink={item.permlink}
-            created={item.created_at}
-            body={item.body}
-            upvotes={item.total_votes}
-            replyCount={item.children}
-            meta={{ app: item.app, tags: item.tags }}
-            payout={item.payout}
-            profile={item.profile}
-            payoutAt={item.payout_at}
-            highlightTag={tag}
-            disableOpacity={true}
-          />
-        </React.Fragment>),
-      )}
-      <PostListSkeleton loading={loading} />
-      {(!loading && results.length === 0) &&
-        (<center><br/><div className={classes.searchWrapper}><h6>No Buzz's found with <span style={{ color: '#000', fontFamily: 'Segoe-Bold' }}>#{tag}</span></h6></div></center>)}
+      <HelmetGenerator page='News' />
+      <InfiniteList loading={loading} items={items} onScroll={loadMorePosts}/>
     </React.Fragment>
   )
 }
 
 const mapStateToProps = (state) => ({
-  items: state.posts.get('searchTag'),
-  last: state.posts.get('lastSearchTag'),
-  loading: pending(state, 'GET_SEARCH_TAG_REQUEST'),
-  visited: state.posts.get('isTagsVisited'),
+  loading: pending(state, 'GET_NEWS_POSTS_REQUEST'),
+  items: state.posts.get('news'),
+  isVisited: state.posts.get('isNewsVisited'),
+  last: state.posts.get('lastNews'),
+  mutelist: state.auth.get('mutelist'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
-    getSearchTagsRequest,
+    getNewsPostsRequest,
+    setNewsIsVisited,
+    setHomeIsVisited,
+    setTrendingIsVisited,
+    clearHomePosts,
+    clearTrendingPosts,
+    setProfileIsVisited,
+    clearAccountBlog,
+    clearAccountReplies,
     clearTagsPost,
     setTagsIsVisited,
-    clearLastSearchTag,
     setPageFrom,
+    clearLastSearchTag,
     clearSearchPosts,
+    clearAppendReply,
     clearReplies,
+    clearScrollIndex,
   }, dispatch),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Hive)
+export default connect(mapStateToProps, mapDispatchToProps)(News)

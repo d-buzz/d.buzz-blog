@@ -48,6 +48,7 @@ const useStyles = createUseStyles(theme => ({
   },
   paddingBottom16:{
     paddingBottom: 16,
+    marginBottom: "5px",
   },
   marginRight32:{
     marginRight:32,

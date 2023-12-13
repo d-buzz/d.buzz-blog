@@ -962,7 +962,7 @@ const Content = (props) => {
               
               {/* <br /> */}
               <React.Fragment>
-                <h2 style={{marginBottom:'25px'}}><strong>{title}</strong></h2>
+                <h1 style={{marginBottom:'25px', letterSpacing: "-0.011em", lineHeight: "52px", fontSize: "45px", fontWeight:"700", fontFamily:'"Helvetica Neue", Helvetica, Arial, sans-serif'}}><strong>{title}</strong></h1>
                 {depth !== 0 && parent_author !== null && (
                   <Row>
                     <Col>

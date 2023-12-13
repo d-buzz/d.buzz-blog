@@ -278,9 +278,11 @@ const PostList = React.memo((props) => {
         setLeftWidth({ width: 50 })
         setAvatarSize(45)
         if (!unguardedLinks) {
-          setRightWidth({ width: width-200 })
+          setRightWidth({ width:"100%" })
+          // setRightWidth({ width: width-200 })
         } else {
-          setRightWidth({ width: width-120 })
+          setRightWidth({ width:"100%" })
+          // setRightWidth({ width: width-120 })
         }
       }
     }

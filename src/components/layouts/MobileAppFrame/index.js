@@ -496,9 +496,9 @@ const MobileAppFrame = (props) => {
               <UserSettingModal show={openUserSettingsModal} onHide={handleClickCloseUserSettingsModal} />
               <SwitchAccountModal show={openSwitchAccountModal} onHide={handleClickCloseSwitchAccountModal} />
             </Navbar>
-                 
+            {!isCreatePostPage && !isSearchPage && (<Tabs hideFollower={isAuthenticated? false:true}/>)}
             <Row>
-              {!isCreatePostPage && !isSearchPage && (<Tabs/>)}
+              
               {!isProfileRoute && !isContentRoute && (
                 <Col className={classNames(title !== 'Notifications'?classes.clearPadding:classes.margin10)}>
                   <div style={{ paddingTop: 60, marginTop: 20, paddingLeft: 10, backgroundColor: 'white', borderRadius: 5, marginBottom: 15 }} className={classes.main}>

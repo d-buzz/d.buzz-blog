@@ -279,11 +279,11 @@ export const checkIfImage = (links) => {
 }
 
 
-export const callBridge = async(method, params, appendParams = true) => {
+export const callBridge = async(method, params, appendParams = true, tags = '') => {
   return new Promise((resolve, reject) => {
 
     if (appendParams) {
-      params = { 'tag': '', limit: 10, ...params}
+      params = { 'tag': tags, limit: 10, ...params}
     }
 
     api.call('bridge.' + method, params, async(err, data) => {

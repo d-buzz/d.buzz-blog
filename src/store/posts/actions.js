@@ -109,6 +109,20 @@ export const setLatestIsVisited = (visited = true) => ({
   payload: visited,
 })
 
+export const SET_NEWS_IS_VISITED = 'SET_NEWS_IS_VISITED'
+
+export const setNewsIsVisited = (visited = true) => ({
+  type: SET_NEWS_IS_VISITED,
+  payload: visited,
+})
+
+export const SET_HIVE_IS_VISITED = 'SET_HIVE_IS_VISITED'
+
+export const setHiveIsVisited = (visited = true) => ({
+  type: SET_HIVE_IS_VISITED,
+  payload: visited,
+})
+
 export const SET_TAGS_IS_VISITED = 'SET_TAGS_IS_VISITED'
 
 export const setTagsIsVisited = (visited = true) => ({
@@ -248,6 +262,68 @@ export const SET_LATEST_LAST_POST = 'SET_LATEST_LAST_POST'
 
 export const setLatestLastPost = (post) => ({
   type: SET_LATEST_LAST_POST,
+  payload: post,
+})
+
+export const GET_NEWS_POSTS_REQUEST = 'GET_NEWS_POSTS_REQUEST'
+export const GET_NEWS_POSTS_SUCCESS = 'GET_NEWS_POSTS_SUCCESS'
+export const GET_NEWS_POSTS_FAILURE = 'GET_NEWS_POSTS_FAILURE'
+
+export const getNewsPostsRequest = (start_permlink = '', start_author = '') => ({
+  type: GET_NEWS_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getNewsPostsSuccess = (response, meta) => ({
+  type: GET_NEWS_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getNewsPostsFailure = (error, meta) => ({
+  type: GET_NEWS_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_NEWS_LAST_POST = 'SET_NEWS_LAST_POST'
+
+export const setNewsLastPost = (post) => ({
+  type: SET_NEWS_LAST_POST,
+  payload: post,
+})
+
+export const GET_HIVE_POSTS_REQUEST = 'GET_HIVE_POSTS_REQUEST'
+export const GET_HIVE_POSTS_SUCCESS = 'GET_HIVE_POSTS_SUCCESS'
+export const GET_HIVE_POSTS_FAILURE = 'GET_HIVE_POSTS_FAILURE'
+
+export const getHivePostsRequest = (start_permlink = '', start_author = '') => ({
+  type: GET_HIVE_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getHivePostsSuccess = (response, meta) => ({
+  type: GET_HIVE_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getHivePostsFailure = (error, meta) => ({
+  type: GET_HIVE_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_HIVE_LAST_POST = 'SET_NEWS_LAST_POST'
+
+export const setHiveLastPost = (post) => ({
+  type: SET_NEWS_LAST_POST,
   payload: post,
 })
 
