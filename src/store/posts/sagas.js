@@ -196,7 +196,7 @@ function* getTrendingPostsRequest(payload, meta) {
     })
     
     yield put(setTrendingLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
+    data = data.filter(item => invokeFilter(item))
     
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
@@ -276,7 +276,7 @@ function* getLatestPostsRequest(payload, meta) {
     })
 
     yield put(setLatestLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
+    data = data.filter(item => invokeFilter(item))
 
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
@@ -309,7 +309,7 @@ function* getNewsPostsRequest(payload, meta) {
     })
 
     yield put(setNewsLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
+    data = data.filter(item => invokeFilter(item))
 
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
@@ -342,7 +342,7 @@ function* getHivePostsRequest(payload, meta) {
     })
 
     yield put(setHiveLastPost(data[data.length-1]))
-    data = data.filter((item) => item.body.length >= 280)
+    data = data.filter(item => invokeFilter(item))
 
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
