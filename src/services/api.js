@@ -98,7 +98,7 @@ export const invokeFilter = (item) => {
   const overhead = calculateOverhead(body)
 
   const length = body.length - overhead
-  return (length <= 280 && item.category === `${appConfig.TAG}`)
+  return (length >= 280)
 }
 
 export const keychainSignIn = (username) => {
