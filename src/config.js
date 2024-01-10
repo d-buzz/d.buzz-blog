@@ -20,7 +20,6 @@ const config = {
   APP_NAME: 'D.Buzz',
   APP_DESCRIPTION: 'Micro-blogging social media Dapp on the HIVE blockchain.',
   APP_ICON: 'https://images.hive.blog/p/D5zH9SyxCKdAD9rYwjD1VDFVfes4J8WBmiaYPdeZndqBcsWCe3xdjZ9FWukYQcKxKMUaJu2FLm66h23z4KvAS7BxXaBpNLPzMVDqas4kKbBvZPf2zny6g2ePMPCmbC44pcvGUN?width=128&height=128',
-  MAX_IMAGE_UPLOADS :process.env.REACT_APP_VERSION || 20,
 }
 
 export default config

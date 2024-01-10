@@ -22,7 +22,6 @@ import EmojiIcon2 from "../../elements/Icons/EmojiIcon2"
 import heic2any from 'heic2any'
 import { useRef } from "react"
 import ImagesContainer from "../../ImagesContainer"
-import appConfig from "../../../config";
 
 const useStyles = createUseStyles(theme => ({
   marginLeft0:{
@@ -309,7 +308,7 @@ const Post = (props) => {
   const [buzzAttachedImages, setBuzzAttachedImages] = useState([])
 
   const [compressing, setCompressing] = useState(false)
-  const buzzAllowedImages = appConfig.MAX_IMAGE_UPLOADS
+  const buzzAllowedImages = 4
   // eslint-disable-next-line
   const [imagesLength, setImagesLength] = useState(0)
   // eslint-disable-next-line
