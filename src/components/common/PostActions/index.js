@@ -207,7 +207,7 @@ const PostActions = (props) => {
   }
 
   const [showSlider, setShowSlider] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(1)
   const [vote, setVote] = useState(voteCount)
   const [loading, setLoading] = useState(false)
   const [upvoted, setUpvoted] = useState(hasUpvoted)
