@@ -9,6 +9,7 @@ import { CloseIcon } from '../../elements'
 import {useHistory} from 'react-router-dom'
 import {LinearProgress} from '@material-ui/core'
 import {styled} from '@material-ui/styles'
+import { GiphySearchModal, EmojiPicker } from 'components'
 
 import {
   setPostRequest,
@@ -306,6 +307,10 @@ const Post = (props) => {
   const [tagError, settagError] = useState(false)
   const [showUploadIcon, setshowUploadIcon] = useState(false)
   const [buzzAttachedImages, setBuzzAttachedImages] = useState([])
+  const [openGiphy, setOpenGiphy] = useState(false)
+  const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
+  const [emojiAnchorEl, setEmojianchorEl] = useState(null)
+  const [cursorPosition, setCursorPosition] = useState(null)
 
   const [compressing, setCompressing] = useState(false)
   const buzzAllowedImages = 4
@@ -392,6 +397,43 @@ const Post = (props) => {
         }
       }
     } catch (e) {
+    }
+  }
+
+  const closeGiphy = () => {
+    setOpenGiphy(false)
+    setshowUploadIcon(false)
+  }
+
+  const handleOpenGiphy = () => {
+    setOpenGiphy(!openGiphy)
+  }
+
+  const handleSelectGif = (gif) => {
+    if (gif) {
+      const contentAppend = `${postContent}<br /> ${gif}`
+      setpostContent(contentAppend)
+    }
+  }
+
+  const handleOpenEmojiPicker = (e) => {
+    setOpenEmojiPicker(!openEmojiPicker)
+    setEmojianchorEl(e.currentTarget)
+  }
+
+  const handleCloseEmojiPicker = () => {
+    setOpenEmojiPicker(false)
+    setEmojianchorEl(null)
+    setshowUploadIcon(false)
+  }
+
+  const handleSelectEmoticon = (emoticon) => {
+    if (emoticon) {
+      const cursor = cursorPosition
+      const contentAppend = postContent.slice(0, cursor) + emoticon + postContent.slice(cursor)
+      setpostContent(contentAppend)
+      emoticon.length === 2 && setCursorPosition(cursorPosition + 2)
+      emoticon.length === 4 && setCursorPosition(cursorPosition + 4)
     }
   }
 
@@ -564,15 +606,30 @@ const Post = (props) => {
                   multiple={true}
                   ref={inputRefFileUpload}
                   className={classes.imageUploadInput}
-                  onInput={(e) => handleFileSelectChange(e)}
-                  
+                  onInput={e => {
+                    handleFileSelectChange(e)
+                  }}
                 />
-                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
-                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
+                <div onClick={handleOpenGiphy} className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
+                <div onClick={handleOpenEmojiPicker} className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
               </div>
             )}
           </div>
-          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
+          <textarea  
+            onInput={e => {
+              updateContent(e)
+            }}
+            onKeyUp={e => {
+              setCursorPosition(e.target.selectionStart)
+            }}
+            onKeyDown={e => {
+              setCursorPosition(e.target.selectionStart)
+            }}
+            onClick={(e) => {
+              setCursorPosition(e.target.selectionStart)
+              updateFromDesc()
+            }}
+            rows={10} cols={50} onFocus={() => updateFromDesc()} placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
         </div>
       </form>
       {compressing && (
@@ -641,6 +698,17 @@ const Post = (props) => {
         </div>
         
       </div>
+      <EmojiPicker
+        open={openEmojiPicker}
+        anchorEl={emojiAnchorEl}
+        handleClose={handleCloseEmojiPicker}
+        handleAppendContent={handleSelectEmoticon}
+      />
+      <GiphySearchModal
+        show={openGiphy}
+        onHide={closeGiphy}
+        handleAppendContent={handleSelectGif}
+      />
     </Container>
   )
 }
