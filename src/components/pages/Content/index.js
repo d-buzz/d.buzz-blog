@@ -1004,14 +1004,6 @@ const Content = (props) => {
                     </div>
                   </Col>
                 </Row>
-                {/* <div>
-                  <div style={{ marginTop: 10 }}>
-                    <label className={classes.meta}>
-                      {moment(`${created}Z`).local().format('LTS • \nLL')}
-                      {app && <React.Fragment> • Posted using <b className={classes.strong}>{app}</b></React.Fragment>}
-                    </label>
-                  </div>
-                </div> */}
                 {/* add div here for comment */}
                 {showSlider && (
                   <div className={classes.sliderWrapper}>
@@ -1038,7 +1030,7 @@ const Content = (props) => {
                     </div>
                   </div>
                 )}
-                <div   className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
+                <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.borderTopGrey, classes.borderBottomGrey, classes.padding1010, classes.margin22, classes.cursorPointer)}>
                   <div className={classNames(classes.displayFlex)}>
                     
                     <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
@@ -1050,7 +1042,6 @@ const Content = (props) => {
                    
                     {!isMobile &&(
                       <div className={classNames(classes.displayFlex)}>
-                      
                         <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                           <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                         </div>
@@ -1059,7 +1050,6 @@ const Content = (props) => {
                   </div>
                   {isMobile &&(
                     <div className={classNames(classes.displayFlex)}>
-                    
                       <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
                         <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                       </div>
@@ -1073,32 +1063,13 @@ const Content = (props) => {
                         {!payout && isMobile ? '0.00' : ''}&nbsp;
                         {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
                       </span>
-                      {/* <Chip
-                        className={classes.chip}
-                        size='small'
-                        label={(
-                          <span className={classes.payout} style={payoutAdditionalStyle}>
-                            ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
-                            {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
-                            {!payout && isMobile ? '0.00' : ''}&nbsp;
-                            {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
-                          </span>
-                        )}
-                        color="#000"
-                        variant="outlined"
-                      /> */}
                     </div>
-                    {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
-                      <MoreIcon />
-                    </div> */}
-                   
                   </div>
                 </div>
                 <div onClick={handleClickContent} style={{ overflow: 'hidden'}}>
                   {isCensored && (
                     <Chip label={censorType} color="secondary" size="small" className={classes.chip} />
                   )}
-                 
                   <MarkdownViewer content={originalContent} minifyAssets={false} />
                 </div>
                 <PostTags meta={meta} />
@@ -1111,32 +1082,59 @@ const Content = (props) => {
                 </div>
               </React.Fragment>
             </div>
-                    
+
             <div className={classes.wrapper}>
-              <div  className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
+              {showSlider && (
+                <div className={classes.sliderWrapper}>
+                  <Row>
+                    <Col xs="auto">
+                      <ContainedButton onClick={handleClickUpvote} fontSize={14} label={`Upvote (${sliderValue}%)`} className={classes.button} />
+                    </Col>
+                    <Col style={{ paddingLeft: 0 }}>
+                      <ContainedButton
+                        fontSize={14}
+                        transparent={true}
+                        label="Cancel"
+                        className={classes.button}
+                        onClick={handleClickHideSlider}
+                      />
+                    </Col>
+                  </Row>
+                  <div style={{ paddingLeft: 10 }}>
+                    <PrettoSlider
+                      marks={marks}
+                      value={sliderValue}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className={classNames(classes.displayFlex, classes.justifyContentSpaceBetween, classes.cursorPointer)}>
                 <div className={classNames(classes.displayFlex)}>
-                      
-                  <div onClick={handleClickShowSlider} className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
-                    {!loading && getupvoted && (<HeartIconRed />)}
-                    {!loading && !getupvoted && (<HeartIcon />)}
-                    {loading && (<Spinner top={0} loading={true} size={20} style={{ display: 'inline-block', verticalAlign: 'top' }} />)}
+                  <div onClick={handleClickShowSlider}
+                    className={classNames(classes.displayFlex, classes.marginRight24, classes.alignItemsCenter)}>
+                    {!loading && getupvoted && (<HeartIconRed/>)}
+                    {!loading && !getupvoted && (<HeartIcon/>)}
+                    {loading && (<Spinner top={0} loading={true} size={20}
+                      style={{display: 'inline-block', verticalAlign: 'top'}}/>)}
                     <label className={classNames(classes.margin0, classes.marginLeft5)}>{getActiveVotes}</label>
                   </div>
-                  
-                  {!isMobile &&(
+                  {!isMobile && (
                     <div className={classNames(classes.displayFlex)}>
-                    
-                      <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                        <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                      <div onClick={() => updateReply(true)}
+                        className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                        <CommentTwoIcon size={17}/> <label
+                          className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                       </div>
                     </div>
                   )}
                 </div>
-                {isMobile &&(
+                {isMobile && (
                   <div className={classNames(classes.displayFlex)}>
-                  
-                    <div onClick={() => updateReply(true)} className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
-                      <CommentTwoIcon size={17} />  <label className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
+                    <div onClick={() => updateReply(true)}
+                      className={classNames(classes.displayFlex, classes.alignItemsCenter)}>
+                      <CommentTwoIcon size={17}/> <label
+                        className={classNames(classes.margin0, classes.marginLeft5)}>{replyCount}</label>
                     </div>
                   </div>
                 )}
@@ -1149,44 +1147,9 @@ const Content = (props) => {
                       {!payout && isMobile ? '0.00' : ''}&nbsp;
                       {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
                     </span>
-                    {/* <Chip
-                      className={classes.chip}
-                      size='small'
-                      icon={iconDetails}
-                      label={(
-                        <span className={classes.payout} style={payoutAdditionalStyle}>
-                          ${payout > 1 && parseFloat(max_accepted_payout) === 1 ? '1.00' : payout === '0' ? '0.00' : payout !== 0 ? payout : ''}&nbsp;
-                          {!payout && !isMobile ? '0.00 in 7 days' : ''}&nbsp;
-                          {!payout && isMobile ? '0.00' : ''}&nbsp;
-                          {!isMobile && payout_at && payout ? getPayoutDate(payout_at) : ''}
-                        </span>
-                      )}
-                      color="#000"
-                      variant="outlined"
-                    /> */}
                   </div>
-                  {/* <div className={classNames(classes.displayFlex, classes.marginRight24,classes.alignItemsCenter)}>
-                    <ShareIcon  size={19}  />  
-                  </div> */}
-                  {/* <div className={classNames(classes.displayFlex, classes.paddingTop3,classes.alignItemsCenter)}>
-                    <MoreIcon />
-                  </div> */}
-                  
                 </div>
               </div>
-              {/* <Row>
-                <Col>
-                  <label className={classes.meta}><b className={classes.strong}>{upvotes}</b> Upvotes</label>
-                  <label className={classes.meta}><b className={classes.strong}>{replyCount}</b> Replies</label>
-                </Col>
-                {isAuthenticated && (
-                  <Col xs="auto">
-                    <div className={classNames(classes.threeDotWrapper, classes.icon)} onClick={handleClickMore}>
-                      <MoreIcon className={classes.iconCursor} />
-                    </div>
-                  </Col>
-                )}
-              </Row> */}
               <Menu
                 anchorEl={anchorEl}
                 keepMounted
@@ -1204,7 +1167,6 @@ const Content = (props) => {
               )} */}
               <Row>
                 <Col>
-                
                   {/* <PostActions
                     disableExtraPadding={true}
                     body={body}
