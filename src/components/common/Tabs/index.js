@@ -148,12 +148,15 @@ const Tabs = (props) => {
                     Latest
                 </div>
               )}
-             
+
               <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/news')} className={classNames(classes.cursorPointer,pathname === '/news'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
                     News
               </div>
-              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/hive')} className={classNames(classes.cursorPointer,pathname === '/hive'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                    Hive
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/events')} className={classNames(classes.cursorPointer,pathname === '/events'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                Event
+              </div>
+              <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/forsale')} className={classNames(classes.cursorPointer,pathname === '/forsale'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
+                FOR SALE
               </div>
             </div>
           </div>
