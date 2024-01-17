@@ -153,10 +153,10 @@ const Tabs = (props) => {
                     News
               </div>
               <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/events')} className={classNames(classes.cursorPointer,pathname === '/events'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                Event
+                Events
               </div>
               <div style={{fontFamily:'RobotoRegular'}} onClick={() => redirectPage('/forsale')} className={classNames(classes.cursorPointer,pathname === '/forsale'?classes.borderBottomSolid1p:'', classes.minWidthMaxContent, classes.paddingBottom16, classes.marginRight32, classes.displayBLock)}>
-                FOR SALE
+                For Sale
               </div>
             </div>
           </div>
