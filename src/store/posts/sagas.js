@@ -471,7 +471,7 @@ function* publishPostRequest(payload, meta) {
   let success = false
 
   const user = yield select(state => state.auth.get('user'))
-  const {username, useKeychain, is_authenticated} = user
+  const {username, useKeychain, isAuthenticated: is_authenticated } = user
 
   const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/storageapi\.fleek\.co\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
   const images = body.match(dbuzzImageRegex)
@@ -508,9 +508,7 @@ function* publishPostRequest(payload, meta) {
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
     const is_buzz_post = true
-
     if (useKeychain && is_authenticated) {
-
       const result = yield call(broadcastKeychainOperation, username, operations)
       success = result.success
 

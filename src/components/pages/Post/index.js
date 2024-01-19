@@ -325,7 +325,7 @@ const Post = (props) => {
   const [videoUploading] = useState(false)
   // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
-  const payout = 100000000
+  const payout = 1
   const inputRefFileUpload = useRef(null)
 
   const handleImageCompression = async (image) => {
