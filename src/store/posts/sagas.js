@@ -132,7 +132,7 @@ function patternMute(patterns, data) {
 }
 
 const footnote = (body) => {
-  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>'
+  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>'
   body = `${body} ${footnoteAppend}`
 
   return body
@@ -539,7 +539,7 @@ function* publishPostRequest(payload, meta) {
       cashout_time = cashout_time.replace('Z', '')
 
       let body = comment[1].body
-      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
+      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', '')
 
       const content = {
         author: username,
