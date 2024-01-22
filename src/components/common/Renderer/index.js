@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import classNames from 'classnames'
 // import ReactSoundCloud from 'react-soundcloud-embedded'
-import { UrlVideoEmbed, LinkPreview } from 'components'
+import { UrlVideoEmbed } from 'components'
 import { createUseStyles } from 'react-jss'
 import TwitterEmbed from '../TwitterEmbed'
 import VideoPreview from '../VideoPreview'
@@ -97,7 +97,7 @@ const useStyles = createUseStyles(theme => ({
     overflow: 'hidden',
     paddingBottom: '56.25%',
     position: 'relative',
-    height:0,
+    height: 0,
     marginBottom: 10,
     '& iframe': {
       left: 0,
@@ -105,7 +105,7 @@ const useStyles = createUseStyles(theme => ({
       height: '100%',
       width: '100%',
       position: 'absolute',
-      border: 'none', 
+      border: 'none',
       overflow: 'hidden',
     },
   },
@@ -145,7 +145,7 @@ const useStyles = createUseStyles(theme => ({
     borderRadius: 25,
     transition: 'opacity 250ms',
     cursor: 'pointer',
-    
+
     '& a': {
       textDecoration: 'none',
     },
@@ -166,70 +166,70 @@ const prepareYoutubeEmbeds = (
   contentImages,
 ) => {
   const youtubeRegex = /(https?:\/\/)?((www\.)?(m\.)?youtube\.com|youtu\.?be)\/.+/i
-  
+
   let body = content
-  
+
   const links = parseUrls(content)
 
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
-    
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
+
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-  
-        if(link.match(youtubeRegex) && link.includes('.be')){
+
+        if (link.match(youtubeRegex) && link.includes('.be')) {
           const data = link.split('.be/')
           match = link.match(youtubeRegex)
           if (data[1]) {
             id = data[1]
           }
         }
-        else if(link.match(youtubeRegex) && link.includes('watch')){
+        else if (link.match(youtubeRegex) && link.includes('watch')) {
           const data = link.split(/\?v=|&/)
           match = link.match(youtubeRegex)
           if (data[1]) {
             id = data[1]
           }
-        }else if (link.match(youtubeRegex) && link.includes('live')){
+        } else if (link.match(youtubeRegex) && link.includes('live')) {
           const data = link.split('live/')
           match = link.match(youtubeRegex)
           if (data[1]) {
             id = data[1].replace(/\?feature=share/, '')
           }
         }
-        else if(link.match(youtubeRegex) && link.includes('shorts')){
+        else if (link.match(youtubeRegex) && link.includes('shorts')) {
           const data = link.split('shorts/')
           match = link.match(youtubeRegex)
           if (data[1]) {
             id = data[1].replace(/\?feature=share/, '')
           }
-        }else if(link.match(youtubeRegex) && link.includes('playlist')){
+        } else if (link.match(youtubeRegex) && link.includes('playlist')) {
           const data = link.split('?list=')
           match = link.match(youtubeRegex)
           if (data[1]) {
             id = data[1]
           }
         }
-        
-        if(match){
+
+        if (match) {
           // clean first or remove all first the additional params in the id
-          if(link.includes('playlist')) {
-            const plID = "videoseries?list="+id
+          if (link.includes('playlist')) {
+            const plID = "videoseries?list=" + id
             videoEmbeds.push({ app: 'youtube', id: plID })
           }
           if (id.match(/&t=.*/)) {
             id = id.replace(/&t=.*/, "")
           }
           body = body.replace(link, `~~~~~~.^.~~~:youtube:${id}:~~~~~~.^.~~~`)
-          if(!link.includes('playlist')) videoEmbeds.push({ app: 'youtube', id })
+          if (!link.includes('playlist')) videoEmbeds.push({ app: 'youtube', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
-    
-    if(body.match(/~~~~~~\.\^\.~~~:youtube:[a-z-A-Z0-9_?=-]+:~~~~~~\.\^\.~~~/gi)) {
+
+    if (body.match(/~~~~~~\.\^\.~~~:youtube:[a-z-A-Z0-9_?=-]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:youtube:[a-z-A-Z0-9_?=-]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -256,9 +256,9 @@ const prepareTwitterEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-twitter-embed-container:') && videoEmbeds.length===0 && soundEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-twitter-embed-container:') && videoEmbeds.length === 0 && soundEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     const matchData = content.match(htmlReplacement)
-    if(matchData) {
+    if (matchData) {
       const id = matchData[5]
       let title = body
       title = title.replace(htmlReplacement, '')
@@ -271,59 +271,59 @@ const prepareTwitterEmbeds = (
           link = link.replace(/&amp;/g, '&')
           let match = ''
           let id = ''
-  
-          if(link.match(mainTwitterRegex)) {
+
+          if (link.match(mainTwitterRegex)) {
             match = link.match(mainTwitterRegex)
             id = `${match[1]}&${match[2]}`
-            if(link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+            if (link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
               match = link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
               id = `${match[1]}&${match[2]}`
               id = id.slice(0, -2)
             }
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
           }
-          else if(link.match(mobileTwitterRegex)) {
+          else if (link.match(mobileTwitterRegex)) {
             match = link.match(mobileTwitterRegex)
             id = `${match[1]}&${match[2]}`
-            if(link.match(/(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+            if (link.match(/(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
               match = link.match(/(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
               id = `${match[1]}&${match[2]}`
               id = id.slice(0, -2)
             }
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-          }else if(link.match(mainTwitterXRegex)) {
+          } else if (link.match(mainTwitterXRegex)) {
             match = link.match(mainTwitterXRegex)
             id = `${match[1]}&${match[2].split(/[?/]/)[0]}`
-            if(link.match(/(?:https?:\/\/(?:(?:x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+            if (link.match(/(?:https?:\/\/(?:(?:x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
               match = link.match(/(?:https?:\/\/(?:(?:x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
               id = `${match[1]}&${match[2].split(/[?/]/)[0]}`
             }
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-          }else if(link.match(mobileTwitterXRegex)) {
+          } else if (link.match(mobileTwitterXRegex)) {
             match = link.match(mobileTwitterXRegex)
             id = `${match[1]}&${match[2]}`
-            if(link.match(/(?:https?:\/\/(?:(?:mobile\.x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+            if (link.match(/(?:https?:\/\/(?:(?:mobile\.x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
               match = link.match(/(?:https?:\/\/(?:(?:mobile\.x\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
               id = `${match[1]}&${match[2].split(/[?/]/)[0]}`
             }
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
           }
-  
-          if(match) {
+
+          if (match) {
             const id = `${match[1]}&${match[2].split(/[?/]/)[0]}`
             body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
             twitterEmbeds.push({ app: 'twitter', id })
           }
-        } catch(e) { }
+        } catch (e) { }
       })
     }
 
-    if(body.match(/~~~~~~\.\^\.~~~:twitter:[a-zA-Z0-9?&-=_.]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:twitter:[a-zA-Z0-9?&-=_.]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:twitter:[a-zA-Z0-9?&-=_.]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-twitter-embed-container:~~~~~~.^.~~~`
     }
   }
-  
+
   return body
 }
 
@@ -343,36 +343,36 @@ const prepareVimmEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       const data = link.split('/')
-  
+
       try {
-        if(link.match(vimmRegex) && !link.includes('/view')){
+        if (link.match(vimmRegex) && !link.includes('/view')) {
           match = link.match(vimmRegex)
           id = link.includes('http') ? data[4] : data[2]
         }
-        else if(link.match(vimmRegexEmbed)){
+        else if (link.match(vimmRegexEmbed)) {
           match = link.match(vimmRegexEmbed)
           id = match[1]
         }
-        else if(link.match(vimmUserRegex)){
+        else if (link.match(vimmUserRegex)) {
           match = link.match(vimmUserRegex)
           id = match[3]
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:vimm:${id.toLowerCase()}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'vimm', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:vimm:[A-Za-z0-9-=?]+\.?[A-Za-z0-9-]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:vimm:[A-Za-z0-9-=?]+\.?[A-Za-z0-9-]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:vimm:[A-Za-z0-9-=?]+\.?[A-Za-z0-9-]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -394,28 +394,28 @@ const prepareThreeSpeakEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
-        if(link.includes('3speak.online/watch?v')) {
+        if (link.includes('3speak.online/watch?v')) {
           match = link.match(/(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=(.*))))?/i)
-        } else if(link.includes('3speak.co/watch?v')){
+        } else if (link.includes('3speak.co/watch?v')) {
           match = link.match(/(?:https?:\/\/(?:(?:3speak\.co\/watch\?v=(.*))))?/i)
-        } else if(link.includes('3speak.tv/watch?v')) {
+        } else if (link.includes('3speak.tv/watch?v')) {
           match = link.match(/(?:https?:\/\/(?:(?:3speak\.tv\/watch\?v=(.*))))?/i)
         }
-  
-        if(match) {
+
+        if (match) {
           const id = match[1]
           body = body.replace(link, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'threespeak', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:threespeak:[A-Za-z0-9-]+\.?[A-Za-z0-9-.]+\/[a-zA-Z&_=-]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:threespeak:[A-Za-z0-9-]+\.?[A-Za-z0-9-.]+\/[a-zA-Z&_=-]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:threespeak:[A-Za-z0-9-.]+\.?[A-Za-z0-9-]+\/[a-zA-Z&_=-]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -437,32 +437,32 @@ const prepareRumbleEmbed = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       try {
-        if(link.match(rumbleRegexEmbed)) {
+        if (link.match(rumbleRegexEmbed)) {
           match = link.match(rumbleRegexEmbed)
           const input = match['input']
           const data = input.split('/')
           id = data[4]
         }
-  
+
         if (!id) {
           id = ''
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:rumble:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'rumble', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:rumble:[a-z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:rumble:[a-z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:rumble:[a-z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -487,35 +487,35 @@ const prepareLbryEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-  
-        if(link.match(lbryRegex) || link.match(lbry1Regex)){
+
+        if (link.match(lbryRegex) || link.match(lbry1Regex)) {
           const data = link.split('/')
           match = link.match(lbryRegex) ? link.match(lbryRegex) : link.match(lbry1Regex)
           if (data[4]) {
             const data1 = data[4].split(':')
             id = data1[0]
           }
-  
-          if(link.match(lbryRegexEmbed)){
+
+          if (link.match(lbryRegexEmbed)) {
             match = link.split('/')
             id = match[5]
           }
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:lbry:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'lbry', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:lbry:[a-zA-Z0-9-.]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:lbry:[a-zA-Z0-9-.]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:lbry:[a-zA-Z0-9-.]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -537,48 +537,48 @@ const prepareOdyseeEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-  
-        if(link.match(odyseeRegex)){
+
+        if (link.match(odyseeRegex)) {
           const data = link.split('/')
           match = link.match(odyseeRegex)
           if (data[4]) {
             const data1 = data[4].split(':')[0]
-            if(data[4].includes('?')){
+            if (data[4].includes('?')) {
               id = data[4]
             } else {
               id = data1
             }
           } else if (data[3]) {
             const data1 = data[3].split(':')[0]
-            if(data[3].includes('?')){
+            if (data[3].includes('?')) {
               id = data[3]
             } else {
               id = data1
             }
           } else if (data[2]) {
             const data1 = data[2].split(':')[0]
-            if(data[2].includes('?')){
+            if (data[2].includes('?')) {
               id = data[2]
             } else {
               id = data1
             }
           }
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~^odysy^${id}^~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'odysy', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~\^odysy\^[a-zA-Z0-9-.]+\^~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~\^odysy\^[a-zA-Z0-9-.]+\^~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~\^odysy\^[a-zA-Z0-9-.]+\^~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -601,37 +601,37 @@ const prepareBitchuteEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       try {
-        if(link.match(bitchuteRegex)){
+        if (link.match(bitchuteRegex)) {
           const data = link.split('/')
           match = link.match(bitchuteRegex)
           id = data[4]
-          if(link.match(bitchuteRegexEmbed)){
+          if (link.match(bitchuteRegexEmbed)) {
             match = link.match(bitchuteRegexEmbed)
             const input = match['input']
             const data = input.split('/')
             id = data[4]
           }
         }
-  
+
         if (!id) {
           id = ''
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:bitchute:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'bitchute', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:bitchute:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:bitchute:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:bitchute:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -649,34 +649,34 @@ const prepareBannedEmbeds = (
   contentImages,
 ) => {
   const bannedRegex = /(?:https?:\/\/(?:(?:banned\.video\/watch\?id=(.*))))/i
-  
+
   let body = content
-  
+
   const links = parseUrls(content)
-  
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-    
-        if(link.match(bannedRegex)){
+
+        if (link.match(bannedRegex)) {
           const data = link.split('?id=')
           match = link.match(bannedRegex)
           if (data[1]) {
             id = data[1]
           }
         }
-    
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:banned:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'banned', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:banned:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:banned:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:banned:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -694,34 +694,34 @@ const prepareDollarVigilanteEmbeds = (
   contentImages,
 ) => {
   const dollarVigilanteRegex = /(?:https?:\/\/(?:(?:(www\.)?vigilante\.tv\/w\/(.*))))/i
-  
+
   let body = content
-  
+
   const links = parseUrls(content)
-  
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-    
-        if(link.match(dollarVigilanteRegex)){
+
+        if (link.match(dollarVigilanteRegex)) {
           const data = link.split('/')
           match = link.match(dollarVigilanteRegex)
           if (data[4]) {
             id = data[4]
           }
         }
-    
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:dollarvigilante:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'dollarvigilante', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:dollarvigilante:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:dollarvigilante:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:dollarvigilante:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -739,20 +739,20 @@ const prepareDapplrEmbeds = (
   contentImages,
 ) => {
   const dapplrRegex = /(?:https?:\/\/(?:(?:(www\.)?cdn\.dapplr\.in\/file\/dapplr-videos\/(.*)\/(.*))))/i
-  
+
   let body = content
-  
+
   const links = parseUrls(content)
-  
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let username = ''
         let id = ''
-    
-        if(link.match(dapplrRegex)){
+
+        if (link.match(dapplrRegex)) {
           const data = link.split('/')
           match = link.match(dapplrRegex)
           if (data[5] && data[6]) {
@@ -760,15 +760,15 @@ const prepareDapplrEmbeds = (
             id = data[6]
           }
         }
-    
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:dapplr:${username}/${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'dapplr', id: `${username}/${id}` })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:dapplr:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:dapplr:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:dapplr:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -786,34 +786,34 @@ const prepareFreeWorldNewsEmbeds = (
   contentImages,
 ) => {
   const freeWorldNewsRegex = /(?:https?:\/\/(?:(?:freeworldnews\.tv\/watch\?id=(.*))))/i
-  
+
   let body = content
-  
+
   const links = parseUrls(content)
-  
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         let match = ''
         let id = ''
-    
-        if(link.match(freeWorldNewsRegex)){
+
+        if (link.match(freeWorldNewsRegex)) {
           const data = link.split('?id=')
           match = link.match(freeWorldNewsRegex)
           if (data[1]) {
             id = data[1]
           }
         }
-    
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:freeworldnews:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'freeworldnews', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:freeworldnews:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:freeworldnews:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:freeworldnews:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -835,31 +835,31 @@ const prepareSoundCloudEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-sound-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && videoEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-sound-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && videoEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       try {
-        if(link.match(soundcloudRegex)){
+        if (link.match(soundcloudRegex)) {
           const data = link.split('/')
           match = link.match(soundcloudRegex)
           id = `${data[3]}/${data[4]}`
         }
-  
+
         if (!id) {
           id = ''
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:soundcloud:${id}:~~~~~~.^.~~~`)
           soundEmbeds.push({ app: 'soundcloud', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:soundcloud:[a-zA-Z0-9&?=/_-]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:soundcloud:[a-zA-Z0-9&?=/_-]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:soundcloud:[a-zA-Z0-9&?=/_-]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-sound-embed-container:~~~~~~.^.~~~`
     }
@@ -882,33 +882,33 @@ const prepareFacebookEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       try {
-        if(link.match(facebookRegex)){
+        if (link.match(facebookRegex)) {
           const data = link.split('/')
           match = link.match(facebookRegex)
-          
-          id = data[data.length-1]
-          
+
+          id = data[data.length - 1]
+
         }
-  
+
         if (!id) {
           id = ''
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:facebook:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'facebook', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:facebook:[0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:facebook:[0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:facebook:[0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -931,33 +931,33 @@ const prepareTiktokEmbeds = (
   let body = content
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-tiktok-embed-container:') && !body.includes(':dbuzz-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-tiktok-embed-container:') && !body.includes(':dbuzz-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-  
+
       try {
-        if(link.match(tiktokRegex)){
+        if (link.match(tiktokRegex)) {
           const url = new URL(link)
           const data = url.pathname.split('/')
           match = link.match(tiktokRegex)
-          
+
           id = data.reduce((a, v) => v.match(tiktokIdRegex) ? v : a)
         }
-  
+
         if (!id) {
           id = ''
         }
-  
-        if(match){
+
+        if (match) {
           body = body.replace(link, `~~~~~~.^.~~~:tiktok:${id}:~~~~~~.^.~~~`)
           videoEmbeds.push({ app: 'tiktok', id })
         }
-      } catch(error) { }
+      } catch (error) { }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:tiktok:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:tiktok:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:tiktok:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-tiktok-embed-container:~~~~~~.^.~~~`
     }
@@ -980,13 +980,13 @@ const prepareAppleEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
-  
+
       const match = link.match(appleRegex) || link.match(appleRegexEmbed)
-  
-      if(match){
+
+      if (match) {
         const data = link.split('/')
         const id = `${data[4]}/${data[5]}/${data[6]}`
         body = body.replace(link, `~~~~~~.^.~~~:apple:${id}:~~~~~~.^.~~~`)
@@ -994,7 +994,7 @@ const prepareAppleEmbeds = (
       }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:apple:(.*?):~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:apple:(.*?):~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:apple:(.*?):~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -1017,12 +1017,12 @@ const prepareDTubeEmbeds = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       const matchEmbed = link.match(dtubeEmbedRegex)
       const matchVideo = link.match(dtubeVideoRegex)
-  
+
       if (matchEmbed) {
         const data = link.split('/')
         const id = link.includes('http') ? `${data[4]}/${data[5]}` : `${data[2]}/${data[3]}`
@@ -1037,7 +1037,7 @@ const prepareDTubeEmbeds = (
       }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:dtube:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:dtube:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:dtube:[a-z-A-Z0-9]+\/[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
@@ -1060,15 +1060,15 @@ const prepareDBuzzVideos = (
 
   const links = parseUrls(content)
 
-  if(!body.includes(':dbuzz-videos-container:') && videoEmbeds.length===0 && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && contentImages===0) {
+  if (!body.includes(':dbuzz-videos-container:') && videoEmbeds.length === 0 && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
 
       let match
 
-      if(link.match(oldDbuzzVideos) && link.match(dbuzzVideos)) {
+      if (link.match(oldDbuzzVideos) && link.match(dbuzzVideos)) {
         match = link.match(dbuzzVideos)[1]
-      } else if(link.match(oldDbuzzVideos) && !link.match(dbuzzVideos)) {
+      } else if (link.match(oldDbuzzVideos) && !link.match(dbuzzVideos)) {
         match = link.match(oldDbuzzVideos)[1].replace('?dbuzz_video', '')
       }
 
@@ -1079,7 +1079,7 @@ const prepareDBuzzVideos = (
       }
     })
 
-    if(body.match(/~~~~~~\.\^\.~~~:dbuzz-video:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+    if (body.match(/~~~~~~\.\^\.~~~:dbuzz-video:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~:dbuzz-video:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-videos-container:~~~~~~.^.~~~`
     }
@@ -1101,18 +1101,18 @@ const prepareHiveTubeVideoEmbeds = (
   let body = content
 
   const links = parseUrls(content).filter(link => link.match(hiveTubeEmebedsRegex))
-  
-  if(!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzImages.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes(':dbuzz-embed-container:') && !body.includes(':dbuzz-tiktok-embed-container:') && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzImages.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
 
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
-  
+
       const matchedLink = link.match(hiveTubeEmebedsRegex).filter((match) => match !== undefined)
 
       let match
       let domain
-  
-      if(link.includes('http') && link.includes('www')) {
+
+      if (link.includes('http') && link.includes('www')) {
         domain = `${matchedLink[3]}${matchedLink[4]}${matchedLink[5]}`
       } else if (link.includes('https') && !link.includes('www')) {
         domain = `${matchedLink[2]}${matchedLink[3]}${matchedLink[4]}`
@@ -1121,24 +1121,24 @@ const prepareHiveTubeVideoEmbeds = (
       } else {
         domain = `${matchedLink[1]}${matchedLink[2]}${matchedLink[3]}`
       }
-   
-      if(matchedLink) {
+
+      if (matchedLink) {
         match = link.match(/(\/w\/)([0-9A-Za-z]{22})([a-z?=0-9]*)/i)[2]
       }
-  
+
       if (match) {
         const id = match
         body = body.replace(link, `~~~~~~.^.~~~${domain}:hive-tube-embed:${id}:~~~~~~.^.~~~`)
         videoEmbeds.push({ app: 'hive-tube-embed', domain, id })
       }
     })
-    
-    if(body.match(/~~~~~~\.\^\.~~~([\w_-]+)(\.)([a-zA-Z]+):hive-tube-embed:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
+
+    if (body.match(/~~~~~~\.\^\.~~~([\w_-]+)(\.)([a-zA-Z]+):hive-tube-embed:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi)) {
       body = body.replace(/~~~~~~\.\^\.~~~([\w_-]+)(\.)([a-zA-Z]+):hive-tube-embed:[a-z-A-Z0-9]+:~~~~~~\.\^\.~~~/gi, '')
       body = `${body} \n ~~~~~~.^.~~~:dbuzz-embed-container:~~~~~~.^.~~~`
     }
   }
-  
+
   return body
 }
 
@@ -1154,48 +1154,48 @@ const prepareBuzzImages = (
   const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
 
   let body = content
-  
+
   const links = parseUrls(content)
-  
-  if(!body.includes('~~~~~~.^.~~~:dbuzz-images-container:~~~~~~.^.~~~') && videoEmbeds.length===0 && soundEmbeds.length===0 && twitterEmbeds.length===0 && buzzVideos.length===0 && contentImages===0) {
+
+  if (!body.includes('~~~~~~.^.~~~:dbuzz-images-container:~~~~~~.^.~~~') && videoEmbeds.length === 0 && soundEmbeds.length === 0 && twitterEmbeds.length === 0 && buzzVideos.length === 0 && contentImages === 0) {
     links.forEach((link) => {
       link = link.replace(/&amp;/g, '&')
       const matchedLink = link.match(dbuzzImageRegex)
-  
-      if(matchedLink !== null) {
-        if(!buzzImages.includes(matchedLink[0])) {
+
+      if (matchedLink !== null) {
+        if (!buzzImages.includes(matchedLink[0])) {
           body = body.replace(link, `~~~~~~.^.~~~:dbuzz-image-item:~~~~~~.^.~~~`)
           buzzImages.push(matchedLink[0])
         }
       }
     })
-    
+
     body = body.replace(/~~~~~~\.\^\.~~~:dbuzz-image-item:~~~~~~\.\^\.~~~/g, '')
     body = `${body} \n ~~~~~~.^.~~~:dbuzz-images-container:~~~~~~.^.~~~`
   }
-  
+
   return body
 }
 
 const getCoinTicker = (coin) => {
   const data = require('../../../files/coinGeckoData.json')
 
-  for(var i=0; i<=data.length; i++){
-    if(data[i]?.symbol === coin){
-      return {id: data[i]?.id, name: data[i]?.name}
+  for (var i = 0; i <= data.length; i++) {
+    if (data[i]?.symbol === coin) {
+      return { id: data[i]?.id, name: data[i]?.name }
     }
   }
 }
 
-const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, recomputeRowIndex, classes, videoEmbeds, soundEmbeds, twitterEmbeds, buzzImages, buzzVideos, onImageLoad, showText = true, showImage = true) => {  
+const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, recomputeRowIndex, classes, videoEmbeds, soundEmbeds, twitterEmbeds, buzzImages, buzzVideos, onImageLoad, showText = true, showImage = true) => {
 
   if (content.includes(':dbuzz-images-container:') && showImage) {
     return <BuzzPhotoGrid content={content} images={buzzImages} minifyAssets={minifyAssets} recomputeRowIndex={recomputeRowIndex} onImageLoad={onImageLoad} />
-  } if(content.includes(':dbuzz-videos-container:') && showImage) {
-    return <a href={`https://ipfs.io/ipfs/${buzzVideos[0]?.id}`}><VideoPreview key={`${buzzVideos[0]?.id}${scrollIndex}dbuzz-video`} url={`https://ipfs.io/ipfs/${buzzVideos[0]?.id}`}/></a>
+  } if (content.includes(':dbuzz-videos-container:') && showImage) {
+    return <a href={`https://ipfs.io/ipfs/${buzzVideos[0]?.id}`}><VideoPreview key={`${buzzVideos[0]?.id}${scrollIndex}dbuzz-video`} url={`https://ipfs.io/ipfs/${buzzVideos[0]?.id}`} /></a>
   } else if (content.includes(':dbuzz-embed-container:') && showImage) {
     return <UrlVideoEmbed key={`${videoEmbeds[0]?.id}${scrollIndex}url-embed`} embed={videoEmbeds} />
-  } 
+  }
 
   else if (content.includes(':dbuzz-twitter-embed-container:') && showImage) {
     return <TwitterEmbed key={`${twitterEmbeds[0]?.id}${scrollIndex}tweet`} tweet={twitterEmbeds} onIframeLoad={onImageLoad} />
@@ -1218,15 +1218,15 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
 
     // youtube
     if (showText === true) {
-        
-    
+
+
       const youtubeRegex = /(https?:\/\/)?((www\.)?(m\.)?youtube\.com|youtu\.?be)\/.+/gi
       // twitter
       const twitterRegex = /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))|(?:https?:\/\/(?:(?:mobile\.twitter\.com\/(.*?)\/status\/(.*))))|(<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter\.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>)/gi
       // vimm
       const vimmRegex = /https?:\/\/(?:www\.)?vimm\.tv\/(?:c\/)?[\w-]+(?:\/embed(?:\?autoplay=\d)?)?/gi
       // threespeak
-      const threeSpeakRegex =/(?:https?:\/\/(?:3speak\.online\/watch\?v=(.*)|3speak\.co\/watch\?v=(.*)|3speak\.tv\/watch\?v=(.*)))/gi
+      const threeSpeakRegex = /(?:https?:\/\/(?:3speak\.online\/watch\?v=(.*)|3speak\.co\/watch\?v=(.*)|3speak\.tv\/watch\?v=(.*)))/gi
       // rumble
       const rumbleRegex = /(?:(?:https?:\/\/)?(?:www\.)?(?:(?:rumble\.com\/embed\/[a-zA-Z1-9-./?=-]+)))/gi
       // odysee
@@ -1254,7 +1254,7 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
 
       // tiktok
       const tiktokRegex = /((http:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*))|(https:\/\/(.*\.tiktok\.com\/.*|tiktok\.com\/.*)))/gi
-      
+
       // soundcloud
       const soundCloudRegex = /https?:\/\/(soundcloud\.com|snd\.sc)\/([a-zA-Z0-9&?=/_-]+)/gi
 
@@ -1297,7 +1297,7 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
 
       //tiktok
       content = content.replace(tiktokRegex, '')
-      
+
       // soundcloud
       content = content.replace(soundCloudRegex, '')
 
@@ -1315,9 +1315,9 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
 
       const checkForValidURL = (n) => {
         return !n.startsWith('@')
-        && !n.startsWith('#')
-        && !n.startsWith('"')
-        && checkForMarkdownDefaults(n)
+          && !n.startsWith('#')
+          && !n.startsWith('"')
+          && checkForMarkdownDefaults(n)
       }
 
       const checkForValidUserName = (n) => {
@@ -1335,11 +1335,11 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
       // // render content (supported for all browsers)
       content = content
         .replace(/("\S+)|(\[\S+)|(\(\S+)|(@\S+)|(#\S+)|((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-])+))+([a-zA-Z]*[a-zA-Z]){0}?([\w.,@?^=%&:/~+#!-$-]+)?(\/+[\w.,@?^=%&:/~+#!-$-]*)*([a-zA-Z0-9/])+/gi, n => checkForImage(n) && checkForValidURL(n) ? `${truncateString(n, 25)}` : n)
-        // // render markdown links  
+        // // render markdown links
         .replace(/\[.*?\]\((.+?)\)/gi, (_m, n) => `${truncateString(n, 25)}`)
         // // render usernames
         .replace(/([a-zA-Z0-9/-]@\S+)|@([A-Za-z0-9-]+\.?[A-Za-z0-9-]+)/gi, n => checkForValidUserName(n) ? `${n}` : n)
-        //   // render hashtags 
+        //   // render hashtags
         .replace(/([a-zA-Z0-9/-]#\S+)|#([A-Za-z\d-]+)/gi, n => checkForValidHashTag(n) ? `${n}` : n)
         // // render crypto tickers
         .replace(/([a-zA-Z0-9/-]\$\S+)|\$([A-Za-z-]+)/gi, n => checkForValidCryptoTicker(n) && getCoinTicker(n.replace('$', '').toLowerCase()) ? `${n}` : n)
@@ -1367,7 +1367,7 @@ const render = (content, markdownClass, assetClass, minifyAssets, scrollIndex, r
         .replace(/---<center>h/g, '')
 
       const maxLength = 100
-      console.log("content.length ",content.length )
+      console.log("content.length ", content.length)
       let truncatedString = content.length > maxLength
         ? content.substring(0, maxLength - 3) + '...'
         : content
@@ -1388,18 +1388,16 @@ const Renderer = React.memo((props) => {
   const {
     minifyAssets = true,
     scrollIndex = -1,
-    recomputeRowIndex = () => {},
+    recomputeRowIndex = () => { },
     setLinkConfirmationModal,
     onImageLoad,
     // when the buzz is being drafted
-    contentImages=0,
+    contentImages = 0,
     showText = true,
     showImage = true,
   } = props
   const classes = useStyles({ minifyAssets })
   let { content = '' } = props
- 
-  const original = content
 
   const extracted = parseUrls(content)
   extracted.forEach((item) => {
@@ -1417,7 +1415,7 @@ const Renderer = React.memo((props) => {
         const url = hyperlink.id
         setLinkConfirmationModal(url)
       })
-      if(isMobile) {
+      if (isMobile) {
         hyperlink.addEventListener('touchstart', function (e) {
           e.preventDefault()
           const url = hyperlink.id
@@ -1431,70 +1429,70 @@ const Renderer = React.memo((props) => {
     prepareHyperlinks()
     // eslint-disable-next-line
   }, [links])
-  
+
   const buzzImages = []
   const buzzVideos = []
   const videoEmbeds = []
   const soundEmbeds = []
   const twitterEmbeds = []
-  
+
   // console.log("JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled'",JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled')
 
-  if(JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled') {
+  if (JSON.parse(localStorage.getItem('customUserData'))?.settings?.videoEmbedsStatus !== 'disabled') {
     // console.log('links',links)
 
     links.forEach((link) => {
       try {
         link = link.replace(/&amp;/g, '&')
         link = link.replace(/\(/g, '%28').replace(/\)/g, '%29')
-        
+
         const hiveTubePattern = /(http|https?:\/\/)?(www\.)?([\w_-]+)(\.)([a-zA-Z]+)(\/w\/)([0-9A-Za-z]{22})([a-z?=0-9]*)/
         const buzzImagesPattern = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/(storageapi\.fleek\.co)?(media\.d\.buzz)?\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
 
-        if(link.includes('youtube.com') ||link.includes('youtu.be')) {
+        if (link.includes('youtube.com') || link.includes('youtu.be')) {
           content = prepareYoutubeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-         
 
-        } else if(link.includes('twitter.com') || link.includes('x.com')) {
+
+        } else if (link.includes('twitter.com') || link.includes('x.com')) {
           content = prepareTwitterEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('3speak.co') || link.includes('3speak.online') || link.includes('3speak.tv')) {
+        } else if (link.includes('3speak.co') || link.includes('3speak.online') || link.includes('3speak.tv')) {
           content = prepareThreeSpeakEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('vimm.tv') || link.includes('Vimm.tv')) {
+        } else if (link.includes('vimm.tv') || link.includes('Vimm.tv')) {
           content = prepareVimmEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('rumble.com')) {
+        } else if (link.includes('rumble.com')) {
           content = prepareRumbleEmbed(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('lbry.tv') || link.includes('open.lbry.com')) {
+        } else if (link.includes('lbry.tv') || link.includes('open.lbry.com')) {
           content = prepareLbryEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('bitchute.com')) {
+        } else if (link.includes('bitchute.com')) {
           content = prepareBitchuteEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('banned.video')) {
+        } else if (link.includes('banned.video')) {
           content = prepareBannedEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('vigilante.tv')) {
+        } else if (link.includes('vigilante.tv')) {
           content = prepareDollarVigilanteEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('dapplr.in')) {
+        } else if (link.includes('dapplr.in')) {
           content = prepareDapplrEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('freeworldnews.tv')) {
+        } else if (link.includes('freeworldnews.tv')) {
           content = prepareFreeWorldNewsEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('soundcloud.com')) {
+        } else if (link.includes('soundcloud.com')) {
           content = prepareSoundCloudEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('facebook.com')) {
+        } else if (link.includes('facebook.com')) {
           content = prepareFacebookEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('tiktok.com')) {
+        } else if (link.includes('tiktok.com')) {
           content = prepareTiktokEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('odysee.com')) {
+        } else if (link.includes('odysee.com')) {
           content = prepareOdyseeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(link.includes('music.apple.com')) {
+        } else if (link.includes('music.apple.com')) {
           content = prepareAppleEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
         } else if (link.includes('d.tube')) {
           content = prepareDTubeEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
         } else if (link.includes('dbuzz_video')) {
           content = prepareDBuzzVideos(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(hiveTubePattern.test(link)) {
+        } else if (hiveTubePattern.test(link)) {
           content = prepareHiveTubeVideoEmbeds(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
-        } else if(buzzImagesPattern.test(link)) {
+        } else if (buzzImagesPattern.test(link)) {
           content = prepareBuzzImages(content, buzzImages, buzzVideos, videoEmbeds, soundEmbeds, twitterEmbeds, contentImages)
         }
-      } catch(error) { }
+      } catch (error) { }
     })
   }
 
@@ -1508,9 +1506,9 @@ const Renderer = React.memo((props) => {
       {splitContent.map((item) => (
         render(item, classes.markdown, assetClass, minifyAssets, scrollIndex, recomputeRowIndex, classes, videoEmbeds, soundEmbeds, twitterEmbeds, buzzImages, buzzVideos, onImageLoad, showText, showImage)
       ))}
-      {showText && showImage && (
+      {/* {showText && showImage && (
         <LinkPreview content={original} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex} />
-      )}
+      )} */}
     </React.Fragment>
   )
 })
@@ -1520,7 +1518,7 @@ const mapDispatchToProps = (dispatch) => ({
     {
       setViewImageModal,
       setLinkConfirmationModal,
-    },dispatch),
+    }, dispatch),
 })
 
 export default connect(null, mapDispatchToProps)(Renderer)

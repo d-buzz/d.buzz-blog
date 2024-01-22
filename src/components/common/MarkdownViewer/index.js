@@ -3,7 +3,7 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import textParser from 'npm-text-parser'
 import classNames from 'classnames'
-import { UrlVideoEmbed, LinkPreview, TweetSkeleton } from 'components'
+import { UrlVideoEmbed, TweetSkeleton } from 'components'
 import { createUseStyles } from 'react-jss'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 
@@ -127,7 +127,7 @@ const prepareTwitterEmbeds = (content) => {
   const links = textParser.getUrls(content)
 
   const matchData = content.match(htmlReplacement)
-  if(matchData) {
+  if (matchData) {
     const id = matchData[5]
     let title = body
     title = title.replace(htmlReplacement, '')
@@ -140,10 +140,10 @@ const prepareTwitterEmbeds = (content) => {
         let match = ''
         let id = ''
 
-        if(link.match(mainTwitterRegex)) {
+        if (link.match(mainTwitterRegex)) {
           match = link.match(mainTwitterRegex)
           id = match[2]
-          if(link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
+          if (link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
             match = link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
             id = match[2]
             id = id.slice(0, -2)
@@ -151,11 +151,11 @@ const prepareTwitterEmbeds = (content) => {
           body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
         }
 
-        if(match) {
+        if (match) {
           const id = match[2]
           body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
         }
-      } catch(e) { }
+      } catch (e) { }
     })
   }
 
@@ -176,20 +176,20 @@ const prepareVimmEmbeds = (content) => {
     let id = ''
 
     try {
-      if(link.match(vimmRegex) && !link.includes('/view')){
+      if (link.match(vimmRegex) && !link.includes('/view')) {
         const data = link.split('/')
         match = link.match(vimmRegex)
         id = data[3]
-        if(link.match(vimmRegexEmbed)){
+        if (link.match(vimmRegexEmbed)) {
           match = link.match(vimmRegexEmbed)
           id = match[1]
         }
       }
 
-      if(match){
+      if (match) {
         body = body.replace(link, `~~~~~~.^.~~~:vimm:${id}:~~~~~~.^.~~~`)
       }
-    } catch(error) { }
+    } catch (error) { }
   })
   return body
 }
@@ -203,17 +203,17 @@ const prepareThreeSpeakEmbeds = (content) => {
     try {
       link = link.replace(/&amp;/g, '&')
       let match = ''
-      if(link.includes('3speak.online/watch?v')) {
+      if (link.includes('3speak.online/watch?v')) {
         match = link.match(/(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=(.*))))?/i)
-      } else if(link.includes('3speak.co/watch?v')){
+      } else if (link.includes('3speak.co/watch?v')) {
         match = link.match(/(?:https?:\/\/(?:(?:3speak\.co\/watch\?v=(.*))))?/i)
       }
 
-      if(match) {
+      if (match) {
         const id = match[1]
         body = body.replace(link, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
       }
-    } catch(error) { }
+    } catch (error) { }
   })
   return body
 }
@@ -231,11 +231,11 @@ const prepareRumbleEmbed = (content) => {
     let id = ''
 
     try {
-      if(link.match(rumbleRegex)){
+      if (link.match(rumbleRegex)) {
         const data = link.split('/')
         match = link.match(rumbleRegex)
         id = data[4]
-        if(link.match(rumbleRegexEmbed)){
+        if (link.match(rumbleRegexEmbed)) {
           match = link.match(rumbleRegexEmbed)
           const input = match['input']
           const data = input.split('/')
@@ -245,11 +245,11 @@ const prepareRumbleEmbed = (content) => {
       if (!id) {
         id = ''
       }
-      
-      if(match){
+
+      if (match) {
         body = body.replace(link, `~~~~~~.^.~~~:rumble:${id}:~~~~~~.^.~~~`)
       }
-    } catch(error) { }
+    } catch (error) { }
   })
   return body
 }
@@ -260,7 +260,7 @@ const prepareLbryEmbeds = (content) => {
   const lbry1Regex = /(?:https?:\/\/(?:(?:open\.lbry\.com)))/i
   const lbryRegexEmbed = /(?:https?:\/\/(?:(?:lbry\.tv\/.*?\/embed\/(.*?))))/i
   let body = content
-  
+
   const links = markdownLinkExtractor(content)
 
   links.forEach((link) => {
@@ -268,32 +268,32 @@ const prepareLbryEmbeds = (content) => {
       link = link.replace(/&amp;/g, '&')
       let match = ''
       let id = ''
-      
-      if(link.match(lbryRegex) || link.match(lbry1Regex)){
+
+      if (link.match(lbryRegex) || link.match(lbry1Regex)) {
         const data = link.split('/')
         match = link.match(lbryRegex) ? link.match(lbryRegex) : link.match(lbry1Regex)
         if (data[4]) {
           const data1 = data[4].split(':')
           id = data1[0]
         }
-        
-        if(link.match(lbryRegexEmbed)){
+
+        if (link.match(lbryRegexEmbed)) {
           match = link.split('/')
           id = match[5]
         }
       }
 
-      if(match){
+      if (match) {
         body = body.replace(link, `~~~~~~.^.~~~:lbry:${id}:~~~~~~.^.~~~`)
       }
-    } catch(error) { }
+    } catch (error) { }
   })
   return body
 }
-        
+
 const prepareBitchuteEmbeds = (content) => {
   const bitchuteRegex = /(?:https?:\/\/(?:(?:www\.bitchute\.com\/(.*?))))/i
-  const bitchuteRegexEmbed = /(?:https?:\/\/(?:(?:www\.bitchute\.com\/embed\/(.*?))))/i 
+  const bitchuteRegexEmbed = /(?:https?:\/\/(?:(?:www\.bitchute\.com\/embed\/(.*?))))/i
   let body = content
 
   const links = textParser.getUrls(content)
@@ -302,13 +302,13 @@ const prepareBitchuteEmbeds = (content) => {
     link = link.replace(/&amp;/g, '&')
     let match = ''
     let id = ''
-    
+
     try {
-      if(link.match(bitchuteRegex)){
+      if (link.match(bitchuteRegex)) {
         const data = link.split('/')
         match = link.match(bitchuteRegex)
         id = data[4]
-        if(link.match(bitchuteRegexEmbed)){
+        if (link.match(bitchuteRegexEmbed)) {
           match = link.match(bitchuteRegexEmbed)
           const input = match['input']
           const data = input.split('/')
@@ -319,41 +319,41 @@ const prepareBitchuteEmbeds = (content) => {
       if (!id) {
         id = ''
       }
-      
-      if(match){
+
+      if (match) {
         body = body.replace(link, `~~~~~~.^.~~~:bitchute:${id}:~~~~~~.^.~~~`)
       }
-    } catch(error) { }
+    } catch (error) { }
   })
   return body
 }
 
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex) => {
 
-  if(content.includes(':twitter:')) {
+  if (content.includes(':twitter:')) {
     const splitTwitter = content.split(':')
     try {
-      return <TwitterTweetEmbed key={`${splitTwitter[2]}${scrollIndex}`} tweetId={splitTwitter[2]} onLoad={() => recomputeRowIndex(scrollIndex)} placeholder={<TweetSkeleton />}/>
-    } catch(e) {console.log(e)}
-  } else if(content.includes(':threespeak:')) {
+      return <TwitterTweetEmbed key={`${splitTwitter[2]}${scrollIndex}`} tweetId={splitTwitter[2]} onLoad={() => recomputeRowIndex(scrollIndex)} placeholder={<TweetSkeleton />} />
+    } catch (e) { console.log(e) }
+  } else if (content.includes(':threespeak:')) {
     const splitThreeSpeak = content.split(':')
     const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
     return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
-  } else if(content.includes(':vimm:')){
+  } else if (content.includes(':vimm:')) {
     const splitVimm = content.split(':')
     const url = `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`
     return <UrlVideoEmbed key={`${url}${scrollIndex}vimm`} url={url} />
-  } else if(content.includes(':rumble:')) {
+  } else if (content.includes(':rumble:')) {
     const splitRumble = content.split(':')
-    if (splitRumble[2] ) {
+    if (splitRumble[2]) {
       const url = `https://rumble.com/embed/${splitRumble[2]}`
       return <UrlVideoEmbed key={`${content}${scrollIndex}rumble`} url={url} />
     }
-  } else if(content.includes(':lbry:')){
+  } else if (content.includes(':lbry:')) {
     const splitLbry = content.split(':')
     const url = `https://lbry.tv/$/embed/${splitLbry[2]}`
     return <UrlVideoEmbed key={`${url}${scrollIndex}lbry`} url={url} />
-  } else if(content.includes(':bitchute:')) {
+  } else if (content.includes(':bitchute:')) {
     const splitBitchute = content.split(':')
     const url = `https://www.bitchute.com/embed/${splitBitchute[2]}`
     return <UrlVideoEmbed key={`${url}${scrollIndex}bitchute`} url={url} />
@@ -377,35 +377,34 @@ const MarkdownViewer = React.memo((props) => {
   const {
     minifyAssets = true,
     scrollIndex = -1,
-    recomputeRowIndex = () => {},
+    recomputeRowIndex = () => { },
   } = props
   let { content = '' } = props
-  const original = content
   const links = textParser.getUrls(content)
 
   links.forEach((link) => {
     try {
       link = link.replace(/&amp;/g, '&')
 
-      if(link.includes('twitter.com')) {
+      if (link.includes('twitter.com')) {
         content = prepareTwitterEmbeds(content)
-      } else if(link.includes('3speak.co') || link.includes('3speak.online')) {
+      } else if (link.includes('3speak.co') || link.includes('3speak.online')) {
         content = prepareThreeSpeakEmbeds(content)
-      } else if(link.includes('www.vimm.tv')) {
+      } else if (link.includes('www.vimm.tv')) {
         content = prepareVimmEmbeds(content)
-      } else if(link.includes('rumble.com')) {
+      } else if (link.includes('rumble.com')) {
         content = prepareRumbleEmbed(content)
-      } else if(link.includes('lbry.tv') || link.includes('open.lbry.com')) {
+      } else if (link.includes('lbry.tv') || link.includes('open.lbry.com')) {
         content = prepareLbryEmbeds(content)
-      } else if(link.includes('www.bitchute.com')) {
+      } else if (link.includes('www.bitchute.com')) {
         content = prepareBitchuteEmbeds(content)
-      } 
-    } catch(error) { }
+      }
+    } catch (error) { }
   })
 
   let assetClass = classes.minified
 
-  if(!minifyAssets) {
+  if (!minifyAssets) {
     assetClass = classes.full
   }
 
@@ -419,7 +418,7 @@ const MarkdownViewer = React.memo((props) => {
       {splitContent.map((item) => (
         render(item, classes.markdown, assetClass, scrollIndex, recomputeRowIndex)
       ))}
-      <LinkPreview content={original} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex} />
+      {/* <LinkPreview content={original} scrollIndex={scrollIndex} recomputeRowIndex={recomputeRowIndex} /> */}
     </React.Fragment>
   )
 })
