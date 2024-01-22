@@ -715,8 +715,7 @@ const Content = (props) => {
     if(body !== '' && body) {
       setOriginalContent(body
         .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
-        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', '')
-      )
+        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', ''))
     }
   }, [body])
 
