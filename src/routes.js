@@ -5,6 +5,8 @@ const Home = React.lazy(() => import('./components/pages/Home'))
 const Trending = React.lazy(() => import('./components/pages/Trending'))
 const Latest = React.lazy(() => import('./components/pages/Latest'))
 const Hive = React.lazy(() => import('./components/pages/Hive'))
+const Events = React.lazy(() => import('./components/pages/Events'))
+const Forsale = React.lazy(() => import('./components/pages/Forsale'))
 const News = React.lazy(() => import('./components/pages/News'))
 const Content = React.lazy(() => import('./components/pages/Content'))
 const Profile = React.lazy(() => import('./components/pages/Profile'))
@@ -19,7 +21,7 @@ const SearchPosts = React.lazy(() => import('./components/sections/SearchPosts')
 const SearchPeople = React.lazy(() => import('./components/sections/SearchPeople'))
 // const CreateBuzzForm = React.lazy(() => import('./components/sections/CreateBuzzForm'))
 
-  
+
 const routes =  [
   {
     component: AppFrame,
@@ -48,6 +50,16 @@ const routes =  [
         path: '/latest',
         exact: true,
         component: Latest,
+      },
+      {
+        path: '/events',
+        exact: true,
+        component: Events,
+      },
+      {
+        path: '/forsale',
+        exact: true,
+        component: Forsale,
       },
       {
         path: '/hive',
@@ -134,5 +146,5 @@ const routes =  [
     ],
   },
 ]
- 
+
 export default routes

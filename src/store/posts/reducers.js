@@ -4,6 +4,8 @@ import {
   GET_LATEST_POSTS_SUCCESS,
   GET_NEWS_POSTS_SUCCESS,
   GET_HIVE_POSTS_SUCCESS,
+  GET_EVENTS_POSTS_SUCCESS,
+  GET_FORSALE_POSTS_SUCCESS,
   GET_TRENDING_TAGS_SUCCESS,
   GET_TRENDING_POSTS_SUCCESS,
   SET_TRENDING_LAST_POST,
@@ -15,8 +17,12 @@ import {
   SET_LATEST_IS_VISITED,
   SET_NEWS_IS_VISITED,
   SET_HIVE_IS_VISITED,
+  SET_EVENTS_IS_VISITED,
+  SET_FORSALE_IS_VISITED,
   SET_LATEST_LAST_POST,
   SET_NEWS_LAST_POST,
+  SET_EVENTS_LAST_POST,
+  SET_FORSALE_LAST_POST,
   SET_TAGS_IS_VISITED,
   CLEAR_SEARCH_POSTS,
   CLEAR_LAST_SEARCH_TAG,
@@ -44,6 +50,8 @@ const defaultState = fromJS({
   latest: [],
   news: [],
   hive: [],
+  events: [],
+  forsale: [],
   content: {},
   search: {},
   searchTag: [],
@@ -55,6 +63,8 @@ const defaultState = fromJS({
   lastLatest: {},
   lastNews: {},
   lastHive: {},
+  lastEvents: {},
+  lastForsale: {},
   isHomeVisited: false,
   isTrendingVisited: false,
   isLatestVisited: false,
@@ -80,6 +90,10 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('lastLatest', payload)
   case SET_NEWS_LAST_POST:
     return state.set('lastNews', payload)
+  case SET_EVENTS_LAST_POST:
+    return state.set('lastEvents', payload)
+  case SET_FORSALE_LAST_POST:
+    return state.set('lastForsale', payload)
   case GET_HOME_POSTS_SUCCESS:
     return state.set('home', payload)
   case GET_LATEST_POSTS_SUCCESS:
@@ -88,6 +102,10 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('news', payload)
   case GET_HIVE_POSTS_SUCCESS:
     return state.set('hive', payload)
+  case GET_EVENTS_POSTS_SUCCESS:
+    return state.set('events', payload)
+  case GET_FORSALE_POSTS_SUCCESS:
+    return state.set('forsale', payload)
   case GET_TRENDING_TAGS_SUCCESS:
     return state.set('tags', payload)
   case GET_TRENDING_POSTS_SUCCESS:
@@ -124,7 +142,11 @@ export const posts = (state = defaultState, { type, payload }) => {
     return state.set('isNewsVisited', payload)
   case SET_HIVE_IS_VISITED:
     return state.set('isHiveVisited', payload)
-  case SET_TAGS_IS_VISITED: 
+  case SET_EVENTS_IS_VISITED:
+    return state.set('isEventsVisited', payload)
+  case SET_FORSALE_IS_VISITED:
+    return state.set('isForsaleVisited', payload)
+  case SET_TAGS_IS_VISITED:
     return state.set('isTagsVisited', payload)
   case CLEAR_APPEND_REPLY:
     return state.set('appendReply', {})
