@@ -733,7 +733,9 @@ const Content = (props) => {
 
   useEffect(() => {
     if(body !== '' && body) {
-      setOriginalContent(body)
+      setOriginalContent(body
+        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
+        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', ''))
     }
   }, [body])
 
@@ -786,6 +788,9 @@ const Content = (props) => {
 
     if(app === 'dBuzz') {
       app = 'D.Buzz'
+    }
+    if(app === 'blogDBuzz') {
+      app = 'blog.d.buzz'
     }
   }
 
