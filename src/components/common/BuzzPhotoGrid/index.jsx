@@ -35,7 +35,7 @@ const useStyles = createUseStyles(theme => ({
 
     '@media (max-width: 480px)': {
       height: !isMobile ? 127 : 200,
-    }
+    },
   },
   imageGridItem: {
     height: '100%',
@@ -66,40 +66,40 @@ const useStyles = createUseStyles(theme => ({
     fontSize: '2rem',
     color: '#ffffff',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  }
+  },
 }))
 
 
 const BuzzPhotoGrid = ({
-  images=[],
+  images = [],
   minifyAssets,
-  onImageLoad = () => {},
-  setViewImageModal = () => {},
+  onImageLoad = () => { },
+  setViewImageModal = () => { },
 }) => {
   const classes = useStyles({ images, minifyAssets })
   const buzzPhotoGridRef = useRef(null)
   const imageLoadTime = 2
 
-  const [imagesEnabled] = useState(JSON.parse(localStorage.getItem('customUserData'))?.settings?.showImagesStatus !== 'disabled') 
+  const [imagesEnabled] = useState(JSON.parse(localStorage.getItem('customUserData'))?.settings?.showImagesStatus !== 'disabled')
 
   const calculateHeightWithMaxWidth = (image, maxWidth) => {
     const originalWidth = image.naturalWidth
     const originalHeight = image.naturalHeight
     let newHeight
 
-    if(originalWidth === originalHeight) {
+    if (originalWidth === originalHeight) {
       newHeight = 510
     } else {
       newHeight = (originalHeight / originalWidth) * maxWidth
     }
-    
+
     return newHeight
   }
 
   const handleImageOnLoad = (url) => {
     const image = document.querySelector(`img[src$="${url}"]`)
-    
-    if(buzzPhotoGridRef && image) {
+
+    if (buzzPhotoGridRef && image) {
       image.style.height = 'auto'
       image.style.background = 'none'
       image.style.animation = 'none'
@@ -107,7 +107,7 @@ const BuzzPhotoGrid = ({
       image.style.visibility = 'hidden'
 
       // re-render postList
-      if(onImageLoad) {
+      if (onImageLoad) {
         onImageLoad()
       }
 
@@ -115,17 +115,17 @@ const BuzzPhotoGrid = ({
 
       const waitForImageLoad = () => {
 
-        if(images.length === 1) {
-          if(renderedHeight !== 0) {
-            if(renderedHeight > 510 && !(renderedHeight === image.width) && minifyAssets) {
+        if (images.length === 1) {
+          if (renderedHeight !== 0) {
+            if (renderedHeight > 510 && !(renderedHeight === image.width) && minifyAssets) {
               image.style.height = '510px'
               image.style.width = !isMobile ? '383px' : '293px'
               image.style.animation = 'none'
               image.style.animation = 'fadeIn 250ms ease-out forwards'
               image.style.visibility = 'visible'
-  
+
               // re-render postList
-              if(onImageLoad) {
+              if (onImageLoad) {
                 onImageLoad()
               }
             } else {
@@ -134,7 +134,7 @@ const BuzzPhotoGrid = ({
               image.style.visibility = 'visible'
 
               // re-render postList
-              if(onImageLoad) {
+              if (onImageLoad) {
                 onImageLoad()
               }
             }
@@ -147,46 +147,49 @@ const BuzzPhotoGrid = ({
           image.style.visibility = 'visible'
 
           // re-render postList
-          if(onImageLoad) {
+          if (onImageLoad) {
             onImageLoad()
           }
         }
       }
 
-      setTimeout(waitForImageLoad, imageLoadTime*100)
+      setTimeout(waitForImageLoad, imageLoadTime * 100)
     }
   }
 
   const handleImageError = (url) => {
     const image = document.querySelector(`img[src$="${url}"]`)
-    image.src = `${window.location.origin}/noimage.svg`
-    image.style.animation = 'none'
-    setTimeout(() => { 
-      image.style.visibility = 'visible'
-      onImageLoad()
-     }, 2000)
 
-    if(onImageLoad) {
-      onImageLoad()
+    if (image) {
+      image.src = `${window.location.origin}/noimage.svg`
+      image.style.animation = "none"
+
+      setTimeout(() => {
+        image.style.visibility = "visible"
+        if (onImageLoad) {
+          onImageLoad()
+        }
+      }, 2000)
     }
   }
+
 
   return (
     imagesEnabled &&
     <div ref={buzzPhotoGridRef} style={{ width: '100%' }} className={`${classes.buzzPhotoGridWrapper} buzzPhotoGrid`}>
       {images.length === 1 &&
-      // one images
-      <div className={`${classes.singleImageWrapper} singleImage`}>
-        <img
-          className={`${classes.buzzImage} singleImage`}
-          src={proxyImage(images[0])}
-          alt={`Buzz Attached Media`}
-          onClick={() => setViewImageModal({ selectedImage: images[0], images })}
-          onLoad={() => handleImageOnLoad(proxyImage(images[0]))}
-          onError={() => handleImageError(proxyImage(images[0]))}
-          loading='lazy'
-        />
-      </div>}
+        // one images
+        <div className={`${classes.singleImageWrapper} singleImage`}>
+          <img
+            className={`${classes.buzzImage} singleImage`}
+            src={proxyImage(images[0])}
+            alt={`Buzz Attached Media`}
+            onClick={() => setViewImageModal({ selectedImage: images[0], images })}
+            onLoad={() => handleImageOnLoad(proxyImage(images[0]))}
+            onError={() => handleImageError(proxyImage(images[0]))}
+            loading='lazy'
+          />
+        </div>}
       {images.length === 2 &&
         // two images
         <div style={{ height: 248 }} className={classes.imageGrid}>
@@ -201,7 +204,7 @@ const BuzzPhotoGrid = ({
               loading='lazy'
             />
           </div>
-          <div style={{ marginLeft: 1 }}  key={images[1]} className={classes.imageGridItem}>
+          <div style={{ marginLeft: 1 }} key={images[1]} className={classes.imageGridItem}>
             <img
               className={classes.buzzImage}
               src={proxyImage(images[1])}
@@ -216,7 +219,7 @@ const BuzzPhotoGrid = ({
       {images.length === 3 &&
         // three images
         <div style={{ height: 324 }} className={classes.imageGrid}>
-          <div style={{ flex: 0.5, marginRight: 2 }}  key={images[0]} className={classes.imageGridItem}>
+          <div style={{ flex: 0.5, marginRight: 2 }} key={images[0]} className={classes.imageGridItem}>
             <img
               className={classes.buzzImage}
               src={proxyImage(images[0])}
@@ -228,7 +231,7 @@ const BuzzPhotoGrid = ({
             />
           </div>
           <div style={{ flex: 0.5, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ height: '50%', marginBottom: 1 }}  key={images[1]} className={classes.imageGridItem}>
+            <div style={{ height: '50%', marginBottom: 1 }} key={images[1]} className={classes.imageGridItem}>
               <img
                 className={classes.buzzImage}
                 src={proxyImage(images[1])}
@@ -239,7 +242,7 @@ const BuzzPhotoGrid = ({
                 loading='lazy'
               />
             </div>
-            <div style={{ height: '50%', marginTop: 1 }}  key={images[2]} className={classes.imageGridItem}>
+            <div style={{ height: '50%', marginTop: 1 }} key={images[2]} className={classes.imageGridItem}>
               <img
                 className={classes.buzzImage}
                 src={proxyImage(images[2])}
@@ -256,7 +259,7 @@ const BuzzPhotoGrid = ({
         // four images
         <div style={{ height: 324 }} className={classes.imageGrid}>
           <div style={{ flex: 0.5, display: 'flex', flexDirection: 'column', marginRight: 1 }}>
-            <div style={{ height: '50%', marginBottom: 1 }}  key={images[0]} className={classes.imageGridItem}>
+            <div style={{ height: '50%', marginBottom: 1 }} key={images[0]} className={classes.imageGridItem}>
               <img
                 className={classes.buzzImage}
                 src={proxyImage(images[0])}
@@ -267,7 +270,7 @@ const BuzzPhotoGrid = ({
                 loading='lazy'
               />
             </div>
-            <div style={{ height: '50%', marginTop: 1 }}  key={images[1]} className={classes.imageGridItem}>
+            <div style={{ height: '50%', marginTop: 1 }} key={images[1]} className={classes.imageGridItem}>
               <img
                 className={classes.buzzImage}
                 src={proxyImage(images[1])}
@@ -280,7 +283,7 @@ const BuzzPhotoGrid = ({
             </div>
           </div>
           <div style={{ flex: 0.5, display: 'flex', flexDirection: 'column', marginLeft: 1 }}>
-            <div style={{ height: '50%', marginBottom: 1 }}  key={images[2]} className={classes.imageGridItem}>
+            <div style={{ height: '50%', marginBottom: 1 }} key={images[2]} className={classes.imageGridItem}>
               <img
                 className={classes.buzzImage}
                 src={proxyImage(images[2])}
@@ -292,7 +295,7 @@ const BuzzPhotoGrid = ({
               />
             </div>
             {images.length === 4 ?
-              <div style={{ height: '50%', marginTop: 1 }}  key={images[3]} className={classes.imageGridItem}>
+              <div style={{ height: '50%', marginTop: 1 }} key={images[3]} className={classes.imageGridItem}>
                 <img
                   className={classes.buzzImage}
                   src={proxyImage(images[3])}
@@ -303,12 +306,11 @@ const BuzzPhotoGrid = ({
                   loading='lazy'
                 />
               </div> :
-              <div style={{ height: '50%', marginTop: 1, backgroundImage: `url(${proxyImage(images[3])})`, backgroundSize: 'cover', backgroundPosition: 'center' }}  key={images[3]} className={classes.imageGridItem}>
+              <div style={{ height: '50%', marginTop: 1, backgroundImage: `url(${proxyImage(images[3])})`, backgroundSize: 'cover', backgroundPosition: 'center' }} key={images[3]} className={classes.imageGridItem}>
                 <div className={classes.moreImages}>
                   +{images.length - 4}
                 </div>
-              </div>
-            }
+              </div>},
           </div>
         </div>}
     </div>
@@ -319,7 +321,7 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators(
     {
       setViewImageModal,
-    },dispatch),
+    }, dispatch),
 })
 
 export default connect(null, mapDispatchToProps)(BuzzPhotoGrid)
