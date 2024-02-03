@@ -297,11 +297,13 @@ const Post = (props) => {
   } = props
   const history = useHistory()
   const classes = useStyles()
+  const draftPost = localStorage.getItem('post_draft') || ''
+  const draftTitle = localStorage.getItem('title_draft') || ''
   // eslint-disable-next-line
   const [showTitleButton, setShowTitleButton] = useState(false)
   const [showDescButton, setShowDescButton] = useState(true)
-  const [postContent, setpostContent] = useState('')
-  const [titleContent, settitleContent] = useState('')
+  const [postContent, setpostContent] = useState(draftPost)
+  const [titleContent, settitleContent] = useState(draftTitle)
   const [tags, setTags] = useState([])
   const [tag, setTag] = useState('')
   const [tagError, settagError] = useState(false)
@@ -468,6 +470,7 @@ const Post = (props) => {
   const updateTitle = (e) => {
     settitleContent(e.target.value)
     const buzzPermlink = null
+    localStorage.setItem('title_draft', e.target.value || '')
     setPostRequest(e.target.value, postContent, tags, payout, buzzPermlink)
   }
   const updateContent = (e) => {
@@ -562,6 +565,7 @@ const Post = (props) => {
     const rawBuzzContent = buzzContent
     // setpostContent(rawBuzzContent)
     // setBuzzContentStripped(stripHtml(rawBuzzContent))
+    localStorage.setItem('post_draft', postContent || '')
   }, [buzzAttachedImages, postContent])
 
 
