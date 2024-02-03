@@ -123,6 +123,20 @@ export const setHiveIsVisited = (visited = true) => ({
   payload: visited,
 })
 
+export const SET_EVENTS_IS_VISITED = 'SET_EVENTS_IS_VISITED'
+
+export const setEventsIsVisited = (visited = true) => ({
+  type: SET_EVENTS_IS_VISITED,
+  payload: visited,
+})
+
+export const SET_FORSALE_IS_VISITED = 'SET_FORSALE_IS_VISITED'
+
+export const setForsaleIsVisited = (visited = true) => ({
+  type: SET_FORSALE_IS_VISITED,
+  payload: visited,
+})
+
 export const SET_TAGS_IS_VISITED = 'SET_TAGS_IS_VISITED'
 
 export const setTagsIsVisited = (visited = true) => ({
@@ -324,6 +338,68 @@ export const SET_HIVE_LAST_POST = 'SET_NEWS_LAST_POST'
 
 export const setHiveLastPost = (post) => ({
   type: SET_NEWS_LAST_POST,
+  payload: post,
+})
+
+export const GET_EVENTS_POSTS_REQUEST = 'GET_EVENTS_POSTS_REQUEST'
+export const GET_EVENTS_POSTS_SUCCESS = 'GET_EVENTS_POSTS_SUCCESS'
+export const GET_EVENTS_POSTS_FAILURE = 'GET_EVENTS_POSTS_FAILURE'
+
+export const getEventsPostsRequest = (start_permlink = '', start_author = '') => ({
+  type: GET_EVENTS_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getEventsPostsSuccess = (response, meta) => ({
+  type: GET_EVENTS_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getEventsPostsFailure = (error, meta) => ({
+  type: GET_EVENTS_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_EVENTS_LAST_POST = 'SET_EVENTS_LAST_POST'
+
+export const setEventsLastPost = (post) => ({
+  type: SET_EVENTS_LAST_POST,
+  payload: post,
+})
+
+export const GET_FORSALE_POSTS_REQUEST = 'GET_FORSALE_POSTS_REQUEST'
+export const GET_FORSALE_POSTS_SUCCESS = 'GET_FORSALE_POSTS_SUCCESS'
+export const GET_FORSALE_POSTS_FAILURE = 'GET_FORSALE_POSTS_FAILURE'
+
+export const getForsalePostsRequest = (start_permlink = '', start_author = '') => ({
+  type: GET_FORSALE_POSTS_REQUEST,
+  payload: { start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getForsalePostsSuccess = (response, meta) => ({
+  type: GET_FORSALE_POSTS_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getForsalePostsFailure = (error, meta) => ({
+  type: GET_FORSALE_POSTS_FAILURE,
+  payload: error,
+  meta,
+})
+
+export const SET_FORSALE_LAST_POST = 'SET_FORSALE_LAST_POST'
+
+export const setForsaleLastPost = (post) => ({
+  type: SET_FORSALE_LAST_POST,
   payload: post,
 })
 

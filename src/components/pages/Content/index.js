@@ -31,6 +31,7 @@ import {
   MarkdownViewer,
   PostTags,
   // UserDialog,
+  LoginModal,
 } from 'components'
 import { bindActionCreators } from 'redux'
 import { pending } from 'redux-saga-thunk'
@@ -572,18 +573,33 @@ const Content = (props) => {
   const [replyRef] = useState('content')
   const [treeHistory] = useState(0)
   const [showSlider, setShowSlider] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(1)
   // const [vote, setVote] = useState(voteCount)
   const [loading, setLoading] = useState(false)
   const [getupvoted, setUpvoted] = useState(false)
+  const [openLoginModal, setOpenLoginModal] = useState(false)
+
+  const { isAuthenticated } = user
 
   const handleClickShowSlider = () => {
+    if(!isAuthenticated) {
+      handleClickOpenLoginModal()
+      return
+    }
     if (!getupvoted) {
       setShowSlider(true)
       if (replyRef === 'list') {
         recomputeRowIndex(scrollIndex)
       }
     }
+  }
+
+  const handleClickOpenLoginModal = () => {
+    setOpenLoginModal(true)
+  }
+
+  const handleClickCloseLoginModal = () => {
+    setOpenLoginModal(false)
   }
 
   const handleChange = (e, value) => {
@@ -660,6 +676,10 @@ const Content = (props) => {
 
   const [showReply, setshowReply] = useState(false)
   const updateReply = (boolean) => {
+    if(boolean && !isAuthenticated) {
+      handleClickOpenLoginModal()
+      return
+    }
     setshowReply(boolean)
   }
   const {
@@ -713,7 +733,9 @@ const Content = (props) => {
 
   useEffect(() => {
     if(body !== '' && body) {
-      setOriginalContent(body)
+      setOriginalContent(body
+        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
+        .replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', ''))
     }
   }, [body])
 
@@ -750,9 +772,6 @@ const Content = (props) => {
     payout = pay
   }
 
-  const { isAuthenticated } = user
-
-
   if(json_metadata) {
     try{
       meta = JSON.parse(json_metadata)
@@ -769,6 +788,9 @@ const Content = (props) => {
 
     if(app === 'dBuzz') {
       app = 'D.Buzz'
+    }
+    if(app === 'blogDBuzz') {
+      app = 'blog.d.buzz'
     }
   }
 
@@ -1240,6 +1262,7 @@ const Content = (props) => {
         onMouseLeave={closePopOver}
         profile={profile}
       /> */}
+      <LoginModal show={openLoginModal} onHide={handleClickCloseLoginModal} />
     </React.Fragment>
   )
 }

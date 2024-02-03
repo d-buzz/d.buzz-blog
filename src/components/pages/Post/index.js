@@ -9,6 +9,7 @@ import { CloseIcon } from '../../elements'
 import {useHistory} from 'react-router-dom'
 import {LinearProgress} from '@material-ui/core'
 import {styled} from '@material-ui/styles'
+import { GiphySearchModal, EmojiPicker } from 'components'
 
 import {
   setPostRequest,
@@ -24,63 +25,63 @@ import { useRef } from "react"
 import ImagesContainer from "../../ImagesContainer"
 
 const useStyles = createUseStyles(theme => ({
-  marginLeft0:{
+  marginLeft0: {
     marginLeft: 0,
   },
-  marginRight0:{
+  marginRight0: {
     marginRight: 0,
   },
-  displayFlex:{
+  displayFlex: {
     display: 'flex',
   },
-  displayNone:{
+  displayNone: {
     display: 'none',
   },
-  justifyContentCenter:{
+  justifyContentCenter: {
     justifyContent: 'center',
   },
-  justifyContentStart:{
+  justifyContentStart: {
     justifyContent: 'start',
   },
-  alignItemsCenter:{
+  alignItemsCenter: {
     alignItems: 'center',
   },
-  alignItemsStart:{
+  alignItemsStart: {
     alignItems: 'start',
   },
-  minWidth100:{
+  minWidth100: {
     minWidth: '100%',
   },
-  backgroundColore5:{
+  backgroundColore5: {
     background: 'white',
   },
   borderNone: {
     border: 0,
   },
-  fontSize21:{
+  fontSize21: {
     fontSize: 21,
   },
   lineHeight158: {
     lineHeight: '1.58',
   },
-  fontWeight400:{
+  fontWeight400: {
     fontWeight: '400',
   },
-  marginTop10:{
+  marginTop10: {
     marginTop: 10,
   },
-  letterSpacing3em:{
+  letterSpacing3em: {
     letterSpacing: '-.003em',
   },
   paddingTop16: {
     paddingTop: 16,
   },
   fontSize42: {
-    fontSize:42,
+    fontSize: 42,
   },
- 
-  lineHeight125:{
-    lineHeight:1.25,
+
+  lineHeight125: {
+    lineHeight: 1.25,
   },
   width40: {
     width: 40,
@@ -94,158 +95,158 @@ const useStyles = createUseStyles(theme => ({
   border1: {
     border: '1px solid',
   },
-  borderRadius50:{
-    borderRadius:'50%',
+  borderRadius50: {
+    borderRadius: '50%',
   },
-  marginRight20:{
+  marginRight20: {
     marginRight: 20,
   },
-  marginRight10:{
+  marginRight10: {
     marginRight: 10,
   },
   margin10: {
     margin: '10px',
   },
-  margin1x2:{
+  margin1x2: {
     margin: '1px 2px',
   },
   marginTop0: {
     marginTop: '0px',
   },
-  width80:{
+  width80: {
     width: '80px',
   },
   cursorPointer: {
     cursor: 'pointer',
   },
-  flexDirectionRow:{
-    flexDirection:"row",
+  flexDirectionRow: {
+    flexDirection: "row",
   },
-  flexDirectionColumn:{
-    flexDirection:"column-reverse",
+  flexDirectionColumn: {
+    flexDirection: "column-reverse",
   },
-  paddingLeft50:{
+  paddingLeft50: {
     paddingLeft: '50px',
   },
-  flexGrow1:{
+  flexGrow1: {
     flexGrow: 1,
   },
-  marginBottom0:{
+  marginBottom0: {
     marginBottom: '0 !important',
   },
-  positionRelative:{
+  positionRelative: {
     position: 'relative',
   },
-  positionAbsolute:{
+  positionAbsolute: {
     position: 'absolute',
   },
-  top0:{
+  top0: {
     top: '0',
   },
-  left60:{
+  left60: {
     left: '60px',
   },
-  backgroundWhite:{
+  backgroundWhite: {
     backgroundColor: 'white',
   },
-  maxWidthUnset:{
+  maxWidthUnset: {
     maxWidth: 'unset',
   },
-  backgroundColorfff:{
+  backgroundColorfff: {
     backgroundColor: '#fff',
   },
-  border1solidccc:{
+  border1solidccc: {
     border: '1px solid #ccc',
   },
-  padding4:{
+  padding4: {
     padding: '4px',
   },
   flexWrapWrap: {
     flexWrap: 'flex',
   },
-  width100:{
+  width100: {
     width: '100%',
   },
-  lineHeight1em:{
+  lineHeight1em: {
     lineHeight: '1em',
   },
-  margin0:{
+  margin0: {
     margin: 0,
   },
-  padding0:{
+  padding0: {
     padding: 0,
   },
-  listStyleTypeNone:{
+  listStyleTypeNone: {
     listStyleType: 'none',
   },
-  bg999:{
+  bg999: {
     backgroundColor: '#999',
   },
-  colorfff:{
+  colorfff: {
     color: '#fff',
   },
-  borderRadius2:{
+  borderRadius2: {
     borderRadius: '2px',
   },
-  padding3x5:{
+  padding3x5: {
     padding: '3px 5px',
   },
-  fontSize085em:{
+  fontSize085em: {
     fontSize: '.85em',
   },
   boxSizingBorderBox: {
     boxSizing: 'border-box',
   },
-  borderColor999:{
-    borderColor:'#999',
+  borderColor999: {
+    borderColor: '#999',
   },
-  padding2:{
+  padding2: {
     padding: '2px',
   },
-  padding2x5:{
+  padding2x5: {
     padding: '2px 5px',
   },
-  marginLeft2:{
-    marginLeft:"2px",
+  marginLeft2: {
+    marginLeft: "2px",
   },
-  fontSize1p15em:{
+  fontSize1p15em: {
     fontSize: '1.15em',
   },
-  flex1x0xauto:{
+  flex1x0xauto: {
     flex: '1 0 auto',
   },
-  margin2:{
+  margin2: {
     margin: '2px',
   },
-  fontSizep85em:{
+  fontSizep85em: {
     fontSize: '.85em',
   },
-  minWidth100px:{
+  minWidth100px: {
     minWidth: '100px',
   },
-  color757575:{
+  color757575: {
     color: '#757575',
   },
-  colorRed:{
+  colorRed: {
     color: 'red',
   },
-  fontSize12:{
+  fontSize12: {
     fontSize: '12px',
   },
-  border1soliddarkgray:{
+  border1soliddarkgray: {
     border: '.5px solid darkgray',
     // border: '1px solid darkgray',
   },
-  marginBottom10:{
+  marginBottom10: {
     marginBottom: '10px',
   },
-  borderRadius7:{
-    borderRadius:'7px',
+  borderRadius7: {
+    borderRadius: '7px',
   },
-  padding10:{
+  padding10: {
     padding: '10px',
   },
-  paddingTop0:{
+  paddingTop0: {
     paddingTop: 0,
   },
   imageUploadInput: {
@@ -256,7 +257,7 @@ const useStyles = createUseStyles(theme => ({
     right: 0,
     margin: '0 auto',
     cursor: 'pointer',
-    visibility: isDesktop? 'hidden':'0',
+    visibility: isDesktop ? 'hidden' : '0',
     opacity: 0,
   },
   uploadImageButton: {
@@ -282,7 +283,7 @@ const useStyles = createUseStyles(theme => ({
   },
 }))
 const Post = (props) => {
-  const BorderLinearProgress = styled(LinearProgress)(({theme}) => ({
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
     backgroundColor: '#7D3B4A',
@@ -308,6 +309,10 @@ const Post = (props) => {
   const [tagError, settagError] = useState(false)
   const [showUploadIcon, setshowUploadIcon] = useState(false)
   const [buzzAttachedImages, setBuzzAttachedImages] = useState([])
+  const [openGiphy, setOpenGiphy] = useState(false)
+  const [openEmojiPicker, setOpenEmojiPicker] = useState(false)
+  const [emojiAnchorEl, setEmojianchorEl] = useState(null)
+  const [cursorPosition, setCursorPosition] = useState(null)
 
   const [compressing, setCompressing] = useState(false)
   const buzzAllowedImages = 4
@@ -327,7 +332,7 @@ const Post = (props) => {
   const [videoUploading] = useState(false)
   // eslint-disable-next-line
   const [buzzLoading, setBuzzLoading] = useState(false)
-  const payout = 100000000
+  const payout = 1
   const inputRefFileUpload = useRef(null)
 
   const handleImageCompression = async (image) => {
@@ -343,7 +348,7 @@ const Post = (props) => {
       useWebWorker: true,
     }
     try {
-      await import('browser-image-compression').then(async ({default: imageCompression}) => {
+      await import('browser-image-compression').then(async ({ default: imageCompression }) => {
         compressedFile = await imageCompression(image, options)
       })
     } catch (error) {
@@ -357,25 +362,25 @@ const Post = (props) => {
     let tagspec = false
     tags.map((tag) => {
       var format = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
-  
-      if(format.test(tag) ){
+
+      if (format.test(tag)) {
         tagspec = true
       }
       return true
     })
     if (tagspec) {
       settagError(true)
-    }else{
+    } else {
       settagError(false)
     }
-    
+
   }, [tags])
-  
+
 
   const handleClickContent = (e) => {
     try {
-      const {target} = e
-      let {href} = target
+      const { target } = e
+      let { href } = target
       const hostname = window.location.hostname
 
       e.preventDefault()
@@ -397,6 +402,43 @@ const Post = (props) => {
     }
   }
 
+  const closeGiphy = () => {
+    setOpenGiphy(false)
+    setshowUploadIcon(false)
+  }
+
+  const handleOpenGiphy = () => {
+    setOpenGiphy(!openGiphy)
+  }
+
+  const handleSelectGif = (gif) => {
+    if (gif) {
+      const contentAppend = `${postContent}<br /> ${gif}`
+      setpostContent(contentAppend)
+    }
+  }
+
+  const handleOpenEmojiPicker = (e) => {
+    setOpenEmojiPicker(!openEmojiPicker)
+    setEmojianchorEl(e.currentTarget)
+  }
+
+  const handleCloseEmojiPicker = () => {
+    setOpenEmojiPicker(false)
+    setEmojianchorEl(null)
+    setshowUploadIcon(false)
+  }
+
+  const handleSelectEmoticon = (emoticon) => {
+    if (emoticon) {
+      const cursor = cursorPosition
+      const contentAppend = postContent.slice(0, cursor) + emoticon + postContent.slice(cursor)
+      setpostContent(contentAppend)
+      emoticon.length === 2 && setCursorPosition(cursorPosition + 2)
+      emoticon.length === 4 && setCursorPosition(cursorPosition + 4)
+    }
+  }
+
   const updateFromDesc = () => {
     setShowTitleButton(false)
     setShowDescButton(true)
@@ -408,9 +450,9 @@ const Post = (props) => {
     const tagsFILTER = tags.filter(old => {
       return old !== tagREmove
     })
-    
+
     const buzzPermlink = null
-    setPostRequest(titleContent,postContent,tagsFILTER,payout,buzzPermlink)
+    setPostRequest(titleContent, postContent, tagsFILTER, payout, buzzPermlink)
   }
   const onkeydownTags = (e) => {
     let newtags = []
@@ -421,23 +463,23 @@ const Post = (props) => {
       // setPostRequest(postContent,tags,payout,buzzPermlink)
       setTag("")
       const buzzPermlink = null
-      setPostRequest(titleContent,postContent,newtags,payout,buzzPermlink)
-    }    
-   
+      setPostRequest(titleContent, postContent, newtags, payout, buzzPermlink)
+    }
+
   }
-  const updateTitle = (e) =>{
+  const updateTitle = (e) => {
     settitleContent(e.target.value)
     const buzzPermlink = null
     localStorage.setItem('title_draft', e.target.value || '')
-    setPostRequest(e.target.value,postContent,tags,payout,buzzPermlink)
+    setPostRequest(e.target.value, postContent, tags, payout, buzzPermlink)
   }
-  const updateContent = (e) =>{
+  const updateContent = (e) => {
     setpostContent(e.target.value)
     const buzzPermlink = null
-    setPostRequest(titleContent,e.target.value,tags,payout,buzzPermlink)
+    setPostRequest(titleContent, e.target.value, tags, payout, buzzPermlink)
   }
 
-  
+
   const handleFileSelectChange = async (event) => {
 
     const images = Array.from(event.target.files)
@@ -458,16 +500,16 @@ const Post = (props) => {
         })
 
         allImages.push(
-          new File([pngBlob], image.name.replace('.heic', ''), {type: 'image/png', size: pngBlob.size}),
+          new File([pngBlob], image.name.replace('.heic', ''), { type: 'image/png', size: pngBlob.size }),
         )
       }),
     )
       .then(async () => {
-        
+
         setCompressing(false)
 
         if ((allImages.length + buzzAttachedImages.length) <= buzzAllowedImages) {
-          
+
           setImagesLength(images.length)
 
           await Promise.all(
@@ -479,10 +521,10 @@ const Post = (props) => {
               // handle image compression and then upload it
               setCompressing(true)
               await handleImageCompression(image).then((uri) => {
-               
+
                 setCompressing(false)
                 setImageSize(Number((uri.size / 1e+6).toFixed(2)))
-               
+
                 uploadFileRequest(uri, setImageUploadProgress).then((image) => {
                   const lastImage = image[image.length - 1]
                   uploadedImages.push(lastImage)
@@ -491,7 +533,7 @@ const Post = (props) => {
                     setImageUploading(false)
                     setBuzzAttachedImages(images => [...images, ...uploadedImages])
                     document.getElementById('file-upload').value = ''
-                    setshowUploadIcon(current => {return !current})
+                    setshowUploadIcon(current => { return !current })
 
                     // set the thread if its the thread
                     // if (Object.keys(buzzThreads).length > 1) {
@@ -512,7 +554,7 @@ const Post = (props) => {
 
   }
 
-  const clickFile = () =>{
+  const clickFile = () => {
     console.log('test upload')
     inputRefFileUpload.current.click()
   }
@@ -545,19 +587,19 @@ const Post = (props) => {
       <form>
         <div className={classNames(classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
           {!isMobile && (
-            <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+            <div className={classNames(classes.marginRight20, classes.width40)}></div>
           )}
-          <input autoFocus value={titleContent}  onChange={(e) => updateTitle(e)}  rows={10} cols={50}  placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100 )} />
+          <input autoFocus value={titleContent} onChange={(e) => updateTitle(e)} rows={10} cols={50} placeholder="Title" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100)} />
         </div>
         {/* <div className={classNames(isMobile? classes.flexDirectionColumn:'', isMobile?classes.paddingLeft50:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}> */}
-        <div className={classNames(isMobile? classes.flexDirectionColumn:'', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
-          <div className={classNames(classes.positionRelative, classes.cursorPointer  )}> 
-            <div onClick={() => setshowUploadIcon(current => {return !current})}  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight20:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon/></div>
+        <div className={classNames(isMobile ? classes.flexDirectionColumn : '', classes.displayFlex, classes.justifyContentStart, classes.alignItemsStart)}>
+          <div className={classNames(classes.positionRelative, classes.cursorPointer)}>
+            <div onClick={() => setshowUploadIcon(current => { return !current })} className={classNames(classes.cursorPointer, classes.width45, classes.height40, showDescButton ? classes.border1 : '', classes.borderRadius50, !isMobile ? classes.marginRight20 : '', isMobile ? classes.margin10 : '', isMobile ? classes.marginTop0 : '', isMobile ? classes.width40 : classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <PlusIcon /></div>
             {showUploadIcon && (
               <div className={classNames(classes.displayFlex, classes.positionAbsolute, classes.top0, classes.left60, classes.backgroundWhite)}>
-                <div onTouchStart={() => clickFile} onClick={() => clickFile()}    className={classNames( classes.cursorPointer, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> 
-                  <label  className={classes.uploadImageButton}>
-                    <UploadIcon/>
+                <div onTouchStart={() => clickFile} onClick={() => clickFile()} className={classNames(classes.cursorPointer, classes.height40, showDescButton ? classes.border1 : '', classes.borderRadius50, !isMobile ? classes.marginRight10 : '', isMobile ? classes.margin10 : '', isMobile ? classes.marginTop0 : '', isMobile ? classes.width40 : classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}>
+                  <label className={classes.uploadImageButton}>
+                    <UploadIcon />
                   </label>
                 </div>
                 <input
@@ -568,27 +610,42 @@ const Post = (props) => {
                   multiple={true}
                   ref={inputRefFileUpload}
                   className={classes.imageUploadInput}
-                  onInput={(e) => handleFileSelectChange(e)}
-                  
+                  onInput={e => {
+                    handleFileSelectChange(e)
+                  }}
                 />
-                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
-                <div  className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
+                <div onClick={handleOpenGiphy} className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <GifIcon/></div>
+                <div onClick={handleOpenEmojiPicker} className={classNames( classes.cursorPointer, classes.width45, classes.height40, showDescButton?classes.border1:'', classes.borderRadius50, !isMobile? classes.marginRight10:'', isMobile? classes.margin10:'', isMobile?classes.marginTop0:'', isMobile?classes.width40:classes.width45, classes.displayFlex, classes.justifyContentCenter, classes.alignItemsCenter)}> <EmojiIcon2/></div>
               </div>
             )}
           </div>
-          <textarea  onInput={(e) => updateContent(e)}  rows={10} cols={50} onFocus={() => updateFromDesc()} onClick={() => updateFromDesc()}  placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
+          <textarea  
+            onInput={e => {
+              updateContent(e)
+            }}
+            onKeyUp={e => {
+              setCursorPosition(e.target.selectionStart)
+            }}
+            onKeyDown={e => {
+              setCursorPosition(e.target.selectionStart)
+            }}
+            onClick={(e) => {
+              setCursorPosition(e.target.selectionStart)
+              updateFromDesc()
+            }}
+            rows={10} cols={50} onFocus={() => updateFromDesc()} placeholder="Tell your story" className={classNames(classes.backgroundColore5, classes.borderNone, classes.fontSize21, classes.lineHeight158, classes.fontWeight400, classes.letterSpacing3em, classes.border1soliddarkgray, classes.marginBottom10, classes.borderRadius7, classes.padding10, classes.width100, classes.paddingTop0 )} value={postContent} ></textarea>
         </div>
       </form>
       {compressing && (
-        <div style={{width: '100%', paddingTop: 5}}>
+        <div style={{ width: '100%', paddingTop: 5 }}>
           <div className={classes.preparingMedia}>Compressing Image</div>
         </div>)}
       {imageUploading && !compressing && (
-        <div style={{width: '100%', paddingTop: 5}}>
+        <div style={{ width: '100%', paddingTop: 5 }}>
           {imageUploadProgress !== 100 && imagesLength === 0 ?
             <div className={classes.uploadProgressBar}>
               <BorderLinearProgress className={classes.linearProgress} variant="determinate"
-                value={imageUploadProgress}/>
+                value={imageUploadProgress} />
               <span className="progressPercent">{imageUploadProgress}%</span>
             </div> :
             <div
@@ -596,7 +653,7 @@ const Post = (props) => {
         </div>)}
       <div className={classNames(classes.flexDirectionRow, classes.displayFlex)}>
         {!isMobile && (
-          <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
+          <div className={classNames(classes.marginRight20, classes.width40)}></div>
         )}
         <div className={classNames(classes.flexGrow1, classes.marginBottom0, classes.positionRelative)}>
           <div className={classNames(classes.maxWidthUnset, classes.positionRelative, classes.backgroundColorfff)}>
@@ -607,20 +664,20 @@ const Post = (props) => {
                   return (
                     <li key={index} className={classNames(classes.margin1x2, classes.bg999, classes.colorfff, classes.borderRadius2, classes.displayFlex, classes.padding3x5, classes.fontSize085em, classes.boxSizingBorderBox, classes.borderColor999)}>
                       <div className={classNames(classes.padding2, classes.displayFlex, classes.alignItemsCenter, classes.padding2x5)}>{tag}</div>
-                      <div onClick={()=>removeTag(tag)} className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}><CloseIcon color='grey'/></div>
+                      <div onClick={() => removeTag(tag)} className={classNames(classes.marginLeft2, classes.displayFlex, classes.alignItemsCenter, classes.fontSize1p15em)}><CloseIcon color='grey' /></div>
                     </li>
                   )
                 })}
                 <li className={classNames(classes.displayFlex, classes.flex1x0xauto, classes.padding3x5, classes.margin2, classes.fontSize085em, classes.borderRadius7)}>
-                  <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyUp={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px,  classes.borderNone, classes.padding0, classes.margin0)} />
+                  <input value={tag} onChange={(e) => setTag(e.target.value)} onKeyUp={(e) => onkeydownTags(e)} placeholder="Add a new topic" className={classNames(classes.flex1x0xauto, classes.minWidth100px, classes.borderNone, classes.padding0, classes.margin0)} />
                 </li>
               </ul>
             </div>
           </div>
-          
+
           {!tagError && (
             <span className={classNames(classes.color757575, classes.fontSize12)}>Topics-Tags to classify your post: {tags.length}/10</span>
-          )} 
+          )}
           {tagError && (
             <span className={classNames(classes.colorRed, classes.fontSize12)}>Remove special characters from tags (only lowercase characters, numbers and dashes)</span>
           )}
@@ -628,23 +685,34 @@ const Post = (props) => {
       </div>
       {/* <div className={classNames(classes.flexDirectionRow, classes.displayFlex, classes.padding10)}> */}
       <div>
-        <div   className={classNames(classes.marginRight20, classes.width40 )}></div>
-        <div className={classNames( classes.padding10)}>
+        <div className={classNames(classes.marginRight20, classes.width40)}></div>
+        <div className={classNames(classes.padding10)}>
           {buzzAttachedImages.length >= 1 && (<ImagesContainer buzzId={currentBuzz} buzzImages={buzzAttachedImages}
             upadateBuzzImages={setBuzzAttachedImages}
             viewFullImage={setViewImageUrl}
             setVideoLimit={setVideoLimit}
-            loading={compressing || imageUploading || videoUploading || buzzLoading}/>)}
+            loading={compressing || imageUploading || videoUploading || buzzLoading} />)}
           <React.Fragment>
-            {(postContent.length !== 0) &&  (
+            {(postContent.length !== 0) && (
               <div className={classes.previewContainer} onClick={handleClickContent}>
-                <Renderer content={postContent} minifyAssets={true} contentImages={0}/>
+                <Renderer content={postContent} minifyAssets={true} contentImages={0} />
               </div>
             )}
           </React.Fragment>
         </div>
-        
+
       </div>
+      <EmojiPicker
+        open={openEmojiPicker}
+        anchorEl={emojiAnchorEl}
+        handleClose={handleCloseEmojiPicker}
+        handleAppendContent={handleSelectEmoticon}
+      />
+      <GiphySearchModal
+        show={openGiphy}
+        onHide={closeGiphy}
+        handleAppendContent={handleSelectGif}
+      />
     </Container>
   )
 }
