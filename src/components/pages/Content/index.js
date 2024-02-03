@@ -573,7 +573,7 @@ const Content = (props) => {
   const [replyRef] = useState('content')
   const [treeHistory] = useState(0)
   const [showSlider, setShowSlider] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(1)
   // const [vote, setVote] = useState(voteCount)
   const [loading, setLoading] = useState(false)
   const [getupvoted, setUpvoted] = useState(false)
