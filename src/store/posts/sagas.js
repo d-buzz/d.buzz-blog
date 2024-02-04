@@ -33,6 +33,16 @@ import {
   getHivePostsFailure,
   setHiveLastPost,
 
+  GET_EVENTS_POSTS_REQUEST,
+  getEventsPostsSuccess,
+  getEventsPostsFailure,
+  setEventsLastPost,
+
+  GET_FORSALE_POSTS_REQUEST,
+  getForsalePostsSuccess,
+  getForsalePostsFailure,
+  setForsaleLastPost,
+
   setContentRedirect,
 
   GET_CONTENT_REQUEST,
@@ -132,7 +142,7 @@ function patternMute(patterns, data) {
 }
 
 const footnote = (body) => {
-  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>'
+  const footnoteAppend = '<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>'
   body = `${body} ${footnoteAppend}`
 
   return body
@@ -142,7 +152,7 @@ function* getTrendingTagsRequests(meta) {
   try {
     let data = yield call(fetchTrendingTags)
     data = data.filter((tag) => !tag.name.includes('hive') && !tag.name.split('')[1].match(new RegExp('^\\d+$')))
-    
+
     yield put(getTrendingTagsSuccess(data, meta))
   } catch (error) {
     yield put(getTrendingTagsFailure(error, meta))
@@ -181,27 +191,27 @@ const invokeHideBuzzFilter = (items) => {
 
 function* getTrendingPostsRequest(payload, meta) {
   const { start_permlink, start_author } = payload
-  
+
   const params = { sort: 'trending', tag: '', start_permlink, start_author }
   const method = 'get_ranked_posts'
-  
+
   try {
     const old = yield select(state => state.posts.get('trending'))
     let data = yield call(callBridge, method, params)
-    
+
     data = [...old, ...data]
-    
+
     data = data.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
     })
-    
+
     yield put(setTrendingLastPost(data[data.length-1]))
     data = data.filter(item => invokeFilter(item))
-    
+
     const mutelist = yield select(state => state.auth.get('mutelist'))
     const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
     data = invokeMuteFilter(data, mutelist, opacityUsers)
-    
+
     yield put(getTrendingPostsSuccess(data, meta))
   } catch(error) {
     console.log({error})
@@ -228,7 +238,7 @@ function* getHomePostsRequest(payload, meta) {
       data = data.filter((obj, pos, arr) => {
         return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
       })
-      
+
       yield put(setHomeLastPost(data[data.length - 1]))
       const mutelist = yield select(state => state.auth.get('mutelist'))
       data = data.filter(item => invokeFilter(item))
@@ -358,6 +368,72 @@ function* getHivePostsRequest(payload, meta) {
   }
 }
 
+function* getEventsPostsRequest(payload, meta) {
+  const { start_permlink, start_author } = payload
+
+  const params = { sort: 'created', start_permlink, start_author }
+  const method = 'get_ranked_posts'
+
+  try {
+    const old = yield select(state => state.posts.get('events'))
+    let data = yield call(callBridge, method, params, true, 'events')
+
+    data = [...old, ...data]
+
+    data = data.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+    })
+
+    yield put(setEventsLastPost(data[data.length-1]))
+    data = data.filter(item => invokeFilter(item))
+
+    const mutelist = yield select(state => state.auth.get('mutelist'))
+    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+    const patterns = yield call(getMutePattern)
+    data = invokeMuteFilter(data, mutelist, opacityUsers)
+
+    data = patternMute(patterns, data)
+
+
+    yield put(getEventsPostsSuccess(data, meta))
+  } catch(error) {
+    yield put(getEventsPostsFailure(error, meta))
+  }
+}
+
+function* getForsalePostsRequest(payload, meta) {
+  const { start_permlink, start_author } = payload
+
+  const params = { sort: 'created', start_permlink, start_author }
+  const method = 'get_ranked_posts'
+
+  try {
+    const old = yield select(state => state.posts.get('forsale'))
+    let data = yield call(callBridge, method, params, true, 'forsale')
+
+    data = [...old, ...data]
+
+    data = data.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos
+    })
+
+    yield put(setForsaleLastPost(data[data.length-1]))
+    data = data.filter(item => invokeFilter(item))
+
+    const mutelist = yield select(state => state.auth.get('mutelist'))
+    const opacityUsers = yield select(state => state.auth.get('opacityUsers'))
+    const patterns = yield call(getMutePattern)
+    data = invokeMuteFilter(data, mutelist, opacityUsers)
+
+    data = patternMute(patterns, data)
+
+
+    yield put(getForsalePostsSuccess(data, meta))
+  } catch(error) {
+    yield put(getForsalePostsFailure(error, meta))
+  }
+}
+
 function* getLinkMetaRequest(payload, meta) {
   try {
     const { url } = payload
@@ -438,7 +514,7 @@ function* fileUploadRequest(payload, meta) {
     const {file, progress} = payload
     console.log('im here', user)
     if (isAuthenticated) {
-      
+
       const result = yield call(uploadImage, file, progress)
 
       let images = []
@@ -471,7 +547,7 @@ function* publishPostRequest(payload, meta) {
   let success = false
 
   const user = yield select(state => state.auth.get('user'))
-  const {username, useKeychain, is_authenticated} = user
+  const {username, useKeychain, isAuthenticated: is_authenticated } = user
 
   const dbuzzImageRegex = /!\[(?:[^\]]*?)\]\((.+?)\)|(https:\/\/storageapi\.fleek\.co\/[a-z-]+\/dbuzz-images\/(dbuzz-image-[0-9]+\.(?:png|jpg|gif|jpeg|webp|bmp)))|(https?:\/\/[a-zA-Z0-9=+-?_]+\.(?:png|jpg|gif|jpeg|webp|bmp|HEIC))|(?:https?:\/\/(?:ipfs\.io\/ipfs\/[a-zA-Z0-9=+-?]+))/gi
   const images = body.match(dbuzzImageRegex)
@@ -508,9 +584,7 @@ function* publishPostRequest(payload, meta) {
     const comment_options = operations[1]
     const permlink = comment_options[1].permlink
     const is_buzz_post = true
-
     if (useKeychain && is_authenticated) {
-
       const result = yield call(broadcastKeychainOperation, username, operations)
       success = result.success
 
@@ -539,7 +613,7 @@ function* publishPostRequest(payload, meta) {
       cashout_time = cashout_time.replace('Z', '')
 
       let body = comment[1].body
-      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">Blog D.Buzz</a>', '')
+      body = body.replace('<br /><br /> Posted via <a href="https://blog.d.buzz" data-link="promote-link">blog.d.buzz</a>', '')
 
       const content = {
         author: username,
@@ -941,6 +1015,14 @@ function* watchGetHivePostsRequest({payload, meta}) {
   yield call(getHivePostsRequest, payload, meta)
 }
 
+function* watchGetEventsPostsRequest({payload, meta}) {
+  yield call(getEventsPostsRequest, payload, meta)
+}
+
+function* watchGetForsalePostsRequest({payload, meta}) {
+  yield call(getForsalePostsRequest, payload, meta)
+}
+
 function* watchGetTrendingTagsRequest({ meta }) {
   yield call(getTrendingTagsRequests, meta)
 }
@@ -1001,6 +1083,8 @@ export default function* sagas() {
   yield takeEvery(GET_LATEST_POSTS_REQUEST, watchGetLatestPostsRequest)
   yield takeEvery(GET_NEWS_POSTS_REQUEST, watchGetNewsPostsRequest)
   yield takeEvery(GET_HIVE_POSTS_REQUEST, watchGetHivePostsRequest)
+  yield takeEvery(GET_EVENTS_POSTS_REQUEST, watchGetEventsPostsRequest)
+  yield takeEvery(GET_FORSALE_POSTS_REQUEST, watchGetForsalePostsRequest)
   yield takeEvery(GET_TRENDING_TAGS_REQUEST, watchGetTrendingTagsRequest)
   yield takeEvery(GET_TRENDING_POSTS_REQUEST, watchGetTrendingPostsRequest)
   yield takeEvery(GET_FOLLOW_DETAILS_REQUEST, watchGetFollowDetailsRequest)

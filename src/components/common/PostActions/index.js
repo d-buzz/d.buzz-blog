@@ -24,6 +24,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { isMobile } from 'react-device-detect'
 import { useHistory } from 'react-router'
+import { LoginModal } from 'components'
 
 const PrettoSlider = withStyles({
   root: {
@@ -207,10 +208,11 @@ const PostActions = (props) => {
   }
 
   const [showSlider, setShowSlider] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(1)
   const [vote, setVote] = useState(voteCount)
   const [loading, setLoading] = useState(false)
   const [upvoted, setUpvoted] = useState(hasUpvoted)
+  const [openLoginModal, setOpenLoginModal] = useState(false)
 
   const { isAuthenticated } = user
 
@@ -231,6 +233,10 @@ const PostActions = (props) => {
 
 
   const handleClickShowSlider = () => {
+    if(!isAuthenticated) {
+      handleClickOpenLoginModal()
+      return
+    }
     setShowSlider(true)
     if (replyRef === 'list') {
       recomputeRowIndex(scrollIndex)
@@ -273,6 +279,14 @@ const PostActions = (props) => {
   //   openReplyModal(author, permlink, body, treeHistory, replyRef)
   // }
 
+  const handleClickOpenLoginModal = () => {
+    setOpenLoginModal(true)
+  }
+
+  const handleClickCloseLoginModal = () => {
+    setOpenLoginModal(false)
+  }
+
   const getPayoutDate = (date) => {
     const semantic =  moment(`${date}Z`).local().fromNow()
     return semantic !== '51 years ago' ? semantic : ''
@@ -290,6 +304,11 @@ const PostActions = (props) => {
     const { target } = e
     let { href } = target
     const hostname = window.location.hostname
+
+    if(!isAuthenticated) {
+      handleClickOpenLoginModal()
+      return
+    }
 
     e.preventDefault()
     if(href && !href.includes(hostname)) {
@@ -332,7 +351,7 @@ const PostActions = (props) => {
                   inlineClass={classNames(classes.inline, classes.icon)}
                   icon={<IconButton classes={{ root: classes.iconButton  }} disabled={!isAuthenticated || disableUpvote} size="small"><HeartIcon /></IconButton>}
                   hideStats={hideStats}
-                  disabled={!isAuthenticated || disableUpvote}
+                  // disabled={!isAuthenticated || disableUpvote}
                   onClick={handleClickShowSlider}
                   stat={(
                     <label style={{ marginLeft: 5 }}>
@@ -362,7 +381,7 @@ const PostActions = (props) => {
                 inlineClass={classNames(classes.inline, classes.icon)}
                 icon={<IconButton classes={{ root: classes.iconButton  }} size="small" disabled={!isAuthenticated}><CommentIcon /></IconButton>}
                 hideStats={hideStats}
-                disabled={!isAuthenticated}
+                // disabled={!isAuthenticated}
                 onClick={handleOpenContent}
                 stat={(
                   <label style={{ marginLeft: 5 }}>
@@ -423,6 +442,7 @@ const PostActions = (props) => {
           </div>
         </div>
       )}
+      <LoginModal show={openLoginModal} onHide={handleClickCloseLoginModal} />
     </React.Fragment>
   )
 }
