@@ -65,10 +65,41 @@ export const getAccountBlogFailure = (error, meta) => ({
   meta,
 })
 
+export const GET_ACCOUNT_POST_REQUEST = 'GET_ACCOUNT_POST_REQUEST'
+export const GET_ACCOUNT_POST_SUCCESS = 'GET_ACCOUNT_POST_SUCCESS'
+export const GET_ACCOUNT_POST_FAILURE = 'GET_ACCOUNT_POST_FAILURE'
+
+export const getAccountPostRequest = (username, start_permlink = null, start_author = null) => ({
+  type: GET_ACCOUNT_POST_REQUEST,
+  payload: { username, start_permlink, start_author },
+  meta: {
+    thunk: true,
+  },
+})
+
+export const getAccountPostSuccess = (response, meta) => ({
+  type: GET_ACCOUNT_POST_SUCCESS,
+  payload: response,
+  meta,
+})
+
+export const getAccountPostFailure = (error, meta) => ({
+  type: GET_ACCOUNT_POST_FAILURE,
+  payload: error,
+  meta,
+})
+
 export const SET_LAST_ACCOUNT_BLOG = 'SET_LAST_ACCOUNT_BLOG'
 
 export const setLastAccountBlog = (response) => ({
   type: SET_LAST_ACCOUNT_BLOG,
+  payload: response,
+})
+
+export const SET_LAST_ACCOUNT_POST = 'SET_LAST_ACCOUNT_POST'
+
+export const setLastAccountPost = (response) => ({
+  type: SET_LAST_ACCOUNT_POST,
   payload: response,
 })
 

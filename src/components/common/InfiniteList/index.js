@@ -85,6 +85,8 @@ class InfiniteList extends PureComponent {
                   pending_payout_value={items[index].pending_payout_value}
                   max_accepted_payout={items[index].max_accepted_payout}
                   payoutAt={items[index].payout_at}
+                  reblogs = {items[index].reblogs}
+                  reblogged_by = {items[index].reblogged_by || []}
                   cashout_time={items[index].cashout_time}
                   scrollIndex={index}
                   recomputeRowIndex={recomputeRowIndex}
