@@ -29,6 +29,7 @@ class InfiniteList extends PureComponent {
       loading,
       unguardedLinks,
       clearScrollIndex,
+      profile_owner,
       scrollToIndex,
       disableOpacity = true,
     } = this.props
@@ -86,6 +87,7 @@ class InfiniteList extends PureComponent {
                   max_accepted_payout={items[index].max_accepted_payout}
                   payoutAt={items[index].payout_at}
                   reblogs = {items[index].reblogs}
+                  profile_owner = {profile_owner || ""}
                   reblogged_by = {items[index].reblogged_by || []}
                   cashout_time={items[index].cashout_time}
                   scrollIndex={index}

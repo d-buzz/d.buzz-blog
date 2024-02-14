@@ -79,14 +79,14 @@ function* getAccountBlogRequest(payload, meta) {
 function* getAccountPostRequest(payload, meta) {
   try{
     const { username, start_permlink, start_author } = payload
-    const old = yield select(state => state.profile.get('blog'))
+    const old = yield select(state => state.profile.get('post'))
     let data = yield call(fetchAccountBlog, username, start_permlink, start_author)
-    console.log("eyy")
+
     data = [...old, ...data]
     data = data.filter((obj, pos, arr) => {
       return (arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos) && obj['reblogs'] === 0
     })
-    console.log(data)
+
     yield put(setLastAccountPost(data[data.length-1]))
     yield put(getAccountPostSuccess(data, meta))
   } catch(error) {
