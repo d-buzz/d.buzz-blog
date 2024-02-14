@@ -322,7 +322,7 @@ const PostList = React.memo((props) => {
         history.push(link)
       } else {
         const split = href.split('/')
-        href = `/${split[3]}`
+        href = `/${split.slice(4).join('/')}`
         history.push(href)
       }
     }
