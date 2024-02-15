@@ -560,10 +560,10 @@ const AppBar = (props) => {
                             <MenuLink 
                               as={Link}
                               to="/notifications"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                handleNavigate('/notifications')
-                              }}
+                              // onClick={(e) => {
+                              //   e.preventDefault()
+                              //   handleNavigate('/notifications')
+                              // }}
                             >
                               <Badge badgeContent={count.unread || 0} color="secondary"><NotificationsNoneIcon classes={{ root: classes.root }} /></Badge>
                             </MenuLink>
@@ -599,10 +599,10 @@ const AppBar = (props) => {
                               style={{ padding: 'auto', '&: hover':{ backgroundColor: 'red' } }}
                               as={Link}
                               to={`/@${username}`}
-                              onClick={(e) => {
-                                e.preventDefault()
-                                handleNavigate(`/@${username}`)
-                              }}
+                              // onClick={(e) => {
+                              //   e.preventDefault()
+                              //   handleNavigate(`/@${username}`)
+                              // }}
                             >
                               <div>
                                 <Avatar height={40} author={username} style={{ marginBottom: -10 }} />
@@ -615,30 +615,30 @@ const AppBar = (props) => {
                             <MenuLink
                               as={Link}
                               to="/"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                handleNavigate('/')
-                              }}
+                              // onClick={(e) => {
+                              //   e.preventDefault()
+                              //   handleNavigate('/')
+                              // }}
                             >
                               <HomeIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Home</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/trending"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                handleNavigate('/trending')
-                              }}
+                              // onClick={(e) => {
+                              //   e.preventDefault()
+                              //   handleNavigate('/trending')
+                              // }}
                             >
                               <TrendingUpIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Trending</label>
                             </MenuLink>
                             <MenuLink 
                               as={Link}
                               to="/latest"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                handleNavigate('/latest')
-                              }}
+                              // onClick={(e) => {
+                              //   e.preventDefault()
+                              //   handleNavigate('/latest')
+                              // }}
                             >
                               <UpdateIcon /><label style={{ paddingLeft: 15, marginBottom: 0, fontSize: 15 }}>Latest</label>
                             </MenuLink>
