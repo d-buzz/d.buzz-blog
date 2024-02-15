@@ -9,6 +9,11 @@ import {
   getAccountBlogFailure,
   setLastAccountBlog,
 
+  GET_ACCOUNT_POST_REQUEST,
+  getAccountPostSuccess,
+  getAccountPostFailure,
+  setLastAccountPost,
+
   GET_ACCOUNT_REPLIES_REQUEST,
   getAccountRepliesSuccess,
   getAccountRepliesFailure,
@@ -71,6 +76,24 @@ function* getAccountBlogRequest(payload, meta) {
   }
 }
 
+function* getAccountPostRequest(payload, meta) {
+  try{
+    const { username, start_permlink, start_author } = payload
+    const old = yield select(state => state.profile.get('post'))
+    let data = yield call(fetchAccountBlog, username, start_permlink, start_author)
+
+    data = [...old, ...data]
+    data = data.filter((obj, pos, arr) => {
+      return (arr.map(mapObj => mapObj['post_id']).indexOf(obj['post_id']) === pos) && obj['reblogs'] === 0
+    })
+
+    yield put(setLastAccountPost(data[data.length-1]))
+    yield put(getAccountPostSuccess(data, meta))
+  } catch(error) {
+    yield put(getAccountPostFailure(error, meta))
+  }
+}
+
 function* getAccountRepliesRequest(payload, meta) {
   try {
     const { username, start_permlink, start_author } = payload
@@ -116,6 +139,10 @@ function* watchGetAccountBlogRequest({ payload, meta }) {
   yield call(getAccountBlogRequest, payload, meta)
 }
 
+function* watchGetAccountPostRequest({ payload, meta }) {
+  yield call(getAccountPostRequest, payload, meta)
+}
+
 function* watchGetAccountRepliesRequest({ payload, meta }) {
   yield call(getAccountRepliesRequest, payload, meta)
 }
@@ -127,6 +154,7 @@ function* watchGetAccountCommentsRequest({ payload, meta }) {
 export default function* sagas() {
   yield takeEvery(GET_PROFILE_REQUEST, watchGetProfileRequest)
   yield takeEvery(GET_ACCOUNT_BLOG_REQUEST, watchGetAccountBlogRequest)
+  yield takeEvery(GET_ACCOUNT_POST_REQUEST, watchGetAccountPostRequest)
   yield takeEvery(GET_ACCOUNT_REPLIES_REQUEST, watchGetAccountRepliesRequest)
   yield takeEvery(GET_ACCOUNT_COMMENTS_REQUEST, watchGetAccountCommentsRequest)
 }

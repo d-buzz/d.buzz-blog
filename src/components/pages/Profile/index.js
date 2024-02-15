@@ -16,6 +16,7 @@ import { bindActionCreators } from 'redux'
 import {
   getProfileRequest,
   getAccountBlogRequest,
+  getAccountPostRequest,
   setProfileIsVisited,
   getAccountRepliesRequest,
   getAccountCommentsRequest,
@@ -123,6 +124,7 @@ const Profile = (props) => {
     clearAccountComments,
     setProfileIsVisited,
     getAccountBlogRequest, 
+    getAccountPostRequest,
     getAccountCommentsRequest,
     getAccountRepliesRequest,
   } = props
@@ -156,8 +158,10 @@ const Profile = (props) => {
     let tab = 'blog'
 
     if(index === 1) {
-      tab = 'comments'
+      tab = 'posts'
     } else if (index === 2) {
+      tab = 'comments'
+    } else if (index === 3) {
       tab = 'replies'
     }
 
@@ -183,6 +187,7 @@ const Profile = (props) => {
       setProfileIsVisited()
       getProfileRequest(username)
       getAccountBlogRequest(username)
+      getAccountPostRequest(username)
       getAccountCommentsRequest(username)
       getAccountRepliesRequest(username)
       getFollowersRequest(username)
@@ -194,10 +199,12 @@ const Profile = (props) => {
   useEffect(() => {
     if(pathname.match(/(\/t\/blog\/)$|(\/t\/blog)$/m)) {
       setIndex(0)
-    } else if(pathname.match(/(\/t\/comments\/)$|(\/t\/comments)$/m)) {
+    } else if(pathname.match(/(\/t\/posts\/)$|(\/t\/posts)$/m)) {
       setIndex(1)
-    } else if(pathname.match(/(\/t\/replies\/)$|(\/t\/replies)$/m)) {
+    } else if(pathname.match(/(\/t\/comments\/)$|(\/t\/comments)$/m)) {
       setIndex(2)
+    } else if(pathname.match(/(\/t\/replies\/)$|(\/t\/replies)$/m)) {
+      setIndex(3)
     } else {
       setIndex(0)
     }
@@ -300,8 +307,9 @@ const Profile = (props) => {
                         className={classes.tabContainer}
                       >
                         <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Blog" />
-                        <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
-                        <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
+                        <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Posts" />
+                        <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Comments" />
+                        <Tab disableTouchRipple onClick={handleTabs(3)} className={classes.tabs} label="Replies" />
                       </Tabs>
                     </Col> 
                   </div> 
@@ -364,8 +372,9 @@ const Profile = (props) => {
                       className={classes.tabContainer}
                     >
                       <Tab disableTouchRipple onClick={handleTabs(0)} className={classes.tabs} label="Blog" />
-                      <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Comments" />
-                      <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Replies" />
+                      <Tab disableTouchRipple onClick={handleTabs(1)} className={classes.tabs} label="Posts" />
+                      <Tab disableTouchRipple onClick={handleTabs(2)} className={classes.tabs} label="Comments" />
+                      <Tab disableTouchRipple onClick={handleTabs(3)} className={classes.tabs} label="Replies" />
                     </Tabs>
                   </Col>
                 </Row>
@@ -398,6 +407,7 @@ const mapDispatchToProps = (dispatch) => ({
   ...bindActionCreators({
     getProfileRequest,
     getAccountBlogRequest,
+    getAccountPostRequest,
     setProfileIsVisited,
     getAccountRepliesRequest,
     clearAccountBlog,

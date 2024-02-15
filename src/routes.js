@@ -12,6 +12,7 @@ const Content = React.lazy(() => import('./components/pages/Content'))
 const Profile = React.lazy(() => import('./components/pages/Profile'))
 const Post = React.lazy(() => import('./components/pages/Post'))
 const AccountBlog = React.lazy(() => import('./components/sections/AccountBlog'))
+const AccountPosts = React.lazy(() => import('./components/sections/AccountPosts'))
 const AccountReplies = React.lazy(() => import('./components/sections/AccountReplies'))
 const AccountComments = React.lazy(() => import('./components/sections/AccountComments'))
 const Notification = React.lazy(() => import('./components/pages/Notification'))
@@ -125,6 +126,11 @@ const routes =  [
             path: '/@:username/',
             exact: true,
             component: AccountBlog,
+          },
+          {
+            path: '/@:username/t/posts',
+            exact: true,
+            component: AccountPosts,
           },
           {
             path: '/@:username/t/blog',

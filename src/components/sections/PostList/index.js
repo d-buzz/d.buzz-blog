@@ -211,8 +211,11 @@ const PostList = React.memo((props) => {
     openUserDialog,
     saveScrollIndex,
     scrollIndex,
+    profile_owner = "",
     recomputeRowIndex = () => {},
     openMuteDialog,
+    reblogs,
+    reblogged_by,
     opacityUsers,
     disableOpacity,
   } = props
@@ -379,7 +382,7 @@ const PostList = React.memo((props) => {
                       <div>
                         <div style={leftWidth} className={classNames(classes.left,classes.profileContent)} onClick={handleOpenContent}>
                           <Avatar height={avatarSize} author={author} className={classNames(classes.marginRight5px)} />
-                          <div>
+                          <div style={{display:"flex"}}>
                             <label className={classes.name}>
                               {!disableProfileLink && (
                                 <Link
@@ -394,7 +397,10 @@ const PostList = React.memo((props) => {
                               )}
                               {disableProfileLink && (<span className={classes.spanName}>{author}</span>)}
                             </label>
-                            <label style={{marginBottom:0}} className={classes.username}>
+                            <label style={{marginBottom:0,display:"flex"}} className={classes.username}>
+                              {reblogs > 0 && reblogged_by.includes(profile_owner) && (
+                                <div style={{color:"blue"}}>Reblogged</div>
+                              )}
                               &nbsp;&bull;&nbsp;{moment(`${ !searchListMode ? `${created}Z` : created }`).local().fromNow()}
                             </label>
                           </div>

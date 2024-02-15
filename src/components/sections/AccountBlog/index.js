@@ -28,7 +28,7 @@ const AccountBlog = (props) => {
     <React.Fragment>
       {/* {!muted && ( */}
       <React.Fragment>
-        <InfiniteList disableOpacity={true} loading={loading} items={items} onScroll={loadMorePosts} unguardedLinks={!user.isAuthenticated}/>
+        <InfiniteList disableOpacity={true} loading={loading} profile_owner={author} items={items} onScroll={loadMorePosts} unguardedLinks={!user.isAuthenticated}/>
         {(!loading && items.length === 0) &&
         (<center><br/><h6>No Blog from @{author}</h6></center>)}
       </React.Fragment>
