@@ -3,7 +3,11 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import textParser from 'npm-text-parser'
 import classNames from 'classnames'
-import { UrlVideoEmbed, TweetSkeleton } from 'components'
+import {
+  UrlVideoEmbed,
+  UrlWithImageAndVideoEmbed,
+  TweetSkeleton,
+} from 'components'
 import { createUseStyles } from 'react-jss'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 
@@ -121,51 +125,27 @@ const useStyles = createUseStyles(theme => ({
 
 const prepareTwitterEmbeds = (content) => {
   let body = content
-  const mainTwitterRegex = /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i
-  const htmlReplacement = /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter\.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i
-
   const links = textParser.getUrls(content)
 
-  const matchData = content.match(htmlReplacement)
-  if (matchData) {
-    const id = matchData[5]
-    let title = body
-    title = title.replace(htmlReplacement, '')
-    body = body.replace(body, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-    body = `${title} ${body}`
-  } else {
-    links.forEach((link) => {
-      try {
-        link = link.replace(/&amp;/g, '&')
-        let match = ''
-        let id = ''
+  links.forEach((link) => {
+    try {
+      // Use a regular expression to extract the numeric identifier
+      const match = link.match(/\/status\/(\d+)/)
+      console.log('prepareTwitterEmbeds', match)
 
-        if (link.match(mainTwitterRegex)) {
-          match = link.match(mainTwitterRegex)
-          id = match[2]
-          if (link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
-            match = link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
-            id = match[2]
-            id = id.slice(0, -2)
-          }
-          body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-        }
-
-        if (match) {
-          const id = match[2]
-          body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-        }
-      } catch (e) { }
-    })
-  }
-
+      if (match) {
+        const id = match[1]
+        body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
+      }
+    } catch (e) { }
+  })
 
   return body
 }
 
 const prepareVimmEmbeds = (content) => {
-  const vimmRegex = /(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?))))/i
-  const vimmRegexEmbed = /(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?)\/embed)))/i
+  const vimmRegex = /https?:\/\/www\.vimm\.tv\/(.*?)/i
+  const vimmRegexEmbed = /https?:\/\/www\.vimm\.tv\/(.*?)\/embed/i
   let body = content
 
   const links = textParser.getUrls(content)
@@ -195,27 +175,37 @@ const prepareVimmEmbeds = (content) => {
 }
 
 const prepareThreeSpeakEmbeds = (content) => {
-  let body = content
+  try {
+    const link = (/\[!\[.*]\(.*\)]\(.*\)/).exec(content)
 
-  const links = markdownLinkExtractor(content)
+    // check if there is hyperlink with embedded image
+    if (link) {
+      const linkRegex = /\[!\[(.*?)]\((.*?)\)]\((.*?)\)/
+      const bodyMatch = content.match(linkRegex)
+      const [wholeLink, , , videoLink] = bodyMatch
+      const platformMatch = videoLink.match(/(?:https?:\/\/(?:3speak\.online|3speak\.co|3speak\.tv)\/watch\?v=(.*))?/i)
 
-  links.forEach((link) => {
-    try {
-      link = link.replace(/&amp;/g, '&')
-      let match = ''
-      if (link.includes('3speak.online/watch?v')) {
-        match = link.match(/(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=(.*))))?/i)
-      } else if (link.includes('3speak.co/watch?v')) {
-        match = link.match(/(?:https?:\/\/(?:(?:3speak\.co\/watch\?v=(.*))))?/i)
+      if (platformMatch) {
+        console.log('platformMatch', platformMatch)
+        const id = platformMatch[1]
+        return content.replace(wholeLink, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
       }
+    } else { // this should filter all the hyperlink and normal link
+      const plainTextRegex = /https?:\/\/(?:3speak\.online|3speak\.co|3speak\.tv)\/watch\?v=([^\s()]+)/i
+      const plainTextMatch = content.match(plainTextRegex)
 
-      if (match) {
-        const id = match[1]
-        body = body.replace(link, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
+      if (plainTextMatch[0] === plainTextMatch.input) {
+        console.log('plainTextMatches', plainTextMatch)
+
+        if (plainTextMatch) {
+          const id = plainTextMatch[1]
+          return content.replace(plainTextRegex, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
+        }
       }
-    } catch (error) { }
-  })
-  return body
+    }
+  } catch (error) {}
+
+  return content
 }
 
 const prepareRumbleEmbed = (content) => {
@@ -333,16 +323,30 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
   if (content.includes(':twitter:')) {
     const splitTwitter = content.split(':')
     try {
-      return <TwitterTweetEmbed key={`${splitTwitter[2]}${scrollIndex}`} tweetId={splitTwitter[2]} onLoad={() => recomputeRowIndex(scrollIndex)} placeholder={<TweetSkeleton />} />
-    } catch (e) { console.log(e) }
+      return <TwitterTweetEmbed
+        key={`${splitTwitter[2]}${scrollIndex}`}
+        tweetId={splitTwitter[2]}
+        onLoad={() => recomputeRowIndex(scrollIndex)}
+        placeholder={<TweetSkeleton/>}
+      />
+    } catch (e) {
+      console.log(e)
+    }
   } else if (content.includes(':threespeak:')) {
     const splitThreeSpeak = content.split(':')
-    const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
+    const embed = {
+      app: splitThreeSpeak[1],
+      id: splitThreeSpeak[2],
+    }
+    return <UrlWithImageAndVideoEmbed key={`${content}${splitThreeSpeak[2]}url-embed`} embed={embed} />
   } else if (content.includes(':vimm:')) {
     const splitVimm = content.split(':')
-    const url = `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}vimm`} url={url} />
+    const embed = {
+      app: splitVimm[1],
+      id: splitVimm[2],
+      domain: `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`,
+    }
+    return <UrlWithImageAndVideoEmbed key={`${content}${splitVimm[2]}url-embed`} embed={embed} />
   } else if (content.includes(':rumble:')) {
     const splitRumble = content.split(':')
     if (splitRumble[2]) {
@@ -379,28 +383,28 @@ const MarkdownViewer = React.memo((props) => {
     scrollIndex = -1,
     recomputeRowIndex = () => { },
   } = props
-  let { content = '' } = props
-  const links = textParser.getUrls(content)
+  const { content = '' } = props
+  // const links = textParser.getUrls(content)
 
-  links.forEach((link) => {
-    try {
-      link = link.replace(/&amp;/g, '&')
-
-      if (link.includes('twitter.com')) {
-        content = prepareTwitterEmbeds(content)
-      } else if (link.includes('3speak.co') || link.includes('3speak.online')) {
-        content = prepareThreeSpeakEmbeds(content)
-      } else if (link.includes('www.vimm.tv')) {
-        content = prepareVimmEmbeds(content)
-      } else if (link.includes('rumble.com')) {
-        content = prepareRumbleEmbed(content)
-      } else if (link.includes('lbry.tv') || link.includes('open.lbry.com')) {
-        content = prepareLbryEmbeds(content)
-      } else if (link.includes('www.bitchute.com')) {
-        content = prepareBitchuteEmbeds(content)
-      }
-    } catch (error) { }
-  })
+  // links.forEach((link, index) => {
+  //   try {
+  //     link = link.replace(/&amp;/g, '&')
+  //     console.log(`link from parser ${index}`, link)
+  //     if (link.includes('twitter.com')) {
+  //       content = prepareTwitterEmbeds(content)
+  //     } else if (link.includes('3speak.co') || link.includes('3speak.online') || link.includes('3speak.tv')) {
+  //       content = prepareThreeSpeakEmbeds(content)
+  //     } else if (link.includes('vimm.tv') || link.includes('Vimm.tv')) {
+  //       content = prepareVimmEmbeds(content)
+  //     } else if (link.includes('rumble.com')) {
+  //       content = prepareRumbleEmbed(content)
+  //     } else if (link.includes('lbry.tv') || link.includes('open.lbry.com')) {
+  //       content = prepareLbryEmbeds(content)
+  //     } else if (link.includes('www.bitchute.com')) {
+  //       content = prepareBitchuteEmbeds(content)
+  //     }
+  //   } catch (error) { }
+  // })
 
   let assetClass = classes.minified
 
@@ -408,9 +412,32 @@ const MarkdownViewer = React.memo((props) => {
     assetClass = classes.full
   }
 
+  let splitContent = content.split(`\n`)
 
-  let splitContent = content.split(`~~~~~~.^.~~~`)
+  splitContent = splitContent.map((item, index) => {
+    if (item.includes('twitter.com') || item.includes('x.com')) {
+      item = prepareTwitterEmbeds(item)
+    } else if (item.includes('3speak.co') || item.includes('3speak.online') || item.includes('3speak.tv')) {
+      item = prepareThreeSpeakEmbeds(item)
+    } else if (item.includes('vimm1.tv') || item.includes('Vimm1.tv')) {
+      item = prepareVimmEmbeds(item)
+    } else if (item.includes('rumble.com')) {
+      item = prepareRumbleEmbed(item)
+    } else if (item.includes('lbry.tv') || item.includes('open.lbry.com')) {
+      item = prepareLbryEmbeds(item)
+    } else if (item.includes('www.bitchute.com')) {
+      item = prepareBitchuteEmbeds(item)
+    }
 
+    return item
+  })
+
+  const combinedString = splitContent.join('\n')
+
+  console.log('splitContent', splitContent)
+  console.log('combinedString', combinedString)
+
+  splitContent = combinedString.split(`~~~~~~.^.~~~`)
   splitContent = splitContent.filter((item) => item !== '')
 
   return (
