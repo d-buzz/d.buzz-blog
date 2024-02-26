@@ -435,6 +435,103 @@ const prepareTiktokEmbeds = (content) => {
   return body
 }
 
+const prepareOdyseeEmbeds = (content) => {
+  const odyseeRegex = /^https:\/\/odysee\.com\/@([^/]+)\/([^:]+:\w+)/
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    try {
+      const match = link.match(odyseeRegex)
+
+      if (match) {
+        const id = `@${match[1]}/${match[2]}`
+        const modifiedString = id.replace(/:/g, "=====")
+        body = body.replace(link, `~~~~~~.^.~~~:odysee:${modifiedString}~~~~~~.^.~~~`)
+      }
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareDTubeEmbeds = (content) => {
+  const dtubeEmbedRegex = /^(https?:\/\/)?(?:www\.)?(emb\.)?d\.tube\/v\/.*\/[a-zA-Z0-9-]+/gi
+  const dtubeVideoRegex = /^(https?:\/\/)?(?:www\.)?(d\.tube)\/#!\/v\/.*\/[a-zA-Z0-9-]+/gi
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+    const matchEmbed = link.match(dtubeEmbedRegex)
+    const matchVideo = link.match(dtubeVideoRegex)
+
+    if (matchEmbed) {
+      const data = link.split('/')
+      const id = link.includes('http') ? `${data[4]}/${data[5]}` : `${data[2]}/${data[3]}`
+      body = body.replace(link, `~~~~~~.^.~~~:dtube:${id}:~~~~~~.^.~~~`)
+
+    } else if (matchVideo) {
+      const data = link.split('/')
+      const id = link.includes('http') ? `${data[5]}/${data[6]}` : `${data[3]}/${data[4]}`
+      body = body.replace(link, `~~~~~~.^.~~~:dtube:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
+const prepareAppleEmbeds = (content) => {
+  const appleRegex = /https?:\/\/music\.apple\.com\/(.*?)/i
+  const appleRegexEmbed = /https?:\/\/embed\.music\.apple\.com\/(.*?)/i
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+
+    const match = link.match(appleRegex) || link.match(appleRegexEmbed)
+
+    if (match) {
+      const data = link.split('/')
+      const id = `${data[4]}/${data[5]}/${data[6]}`
+      body = body.replace(link, `~~~~~~.^.~~~:apple:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
+const prepareDBuzzVideos = (content) => {
+  const oldDbuzzVideos = /https:\/\/ipfs\.io\/ipfs\/(.*\?dbuzz_video)/i
+  const dbuzzVideos = /https:\/\/ipfs\.io\/ipfs\/.*\?dbuzz_video=https:\/\/ipfs\.io\/ipfs\/([a-zA-Z0-9]+)/i
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+
+    let match
+
+    if (link.match(oldDbuzzVideos) && link.match(dbuzzVideos)) {
+      match = link.match(dbuzzVideos)[1]
+    } else if (link.match(oldDbuzzVideos) && !link.match(dbuzzVideos)) {
+      match = link.match(oldDbuzzVideos)[1].replace('?dbuzz_video', '')
+    }
+
+    if (match) {
+      const id = match
+      body = body.replace(link, `~~~~~~.^.~~~:dbuzz-video:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex) => {
   const splitContent = content.split(':')
   const embedTypes = [
@@ -448,6 +545,11 @@ const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowInd
     ':soundcloud:',
     // ':facebook:',
     // ':tiktok:',
+    // :twitter:,
+    ':odysee:',
+    ':dtube:',
+    ':apple:',
+    ':dbuzz-video:',
   ]
 
   if (content.includes(':twitter:')) {
@@ -519,8 +621,8 @@ const MarkdownViewer = React.memo((props) => {
     //   item = prepareVimmEmbeds(item)
     } else if (item.includes('rumble.com')) {
       item = prepareRumbleEmbed(item)
-    } else if (item.includes('lbry.tv') || item.includes('open.lbry.com')) {
-      item = prepareLbryEmbeds(item)
+    // } else if (item.includes('lbry.tv') || item.includes('open.lbry.com')) {
+    //   item = prepareLbryEmbeds(item)
     } else if (item.includes('bitchute.com')) {
       item = prepareBitchuteEmbeds(item)
     } else if (item.includes('banned.video')) {
@@ -533,14 +635,14 @@ const MarkdownViewer = React.memo((props) => {
       item = prepareFacebookEmbeds(item)
     } else if (item.includes('tiktok.com')) {
       item = prepareTiktokEmbeds(item)
-    // } else if (item.includes('odysee.com')) {
-    //   item = prepareOdyseeEmbeds(item)
-    // } else if (item.includes('music.apple.com')) {
-    //   item = prepareAppleEmbeds(item)
-    // } else if (item.includes('d.tube')) {
-    //   item = prepareDTubeEmbeds(item)
-    // } else if (item.includes('dbuzz_video')) {
-    //   item = prepareDBuzzVideos(item)
+    } else if (item.includes('odysee.com') || item.includes('lbry.tv') || item.includes('open.lbry.com')) {
+      item = prepareOdyseeEmbeds(item)
+    } else if (item.includes('music.apple.com')) {
+      item = prepareAppleEmbeds(item)
+    } else if (item.includes('d.tube')) {
+      item = prepareDTubeEmbeds(item)
+    } else if (item.includes('dbuzz_video')) {
+      item = prepareDBuzzVideos(item)
     // } else if (hiveTubePattern.test(link)) {
     //   item = prepareHiveTubeVideoEmbeds(item)
     // } else if (buzzImagesPattern.test(link)) {

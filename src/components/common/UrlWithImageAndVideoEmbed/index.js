@@ -58,8 +58,8 @@ const UrlWithImageAndVideoEmbed = (props) => {
         return `https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook%2Fvideos%2F${id}%2F&width=500&show_text=false&appId=${FACEBOOK_APP_ID}&height=360`
       case 'tiktok':
         return `https://www.tiktok.com/embed/v2/${id}?lang=en-US`
-      case 'odysy':
-        return `https://odysee.com/$/embed/${id}`
+      case 'odysee':
+        return `https://odysee.com/$/embed/${id.replace(/=====/g, ":")}`
       case 'apple':
         return `https://embed.music.apple.com/gb/${id}`
       case 'dtube':
