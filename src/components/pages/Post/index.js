@@ -549,7 +549,7 @@ const Post = (props) => {
             }),
           )
         } else {
-          alert(`You can only upload 20 images per post \n\n Please only upload remaining ${remainingImageUploads <= 1 ? `${remainingImageUploads} image` : `${remainingImageUploads} images`}`)
+          alert(`You can only upload 4 images per buzz \n\n Please only upload remaining ${remainingImageUploads <= 1 ? `${remainingImageUploads} image` : `${remainingImageUploads} images`}`)
         }
       })
 
@@ -620,7 +620,7 @@ const Post = (props) => {
               </div>
             )}
           </div>
-          <textarea
+          <textarea  
             onInput={e => {
               updateContent(e)
             }}
