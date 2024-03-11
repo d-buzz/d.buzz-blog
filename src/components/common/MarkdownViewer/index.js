@@ -3,9 +3,14 @@ import { DefaultRenderer } from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import textParser from 'npm-text-parser'
 import classNames from 'classnames'
-import { UrlVideoEmbed, TweetSkeleton } from 'components'
+import {
+  UrlWithImageAndVideoEmbed,
+  TweetSkeleton,
+} from 'components'
 import { createUseStyles } from 'react-jss'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
+import { parseUrls, generateUniqueId } from 'services/helper'
+import { FacebookEmbed, TikTokEmbed } from "react-social-media-embed"
 
 const renderer = new DefaultRenderer({
   baseUrl: "https://blog.d.buzz/",
@@ -121,51 +126,27 @@ const useStyles = createUseStyles(theme => ({
 
 const prepareTwitterEmbeds = (content) => {
   let body = content
-  const mainTwitterRegex = /(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*))))/i
-  const htmlReplacement = /<blockquote[^>]*?><p[^>]*?>(.*?)<\/p>.*?mdash; (.*)<a href="(https:\/\/twitter\.com\/.*?(.*?\/status\/(.*?))\?.*?)">(.*?)<\/a><\/blockquote>/i
-
   const links = textParser.getUrls(content)
 
-  const matchData = content.match(htmlReplacement)
-  if (matchData) {
-    const id = matchData[5]
-    let title = body
-    title = title.replace(htmlReplacement, '')
-    body = body.replace(body, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-    body = `${title} ${body}`
-  } else {
-    links.forEach((link) => {
-      try {
-        link = link.replace(/&amp;/g, '&')
-        let match = ''
-        let id = ''
+  links.forEach((link) => {
+    try {
+      // Use a regular expression to extract the numeric identifier
+      const match = link.match(/\/status\/(\d+)/)
+      console.log('prepareTwitterEmbeds', match)
 
-        if (link.match(mainTwitterRegex)) {
-          match = link.match(mainTwitterRegex)
-          id = match[2]
-          if (link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)) {
-            match = link.match(/(?:https?:\/\/(?:(?:twitter\.com\/(.*?)\/status\/(.*)?=(.*))))/i)
-            id = match[2]
-            id = id.slice(0, -2)
-          }
-          body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-        }
-
-        if (match) {
-          const id = match[2]
-          body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
-        }
-      } catch (e) { }
-    })
-  }
-
+      if (match) {
+        const id = match[1]
+        body = body.replace(link, `~~~~~~.^.~~~:twitter:${id}:~~~~~~.^.~~~`)
+      }
+    } catch (e) { }
+  })
 
   return body
 }
 
 const prepareVimmEmbeds = (content) => {
-  const vimmRegex = /(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?))))/i
-  const vimmRegexEmbed = /(?:https?:\/\/(?:(?:www\.vimm\.tv\/(.*?)\/embed)))/i
+  const vimmRegex = /https?:\/\/www\.vimm\.tv\/(.*?)/i
+  const vimmRegexEmbed = /https?:\/\/www\.vimm\.tv\/(.*?)\/embed/i
   let body = content
 
   const links = textParser.getUrls(content)
@@ -195,32 +176,42 @@ const prepareVimmEmbeds = (content) => {
 }
 
 const prepareThreeSpeakEmbeds = (content) => {
-  let body = content
+  try {
+    const link = (/\[!\[.*]\(.*\)]\(.*\)/).exec(content)
 
-  const links = markdownLinkExtractor(content)
+    // check if there is hyperlink with embedded image
+    if (link) {
+      const linkRegex = /\[!\[(.*?)]\((.*?)\)]\((.*?)\)/
+      const bodyMatch = content.match(linkRegex)
+      const [wholeLink, , , videoLink] = bodyMatch
+      const platformMatch = videoLink.match(/(?:https?:\/\/(?:3speak\.online|3speak\.co|3speak\.tv)\/watch\?v=(.*))?/i)
 
-  links.forEach((link) => {
-    try {
-      link = link.replace(/&amp;/g, '&')
-      let match = ''
-      if (link.includes('3speak.online/watch?v')) {
-        match = link.match(/(?:https?:\/\/(?:(?:3speak\.online\/watch\?v=(.*))))?/i)
-      } else if (link.includes('3speak.co/watch?v')) {
-        match = link.match(/(?:https?:\/\/(?:(?:3speak\.co\/watch\?v=(.*))))?/i)
+      if (platformMatch) {
+        console.log('platformMatch', platformMatch)
+        const id = platformMatch[1]
+        return content.replace(wholeLink, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
       }
+    } else { // this should filter all the hyperlink and normal link
+      const plainTextRegex = /https?:\/\/(?:3speak\.online|3speak\.co|3speak\.tv)\/watch\?v=([^\s()]+)/i
+      const plainTextMatch = content.match(plainTextRegex)
 
-      if (match) {
-        const id = match[1]
-        body = body.replace(link, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
+      if (plainTextMatch[0] === plainTextMatch.input) {
+        console.log('plainTextMatches', plainTextMatch)
+
+        if (plainTextMatch) {
+          const id = plainTextMatch[1]
+          return content.replace(plainTextRegex, `~~~~~~.^.~~~:threespeak:${id}:~~~~~~.^.~~~`)
+        }
       }
-    } catch (error) { }
-  })
-  return body
+    }
+  } catch (error) {}
+
+  return content
 }
 
 const prepareRumbleEmbed = (content) => {
-  const rumbleRegex = /(?:https?:\/\/(?:(?:rumble\.com\/(.*?))))/i
-  const rumbleRegexEmbed = /(?:https?:\/\/(?:(?:rumble\.com\/embed\/(.*?))))/i
+  const rumbleRegex = /https?:\/\/rumble\.com\/(.*?)/i
+  const rumbleRegexEmbed = /https?:\/\/rumble\.com\/embed\/(.*?)/i
   let body = content
 
   const links = textParser.getUrls(content)
@@ -251,6 +242,7 @@ const prepareRumbleEmbed = (content) => {
       }
     } catch (error) { }
   })
+
   return body
 }
 
@@ -328,49 +320,280 @@ const prepareBitchuteEmbeds = (content) => {
   return body
 }
 
+const prepareBannedEmbeds = (content) => {
+  const bannedRegex = /https?:\/\/banned\.video\/watch\?id=(.*)/i
+
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    try {
+      link = link.replace(/&amp;/g, '&')
+      let match = ''
+      let id = ''
+
+      if (link.match(bannedRegex)) {
+        const data = link.split('?id=')
+        match = link.match(bannedRegex)
+        if (data[1]) {
+          id = data[1]
+        }
+      }
+
+      if (match) {
+        body = body.replace(link, `~~~~~~.^.~~~:banned:${id}:~~~~~~.^.~~~`)
+      }
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareDollarVigilanteEmbeds = (content) => {
+  const dollarVigilanteRegex = /https?:\/\/(www\.)?vigilante\.tv\/w\/(.*)/i
+
+  let body = content
+
+  const links = parseUrls(content)
+  links.forEach((link) => {
+    try {
+      link = link.replace(/&amp;/g, '&')
+      let match = ''
+      let id = ''
+
+      if (link.match(dollarVigilanteRegex)) {
+        const data = link.split('/')
+        match = link.match(dollarVigilanteRegex)
+        if (data[4]) {
+          id = data[4]
+        }
+      }
+
+      if (match) {
+        body = body.replace(link, `~~~~~~.^.~~~:dollarvigilante:${id}:~~~~~~.^.~~~`)
+      }
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareSoundCloudEmbeds = (content) => {
+  const soundcloudRegex = /^https?:\/\/(soundcloud\.com|snd\.sc)\/(.*)$/
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+    let match = ''
+    let id = ''
+
+    try {
+      if (link.match(soundcloudRegex)) {
+        const data = link.split('/')
+        match = link.match(soundcloudRegex)
+        id = `${data[3]}/${data[4]}`
+      }
+
+      if (!id) {
+        id = ''
+      }
+
+      if (match) {
+        body = body.replace(link, `~~~~~~.^.~~~:soundcloud:${id}:~~~~~~.^.~~~`)
+      }
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareFacebookEmbeds = (content) => {
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    try {
+      body = body.replace(link, `~~~~~~.^.~~~:facebook:${link}:~~~~~~.^.~~~`)
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareTiktokEmbeds = (content) => {
+  let body = content
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    body = body.replace(link, `~~~~~~.^.~~~:tiktok:${link}:~~~~~~.^.~~~`)
+  })
+
+  return body
+}
+
+const prepareOdyseeEmbeds = (content) => {
+  const odyseeRegex = /^https:\/\/odysee\.com\/@([^/]+)\/([^:]+:\w+)/
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    try {
+      const match = link.match(odyseeRegex)
+
+      if (match) {
+        const id = `@${match[1]}/${match[2]}`
+        const modifiedString = id.replace(/:/g, "=====")
+        body = body.replace(link, `~~~~~~.^.~~~:odysee:${modifiedString}~~~~~~.^.~~~`)
+      }
+    } catch (error) { }
+  })
+
+  return body
+}
+
+const prepareDTubeEmbeds = (content) => {
+  const dtubeEmbedRegex = /^(https?:\/\/)?(?:www\.)?(emb\.)?d\.tube\/v\/.*\/[a-zA-Z0-9-]+/gi
+  const dtubeVideoRegex = /^(https?:\/\/)?(?:www\.)?(d\.tube)\/#!\/v\/.*\/[a-zA-Z0-9-]+/gi
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+    const matchEmbed = link.match(dtubeEmbedRegex)
+    const matchVideo = link.match(dtubeVideoRegex)
+
+    if (matchEmbed) {
+      const data = link.split('/')
+      const id = link.includes('http') ? `${data[4]}/${data[5]}` : `${data[2]}/${data[3]}`
+      body = body.replace(link, `~~~~~~.^.~~~:dtube:${id}:~~~~~~.^.~~~`)
+
+    } else if (matchVideo) {
+      const data = link.split('/')
+      const id = link.includes('http') ? `${data[5]}/${data[6]}` : `${data[3]}/${data[4]}`
+      body = body.replace(link, `~~~~~~.^.~~~:dtube:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
+const prepareAppleEmbeds = (content) => {
+  const appleRegex = /https?:\/\/music\.apple\.com\/(.*?)/i
+  const appleRegexEmbed = /https?:\/\/embed\.music\.apple\.com\/(.*?)/i
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+
+    const match = link.match(appleRegex) || link.match(appleRegexEmbed)
+
+    if (match) {
+      const data = link.split('/')
+      const id = `${data[4]}/${data[5]}/${data[6]}`
+      body = body.replace(link, `~~~~~~.^.~~~:apple:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
+const prepareDBuzzVideos = (content) => {
+  const oldDbuzzVideos = /https:\/\/ipfs\.io\/ipfs\/(.*\?dbuzz_video)/i
+  const dbuzzVideos = /https:\/\/ipfs\.io\/ipfs\/.*\?dbuzz_video=https:\/\/ipfs\.io\/ipfs\/([a-zA-Z0-9]+)/i
+  let body = content
+
+  const links = parseUrls(content)
+
+  links.forEach((link) => {
+    link = link.replace(/&amp;/g, '&')
+
+    let match
+
+    if (link.match(oldDbuzzVideos) && link.match(dbuzzVideos)) {
+      match = link.match(dbuzzVideos)[1]
+    } else if (link.match(oldDbuzzVideos) && !link.match(dbuzzVideos)) {
+      match = link.match(oldDbuzzVideos)[1].replace('?dbuzz_video', '')
+    }
+
+    if (match) {
+      const id = match
+      body = body.replace(link, `~~~~~~.^.~~~:dbuzz-video:${id}:~~~~~~.^.~~~`)
+    }
+  })
+
+  return body
+}
+
 const render = (content, markdownClass, assetClass, scrollIndex, recomputeRowIndex) => {
+  const splitContent = content.split(':')
+  const embedTypes = [
+    ':threespeak:',
+    ':vimm:',
+    ':rumble:',
+    ':lbry:',
+    ':bitchute:',
+    ':banned:',
+    ':dollarvigilante:',
+    ':soundcloud:',
+    // ':facebook:',
+    // ':tiktok:',
+    // :twitter:,
+    ':odysee:',
+    ':dtube:',
+    ':apple:',
+    ':dbuzz-video:',
+  ]
 
   if (content.includes(':twitter:')) {
-    const splitTwitter = content.split(':')
     try {
-      return <TwitterTweetEmbed key={`${splitTwitter[2]}${scrollIndex}`} tweetId={splitTwitter[2]} onLoad={() => recomputeRowIndex(scrollIndex)} placeholder={<TweetSkeleton />} />
-    } catch (e) { console.log(e) }
-  } else if (content.includes(':threespeak:')) {
-    const splitThreeSpeak = content.split(':')
-    const url = `https://3speak.co/embed?v=${splitThreeSpeak[2]}`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}3speak`} url={url} />
-  } else if (content.includes(':vimm:')) {
-    const splitVimm = content.split(':')
-    const url = `https://www.vimm.tv/${splitVimm[2]}/embed?autoplay=0`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}vimm`} url={url} />
-  } else if (content.includes(':rumble:')) {
-    const splitRumble = content.split(':')
-    if (splitRumble[2]) {
-      const url = `https://rumble.com/embed/${splitRumble[2]}`
-      return <UrlVideoEmbed key={`${content}${scrollIndex}rumble`} url={url} />
+      return (
+        <TwitterTweetEmbed
+          key={`${splitContent[1]}${scrollIndex}${generateUniqueId()}`}
+          tweetId={splitContent[2]}
+          onLoad={() => recomputeRowIndex(scrollIndex)}
+          placeholder={<TweetSkeleton />}
+        />
+      )
+    } catch (e) {
+      console.log(e)
     }
-  } else if (content.includes(':lbry:')) {
-    const splitLbry = content.split(':')
-    const url = `https://lbry.tv/$/embed/${splitLbry[2]}`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}lbry`} url={url} />
-  } else if (content.includes(':bitchute:')) {
-    const splitBitchute = content.split(':')
-    const url = `https://www.bitchute.com/embed/${splitBitchute[2]}`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}bitchute`} url={url} />
   } else if (content.includes(':facebook:')) {
-    const splitFacebook = content.split(':')
-    const url = splitFacebook[4] ? `https:${splitFacebook[3]}` : `https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2F${splitFacebook[2]}%2Fvideos%2F${splitFacebook[3]}&width=500&show_text=false&height=300`
-    return <UrlVideoEmbed key={`${url}${scrollIndex}facebook`} url={url} />
+    return <FacebookEmbed
+      key={`${splitContent[1]}${splitContent[2]}${generateUniqueId()}`}
+      url={`${splitContent[2]}:${splitContent[3]}`}
+    />
+  } else if (content.includes(':tiktok:')) {
+    return <TikTokEmbed
+      key={`${splitContent[1]}${splitContent[2]}${generateUniqueId()}`}
+      url={`${splitContent[2]}:${splitContent[3]}`}
+    />
+  } else if (embedTypes.some(type => content.includes(type))) {
+    const embed = {
+      app: splitContent[1],
+      id: splitContent[2],
+      domain: '',
+    }
+    return <UrlWithImageAndVideoEmbed key={`${splitContent[1]}${splitContent[2]}${generateUniqueId()}`} embed={embed} />
   } else {
     // render normally
-    return <div
-      key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
-      className={classNames(markdownClass, assetClass)}
-      dangerouslySetInnerHTML={{ __html: renderer.render(content) }}
-    />
+    return (
+      <div
+        key={`${new Date().getTime()}${scrollIndex}${Math.random()}`}
+        className={classNames(markdownClass, assetClass)}
+        dangerouslySetInnerHTML={{ __html: renderer.render(content) }}
+      />
+    )
   }
-
 }
+
 
 const MarkdownViewer = React.memo((props) => {
   const classes = useStyles()
@@ -379,28 +602,7 @@ const MarkdownViewer = React.memo((props) => {
     scrollIndex = -1,
     recomputeRowIndex = () => { },
   } = props
-  let { content = '' } = props
-  const links = textParser.getUrls(content)
-
-  links.forEach((link) => {
-    try {
-      link = link.replace(/&amp;/g, '&')
-
-      if (link.includes('twitter.com')) {
-        content = prepareTwitterEmbeds(content)
-      } else if (link.includes('3speak.co') || link.includes('3speak.online')) {
-        content = prepareThreeSpeakEmbeds(content)
-      } else if (link.includes('www.vimm.tv')) {
-        content = prepareVimmEmbeds(content)
-      } else if (link.includes('rumble.com')) {
-        content = prepareRumbleEmbed(content)
-      } else if (link.includes('lbry.tv') || link.includes('open.lbry.com')) {
-        content = prepareLbryEmbeds(content)
-      } else if (link.includes('www.bitchute.com')) {
-        content = prepareBitchuteEmbeds(content)
-      }
-    } catch (error) { }
-  })
+  const { content = '' } = props
 
   let assetClass = classes.minified
 
@@ -408,9 +610,54 @@ const MarkdownViewer = React.memo((props) => {
     assetClass = classes.full
   }
 
+  let splitContent = content.split(`\n`)
 
-  let splitContent = content.split(`~~~~~~.^.~~~`)
+  splitContent = splitContent.map((item, index) => {
+    if (item.includes('twitter.com') || item.includes('x.com')) {
+      item = prepareTwitterEmbeds(item)
+    } else if (item.includes('3speak.co') || item.includes('3speak.online') || item.includes('3speak.tv')) {
+      item = prepareThreeSpeakEmbeds(item)
+    // } else if (item.includes('vimm.tv') || item.includes('Vimm.tv')) {
+    //   item = prepareVimmEmbeds(item)
+    } else if (item.includes('rumble.com')) {
+      item = prepareRumbleEmbed(item)
+    // } else if (item.includes('lbry.tv') || item.includes('open.lbry.com')) {
+    //   item = prepareLbryEmbeds(item)
+    } else if (item.includes('bitchute.com')) {
+      item = prepareBitchuteEmbeds(item)
+    } else if (item.includes('banned.video')) {
+      item = prepareBannedEmbeds(item)
+    } else if (item.includes('vigilante.tv')) {
+      item = prepareDollarVigilanteEmbeds(item)
+    } else if (item.includes('soundcloud.com')) {
+      item = prepareSoundCloudEmbeds(item)
+    } else if (item.includes('facebook.com') || item.includes('fb.watch')) {
+      item = prepareFacebookEmbeds(item)
+    } else if (item.includes('tiktok.com')) {
+      item = prepareTiktokEmbeds(item)
+    } else if (item.includes('odysee.com') || item.includes('lbry.tv') || item.includes('open.lbry.com')) {
+      item = prepareOdyseeEmbeds(item)
+    } else if (item.includes('music.apple.com')) {
+      item = prepareAppleEmbeds(item)
+    } else if (item.includes('d.tube')) {
+      item = prepareDTubeEmbeds(item)
+    } else if (item.includes('dbuzz_video')) {
+      item = prepareDBuzzVideos(item)
+    // } else if (hiveTubePattern.test(link)) {
+    //   item = prepareHiveTubeVideoEmbeds(item)
+    // } else if (buzzImagesPattern.test(link)) {
+    //   item = prepareBuzzImages(item)
+    }
 
+    return item
+  })
+
+  const combinedString = splitContent.join('\n')
+
+  console.log('splitContent', splitContent)
+  console.log('combinedString', combinedString)
+
+  splitContent = combinedString.split(`~~~~~~.^.~~~`)
   splitContent = splitContent.filter((item) => item !== '')
 
   return (

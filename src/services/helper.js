@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import {useEffect, useState} from 'react'
 import uuid from 'uuid-random'
-import { encrypt, decrypt } from 'caesar-shift'
-import CryptoJS  from 'crypto-js'
+import {decrypt, encrypt} from 'caesar-shift'
+import CryptoJS from 'crypto-js'
 import sha256 from 'crypto-js/sha256'
-import { Remarkable } from 'remarkable'
-import { DefaultRenderer } from 'steem-content-renderer'
+import {Remarkable} from 'remarkable'
+import {DefaultRenderer} from 'steem-content-renderer'
 import markdownLinkExtractor from 'markdown-link-extractor'
 import diff_match_patch from 'diff-match-patch'
 import sanitize from 'sanitize-html'
@@ -17,7 +17,7 @@ export const getUrls = (text) => {
 }
 export const calculateOverhead = (content) => {
   let urls = getUrls(content) || []
-  
+
   const markdown = content?.match(/#+\s|[*]|\s+&nbsp;+\s|\s+$/gm) || []
 
   let overhead = 0
@@ -30,11 +30,11 @@ export const calculateOverhead = (content) => {
       overhead += item.length
     })
   }
-  
+
   if((urls.length) > 3) {
     urls = urls.slice(0, 2)
   }
-  
+
   if(urls && urls.length <= 3){
     urls.forEach((item) => {
       // overheadItems.push(item)
@@ -176,7 +176,7 @@ export const extractVideoLinks = (links) => {
         if (tempLink.includes('&')) {
           splitLink[1] = (tempLink.split('&'))[0]
         }
-  
+
         videoLinks.push({ link, type: 'youtube', id: splitLink[1] })
       }
     } else if (link.includes('3speak.online')) {
@@ -193,18 +193,18 @@ export const extractImageLinks = (links) => {
   const imageLinks = []
 
   links.forEach((link) => {
-    if ((link.includes('.jpg') 
+    if ((link.includes('.jpg')
         || link.includes('.png')
         || link.includes('.JPEG')
-        || link.includes('youtu.be') 
-        || link.includes('youtube')) 
+        || link.includes('youtu.be')
+        || link.includes('youtube'))
         && !link.includes('img.3speakcontent.online')) {
 
       if (link.includes('youtube')) {
         const splitLink = link.includes('youtu.be') ? link.split('be/') : link.split('v=')
         link = `https://img.youtube.com/vi/${splitLink[1]}/hqdefault.jpg`
-      } 
-      
+      }
+
       imageLinks.push(link)
     }
   })
@@ -219,7 +219,7 @@ const prepareImages = (content) => {
     // remove 3speak thumbnails
     if((item.includes('.png') && item.includes('img.3speakcontent.online')) && !item.includes('https://images.hive.blog')) {
       splitContent[index] = ''
-    } 
+    }
   })
   return splitContent.join(' ')
 }
@@ -244,7 +244,7 @@ const prepareEmbeds = (content) => {
       idToFormat = idToFormat.replace(/\)/g, '')
       idToFormat = idToFormat.replace('[Watch on', '')
       idToFormat = idToFormat.trim('')
-  
+
       const videoLink = `https://3speak.online/embed?v=${idToFormat}`
 
       if(!visited.includes(videoLink)) {
@@ -287,7 +287,7 @@ const render = (content) => {
                     height='400'
                     width='100%'
                     loading='lazy'
-                  ></iframe>`    
+                  ></iframe>`
     } else {
       contentBody = renderer.render(item)
     }
@@ -581,6 +581,12 @@ export const truncateString = (str, num) => {
   }
 }
 
+export const generateUniqueId = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+  })
+}
 
 export const proxyImage = (url) => {
   // const enabled = true
