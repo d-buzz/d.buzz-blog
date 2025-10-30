@@ -1,0 +1,5 @@
+# Redirects for Single Page Application routing
+# This file tells Netlify to redirect all routes to index.html
+# So that React Router can handle the routing on the client side
+
+/*    /index.html   200

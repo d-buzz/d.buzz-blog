@@ -1,0 +1,75 @@
+# Netlify configuration for Blog.D.Buzz
+
+[build]
+  # Build command for React app
+  command = "npm run build"
+
+  # Directory that contains the deploy-ready HTML files and assets
+  publish = "build"
+
+  # Node version to use
+  [build.environment]
+    NODE_VERSION = "14"
+
+# Redirect rules for Single Page Application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+
+# Cache static assets
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "*.gif"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# Deploy contexts for different branches
+[context.production]
+  command = "npm run build"
+
+[context.deploy-preview]
+  command = "npm run build"
+
+[context.branch-deploy]
+  command = "npm run build"
+
+# Environment variables (set these in Netlify UI for security)
+# REACT_APP_VERSION
+# REACT_APP_SEARCH_API
+# REACT_APP_IMAGE_API
+# REACT_APP_VIDEO_API
+# REACT_APP_CENSOR_API
+# REACT_APP_PRICE_CHART_API
+# REACT_APP_FLEEK_API_KEY
+# REACT_APP_FLEEK_API_SECRET
+# REACT_APP_MAX_IMAGE_UPLOAD

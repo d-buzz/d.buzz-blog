@@ -101,6 +101,68 @@ yarn test
 
 This will execute the test suite and output the results.
 
+## Deployment
+
+### Netlify Auto Deploy
+
+This project is configured for automatic deployment on Netlify. The configuration is defined in `netlify.toml`.
+
+#### Quick Deploy
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/d-buzz/d.buzz-blog)
+
+#### Manual Setup
+
+1. **Connect Repository to Netlify:**
+   - Log in to [Netlify](https://app.netlify.com/)
+   - Click "New site from Git"
+   - Choose your Git provider (GitHub, GitLab, etc.)
+   - Select the `d.buzz-blog` repository
+   - Netlify will auto-detect the build settings from `netlify.toml`
+
+2. **Configure Environment Variables:**
+
+   In the Netlify dashboard, go to Site settings > Build & deploy > Environment variables and add:
+
+   ```
+   REACT_APP_VERSION=2.1.0
+   REACT_APP_SEARCH_API=https://search-api.d.buzz/api/v1
+   REACT_APP_IMAGE_API=https://image-api.d.buzz/api/v1
+   REACT_APP_VIDEO_API=https://video-api.d.buzz/api/v1
+   REACT_APP_CENSOR_API=https://censor-api.d.buzz/api/v1/censor
+   REACT_APP_FLEEK_API_KEY=your_fleek_api_key
+   REACT_APP_FLEEK_API_SECRET=your_fleek_api_secret
+   REACT_APP_MAX_IMAGE_UPLOAD=15
+   ```
+
+3. **Deploy:**
+   - Netlify will automatically build and deploy on every push to the connected branch
+   - Production deploys typically occur from the `main` or `stable` branch
+   - Preview deploys are created for pull requests
+
+#### Build Configuration
+
+The project uses the following build settings (defined in `netlify.toml`):
+
+- **Build Command:** `npm run build`
+- **Publish Directory:** `build`
+- **Node Version:** 14
+
+#### Deploy Contexts
+
+- **Production:** Deploys from main branch
+- **Deploy Preview:** Creates preview for pull requests
+- **Branch Deploy:** Deploys from feature branches
+
+#### Custom Domain
+
+To configure a custom domain:
+
+1. Go to Site settings > Domain management
+2. Add your custom domain
+3. Configure DNS settings as instructed by Netlify
+4. Netlify automatically provisions SSL certificates
+
 ## Contributing
 
 We warmly welcome community contributions to D.Buzz Blog. Whether it's reporting bugs, suggesting enhancements, or submitting pull requests for bug fixes and new features, your involvement is invaluable to the project.
