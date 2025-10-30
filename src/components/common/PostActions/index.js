@@ -28,11 +28,11 @@ import { LoginModal } from 'components'
 
 const PrettoSlider = withStyles({
   root: {
-    color: '#e53935',
+    color: '#1DA1F2',
     height: 5,
     '& .MuiSlider-markLabel': {
       fontSize: 12,
-      // color: '#d32f2f',
+      // color: '#1DA1F2',
     },
   },
   thumb: {

@@ -52,7 +52,7 @@ const Events = (props) => {
   } = props
 
   useEffect(() => {
-    setPageFrom('hive')
+    setPageFrom('events')
     if(!isVisited) {
       anchorTop()
       clearHomePosts()
