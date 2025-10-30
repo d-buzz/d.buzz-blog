@@ -146,7 +146,7 @@ The project uses the following build settings (defined in `netlify.toml`):
 
 - **Build Command:** `npm run build`
 - **Publish Directory:** `build`
-- **Node Version:** 14
+- **Node Version:** 16
 
 #### Deploy Contexts
 
