@@ -73,7 +73,7 @@ const useStyles = createUseStyles(theme => ({
   },
   tabContainer: {
     '& span.MuiTabs-indicator': {
-      backgroundColor: '#e53935 !important',
+      backgroundColor: '#1DA1F2 !important',
     },
   },
   paragraph: {

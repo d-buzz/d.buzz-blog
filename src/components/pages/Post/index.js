@@ -229,7 +229,7 @@ const useStyles = createUseStyles(theme => ({
     color: '#757575',
   },
   colorRed: {
-    color: 'red',
+    color: '#1DA1F2',
   },
   fontSize12: {
     fontSize: '12px',
@@ -287,9 +287,9 @@ const Post = (props) => {
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#7D3B4A',
+    backgroundColor: '#B8DAF0',
     [`& .MuiLinearProgress-barColorPrimary`]: {
-      backgroundColor: '#E74B5D',
+      backgroundColor: '#1DA1F2',
     },
   }))
   const {
@@ -488,7 +488,7 @@ const Post = (props) => {
     const heicImages = images.filter(image => image.type === 'image/heic')
     const uploadedImages = []
 
-    const remainingImageUploads = (4 - buzzAttachedImages.length) >= 0 ? (4 - buzzAttachedImages.length) : 0
+    const remainingImageUploads = (buzzAllowedImages - buzzAttachedImages.length) >= 0 ? (buzzAllowedImages - buzzAttachedImages.length) : 0
 
     Promise.all(
       heicImages.map(async (image) => {
@@ -549,7 +549,7 @@ const Post = (props) => {
             }),
           )
         } else {
-          alert(`You can only upload 4 images per buzz \n\n Please only upload remaining ${remainingImageUploads <= 1 ? `${remainingImageUploads} image` : `${remainingImageUploads} images`}`)
+          alert(`You can only upload ${buzzAllowedImages} images per post \n\n Please only upload remaining ${remainingImageUploads <= 1 ? `${remainingImageUploads} image` : `${remainingImageUploads} images`}`)
         }
       })
 

@@ -52,7 +52,7 @@ const Forsale = (props) => {
   } = props
 
   useEffect(() => {
-    setPageFrom('hive')
+    setPageFrom('forsale')
     if(!isVisited) {
       anchorTop()
       clearHomePosts()
